@@ -16,7 +16,7 @@
 		<property name="username" value="postgres"/>
 		<property name="password" value="postgres"/>
 		<property name="driverClassName" value="org.postgresql.Driver"/>
-		<property name="url" value="jdbc:postgresql://localhost:5432/teste-sisat"/>
+		<property name="url" value="jdbc:postgresql://localhost:5432/siac"/>
 	</bean>
 	
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">

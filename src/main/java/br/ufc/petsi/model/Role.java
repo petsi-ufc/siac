@@ -1,8 +1,10 @@
 package br.ufc.petsi.model;
 
+import java.io.Serializable;
+
 import org.springframework.security.core.GrantedAuthority;
 
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority, Serializable {
 	
 	private Long id;
 	

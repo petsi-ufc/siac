@@ -1,5 +1,6 @@
 package br.ufc.petsi.security;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,7 +18,7 @@ import br.ufc.petsi.model.Role;
 import br.ufc.petsi.model.User;
 
 @Named
-public class LdapAuthenticationProvider implements AuthenticationProvider{
+public class LdapAuthenticationProvider implements AuthenticationProvider, Serializable{
 
 	@Inject
 	@Qualifier("ldapUser")
@@ -28,7 +29,7 @@ public class LdapAuthenticationProvider implements AuthenticationProvider{
 			throws AuthenticationException {
 		String name = authen.getName();
 		String password = authen.getCredentials() != null ? (String) authen.getCredentials() : null;
-		
+	
 		User user = userDAO.getByCpf(name);
 		
 		if( user == null || !userDAO.authenticate(name, password) || user.getRoles().isEmpty()) {

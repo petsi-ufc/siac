@@ -9,7 +9,6 @@ public class AuthenticationController {
 	
 	@RequestMapping( value = {"/", "/home"} )
 	public ModelAndView home() {
-		System.out.println("aqui");
 		return new ModelAndView("login");
 	}
 	

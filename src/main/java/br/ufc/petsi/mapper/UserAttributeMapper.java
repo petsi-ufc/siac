@@ -1,5 +1,7 @@
 package br.ufc.petsi.mapper;
 
+import java.io.Serializable;
+
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
@@ -8,7 +10,7 @@ import org.springframework.ldap.core.AttributesMapper;
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.model.User;
 
-public class UserAttributeMapper implements AttributesMapper<User> {
+public class UserAttributeMapper implements AttributesMapper<User>, Serializable {
 
 	@Override
 	public User mapFromAttributes(Attributes attrs) throws NamingException {
