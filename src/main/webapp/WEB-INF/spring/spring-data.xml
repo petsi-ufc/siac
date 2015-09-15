@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byType"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	 
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="username" value="postgres"/>
+		<property name="password" value="postgres"/>
+		<property name="driverClassName" value="org.postgresql.Driver"/>
+		<property name="url" value="jdbc:postgresql://localhost:5432/teste-sisat"/>
+	</bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		
+		<property name="annotatedClasses">
+			<array>
+				<value>br.ufc.petsi.model.Consultation</value>
+				<value>br.ufc.petsi.model.Agenda</value>
+				<value>br.ufc.petsi.model.Role</value>
+				<value>br.ufc.petsi.model.Rating</value>
+				<value>br.ufc.petsi.model.Schedule</value>
+				<value>br.ufc.petsi.model.Service</value>
+				<value>br.ufc.petsi.model.User</value>
+			</array>
+		</property>
+		
+	</bean>
+	
+	<!-- gerenciamento de jpa pelo spring -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		</property>
+	</bean>
+	
+	<!-- gerenciamento da transação pelo spring -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<!-- Configurando o Ldap-->
+	<jee:jndi-lookup id="ldapUrl" jndi-name="java:comp/env/ldap/url" expected-type="java.lang.String" />
+    <jee:jndi-lookup id="ldapBase" jndi-name="java:comp/env/ldap/base" expected-type="java.lang.String" />
+    <jee:jndi-lookup id="ldapUserDn" jndi-name="java:comp/env/ldap/userdn" expected-type="java.lang.String" />
+    <jee:jndi-lookup id="ldapPassword" jndi-name="java:comp/env/ldap/password" expected-type="java.lang.String" />
+    <jee:jndi-lookup id="ldapOu" jndi-name="java:comp/env/ldapou" expected-type="java.lang.String" />
+
+    <bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+        <property name="url" ref="ldapUrl" />
+        <property name="base" ref="ldapBase" />
+        <property name="userDn" ref="ldapUserDn" />
+        <property name="password" ref="ldapPassword" />
+    </bean>
+
+    <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+        <constructor-arg ref="contextSource" />
+    </bean>
+    
+    <bean id="base" class="java.lang.String">
+        <constructor-arg ref="ldapOu" />
+    </bean>
+    
+    <bean id="ldapUser" class="br.ufc.petsi.dao.ldap.LdapUser">
+    	<property name="ldapTemplate" ref="ldapTemplate" />
+    	<property name="base" ref="base" />
+    </bean>
+    
+</beans>
