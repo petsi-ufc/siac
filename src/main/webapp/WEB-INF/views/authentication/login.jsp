@@ -6,11 +6,11 @@
 		
 		<form action="<c:url value='j_spring_security_check' />" method="post" >
 			<div class="form-group">
-     			<input type="text" class="form-control" name="j_username" placeholder="CPF">
-				<input type="password" class="form-control" name="j_password" placeholder="Senha">
+     			<input type="text" class="form-control" name="j_username" placeholder="CPF" required="required">
+				<input type="password" class="form-control" name="j_password" placeholder="Senha" required="required">
    			</div>
+			<input type="submit" class="btn btn-info" value="Entrar" id="bt-enter"><br>
 			<a href="#">Esqueceu a senha?</a>
-			<input type="submit" class="btn btn-info" value="Entrar" id="bt-enter">
 		</form>
 
 	</div>
