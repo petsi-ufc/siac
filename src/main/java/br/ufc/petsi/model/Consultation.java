@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -39,6 +40,10 @@ public class Consultation {
 			fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="id_rating")
 	private Rating rating;
+	
+	@ManyToOne
+	@JoinColumn( name = "id_agenda" )
+	private Agenda agenda;
 
 	public Consultation(Long id, Service service, ConsultationState state, Schedule schedule) {
 		this.id = id;
@@ -87,6 +92,14 @@ public class Consultation {
 
 	public void setRating(Rating rating) {
 		this.rating = rating;
+	}
+
+	public Agenda getAgenda() {
+		return agenda;
+	}
+
+	public void setAgenda(Agenda agenda) {
+		this.agenda = agenda;
 	}
 	
 }

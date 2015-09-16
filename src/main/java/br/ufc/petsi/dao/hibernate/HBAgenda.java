@@ -21,6 +21,11 @@ public class HBAgenda implements AgendaDAO{
 	public void save(Agenda ag) {
 		getSession().persist(ag);
 	}
+	
+	@Override
+	public void update(Agenda ag) {
+		getSession().update(ag);
+	}
 
 	@Override
 	public Agenda getAgendaById(long id) {
@@ -30,11 +35,10 @@ public class HBAgenda implements AgendaDAO{
 	}
 
 	@Override
-	public List<Agenda> getAgendaListByUserId(long idUser) {
+	public Agenda getAgendaByUserId(long idUser) {
 		Query query = getSession().createQuery("SELECT ag FROM Agenda ag WHERE ag.userId = :userId");
 		query.setParameter("userId", idUser);
-		List<Agenda> agendas = query.list();
-		return agendas;
+		return (Agenda) query.uniqueResult();
 	}
 	
 	private Session getSession(){
