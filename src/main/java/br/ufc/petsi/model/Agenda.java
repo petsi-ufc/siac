@@ -20,10 +20,35 @@ public class Agenda {
 	@GeneratedValue
 	private Long id;
 	
-	@OneToMany(mappedBy = "agenda", targetEntity = Schedule.class, 
+	@OneToMany(mappedBy = "agenda", targetEntity = Consultation.class, 
 			cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Schedule> schedules;
+	private List<Consultation> consultations;
 	
 	@NotNull
 	private Long id_user;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<Consultation> getConsultations() {
+		return consultations;
+	}
+
+	public void setConsultations(List<Consultation> consultations) {
+		this.consultations = consultations;
+	}
+
+	public Long getId_user() {
+		return id_user;
+	}
+
+	public void setId_user(Long id_user) {
+		this.id_user = id_user;
+	}
+	
 }

@@ -26,10 +26,6 @@ public class Schedule {
 	@NotNull
 	@Temporal(TemporalType.DATE)
 	private Date dateEnd;
-	
-	@ManyToOne
-	@JoinColumn( name = "id_agenda" )
-	private Agenda agenda;
 
 	@NotNull
 	private boolean available;
