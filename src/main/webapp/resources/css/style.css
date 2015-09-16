@@ -1,43 +1,36 @@
 #main-container{
 	position: absolute;
-	width: 30%;
-	height: 44%;
-	left: 50%;
-	top: 50%;
-	margin-left: -15%;
-	margin-top: -10%;
-	box-shadow: 3px 3px 3px #888888;
-	border: solid 2px #757575;
-	border-radius: 5px;
+	width:370px;
+	height:350px;
+	max-width: 370px;
+	max-height: 350px;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	margin: auto;
+	box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, 0.175);
+	border-radius: 10px;
+	vertical-align: center;
+	padding: 30px;
+}
+
+#container-content{
+	text-align: center;
 }
 
 #container-content img{
-	margin-top: 5px;
-	margin-bottom: 20px;
-}
-
-
-#container-content{
-	margin-top: 30px;
-	position: absolute;
-	left: 50%;
-	margin-left: -23.5%;
-}
-
-#container-content input{
-	display: block;
-	margin: 0 auto;
+	margin-top: 20px;
 	margin-bottom: 10px;
 }
 
-
-#container-content input[type="submit"]{
-	position: absolute;
-	right: 0px;
-	margin-top:10px;
+#container-content input{
+	width: 200px;
+	margin: 0 auto;
+	margin-bottom: 10px;
+	display: b	
 }
 
-#container-content a{
+#main-container #container-content a{
 	font-size: 13px;
-	
 }

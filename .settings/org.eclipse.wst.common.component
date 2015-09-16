@@ -6,6 +6,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
         <property name="java-output-path" value="/siac/target/classes"/>
-        <property name="context-root" value="sisat"/>
+        <property name="context-root" value="siac"/>
     </wb-module>
 </project-modules>
