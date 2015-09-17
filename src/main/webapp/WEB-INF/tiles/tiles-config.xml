@@ -4,18 +4,20 @@
 <tiles-definitions>
 	
 	<definition name="main" template="/WEB-INF/views/templates/main.jsp">
-		<put-attribute name="title" value="Sisat" />
+		<put-attribute name="title" value="SIAC" />
 		<put-attribute name="header" value="/WEB-INF/views/templates/header.jsp"/>
 		<put-attribute name="body" value="Hello, world!"/>
 		<put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp" />
 	</definition>
 	
-	<definition name="home" extends="main">
-		
+	<definition name="home_patient" extends="main">
+		<put-attribute name="body" value="/WEB-INF/views/users/patient/home.jsp"/>	
 	</definition>
 	
 	<definition name="login" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/authentication/login.jsp" />
+		<put-attribute name="header" value=""></put-attribute>
+		<put-attribute name="footer" value=""></put-attribute>
 	</definition>
 	
 	<definition name="success" extends="main">
@@ -23,3 +25,4 @@
 	</definition>
 	
 </tiles-definitions>
+

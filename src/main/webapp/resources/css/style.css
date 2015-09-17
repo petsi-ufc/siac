@@ -34,3 +34,66 @@
 #main-container #container-content a{
 	font-size: 13px;
 }
+
+#img-banner{
+	max-width: 100%;
+	min-width: 100%;
+}
+
+#left-bar{
+	width:30%;
+	float: left;
+	margin-top:35px;
+}
+
+#avatar{
+	width: 100%;
+	background-color: red;
+}
+
+#left-bar img{
+	margin: 0 auto;
+	cursor: pointer;
+}
+
+#box-services{
+	width: 300px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-right: auto;
+	margin-left: auto;
+	border-radius: 5px;
+	box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, 0.175);
+	text-align: center;
+}
+
+#box-services h3{
+	padding-top: 5px;
+}
+
+#box-services a{
+	font-size: 17px;
+}
+
+.nav-divider{
+	margin: 0 !important;
+}
+
+#calendar-legend{
+	text-align: center;
+}
+
+#right-bar{
+	text-align:center;
+	height: 100%;
+	width:70%;
+	float: right;
+}
+
+#calendar{
+	max-height: 70%;
+	max-width: 70%; 
+	margin: 0 auto;
+}
+
+
