@@ -79,6 +79,10 @@
 	margin: 0 !important;
 }
 
+.nav-stacked li{
+	margin: 0 !important;
+}
+
 #calendar-legend{
 	text-align: center;
 }
@@ -93,6 +97,11 @@
 #calendar{
 	max-height: 70%;
 	max-width: 70%; 
+	margin: 0 auto;
+}
+
+#page-footer{
+	max-width: 100%;
 	margin: 0 auto;
 }
 

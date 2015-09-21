@@ -37,6 +37,6 @@
 </div>
 
 <div id="right-bar">
-	<h2>Meu calendário</h2>
+	<h2 id="my-calendar">Meu calendário</h2>
 	<div id="calendar"></div>	
 </div>

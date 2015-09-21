@@ -10,7 +10,8 @@
 				<input type="password" class="form-control" name="j_password" placeholder="Senha" required="required">
    			</div>
 			<input type="submit" class="btn btn-info" value="Entrar" id="bt-enter"><br>
-			<a href="#">Esqueceu a senha?</a>
+			<a href="#" data-toggle="modal" data-target="#modal-forgot-pass">Esqueceu a senha?</a>
+			
 		</form>
 
 	</div>
