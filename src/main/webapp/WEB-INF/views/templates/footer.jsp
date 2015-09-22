@@ -1,3 +1,5 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <div id="page-footer">
-	<h1>RODAPÉ</h1>
+	
 </div>
