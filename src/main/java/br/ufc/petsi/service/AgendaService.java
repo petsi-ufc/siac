@@ -15,7 +15,7 @@ public class AgendaService {
 	@Inject
 	private AgendaDAO agendaDAO;
 	
-	public boolean agendar(User user, Consultation con) {
+	public boolean schedule(User user, Consultation con) {
 		
 		if( con == null )
 			return false;

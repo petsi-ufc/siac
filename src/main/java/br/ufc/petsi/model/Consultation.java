@@ -102,4 +102,7 @@ public class Consultation {
 		this.agenda = agenda;
 	}
 	
+	public boolean checkScheduleShocks(Consultation con) {
+		return this.schedule.checkScheduleShocks(con.getSchedule());
+	}
 }

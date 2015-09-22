@@ -13,7 +13,7 @@
 	<definition name="home_patient" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/users/patient/home.jsp"/>	
 	</definition>
-	
+		
 	<definition name="login" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/authentication/login.jsp" />
 		<put-attribute name="header" value=""></put-attribute>

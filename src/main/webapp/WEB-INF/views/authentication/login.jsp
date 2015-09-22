@@ -8,9 +8,16 @@
 			<div class="form-group">
      			<input type="text" class="form-control" name="j_username" placeholder="CPF" required="required">
 				<input type="password" class="form-control" name="j_password" placeholder="Senha" required="required">
+				<select name="role" class="form-control">
+   					<option>Selecione uma Opção</option>
+   					<option>Paciente</option>
+   					<option>Profissional</option>
+   					<option>Administrador</option>
+   				</select>
    			</div>
-			<input type="submit" class="btn btn-info" value="Entrar" id="bt-enter"><br>
-			<a href="#">Esqueceu a senha?</a>
+   			<input type="submit" class="btn btn-info" value="Entrar" id="bt-enter"><br>
+			<a href="#" data-toggle="modal" data-target="#modal-forgot-pass">Esqueceu a senha?</a>
+			
 		</form>
 
 	</div>
