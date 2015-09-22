@@ -73,4 +73,19 @@ public class Schedule {
 		this.available = available;
 	}
 	
+	public boolean checkScheduleShocks(Schedule sch) {
+		if(this.dateInit.compareTo(sch.dateEnd) != 0)
+			return true;
+		else {
+			long timeInit = dateInit.getTime();
+			long timeEnd = dateEnd.getTime();
+			
+			long time = sch.getDateInit().getTime();
+			if(time >= timeInit && time < timeEnd) {
+				return false;
+			}
+			
+		}
+		return true;
+	}
 }
