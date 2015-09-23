@@ -2,7 +2,7 @@
  *	Todas as funcionalidades javascript do siac. 
  */
 
-const MY_CALENDAR = "service_0";
+const MY_CALENDAR = "0";
 
 //Essa variável é utilizada para saber qual o serviço que o usuário clicou.
 var service_id = "";
@@ -45,9 +45,17 @@ function openScheduleModal(schedules){
 
 function onServiceClick(){
 
-	$(".service").click(function(){
-		$("#my-calendar").text("Calendário "+$(this).text());
-		service_id = this.id;
+	$(".link-service").click(function(){
+		service_id = $(this).attr('id');
+		
+		if(service_id == MY_CALENDAR)
+			$("#my-calendar").text("Meu Calendário");
+		else
+			$("#my-calendar").text("Calendário "+$(this).text());
+		
+		
+		$(".service").removeClass("active");
+		$(this).parent("li").addClass("active");
 	});
 }
 
