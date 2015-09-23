@@ -4,6 +4,9 @@
 
 const MY_CALENDAR = "service_0";
 
+//Essa variável é utilizada para saber qual o serviço que o usuário clicou.
+var service_id = "";
+
 $("document").ready(function(){
 
 	onClickModalConfig();
@@ -19,7 +22,6 @@ function postAjaxCall(url, params){
 		}
 	});
 }
-
 
 function openScheduleModal(schedules){
 	if(schedules == null || schedules == undefined){
@@ -42,8 +44,10 @@ function openScheduleModal(schedules){
 }
 
 function onServiceClick(){
+
 	$(".service").click(function(){
 		$("#my-calendar").text("Calendário "+$(this).text());
+		service_id = this.id;
 	});
 }
 
