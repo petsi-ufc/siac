@@ -14,11 +14,16 @@
 		<put-attribute name="body" value="/WEB-INF/views/users/patient/home.jsp"/>	
 	</definition>
 		
+	<definition name="home_professional" extends="main">
+		<put-attribute name="body" value="/WEB-INF/views/users/professional/home.jsp"/>	
+	</definition>
+	
 	<definition name="login" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/authentication/login.jsp" />
 		<put-attribute name="header" value=""></put-attribute>
 		<put-attribute name="footer" value=""></put-attribute>
 	</definition>
+	
 	
 	<definition name="success" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/authentication/success.jsp" />
