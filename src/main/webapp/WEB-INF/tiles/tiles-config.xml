@@ -24,10 +24,7 @@
 		<put-attribute name="footer" value=""></put-attribute>
 	</definition>
 	
-	
-	<definition name="success" extends="main">
-		<put-attribute name="body" value="/WEB-INF/views/authentication/success.jsp" />
-	</definition>
+
 	
 </tiles-definitions>
 
