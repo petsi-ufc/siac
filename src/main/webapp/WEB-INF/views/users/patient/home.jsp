@@ -25,13 +25,13 @@
 			<h3>Serviços disponí­veis</h3>
 			<ul class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
-				<li><a id="service_0" class="service" href="#">Seu calendário</a></li>
+				<li><a id="0" class="service" href="#">Seu calendário</a></li>
 				<li class="nav-divider"></li>
-				<li><a id="service_1" class="service" href="#">Nutrição</a></li>
+				<li><a id="1" class="service" href="#">Nutrição</a></li>
 			   	<li class="nav-divider"></li>
-			   	<li><a id="service_2" class="service" href="#">Odontologia</a></li>
+			   	<li><a id="2" class="service" href="#">Odontologia</a></li>
 			   	<li class="nav-divider"></li>
-			   	<li><a id="service_3" class="service" href="#">Psicologia</a></li>
+			   	<li><a id="3" class="service" href="#">Psicologia</a></li>
 			</ul>
 		</div>
 		<div id="calendar-legend">

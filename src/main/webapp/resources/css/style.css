@@ -1,3 +1,9 @@
+body html{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
 #main-container{
 	position: absolute;
 	width:370px;
@@ -96,7 +102,8 @@
 }
 
 #calendar-legend{
-	text-align: center;	top:0;
+	text-align: center;	
+	top:0;
 	bottom:0;
 	left:0;
 	right:0;
@@ -114,20 +121,6 @@
 	max-height: 70%;
 	max-width: 70%; 
 	margin: 0 auto;
-}
-
-#page-footer{
-	clear: both;
-	height:200px;
-	max-height: 40%;
-	max-width:100%;
-	background-color:#20558a;
-	margin-top: 140px;
-}
-
-#container{
-	background-color: green;
-	height: 100%;
 }
 
 #box-logo{
@@ -155,6 +148,32 @@
 	max-width: 40px;
 }
 
+#page-footer{
+	min-height:200px;
+	max-height:100%;
+	width: 100%;
+	background-color:#20558a;
+	margin-top: 140px;
+	border-top: solid 3px;
+	border-color: #cecece;
+	bottom:0;
+	clear: both;
+}
+
+#footer-content{
+	position: relative;
+	max-width:100%;
+	text-align: center;
+}
+
+.img-footer{
+	display:inline;	
+}
+
+.img-footer img{
+	margin:10px 60px;
+	display:inline;
+}
 
 
 
