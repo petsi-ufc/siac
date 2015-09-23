@@ -18,6 +18,10 @@
 		<put-attribute name="body" value="/WEB-INF/views/users/professional/home.jsp"/>	
 	</definition>
 	
+	<definition name="home_manager" extends="main">
+		<put-attribute name="body" value="/WEB-INF/views/users/manager/home.jsp"/>	
+	</definition>
+	
 	<definition name="login" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/authentication/login.jsp" />
 		<put-attribute name="header" value=""></put-attribute>
