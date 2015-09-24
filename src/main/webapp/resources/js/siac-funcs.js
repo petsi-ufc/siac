@@ -10,7 +10,7 @@ var service_id = "";
 $("document").ready(function(){
 
 	onClickModalConfig();
-	initCalendar();
+	initCalendarPatient();
 	onServiceClick();
 
 });
@@ -55,7 +55,7 @@ function onServiceClick(){
 		
 		
 		$(".service").removeClass("active");
-		$(this).parent("li").addClass("active");
+		$(this).parent().addClass("active");
 	});
 }
 
@@ -66,8 +66,8 @@ function onClickModalConfig(){
 	});
 }
 
-function initCalendar(){
-	$("#calendar").fullCalendar({
+function initCalendarPatient(){
+	$("#calendar_patient").fullCalendar({
 		header: {
 			left: 'prev',
 			center: 'title',
@@ -96,11 +96,11 @@ function initCalendar(){
 		         ],
 		         businessHours: true,
 		         editable: false,
-		         dayClick: function(date, jsEvent, view){
-		        	 postAjaxCall("/siac/", null);
-		         }
+		         dayClick: clickFunction
 	});
+	
 }
 
-
-
+function clickFunction(date, jsEvent, view){
+	alert("Date: "+date.format()+"\nView Mame: "+view.name);
+}

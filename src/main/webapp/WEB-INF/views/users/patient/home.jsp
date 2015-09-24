@@ -41,7 +41,7 @@
 	
 	<div id="right-bar">
 		<h2 id="my-calendar">Meu calendário</h2>
-		<div id="calendar"></div>	
+		<div class="calendar" id="calendar_patient"></div>	
 	</div>
 	
 	<div id="modal-schedules" class="modal fade" role="dialog">
