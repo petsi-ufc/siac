@@ -19,7 +19,7 @@ function postAjaxCall(url, params){
 	$.post(url, params).done(function(data, textStatus){
 		alert("Schedules: "+data);
 	}).fail(function(textStatus, errorThrown){
-		alert("Error: "+errorThrown);
+		alert("Não foi possível carregar os horários: "+errorThrown);
 	});
 }
 
