@@ -50,9 +50,14 @@ function onServiceClick(){
 		
 		if(serviceId == MY_CALENDAR)
 			$("#my-calendar").text("Meu Calendário");
-		else
+		else{
 			$("#my-calendar").text("Calendário "+$(this).text());
-		
+			
+			var params = new Object();
+			params["serviceId"] = serviceId;
+			
+			postAjaxCall("/siac/getAgenda", params);
+		}
 		
 		$(".service").removeClass("active");
 		$(this).parent().addClass("active");
@@ -102,8 +107,5 @@ function initCalendarPatient(){
 }
 
 function clickFunction(date, jsEvent, view){
-	var params = new Object();
-	params["serviceId"] = serviceId;
-	
-	postAjaxCall("/siac/getAgenda", params);
+	alert("TODO");
 }
