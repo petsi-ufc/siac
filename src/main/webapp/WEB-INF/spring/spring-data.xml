@@ -19,28 +19,6 @@
 		<property name="url" value="jdbc:postgresql://localhost:5432/siac"/>
 	</bean>
 	
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource"/>
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-			</props>
-		</property>
-		
-		<property name="annotatedClasses">
-			<array>
-				<value>br.ufc.petsi.model.Consultation</value>
-				<value>br.ufc.petsi.model.Agenda</value>
-				<value>br.ufc.petsi.model.Role</value>
-				<value>br.ufc.petsi.model.Rating</value>
-				<value>br.ufc.petsi.model.Schedule</value>
-				<value>br.ufc.petsi.model.Service</value>
-				<value>br.ufc.petsi.model.User</value>
-			</array>
-		</property>
-		
-	</bean>
 	
 	<!-- gerenciamento de jpa pelo spring -->
 	<bean id="entityManagerFactory"

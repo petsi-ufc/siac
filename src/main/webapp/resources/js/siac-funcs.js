@@ -2,24 +2,24 @@
  *	Todas as funcionalidades javascript do siac. 
  */
 
-const MY_CALENDAR = "service_0";
+const MY_CALENDAR = "0";
 
 //Essa variável é utilizada para saber qual o serviço que o usuário clicou.
-var service_id = "";
+var serviceId = "0";
 
 $("document").ready(function(){
 
 	onClickModalConfig();
-	initCalendar();
+	initCalendarPatient();
 	onServiceClick();
 
 });
 
 function postAjaxCall(url, params){
-	$.post(url,null ,function(data, status){
-		if(status == "success"){
-			openScheduleModal(data);
-		}
+	$.post(url, params).done(function(data, textStatus){
+		alert("Schedules: "+data);
+	}).fail(function(textStatus, errorThrown){
+		alert("Error: "+errorThrown);
 	});
 }
 
@@ -45,9 +45,17 @@ function openScheduleModal(schedules){
 
 function onServiceClick(){
 
-	$(".service").click(function(){
-		$("#my-calendar").text("Calendário "+$(this).text());
-		service_id = this.id;
+	$(".link-service").click(function(){
+		serviceId = $(this).attr('id');
+		
+		if(serviceId == MY_CALENDAR)
+			$("#my-calendar").text("Meu Calendário");
+		else
+			$("#my-calendar").text("Calendário "+$(this).text());
+		
+		
+		$(".service").removeClass("active");
+		$(this).parent().addClass("active");
 	});
 }
 
@@ -58,8 +66,8 @@ function onClickModalConfig(){
 	});
 }
 
-function initCalendar(){
-	$("#calendar").fullCalendar({
+function initCalendarPatient(){
+	$("#calendar_patient").fullCalendar({
 		header: {
 			left: 'prev',
 			center: 'title',
@@ -88,11 +96,14 @@ function initCalendar(){
 		         ],
 		         businessHours: true,
 		         editable: false,
-		         dayClick: function(date, jsEvent, view){
-		        	 postAjaxCall("/siac/", null);
-		         }
+		         dayClick: clickFunction
 	});
+	
 }
 
-
-
+function clickFunction(date, jsEvent, view){
+	var params = new Object();
+	params["serviceId"] = serviceId;
+	
+	postAjaxCall("/siac/getAgenda", params);
+}

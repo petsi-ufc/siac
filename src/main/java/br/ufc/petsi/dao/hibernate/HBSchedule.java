@@ -2,11 +2,10 @@ package br.ufc.petsi.dao.hibernate;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import br.ufc.petsi.dao.ScheduleDAO;
@@ -15,38 +14,35 @@ import br.ufc.petsi.model.Schedule;
 @Repository
 public class HBSchedule implements ScheduleDAO{
 
-	@Inject
-	private SessionFactory sessionFactory;
-	
+
+	@PersistenceContext
+	private EntityManager manager;
+		
 	@Override
 	public void save(Schedule sche) {
-		getSession().persist(sche);
+		manager.persist(sche);
 	}
 
 	@Override
 	public Schedule getScheduleById(long id) {
-		Query query = getSession().createQuery("SELECT sche FROM Schedule sche WHERE sche.id = :id");
+		Query query = manager.createQuery("SELECT sche FROM Schedule sche WHERE sche.id = :id");
 		query.setParameter("id", id);
-		return (Schedule) query.uniqueResult();
+		return (Schedule) query.getSingleResult();
 	}
 
 	@Override
 	public List<Schedule> getSchedulesByUserId(long userId) {
-		Query query = getSession().createQuery("SELECT sche FROM Schedule sche WHERE sche.id = :userId");
+		Query query = manager.createQuery("SELECT sche FROM Schedule sche WHERE sche.id = :userId");
 		query.setParameter("userId", userId);
-		List<Schedule> list = query.list();
+		List<Schedule> list = query.getResultList();
 		return list;
 	}
 
 	@Override
 	public List<Schedule> getAllSchedulesAvaliable() {
-		Query query = getSession().createQuery("SELECT sche FROM Schedule sche WHERE sche.avaliable = true");
-		List<Schedule> list = query.list();
+		Query query = manager.createQuery("SELECT sche FROM Schedule sche WHERE sche.avaliable = true");
+		List<Schedule> list = query.getResultList();
 		return list;
-	}
-	
-	private Session getSession(){
-		return sessionFactory.getCurrentSession();
 	}
 
 }
