@@ -1,6 +1,7 @@
 package br.ufc.petsi.dao.hibernate;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -30,14 +31,22 @@ public class HBAgenda implements AgendaDAO{
 	public Agenda getAgendaById(long id) {
 		Query query = (Query) manager.createQuery("SELECT ag FROM Agenda ag WHERE ag.id = :id");
 		query.setParameter("id", id);
-		return (Agenda) query.getSingleResult();
+		try {
+			return (Agenda) query.getSingleResult();	
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	@Override
-	public Agenda getAgendaByUserId(long idUser) {
+	public Agenda getAgendaByUserId(long userId) {
 		Query query = (Query) manager.createQuery("SELECT ag FROM Agenda ag WHERE ag.userId = :userId");
-		query.setParameter("userId", idUser);
-		return (Agenda) query.getSingleResult();
+		query.setParameter("userId", userId);
+		try {
+			return (Agenda) query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 	
 
