@@ -41,27 +41,28 @@ public class AgendaController {
 		service.setName("Dentista");
 		
 		//List<Consultation> list = conDao.getConsultationsByService(service);
-		
-		Agenda agenda = new Agenda();
-		List<Consultation> list = new ArrayList<Consultation>();
-		
-		Schedule sc = new Schedule();
-		sc.setAvailable(true);
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-DD");
-		try {
-		    sc.setDateInit(df.parse("2015-09-02"));
-			sc.setDateEnd(df.parse("2015-09-04"));
-		} catch (ParseException ex) {
-		    ex.printStackTrace();
-		}
-		Consultation cons = new Consultation();
-		cons.setService(service);
-		cons.setState(ConsultationState.SC);
-		cons.setSchedule(sc);
-		
-		list.add(cons);
-		agenda.setConsultations(list);
-		
+		//------------CÓDIGO DE TESTE --------------------\\
+			Agenda agenda = new Agenda();
+			List<Consultation> list = new ArrayList<Consultation>();
+			
+			Schedule sc = new Schedule();
+			sc.setAvailable(true);
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-DD");
+			try {
+			    sc.setDateInit(df.parse("2015-09-02"));
+				sc.setDateEnd(df.parse("2015-09-04"));
+			} catch (ParseException ex) {
+			    ex.printStackTrace();
+			}
+			Consultation cons = new Consultation();
+			cons.setService(service);
+			cons.setState(ConsultationState.SC);
+			cons.setSchedule(sc);
+			
+			list.add(cons);
+			agenda.setConsultations(list);
+		//------------CÓDIGO DE TESTE --------------------\\
+			
 		Gson gson = new Gson();
 		String json = gson.toJson(agenda);
 		return json;

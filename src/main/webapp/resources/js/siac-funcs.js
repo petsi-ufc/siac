@@ -106,7 +106,6 @@ function setCalendarSchedules(json){
 				dateEnd = new Date(value.dateEnd);
 				_dateInit = formatDate(dateInit);
 				_dateEnd = formatDate(dateEnd);
-				alert(_dateEnd);
 				
 				renderCalendarEvent(serviceName, _dateInit, _dateEnd);
 			}
@@ -117,7 +116,7 @@ function setCalendarSchedules(json){
 
 function formatDate(date){
 	var dd = date.getDate();
-    var mm = date.getMonth()+1; //January is 0!
+    var mm = date.getMonth()+1; //Janeiro é 0!
 
     var yyyy = date.getFullYear();
     if(dd<10){
