@@ -61,7 +61,7 @@ function onServiceClick(){
 			url = "/siac/getServiceAgenda";
 		}
 		$.getJSON(url, params, function(json){
-			setCalendarSchedules(json);
+			setCalendarSchedules("#calendar_patient", json);
 		});
 	});
 }
@@ -84,30 +84,47 @@ function initCalendarPatient(){
 		},
 				 businessHours: true,
 		         editable: false,
-		         dayClick: clickFunction
+		         dayClick: clickFunction,
+		         eventClick: clickEvent
 	});
 	
 }
 
 
+function clickEvent(event, jsEvent, view){
+	alert("Event: "+event.title+"\nID: "+event.id);
+}
+
 /*Essa função pega todos os dados vindos da requisição
-  AJAX e preche o calendário com elas.*/
-function setCalendarSchedules(json){
-	if(json.consultations.length == 0){
+  AJAX e preche o calendário com elas.
+  
+  Params: Id do calendário e json vindo do ajax.
+  */
+function setCalendarSchedules(idCalendar, json){
+	/*Removendo todos os eventos para não haver duplicações. A função passada como argumento quando retorna
+	 * true remove o evento passado por parametro. Logo essa função irá remover todos os eventos.
+	*/
+	$(idCalendar).fullCalendar('removeEvents', function(event){
+		return true;
+	});
+	if(JSON.stringify(json) == "{}" || json.consultations.length == 0){
 		alert("Não existe nenhum evento cadastrado!");
 		return;
 	}
 	
 	$.each(json.consultations, function(key, obj){
 		var serviceName = obj.service.name;
+		var serviceId = 0;
 		$.each(obj, function(name, value){
+			if(name == "service"){
+				serviceId = value.id;
+			}
 			if(name == "schedule"){
 				dateInit = new Date(value.dateInit);
 				dateEnd = new Date(value.dateEnd);
 				_dateInit = formatDate(dateInit);
 				_dateEnd = formatDate(dateEnd);
-				
-				renderCalendarEvent(serviceName, _dateInit, _dateEnd);
+				renderCalendarEvent(idCalendar, serviceId, serviceName, _dateInit, _dateEnd);
 			}
 		});
 	});
@@ -130,12 +147,13 @@ function formatDate(date){
 }
 
 //Essa função é responsável por adicionar um evento no calendário.
-function renderCalendarEvent(serviceName, dayStart, dayEnd){
-	$("#calendar_patient").fullCalendar('renderEvent',{
+function renderCalendarEvent(idCalendar, idService ,serviceName, dayStart, dayEnd){
+	$(idCalendar).fullCalendar('renderEvent',{
+		id: idService,
 		title: serviceName,
 		start: dayStart,
 		end: dayEnd
-	},'stick');
+	}, true);
 }
 
 function clickFunction(date, jsEvent, view){
