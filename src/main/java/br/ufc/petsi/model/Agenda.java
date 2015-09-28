@@ -3,12 +3,12 @@ package br.ufc.petsi.model;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -25,7 +25,8 @@ public class Agenda {
 	private List<Consultation> consultations;
 	
 	@NotNull
-	private Long id_user;
+	@Column(name="id_user")
+	private Long userId;
 
 	public Long getId() {
 		return id;
@@ -43,12 +44,12 @@ public class Agenda {
 		this.consultations = consultations;
 	}
 
-	public Long getId_user() {
-		return id_user;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setId_user(Long id_user) {
-		this.id_user = id_user;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 	
 }
