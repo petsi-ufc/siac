@@ -40,6 +40,7 @@
 	</div>
 	
 	<div id="right-bar">
+		<div class="alert alert-danger" id="alert-schedules">Não há nenhum horário cadastrado!</div>
 		<h2 id="my-calendar">Meu calendário</h2>
 		<div class="calendar" id="calendar_patient"></div>	
 	</div>

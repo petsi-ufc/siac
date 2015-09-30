@@ -12,15 +12,13 @@ $("document").ready(function(){
 	onClickModalConfig();
 	initCalendarPatient();
 	onServiceClick();
-
+	
 });
 
-function postAjaxCall(url, params){
-	$.post(url, params).done(function(data, textStatus){
-		return data;
-	}).fail(function(textStatus, errorThrown){
-		alert("Não foi possível carregar os horários: "+errorThrown);
-	});
+//Função que fax uma chamada ajax contendo a url e os parametros devidos.
+//O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
+function ajaxCall(url, params, func){
+	$.getJSON(url, params, func);
 }
 
 
@@ -60,7 +58,7 @@ function onServiceClick(){
 			params["serviceId"] = serviceId;
 			url = "/siac/getServiceAgenda";
 		}
-		$.getJSON(url, params, function(json){
+		ajaxCall(url, params, function(json){
 			setCalendarSchedules("#calendar_patient", json);
 		});
 	});
@@ -90,17 +88,24 @@ function initCalendarPatient(){
 	
 }
 
-
+//Quando o usuário clica no evento essa função é chamada.
 function clickEvent(event, jsEvent, view){
 	alert("Event: "+event.title+"\nID: "+event.id);
 }
 
+function openModalSchedules(idService){
+	
+}
+
+
 /*Essa função pega todos os dados vindos da requisição
   AJAX e preche o calendário com elas.
-  
   Params: Id do calendário e json vindo do ajax.
   */
 function setCalendarSchedules(idCalendar, json){
+	//Escondendo a mensagem de erro.
+	$("#alert-schedules").css({"display":"none"});
+	
 	/*Removendo todos os eventos para não haver duplicações. A função passada como argumento quando retorna
 	 * true remove o evento passado por parametro. Logo essa função irá remover todos os eventos.
 	*/
@@ -108,12 +113,13 @@ function setCalendarSchedules(idCalendar, json){
 		return true;
 	});
 	if(JSON.stringify(json) == "{}" || json.consultations.length == 0){
-		alert("Não existe nenhum evento cadastrado!");
+		$("#alert-schedules").css({"display":"block"});
 		return;
 	}
 	
 	$.each(json.consultations, function(key, obj){
 		var serviceName = obj.service.name;
+		
 		var serviceId = 0;
 		$.each(obj, function(name, value){
 			if(name == "service"){
@@ -130,6 +136,7 @@ function setCalendarSchedules(idCalendar, json){
 	});
 	
 }
+
 
 function formatDate(date){
 	var dd = date.getDate();
@@ -155,6 +162,7 @@ function renderCalendarEvent(idCalendar, idService ,serviceName, dayStart, dayEn
 		end: dayEnd
 	}, true);
 }
+
 
 function clickFunction(date, jsEvent, view){
 	
