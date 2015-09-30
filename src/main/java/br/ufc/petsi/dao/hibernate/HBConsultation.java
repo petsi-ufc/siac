@@ -1,5 +1,6 @@
 package br.ufc.petsi.dao.hibernate;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -51,6 +52,22 @@ public class HBConsultation implements ConsultationDAO{
 		List<Consultation> cons = query.getResultList();
 		return cons;
 	}
+
+	@Override
+	public List<Consultation> getConsultationsByServiceAndDate(Service service,
+			Date startDay, Date endDay) {
+		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE"
+				+ " cons.service = :service AND cons.schedule.dateInit = :startDay"
+				+ "and cons.schedule.dateEnd = :endDay");
+		query.setParameter("service", service);
+		query.setParameter("startDay", startDay);
+		query.setParameter("endDay", endDay);
+		
+		List<Consultation> cons = query.getResultList();
+		return cons;
+	}
+	
+	
 
 	
 	

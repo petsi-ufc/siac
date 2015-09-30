@@ -175,3 +175,11 @@ body html{
 	display:inline;
 }
 
+#alert-schedules{
+	display:none;
+	margin: 0 auto;
+	max-height: 20%;
+	max-width: 70%; 
+	width: 70%;
+}
+

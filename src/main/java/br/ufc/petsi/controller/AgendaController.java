@@ -3,9 +3,11 @@ package br.ufc.petsi.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.swing.JOptionPane;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,27 +35,33 @@ public class AgendaController {
 	@Inject
 	private AgendaDAO agendaDao;
 	
+	@RequestMapping("/getConsultationsByDate")
+	@ResponseBody
+	public String getConsultationsByDate(long serviceId, Date startDay, Date endDay){
+		Service service = new Service();
+		service.setId(serviceId);
+		List<Consultation> list = conDao.getConsultationsByServiceAndDate(service, startDay, endDay);
+		return "";
+	}
+	
+	
 	@RequestMapping("/getServiceAgenda")
 	@ResponseBody
 	public String getServiceAgenda(long serviceId){
-		Service service = new Service();
-		service.setId(serviceId);
-		service.setName("Dentista");
-		
-		//List<Consultation> list = conDao.getConsultationsByService(service);
-		//------------CÓDIGO DE TESTE --------------------\\
-			Agenda agenda = new Agenda();
-			List<Consultation> list = new ArrayList<Consultation>();
+		Agenda agenda = new Agenda();
+		List<Consultation> list = new ArrayList<Consultation>();
+		if(serviceId == 2l){
+			Service service = new Service();
+			service.setId(2L);
+			service.setName("Odontologia");
 			
+			//------------CÓDIGO DE TESTE --------------------\\
+			//List<Consultation> list = conDao.getConsultationsByService(service);
 			Schedule sc = new Schedule();
 			sc.setAvailable(true);
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-DD");
-			try {
-			    sc.setDateInit(df.parse("2015-09-02"));
-				sc.setDateEnd(df.parse("2015-09-04"));
-			} catch (ParseException ex) {
-			    ex.printStackTrace();
-			}
+			sc.setDateInit(new Date());
+			sc.setDateEnd(new Date());
+			
 			Consultation cons = new Consultation();
 			cons.setService(service);
 			cons.setState(ConsultationState.SC);
@@ -61,8 +69,25 @@ public class AgendaController {
 			
 			list.add(cons);
 			agenda.setConsultations(list);
-		//------------CÓDIGO DE TESTE --------------------\\
+			//------------CÓDIGO DE TESTE --------------------\\
+		}else if(serviceId == 3l){
+			Service service2 = new Service();
+			service2.setId(3L);
+			service2.setName("Psicologia");
 			
+			Schedule sc2 = new Schedule();
+			sc2.setDateInit(new Date());
+			sc2.setDateEnd(new Date());
+			
+			Consultation cons2 = new Consultation();
+			cons2.setService(service2);
+			cons2.setState(ConsultationState.SC);
+			cons2.setSchedule(sc2);
+
+			list.add(cons2);
+			agenda.setConsultations(list);
+		}
+		
 		Gson gson = new Gson();
 		String json = gson.toJson(agenda);
 		return json;
