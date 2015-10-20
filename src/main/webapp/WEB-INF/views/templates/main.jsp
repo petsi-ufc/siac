@@ -17,6 +17,7 @@
 	<script type="text/javascript" src="<c:url value='/resources/js/fullcalendar.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/pt-br.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/siac-funcs.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/admin-funcs.js'/>"></script>
 	<title>
 		<tiles:getAsString name="title"/>
 	</title>
