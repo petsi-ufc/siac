@@ -183,3 +183,14 @@ body html{
 	width: 70%;
 }
 
+#generate-report{
+	display:none;
+}
+
+#set-professional{
+	display:none;
+}
+
+#add-service{
+	display:none;
+}
