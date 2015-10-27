@@ -18,7 +18,9 @@ $("document").ready(function(){
 //Função que fax uma chamada ajax contendo a url e os parametros devidos.
 //O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
 function ajaxCall(url, params, func){
-	$.getJSON(url, params, func);
+	$.getJSON(url, params, func).error(function(textStatus, error){
+		alert("ERRO"+textStatus);
+	});
 }
 
 

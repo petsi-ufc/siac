@@ -24,6 +24,26 @@ function onActionClick(){
 			$("#set-professional").css("display", "block");
 		}else if($(this).attr("id") == 2){
 			$("#add-service").css("display", "block");
+			ajaxCall("/siac/getServices", function(json){
+				var serviceName;
+				var serviceActive;
+				$.each(json, function(key, obj){
+					$.each(obj, function(name, value){
+						if(name=="name"){
+							serviceName = value;
+						}
+						if(name=="active"){
+							serviceActive = value;
+						}
+					})
+					var newRow = $("<tr></tr>");
+					newRow.append("<td>"+serviceName+"</td>");
+					newRow.append("<td>"+serviceActive+"</td>");
+					newRow.append("<td>---</td>");
+					newRow.append("<td>---</td>");
+					$("#table-services").append(newRow);
+				});
+			})
 		}
 	});
 }

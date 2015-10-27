@@ -19,11 +19,14 @@ public class Service {
 	@NotNull(message="Informe o nome do serviço!")
 	private String name;
 
+	private boolean active;
+
 	public Service() {}
 	
-	public Service(Long id, String name) {
+	public Service(Long id, String name, boolean active) {
 		this.id = id;
 		this.name = name;
+		this.active = active;
 	}
 
 	public Long getId() {
@@ -38,9 +41,22 @@ public class Service {
 		return name;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Service [id=" + id + ", name=" + name + ", active=" + active
+				+ "]";
+	}
 	
 }
