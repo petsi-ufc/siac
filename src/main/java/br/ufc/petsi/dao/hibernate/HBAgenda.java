@@ -39,7 +39,7 @@ public class HBAgenda implements AgendaDAO{
 	}
 
 	@Override
-	public Agenda getAgendaByUserId(long userId) {
+	public Agenda getAgendaByUserId(String userId) {
 		Query query = (Query) manager.createQuery("SELECT ag FROM Agenda ag WHERE ag.userId = :userId");
 		query.setParameter("userId", userId);
 		try {

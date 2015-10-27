@@ -2,41 +2,58 @@ package br.ufc.petsi.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table( name = "users" )
 public class User {
 	
-	private Long id;
+	@Id
+	private String cpf;
 	
-	private String login;
+	private String name;
 	
 	private String email;
-	
+	@OneToMany( targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+	@JoinTable(
+			name = "usuario_papel",
+			joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "cpf"), 
+			inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id")
+			)
 	private List<Role> roles;
 
 	public User() {
 
 	}
 	
-	public User(Long id, String login, String password, String email, List<Role> roles) {
-		this.id = id;
-		this.login = login;
+	public User(String cpf, String name, String email, List<Role> roles) {
+		this.cpf = cpf;
+		this.name = name;
 		this.email = email;
 		this.roles = roles;
 	}
 
-	public Long getId() {
-		return id;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {

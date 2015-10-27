@@ -18,13 +18,13 @@ public class UserAttributeMapper implements AttributesMapper<User>, Serializable
 		User user = new User();
 		
 		if(attrs.get(Constants.CPF_USER) != null) {
-			user.setLogin(attrs.get(Constants.CPF_USER).get().toString());
+			user.setCpf(attrs.get(Constants.CPF_USER).get().toString());
 		}
 		
-		if(attrs.get(Constants.ID_USER) != null) {
-			user.setId(Long.parseLong(attrs.get(Constants.ID_USER).get().toString()));
+		if(attrs.get(Constants.NAME_USER) != null) {
+			user.setName(attrs.get(Constants.NAME_USER).get().toString());
 		}
-			
+		
 		if(attrs.get(Constants.EMAIL_USER) != null) {
 			user.setEmail(attrs.get(Constants.EMAIL_USER).get().toString());
 		}
