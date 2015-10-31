@@ -57,8 +57,9 @@
 
 
 	<div id="right-bar">
-		<div class="alert alert-danger" id="alert-schedules">Não há
-			nenhum horário cadastrado!</div>
+	
+		<div class="alert alert-danger" id="alert-schedules">Não há nenhum horário cadastrado!</div>
+		
 		<h2 id="my-calendar">Meu calendário</h2>
 		<div class="calendar" id="calendar_patient"></div>
 
@@ -104,12 +105,14 @@
 						<th>Nome</th>
 						<th>Ativo</th>
 						<th>Editar</th>
-						<th>Desativar</th>
+						<th>Ativar / Desativar</th>
 					</tr>
 				</thead>
 			</table>
 			<button type="submit" class="btn btn-primary pull-left" data-toggle="modal" data-target="#modal-add-service">Adicionar serviço</button>
 			
+			
+			<!-- Modal usado para cadastrar um serviço -->
 			<div class="modal fade" id="modal-add-service" tabindex="-1" role="dialog" aria-labelledby="modal-service">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -120,24 +123,49 @@
 							<h4 class="modal-title" id="modal-service">Adicionar Serviço</h4>
 						</div>
 						<div class="modal-body">
-						
-							<form action="/siac/registerService" method="post">
 							
 								<div class="form-group">
 									<label>Nome do serviço: </label>
-									<input type="text" class="form-control" name="name" />
+									<input type="text" class="form-control" name="name" id="name-register-service"/>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-									<input type="submit" class="btn btn-primary" value="Salvar Serviço">
+									<button type="button" class="btn btn-primary save-register-service" >Salvar Serviço</button>
 								</div>
-							</form>
 						
 						</div>
 						
 					</div>
 				</div>
 			</div><!-- Fim da dvi #modal-add-service -->
+			
+			<!-- Modal usado para editar um serviço -->
+			<div class="modal fade" id="modal-edit-service" tabindex="-1" role="dialog" aria-labelledby="modal-service">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="modal-service">Editar Serviço</h4>
+						</div>
+						<div class="modal-body">
+							
+								<div class="form-group">
+									<label>Nome do serviço: </label>
+									<input type="text" class="form-control" name="name" id="name-edit-service"/>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+									<button type="button" class="btn btn-primary save-edit-service">Salvar Serviço</button>
+								</div>
+						
+						</div>
+						
+					</div>
+				</div>
+			</div><!-- Fim da dvi #modal-edit-service -->
+			
 		</div>
 	</div>
 
