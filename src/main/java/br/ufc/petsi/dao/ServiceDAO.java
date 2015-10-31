@@ -9,4 +9,5 @@ public interface ServiceDAO {
 	public Service getServiceById(long id);
 	public Service getServiceByName(String name);
 	public List<Service> getAllServices();
+	public void edit(Service service);
 }

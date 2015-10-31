@@ -24,30 +24,32 @@ public class HBService implements ServiceDAO{
 	
 	@Override
 	public void save(Service service) {
-		System.out.println(service);
-		manager.persist(service);
+		this.manager.persist(service);
 	}
 
 	@Override
 	public Service getServiceById(long id) {
-		Query query = manager.createQuery("SELECT se FROM Service se WHERE se.id = :id");
+		Query query = this.manager.createQuery("SELECT se FROM Service se WHERE se.id = :id");
 		query.setParameter("id", id);
 		return (Service) query.getSingleResult();
 	}
 
 	@Override
 	public Service getServiceByName(String name) {
-		Query query = manager.createQuery("SELECT se FROM Service se WHERE se.name = :name");
+		Query query = this.manager.createQuery("SELECT se FROM Service se WHERE se.name = :name");
 		query.setParameter("name", name);
 		return (Service) query.getSingleResult();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Service> getAllServices(){
-		List<Service> services = manager.createQuery("SELECT se FROM Service se").getResultList();
-		
-		System.out.println(services);
+		List<Service> services = this.manager.createQuery("SELECT se FROM Service se").getResultList();
 		return services;
+	}
+
+	@Override
+	public void edit(Service service) {
+		this.manager.merge(service);
 	}
 	
 }

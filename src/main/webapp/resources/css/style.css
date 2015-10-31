@@ -195,6 +195,10 @@ body html{
 	display:none;
 }
 
+#alert-service-success{
+	display:none;
+}
+
 .fc-event-container{
 	cursor: pointer;
 }
