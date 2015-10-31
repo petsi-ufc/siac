@@ -194,3 +194,7 @@ body html{
 #add-service{
 	display:none;
 }
+
+#alert-service-success{
+	display:none;
+}
