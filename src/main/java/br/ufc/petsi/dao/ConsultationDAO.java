@@ -13,5 +13,5 @@ public interface ConsultationDAO {
 	public Consultation getConsultationById(long id);
 	public List<Consultation> getConsultationsByState(ConsultationState state);
 	public List<Consultation> getConsultationsByService(Service service);
-	public List<Consultation> getConsultationsByServiceAndDate(Service service, Date startDay, Date endDay);
+	public List<Consultation> getConsultationsByServiceAndDate(Service service, Date startDay);
 }

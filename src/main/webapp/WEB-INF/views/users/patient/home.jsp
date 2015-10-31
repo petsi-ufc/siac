@@ -56,6 +56,7 @@
 						<table id="table-schedule" class="table table-bordered table-hover">
 							<thead>
 								<tr>
+									<th></th>
 									<th>Horário</th>
 									<th id="table-status">Status</th>
 								</tr>
@@ -68,6 +69,7 @@
 						</table>
 					</div>
 					<div class="modal-footer">
+						<button id="btn-confirm-schedule" type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
 					</div>
 				</div>

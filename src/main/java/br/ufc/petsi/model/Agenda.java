@@ -25,8 +25,8 @@ public class Agenda {
 	private List<Consultation> consultations;
 	
 	@NotNull
-	@Column(name="id_user")
-	private Long userId;
+	@Column(name="user_cpf")
+	private String userCpf;
 
 	public Long getId() {
 		return id;
@@ -44,12 +44,12 @@ public class Agenda {
 		this.consultations = consultations;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public String getUsercCpf() {
+		return userCpf;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUserCpf(String userCpf) {
+		this.userCpf = userCpf;
 	}
 	
 }

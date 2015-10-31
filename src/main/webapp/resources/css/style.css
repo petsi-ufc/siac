@@ -194,3 +194,11 @@ body html{
 #add-service{
 	display:none;
 }
+
+.fc-event-container{
+	cursor: pointer;
+}
+
+.row-schedule{
+	cursor: pointer;
+}

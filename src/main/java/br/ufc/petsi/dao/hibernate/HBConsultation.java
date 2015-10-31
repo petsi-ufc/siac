@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -55,20 +56,19 @@ public class HBConsultation implements ConsultationDAO{
 
 	@Override
 	public List<Consultation> getConsultationsByServiceAndDate(Service service,
-			Date startDay, Date endDay) {
+			Date startDay) {
 		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE"
-				+ " cons.service = :service AND cons.schedule.dateInit = :startDay"
-				+ "and cons.schedule.dateEnd = :endDay");
+				+ " cons.service = :service AND cons.schedule.dateInit = :startDay");
 		query.setParameter("service", service);
 		query.setParameter("startDay", startDay);
-		query.setParameter("endDay", endDay);
 		
-		List<Consultation> cons = query.getResultList();
-		return cons;
+		try{
+			List<Consultation> cons = query.getResultList();
+			return cons;
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
-	
-	
 
-	
-	
+		
 }

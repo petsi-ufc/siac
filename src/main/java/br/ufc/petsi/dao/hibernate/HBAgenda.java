@@ -39,9 +39,9 @@ public class HBAgenda implements AgendaDAO{
 	}
 
 	@Override
-	public Agenda getAgendaByUserId(String userId) {
-		Query query = (Query) manager.createQuery("SELECT ag FROM Agenda ag WHERE ag.userId = :userId");
-		query.setParameter("userId", userId);
+	public Agenda getAgendaByUserCPF(String cpf) {
+		Query query = (Query) manager.createQuery("SELECT ag FROM Agenda ag WHERE ag.userCpf = :userC");
+		query.setParameter("userCpf", cpf);
 		try {
 			return (Agenda) query.getSingleResult();
 		} catch (NoResultException e) {
