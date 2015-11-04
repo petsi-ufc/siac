@@ -99,6 +99,7 @@ function initCalendarPatient(){
 	
 }
 
+
 //Quando o usuário clica no evento essa função é chamada.
 function clickEvent(event, jsEvent, view){
 	alert("Event: "+event.title+"\nID: "+event.id);
