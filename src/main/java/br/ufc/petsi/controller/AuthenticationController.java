@@ -16,4 +16,15 @@ public class AuthenticationController {
 	public ModelAndView success() {
 		return new ModelAndView("home_patient");
 	}
+	
+	
+	@RequestMapping("/professional")
+	public ModelAndView professional() {
+		return new ModelAndView("home_professional");
+	}
+	
+	@RequestMapping("/professional/schedule")
+	public ModelAndView scheduleProfessional() {
+		return new ModelAndView("schedule_professional");
+	}
 }
