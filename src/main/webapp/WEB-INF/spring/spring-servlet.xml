@@ -17,6 +17,8 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<context:component-scan base-package="br.ufc.petsi.dao.ldap.hibernate" />
 	<context:component-scan base-package="br.ufc.petsi.dao.ldap" />
 	<context:component-scan base-package="br.ufc.petsi.dao" />
+	<context:component-scan base-package="br.ufc.petsi.model" />
+	<context:component-scan base-package="br.ufc.petsi.service" />
 	
 	<mvc:annotation-driven />
 	

@@ -20,7 +20,7 @@ public class AgendaService {
 		if( con == null )
 			return false;
 		
-		Agenda agenda = agendaDAO.getAgendaByUserId(user.getId());
+		Agenda agenda = agendaDAO.getAgendaByUserId(user.getCpf());
 		
 		agenda.getConsultations().add(con);
 		

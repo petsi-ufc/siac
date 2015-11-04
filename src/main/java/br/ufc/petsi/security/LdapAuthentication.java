@@ -34,7 +34,7 @@ public class LdapAuthentication implements Authentication{
 
 	@Override
 	public String getName() {
-		return user != null ? user.getLogin() : null;
+		return user != null ? user.getCpf() : null;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class LdapAuthentication implements Authentication{
 
 	@Override
 	public Object getPrincipal() {
-		return user != null ? user.getLogin() : null;
+		return user != null ? user.getCpf() : null;
 	}
 
 	@Override

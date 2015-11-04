@@ -97,21 +97,8 @@ public class AgendaController {
 	@RequestMapping("/getUserAgenda")
 	@ResponseBody
 	public String getUserAgenda(long userId){
-		User u = new User();
-		u.setId(userId);
-		
-		Agenda ag = agendaDao.getAgendaByUserId(userId);
-		
-		Gson gson = new Gson();
-		String json = "";
-		
-		if(ag == null){
-			ag = new Agenda();
-			ag.setConsultations(new ArrayList<Consultation>());
-		}
-		
-		json = gson.toJson(ag);
-		return json;
+		//TODO
+		return "";
 		
 	}
 	
