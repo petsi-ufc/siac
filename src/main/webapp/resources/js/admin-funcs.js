@@ -32,7 +32,11 @@ function onActionClick(){
 			$("#set-professional").css("display", "block");
 		}else if($(this).attr("id") == 2){
 			$("#add-service").css("display", "block");
-			updateServiceTable();
+			ajaxCall("/siac/getServices", function(json){
+				
+				fillTableServices(json);
+				
+			});
 		}
 	});
 }
@@ -42,8 +46,44 @@ function onOptionReportClick(){
 	$(".type-report").change(function(){
 		if($(".type-report option:selected").text() == "Geral"){
 			$(".select-service").attr("disabled", "disabled");
+			
 		}else if($(".type-report option:selected").text() == "Por serviço"){
-			$(".select-service").removeAttr("disabled");
+			
+			$(".service-option").remove();
+			
+			ajaxCall("/siac/getServices", function(json){
+				
+				var serviceName;
+				var serviceActive;
+				var serviceId;
+				
+				json.sort(function (obj1, obj2) {
+					return obj1.name < obj2.name ? -1 :
+					(obj1.name > obj2.name ? 1 : 0);
+					});
+				
+				$.each(json, function(key, obj){
+					
+					$.each(obj, function(name, value){
+						if(name=="name"){
+							serviceName = value;
+						}
+						if(name=="active"){
+							serviceActive = value;
+						}
+						if(name=="id"){
+							serviceId = value;
+						}
+					})
+					
+				
+					$(".select-service").append("<option class='service-option' value='"+serviceId+"'>"+serviceName+"</option>");
+					
+				});
+				
+				$(".select-service").removeAttr("disabled");
+				
+			});
 		}
 	});
 }
@@ -56,54 +96,9 @@ function onServiceActiveButtonClick(){
 		params["serviceId"] = $(this).attr("id");
 		
 		ajaxCall("/siac/setInactiveService?id="+params["serviceId"],function(json){
-			var serviceName;
-			var serviceActive;
-			var serviceId;
-			
-			$(".line-service").remove();
-			
-			json.sort(function (obj1, obj2) {
-				return obj1.name < obj2.name ? -1 :
-				(obj1.name > obj2.name ? 1 : 0);
-				});
-			
-			$.each(json, function(key, obj){
-				$.each(obj, function(name, value){
-					if(name=="name"){
-						serviceName = value;
-					}
-					if(name=="active"){
-						serviceActive = value;
-					}
-					if(name=="id"){
-						serviceId = value;
-					}
-				})
 				
-				if(serviceActive){
-					var newRow = $("<tr class='line-service success'></tr>");
-				}else{
-					var newRow = $("<tr class='line-service active'></tr>");
-				}
+			fillTableServices(json);
 				
-				newRow.append("<td>"+serviceName+"</td>");
-				
-				if(serviceActive){
-					newRow.append("<td>Ativo</td>");
-				}else{
-					newRow.append("<td>Inativo</td>");
-				}
-				
-				newRow.append("<td><button class='btn btn-sm btn-warning edit-service' role='button' data-toggle='modal' data-target='#modal-edit-service' data-name='"+serviceName+"' data-id='"+serviceId+"'>Editar</button></td>");
-				
-				if(serviceActive){
-					newRow.append("<td><button class='btn btn-danger btn-sm service-active' id='"+serviceId+"'>Desativar</button></td>");
-				}else{
-					newRow.append("<td><button class='btn btn-primary btn-sm service-inactive' id='"+serviceId+"'>Ativar</button></td>");
-				}
-				
-				$("#table-services").append(newRow);
-			});
 		});
 		
 	});
@@ -118,112 +113,13 @@ function onServiceInactiveButtonClick(){
 		params["serviceId"] = $(this).attr("id");
 		
 		ajaxCall("/siac/setActiveService?id="+params["serviceId"],function(json){
-			var serviceName;
-			var serviceActive;
-			var serviceId;
 			
-			$(".line-service").remove();
+			fillTableServices(json);
 			
-			json.sort(function (obj1, obj2) {
-				return obj1.name < obj2.name ? -1 :
-				(obj1.name > obj2.name ? 1 : 0);
-				});
-			
-			$.each(json, function(key, obj){
-				$.each(obj, function(name, value){
-					if(name=="name"){
-						serviceName = value;
-					}
-					if(name=="active"){
-						serviceActive = value;
-					}
-					if(name=="id"){
-						serviceId = value;
-					}
-				})
-				
-				if(serviceActive){
-					var newRow = $("<tr class='line-service success'></tr>");
-				}else{
-					var newRow = $("<tr class='line-service active'></tr>");
-				}
-				
-				newRow.append("<td>"+serviceName+"</td>");
-				
-				if(serviceActive){
-					newRow.append("<td>Ativo</td>");
-				}else{
-					newRow.append("<td>Inativo</td>");
-				}
-				
-				newRow.append("<td><button class='btn btn-sm btn-warning edit-service' role='button' data-toggle='modal' data-target='#modal-edit-service' data-name='"+serviceName+"' data-id='"+serviceId+"'>Editar</button></td>");
-				
-				if(serviceActive){
-					newRow.append("<td><button class='btn btn-danger btn-sm service-active' id='"+serviceId+"'>Desativar</button></td>");
-				}else{
-					newRow.append("<td><button class='btn btn-primary btn-sm service-inactive' id='"+serviceId+"'>Ativar</button></td>");
-				}
-				
-				$("#table-services").append(newRow);
-			});
 		});
 		
 	});
 	
-}
-
-function updateServiceTable(){
-	
-	ajaxCall("/siac/getServices", function(json){
-		
-		var serviceName;
-		var serviceActive;
-		var serviceId;
-		
-		json.sort(function (obj1, obj2) {
-			return obj1.name < obj2.name ? -1 :
-			(obj1.name > obj2.name ? 1 : 0);
-			});
-		
-		$.each(json, function(key, obj){
-			$.each(obj, function(name, value){
-				if(name=="name"){
-					serviceName = value;
-				}
-				if(name=="active"){
-					serviceActive = value;
-				}
-				if(name=="id"){
-					serviceId = value;
-				}
-			})
-			
-			if(serviceActive){
-				var newRow = $("<tr class='line-service success'></tr>");
-			}else{
-				var newRow = $("<tr class='line-service active'></tr>");
-			}
-			
-			newRow.append("<td>"+serviceName+"</td>");
-			
-			if(serviceActive){
-				newRow.append("<td>Ativo</td>");
-			}else{
-				newRow.append("<td>Inativo</td>");
-			}
-			
-			newRow.append("<td><button class='btn btn-sm btn-warning edit-service' role='button' data-toggle='modal' data-target='#modal-edit-service' data-name='"+serviceName+"' data-id='"+serviceId+"'>Editar</button></td>");
-			
-			if(serviceActive){
-				newRow.append("<td><button class='btn btn-danger btn-sm service-active' id='"+serviceId+"'>Desativar</button></td>");
-			}else{
-				newRow.append("<td><button class='btn btn-primary btn-sm service-inactive' id='"+serviceId+"'>Ativar</button></td>");
-			}
-			
-			$("#table-services").append(newRow);
-		});
-		
-	})
 }
 
 function onServiceEditButtonClick(){
@@ -242,54 +138,7 @@ function onServiceEditSaveButtonClick(){
 		params["serviceId"] = $(this).attr("data-id");
 		
 		ajaxCall("/siac/editService?id="+params["serviceId"]+"&name="+params["serviceName"], function(json){
-			var serviceName;
-			var serviceActive;
-			var serviceId;
-			
-			$(".line-service").remove();
-			
-			json.sort(function (obj1, obj2) {
-				return obj1.name < obj2.name ? -1 :
-				(obj1.name > obj2.name ? 1 : 0);
-				});
-			
-			$.each(json, function(key, obj){
-				$.each(obj, function(name, value){
-					if(name=="name"){
-						serviceName = value;
-					}
-					if(name=="active"){
-						serviceActive = value;
-					}
-					if(name=="id"){
-						serviceId = value;
-					}
-				})
-				
-				if(serviceActive){
-					var newRow = $("<tr class='line-service success'></tr>");
-				}else{
-					var newRow = $("<tr class='line-service active'></tr>");
-				}
-				
-				newRow.append("<td>"+serviceName+"</td>");
-				
-				if(serviceActive){
-					newRow.append("<td>Ativo</td>");
-				}else{
-					newRow.append("<td>Inativo</td>");
-				}
-				
-				newRow.append("<td><button class='btn btn-sm btn-warning edit-service' role='button' data-toggle='modal' data-target='#modal-edit-service' data-name='"+serviceName+"' data-id='"+serviceId+"'>Editar</button></td>");
-				
-				if(serviceActive){
-					newRow.append("<td><button class='btn btn-danger btn-sm service-active' id='"+serviceId+"'>Desativar</button></td>");
-				}else{
-					newRow.append("<td><button class='btn btn-primary btn-sm service-inactive' id='"+serviceId+"'>Ativar</button></td>");
-				}
-				
-				$("#table-services").append(newRow);
-			});
+			fillTableServices(json);
 		});
 		
 		$('#modal-edit-service').modal('hide');
@@ -306,56 +155,60 @@ function onServiceAddButtonClick(){
 		$("#name-register-service").val("");
 		
 		ajaxCall("/siac/registerService?name="+params["serviceName"], function(json){
-			var serviceName;
-			var serviceActive;
-			var serviceId;
-			
-			$(".line-service").remove();
-			
-			json.sort(function (obj1, obj2) {
-				return obj1.name < obj2.name ? -1 :
-				(obj1.name > obj2.name ? 1 : 0);
-				});
-			
-			$.each(json, function(key, obj){
-				$.each(obj, function(name, value){
-					if(name=="name"){
-						serviceName = value;
-					}
-					if(name=="active"){
-						serviceActive = value;
-					}
-					if(name=="id"){
-						serviceId = value;
-					}
-				})
-				
-				if(serviceActive){
-					var newRow = $("<tr class='line-service success'></tr>");
-				}else{
-					var newRow = $("<tr class='line-service active'></tr>");
-				}
-				
-				newRow.append("<td>"+serviceName+"</td>");
-				
-				if(serviceActive){
-					newRow.append("<td>Ativo</td>");
-				}else{
-					newRow.append("<td>Inativo</td>");
-				}
-				
-				newRow.append("<td><button class='btn btn-sm btn-warning edit-service' role='button' data-toggle='modal' data-target='#modal-edit-service' data-name='"+serviceName+"' data-id='"+serviceId+"'>Editar</button></td>");
-				
-				if(serviceActive){
-					newRow.append("<td><button class='btn btn-danger btn-sm service-active' id='"+serviceId+"'>Desativar</button></td>");
-				}else{
-					newRow.append("<td><button class='btn btn-primary btn-sm service-inactive' id='"+serviceId+"'>Ativar</button></td>");
-				}
-				
-				$("#table-services").append(newRow);
-			});
+			fillTableServices(json);
 		});
 		
 		$('#modal-add-service').modal('hide');
 	})
+}
+
+function fillTableServices(json){
+	var serviceName;
+	var serviceActive;
+	var serviceId;
+	
+	$(".line-service").remove();
+	
+	json.sort(function (obj1, obj2) {
+		return obj1.name < obj2.name ? -1 :
+		(obj1.name > obj2.name ? 1 : 0);
+		});
+	
+	$.each(json, function(key, obj){
+		$.each(obj, function(name, value){
+			if(name=="name"){
+				serviceName = value;
+			}
+			if(name=="active"){
+				serviceActive = value;
+			}
+			if(name=="id"){
+				serviceId = value;
+			}
+		})
+		
+		if(serviceActive){
+			var newRow = $("<tr class='line-service success'></tr>");
+		}else{
+			var newRow = $("<tr class='line-service active'></tr>");
+		}
+		
+		newRow.append("<td>"+serviceName+"</td>");
+		
+		if(serviceActive){
+			newRow.append("<td>Ativo</td>");
+		}else{
+			newRow.append("<td>Inativo</td>");
+		}
+		
+		newRow.append("<td><button class='btn btn-sm btn-warning edit-service' role='button' data-toggle='modal' data-target='#modal-edit-service' data-name='"+serviceName+"' data-id='"+serviceId+"'>Editar</button></td>");
+		
+		if(serviceActive){
+			newRow.append("<td><button class='btn btn-danger btn-sm service-active' id='"+serviceId+"'>Desativar</button></td>");
+		}else{
+			newRow.append("<td><button class='btn btn-primary btn-sm service-inactive' id='"+serviceId+"'>Ativar</button></td>");
+		}
+		
+		$("#table-services").append(newRow);
+	});
 }

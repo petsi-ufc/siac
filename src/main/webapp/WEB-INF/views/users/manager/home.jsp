@@ -29,7 +29,7 @@
 				<li class="action"><a class="link-action" id="0">Gerar
 						Relatórios</a></li>
 				<li class="nav-divider"></li>
-				<li class="action"><a class="link-action" id="1">Definir
+				<li class="action"><a class="link-action" id="1">Gerenciar
 						Profissionais</a></li>
 				<li class="nav-divider"></li>
 				<li class="action"><a class="link-action" id="2">Gerenciar
@@ -78,12 +78,9 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<label>Escolha o serviço</label> <select
-						class="form-control select-service">
+					<label>Escolha o serviço</label> 
+					<select class="form-control select-service" disabled="disabled">
 						<option>Escolha o serviço</option>
-						<option>Nutrição</option>
-						<option>Odontologia</option>
-						<option>Psicologia</option>
 					</select>
 				</div>
 			</form>
