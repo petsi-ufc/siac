@@ -45,15 +45,6 @@ function onServiceClick(){
 	$(".link-service").click(function(){
 		$(".service").removeClass("active");
 		$(this).parent().addClass("active");
-		
-		//No caso do calendário ter sido oculto pelo "Gerar Relatórios"
-		$(".calendar").css("display", "block");
-		$("#my-calendar").css("display", "block");
-		$("#alert-schedules").css("display", "block");
-		$(".action").removeClass("active");
-		$("#generate-report").css("display", "none");
-		$("#set-professional").css("display", "none");
-		$("#add-service").css("display", "none");
 
 		serviceId = $(this).attr('id');
 		

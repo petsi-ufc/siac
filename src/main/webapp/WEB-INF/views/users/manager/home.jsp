@@ -37,31 +37,13 @@
 			</ul>
 		</div>
 
-		<div id="box-services">
-			<h3>Serviços disponí­veis</h3>
-			<ul class="nav nav-pills nav-stacked" role="tablist">
-				<li class="nav-divider"></li>
-				<li class="service active"><a class="link-service" id="0">Seu calendário</a></li>
-				<li class="nav-divider"></li>
-				<li class="service"><a class="link-service" id="1">Nutrição</a></li>
-				<li class="nav-divider"></li>
-				<li class="service"><a class="link-service" id="2">Odontologia</a></li>
-				<li class="nav-divider"></li>
-				<li class="service"><a class="link-service" id="3">Psicologia</a></li>
-			</ul>
-		</div>
-		<div id="calendar-legend">
-			<h3>LEGENDA AQUI</h3>
-		</div>
+		
 	</div>
 
 
 	<div id="right-bar">
 	
 		<div class="alert alert-danger" id="alert-schedules">Não há nenhum horário cadastrado!</div>
-		
-		<h2 id="my-calendar">Meu calendário</h2>
-		<div class="calendar" id="calendar_patient"></div>
 
 		<div id="generate-report">
 			<h2>Gerar Relatórios</h2>
@@ -165,35 +147,4 @@
 			
 		</div>
 	</div>
-
-	<div id="modal-schedules" class="modal fade" role="dialog">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">X</button>
-					<h4 class="modal-title" id="modal-title-schedule">Horários dia
-						xx</h4>
-				</div>
-				<div class="modal-body">
-					<table id="table-schedule" class="table table-bordered table-hover">
-						<thead>
-							<tr>
-								<th>Horário</th>
-								<th id="table-status">Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<!-- ESSA TABELA É PREENCHIDA DINAMICAMENTE COM AJAX -->
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 </div>
