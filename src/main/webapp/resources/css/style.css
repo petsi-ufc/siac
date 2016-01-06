@@ -183,6 +183,51 @@ body html{
 	width: 70%;
 }
 
+.timepicker-schedule{
+	width: 100%;
+}
+
+.clear{
+	clear: right;
+}
+
+#modal-content-left{
+	width: 50%;
+	float: left;
+}
+
+#dp3 input{
+	width: 100%;
+}
+
+#initial-date{
+	width:50% !important;
+	text-align: center;
+	padding: auto;
+	margin: 0 auto;
+}
+
+#modal-content-left select{
+	text-align: center;
+	margin: 0 auto;
+}
+
+#modal-content-right{
+	width: 50%;
+	float: right;
+}
+
+#modal-content-right button{
+	float:right;
+}
+
+#input-calendar{
+	width: 81%;
+}
+
+#select-repeat{
+	width: 50%;
+}
 #generate-report{
 	display:none;
 }

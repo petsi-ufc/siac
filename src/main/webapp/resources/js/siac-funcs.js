@@ -175,6 +175,7 @@ function initCalendarPatient(){
 	
 }
 
+
 //Quando o usuário clica no evento essa função é chamada.
 function clickEvent(event, jsEvent, view){
 	getModalSchedules(event);

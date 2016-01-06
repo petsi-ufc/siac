@@ -18,6 +18,10 @@
 		<put-attribute name="body" value="/WEB-INF/views/users/professional/home.jsp"/>	
 	</definition>
 	
+	<definition name="schedule_professional" extends="main">
+		<put-attribute name="body" value="/WEB-INF/views/users/professional/schedule.jsp"/>	
+	</definition>
+	
 	<definition name="home_manager" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/users/manager/home.jsp"/>	
 	</definition>
