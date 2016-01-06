@@ -15,21 +15,22 @@ public class UserAttributeMapper implements AttributesMapper<User>, Serializable
 	@Override
 	public User mapFromAttributes(Attributes attrs) throws NamingException {
 		
-		User user = new User();
+//		User user = new User();
 		
 		if(attrs.get(Constants.CPF_USER) != null) {
-			user.setCpf(attrs.get(Constants.CPF_USER).get().toString());
+//			user.setCpf(attrs.get(Constants.CPF_USER).get().toString());
 		}
 		
 		if(attrs.get(Constants.NAME_USER) != null) {
-			user.setName(attrs.get(Constants.NAME_USER).get().toString());
+//			user.setName(attrs.get(Constants.NAME_USER).get().toString());
 		}
 		
 		if(attrs.get(Constants.EMAIL_USER) != null) {
-			user.setEmail(attrs.get(Constants.EMAIL_USER).get().toString());
+//			user.setEmail(attrs.get(Constants.EMAIL_USER).get().toString());
 		}
 		
-		return user;
+//		return user;
+		return null;
 	}
 	
 }

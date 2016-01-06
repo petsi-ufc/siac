@@ -5,13 +5,13 @@ import java.util.List;
 
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
-import br.ufc.petsi.model.Service;
+import br.ufc.petsi.model.SocialService;
 
 public interface ConsultationDAO {
 	public void save(Consultation cons);
 	public void update(Consultation con);
 	public Consultation getConsultationById(long id);
 	public List<Consultation> getConsultationsByState(ConsultationState state);
-	public List<Consultation> getConsultationsByService(Service service);
-	public List<Consultation> getConsultationsByServiceAndDate(Service service, Date startDay);
+	public List<Consultation> getConsultationsByService(SocialService service);
+	public List<Consultation> getConsultationsByServiceAndDate(SocialService service, Date startDay);
 }

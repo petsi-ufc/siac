@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import br.ufc.petsi.dao.ServiceDAO;
-import br.ufc.petsi.model.Service;
+import br.ufc.petsi.model.SocialService;
 
 @Repository
 public class HBService implements ServiceDAO{
@@ -23,33 +23,38 @@ public class HBService implements ServiceDAO{
 		
 	
 	@Override
-	public void save(Service service) {
+	public void save(SocialService service) {
 		this.manager.persist(service);
 	}
 
 	@Override
-	public Service getServiceById(long id) {
+	public SocialService getServiceById(long id) {
 		Query query = this.manager.createQuery("SELECT se FROM Service se WHERE se.id = :id");
 		query.setParameter("id", id);
-		return (Service) query.getSingleResult();
+		return (SocialService) query.getSingleResult();
 	}
 
 	@Override
-	public Service getServiceByName(String name) {
+	public SocialService getServiceByName(String name) {
 		Query query = this.manager.createQuery("SELECT se FROM Service se WHERE se.name = :name");
 		query.setParameter("name", name);
-		return (Service) query.getSingleResult();
+		return (SocialService) query.getSingleResult();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Service> getAllServices(){
-		List<Service> services = this.manager.createQuery("SELECT se FROM Service se").getResultList();
+	public List<SocialService> getAllServices(){
+		List<SocialService> services = this.manager.createQuery("SELECT se FROM Service se").getResultList();
 		return services;
 	}
 
 	@Override
-	public void edit(Service service) {
+	public void edit(SocialService service) {
 		this.manager.merge(service);
+	}
+
+	@Override
+	public List<SocialService> getActiveServices() {
+		return this.manager.createQuery("SELECT se FROM Service se WHERE se.active = true").getResultList();
 	}
 	
 }

@@ -18,7 +18,6 @@ public class Rating {
 	@NotNull
 	private String comment;
 	
-	@NotNull(message="Informe uma nota para a consulta!")
 	@Column(nullable = false)
 	private int rating;
 

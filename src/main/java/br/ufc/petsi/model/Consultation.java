@@ -1,6 +1,9 @@
 package br.ufc.petsi.model;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,8 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import br.ufc.petsi.enums.ConsultationState;
+
+//Adicionar id ou cpf do profissional e o cpf ou id do pacientes
 
 @Entity
 @Table( name = "consultation" )
@@ -21,35 +28,43 @@ public class Consultation {
 	@GeneratedValue
 	private Long id;
 	
-	@OneToOne(targetEntity = Service.class, 
+	@OneToOne(targetEntity = SocialService.class, 
 			  cascade = { CascadeType.MERGE }, 
 			  fetch = FetchType.EAGER )
 	@JoinColumn( name = "id_service" )
-	private Service service;
+	private SocialService socialService;
+	
+	@ManyToOne
+	private Professional professional;
+	
+	@ManyToOne
+	private Patient patient;
+	
+	@Column(name="date_init")
+	@Temporal(value = TemporalType.DATE)
+	private Date dateInit;
+	
+	@Column(name="date_end")
+	@Temporal(value = TemporalType.DATE)
+	private Date dateEnd;
 	
 	@Enumerated( EnumType.STRING )
 	private ConsultationState state;
-	
-	@OneToOne(targetEntity = Schedule.class, 
-			  cascade = { CascadeType.MERGE }, 
-			  fetch = FetchType.EAGER )
-	@JoinColumn( name = "id_schedule" )
-	private Schedule schedule;
 	
 	@OneToOne(cascade = CascadeType.ALL, optional = false, 
 			fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="id_rating")
 	private Rating rating;
 	
-	@ManyToOne
-	@JoinColumn( name = "id_agenda" )
-	private Agenda agenda;
-
-	public Consultation(Long id, Service service, ConsultationState state, Schedule schedule) {
+	public Consultation(Long id, SocialService socialService, Professional profesisonal, Patient patient, 
+			ConsultationState states, Date dateInit, Date dateEnd) {
 		this.id = id;
-		this.service = service;
+		this.socialService = socialService;
 		this.state = state;
-		this.schedule = schedule;
+		this.professional = profesisonal;
+		this.patient = patient;
+		this.dateEnd = dateEnd;
+		this.dateInit = dateInit;
 	}
 
 	public Consultation() {}
@@ -61,13 +76,45 @@ public class Consultation {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Service getService() {
-		return service;
+	
+	public Professional getProfessional() {
+		return professional;
+	}
+	
+	public Patient getPatient() {
+		return patient;
 	}
 
-	public void setService(Service service) {
-		this.service = service;
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+	public Date getDateInit() {
+		return dateInit;
+	}
+
+	public void setDateInit(Date dateInit) {
+		this.dateInit = dateInit;
+	}
+
+	public Date getDateEnd() {
+		return dateEnd;
+	}
+
+	public void setDateEnd(Date dateEnd) {
+		this.dateEnd = dateEnd;
+	}
+
+	public void setProfessional(Professional professional) {
+		this.professional = professional;
+	}
+
+	public SocialService getService() {
+		return socialService;
+	}
+
+	public void setService(SocialService service) {
+		this.socialService = service;
 	}
 
 	public ConsultationState getState() {
@@ -78,31 +125,11 @@ public class Consultation {
 		this.state = state;
 	}
 
-	public Schedule getSchedule() {
-		return schedule;
-	}
-
-	public void setSchedule(Schedule schedule) {
-		this.schedule = schedule;
-	}
-
 	public Rating getRating() {
 		return rating;
 	}
 
 	public void setRating(Rating rating) {
 		this.rating = rating;
-	}
-
-	public Agenda getAgenda() {
-		return agenda;
-	}
-
-	public void setAgenda(Agenda agenda) {
-		this.agenda = agenda;
-	}
-	
-	public boolean checkScheduleShocks(Consultation con) {
-		return this.schedule.checkScheduleShocks(con.getSchedule());
 	}
 }

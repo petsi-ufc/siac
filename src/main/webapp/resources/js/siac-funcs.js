@@ -12,9 +12,30 @@ $("document").ready(function(){
 
 	onClickModalConfig();
 	initCalendarPatient();
-	onServiceClick();
-	
+	initServices();	
+	initMainNavBar();
 });
+
+/* Essa função pega todos os serviços ativos e mostra na
+ * barra de serviços disponíveis para o paciente.
+*/
+function initServices(){
+	ajaxCall("/siac/getActiveServices", null, function(json){
+		var li = $("#list-services");
+		
+		$.each(json, function(key, obj){
+			li.append("<li class='nav-divider'></li>");
+			
+			var newLine = $("<li class='service'></li>");
+			newLine.append("<a class='link-service'></a>");
+			
+			newLine.children("a").attr("id", obj.id);
+			newLine.children("a").text(obj.name);
+			li.append(newLine);
+		})
+		onServiceClick();
+	});
+}
 
 //Função que fax uma chamada ajax contendo a url e os parametros devidos.
 //O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
@@ -48,9 +69,15 @@ function openScheduleModal(event, schedules){
 		var timeInit = dateInit.getHours()+':'+addZero(dateInit);
 		var timeEnd = dateEnd.getHours()+':'+addZero(dateEnd);
 		
-		tableData += '<td><div class="checkbox">'+
-			  			' <label><input type="checkbox" value=""></label>'+
-			  		 '</div></td>';
+		var disabled = "";
+		if(obj['available'])
+			disabled = "";
+		else
+			disabled = "disabled";
+		
+			tableData += '<td><div class="checkbox">'+
+				  			' <label><input type="checkbox" value="" '+disabled+'></label>'+
+				  		 '</div></td>';
 		
 		tableData += '<td>'+timeInit+' - '+timeEnd+'</td>';
 		
@@ -76,7 +103,7 @@ function openScheduleModal(event, schedules){
 /* Essa função é chamada quando o paciente clica em algum horário
  * apresentado no modal de horários.
 */
-function onScheduleTableClick(){
+function onScheduleTableClick(){	
 	$(".row-schedule").click(function(){
 		var row = $(this);
 		var btnConfirm = $("#btn-confirm-schedule");
@@ -92,6 +119,7 @@ function onScheduleTableClick(){
 		}
 	});
 }
+
 
 
 //Essa função serve para adicionar os zeros aos minutos da data.
@@ -111,7 +139,7 @@ function onServiceClick(){
 		
 		if(serviceId == MY_CALENDAR){
 			$("#my-calendar").text("Meu Calendário");
-			params["userId"] = serviceId;
+			params["userCpf"] = serviceId;
 			url = "/siac/getUserAgenda"
 		}else{
 			$("#my-calendar").text("Calendário "+$(this).text());
@@ -119,11 +147,10 @@ function onServiceClick(){
 			url = "/siac/getServiceAgenda";
 		}
 		ajaxCall(url, params, function(json){
-			setCalendarSchedules("#calendar_patient", json);
+			setCalendarSchedules("#calendar-patient", json);
 		});
 	});
 }
-
 
 function onClickModalConfig(){
 	//Quando o usuário clicar na imagem o modal aparece...
@@ -134,7 +161,7 @@ function onClickModalConfig(){
 
 //Função que inicia o calendário.
 function initCalendarPatient(){
-	$("#calendar_patient").fullCalendar({
+	$("#calendar-patient").fullCalendar({
 		header: {
 			left: 'prev',
 			center: 'title',
@@ -193,7 +220,6 @@ function setCalendarSchedules(idCalendar, json){
 	
 	$.each(json.consultations, function(key, obj){
 		var serviceName = obj.service.name;
-		
 		var serviceId = 0;
 		$.each(obj, function(name, value){
 			if(name == "service"){
@@ -234,7 +260,41 @@ function renderCalendarEvent(idCalendar, idService ,serviceName, dayStart){
 	}, true);
 }
 
-
 function clickFunction(date, jsEvent, view){
 	
 }
+
+/* Essa função é inicia a barra principal.
+*/
+function initMainNavBar(){
+	$("#main-navbar").append(
+		'<li class="active" id="menu-main"><a href="#">Pincipal</a></li>'+
+	    '<li id="menu-consultations"><a href="#">Consultas</a></li>'+
+	    '<li id="menu-reservations"><a href="#">Reservas</a></li>'+
+	    '<li id="menu-help"><a href="#">Ajuda</a></li>');
+	
+	$("#menu-consultations").click(function(){
+		$("#main-navbar").children().removeClass("active");
+		$(this).addClass("active");
+		
+		$("#calendar-patient").css({"display":"none"});
+		$("#my-calendar").css({"display":"none"});
+		
+		$("#my-consultations").css({"display":"block"});
+	});
+	
+	$("#menu-main").click(function(){
+		$("#main-navbar").children().removeClass("active");
+		$(this).addClass("active");
+		
+		$("#calendar-patient").css({"display":"block"});
+		$("#my-calendar").css({"display":"block"});
+		
+		$("#my-consultations").css({"display":"none"});
+		
+	});
+		
+}
+
+
+

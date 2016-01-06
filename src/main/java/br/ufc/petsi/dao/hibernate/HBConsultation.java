@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
-import br.ufc.petsi.model.Service;
+import br.ufc.petsi.model.SocialService;
 
 @Repository
 public class HBConsultation implements ConsultationDAO{
@@ -47,7 +47,7 @@ public class HBConsultation implements ConsultationDAO{
 	}
 
 	@Override
-	public List<Consultation> getConsultationsByService(Service service) {
+	public List<Consultation> getConsultationsByService(SocialService service) {
 		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.service = :service");
 		query.setParameter("service", service);
 		List<Consultation> cons = query.getResultList();
@@ -55,7 +55,7 @@ public class HBConsultation implements ConsultationDAO{
 	}
 
 	@Override
-	public List<Consultation> getConsultationsByServiceAndDate(Service service,
+	public List<Consultation> getConsultationsByServiceAndDate(SocialService service,
 			Date startDay) {
 		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE"
 				+ " cons.service = :service AND cons.schedule.dateInit = :startDay");

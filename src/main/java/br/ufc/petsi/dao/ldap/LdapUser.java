@@ -8,9 +8,7 @@ import org.springframework.ldap.query.LdapQueryBuilder;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.UserDAO;
-import br.ufc.petsi.mapper.RoleAttributeMapper;
 import br.ufc.petsi.mapper.UserAttributeMapper;
-import br.ufc.petsi.model.Role;
 import br.ufc.petsi.model.User;
 
 public class LdapUser implements UserDAO {
@@ -37,17 +35,17 @@ public class LdapUser implements UserDAO {
 		
 		if( users != null && !users.isEmpty() ) {
 			User user = users.get(0);
-			user.setRoles( getRoles(cpf) );
+//			user.setRoles( getRoles(cpf) );
 			return user;
 		}
 		
 		return null;
 	}
 	
-	@Override
-	public List<Role> getRoles(String cpf) {
-		return ldapTemplate.search(Constants.ID_USER + "=" + cpf + "," + base , "(objectclass=brEduPerson)", new RoleAttributeMapper());
-	}
+//	@Override
+//	public List<Role> getRoles(String cpf) {
+//		return ldapTemplate.search(Constants.ID_USER + "=" + cpf + "," + base , "(objectclass=brEduPerson)", new RoleAttributeMapper());
+//	}
 	
 	@Override
 	public boolean authenticate(String login, String password) {

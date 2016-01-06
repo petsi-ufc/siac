@@ -6,10 +6,6 @@ import br.ufc.petsi.model.User;
 
 public class UserService {
 	
-	public boolean sheduleConsultation(User user, Consultation con) {
-		return new AgendaService().schedule(user, con);
-	}
-	
 	public boolean rateConsultation(Consultation con, Rating rating) {
 		return new ConsultationService().rate(con, rating);
 	}
