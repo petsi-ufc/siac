@@ -1,19 +1,17 @@
 package br.ufc.petsi.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import br.ufc.petsi.enums.Role;
 
 @Entity
-@Table( name = "users" )
-public class User {
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+public abstract class User {
 	
 	@Id
 	private String cpf;
@@ -21,23 +19,19 @@ public class User {
 	private String name;
 	
 	private String email;
-	@OneToMany( targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-	@JoinTable(
-			name = "usuario_papel",
-			joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "cpf"), 
-			inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id")
-			)
-	private List<Role> roles;
-
+	
+	@Transient
+	private Role role;
+	
 	public User() {
-
+		//DEFAUTL
 	}
 	
-	public User(String cpf, String name, String email, List<Role> roles) {
+	public User(String cpf, String name, String email, Role role) {
 		this.cpf = cpf;
 		this.name = name;
 		this.email = email;
-		this.roles = roles;
+		this.role = role;
 	}
 
 	public String getCpf() {
@@ -64,13 +58,15 @@ public class User {
 		this.email = email;
 	}
 
-	public List<Role> getRoles() {
-		return roles;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
+	
+	
 	
 	
 }

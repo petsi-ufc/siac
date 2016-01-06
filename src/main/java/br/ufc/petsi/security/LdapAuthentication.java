@@ -8,7 +8,7 @@ import javax.inject.Named;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import br.ufc.petsi.model.Role;
+import br.ufc.petsi.enums.Role;
 import br.ufc.petsi.model.User;
 
 @Named
@@ -17,7 +17,6 @@ public class LdapAuthentication implements Authentication{
 	private User user;
 	private String password;
 	private boolean authenticated;
-	private List<Role> roles;
 	
 	public LdapAuthentication() {
 
@@ -27,7 +26,6 @@ public class LdapAuthentication implements Authentication{
 		super();
 		this.user = user;
 		this.password = password;
-		this.roles = roles;
 	}
 
 
@@ -37,10 +35,7 @@ public class LdapAuthentication implements Authentication{
 		return user != null ? user.getCpf() : null;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles;
-	}
+	
 
 	@Override
 	public Object getCredentials() {
@@ -75,13 +70,13 @@ public class LdapAuthentication implements Authentication{
 		this.user = user;
 	}
 
-	public List<Role> getRoles() {
-		return roles;
-	}
+//	public List<Role> getRoles() {
+//		return roles;
+//	}
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
+//	public void setRoles(List<Role> roles) {
+//		this.roles = roles;
+//	}
 
 	public String getPassword() {
 		return password;
@@ -89,6 +84,12 @@ public class LdapAuthentication implements Authentication{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

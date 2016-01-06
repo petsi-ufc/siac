@@ -3,10 +3,11 @@ package br.ufc.petsi.enums;
 public enum ConsultationState {
 	/*	CD - CANCELED
 	 * 	SC - SCHEDULED
-	 * 	HD - HELD
+	 * 	AV - AVALIABLE
+	 *  NSC - NOT SCHEDULED
 	 */
 
-	CD("Cancelada"), SC("Agendada"), HD("Realizada");
+	FR("FREE"), CD("CANCELED"), SC("SCHEDULED"), RV("RESERVED"), RD("REALIZED"); 
 	
 	private String name;
 	

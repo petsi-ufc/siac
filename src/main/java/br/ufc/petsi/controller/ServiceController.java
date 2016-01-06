@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.dao.ServiceDAO;
-import br.ufc.petsi.model.Service;
+import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ServiceService;
 
 @Controller
@@ -24,9 +24,15 @@ public class ServiceController {
 	
 	@RequestMapping("/registerService")
 	@ResponseBody
-	public String registerService(Service service){
+	public String registerService(SocialService service){
 		serviceService.registerService(service, this.serviceDao);
 		return this.getServices();
+	}
+	
+	@RequestMapping("/getActiveServices")
+	@ResponseBody
+	public String getActiveServices(){
+		return serviceService.getActiveServices(this.serviceDao);
 	}
 	
 	@RequestMapping("/getServices")
@@ -37,21 +43,21 @@ public class ServiceController {
 	
 	@RequestMapping("/setInactiveService")
 	@ResponseBody
-	public String setInactiveService(Service service){
+	public String setInactiveService(SocialService service){
 		serviceService.setInactiveService(this.serviceDao, service);
 		return this.getServices();
 	}
 	
 	@RequestMapping("/setActiveService")
 	@ResponseBody
-	public String setActiveService(Service service){
+	public String setActiveService(SocialService service){
 		serviceService.setActiveService(this.serviceDao, service);
 		return this.getServices();
 	}
 	
 	@RequestMapping("/editService")
 	@ResponseBody
-	public String editService(Service service){
+	public String editService(SocialService service){
 		serviceService.editService(serviceDao, service);
 		return this.getServices();
 	}

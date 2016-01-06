@@ -2,12 +2,13 @@ package br.ufc.petsi.dao;
 
 import java.util.List;
 
-import br.ufc.petsi.model.Service;
+import br.ufc.petsi.model.SocialService;
 
 public interface ServiceDAO {
-	public void save(Service service);
-	public Service getServiceById(long id);
-	public Service getServiceByName(String name);
-	public List<Service> getAllServices();
-	public void edit(Service service);
+	public void save(SocialService service);
+	public SocialService getServiceById(long id);
+	public SocialService getServiceByName(String name);
+	public List<SocialService> getAllServices();
+	public List<SocialService> getActiveServices();
+	public void edit(SocialService service);
 }

@@ -10,11 +10,8 @@
       <a class="navbar-brand" href="#">SIAC</a>
     </div>
     <div>
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Pincipal</a></li>
-        <li><a href="#">Consultas</a></li>
-        <li><a href="#">Reservas</a></li>
-        <li><a href="#">Ajuda</a></li>
+      <ul class="nav navbar-nav" id="main-navbar">
+        <!-- ESSA NAVBAR É PREENCHIDA DINAMICAMENTE COM JS. -->
       </ul>  
       <ul class="nav navbar-nav navbar-right">
       	<li><a href="#"><span class="glyphicon glyphicon-log-out"></span>Sair</a></li>

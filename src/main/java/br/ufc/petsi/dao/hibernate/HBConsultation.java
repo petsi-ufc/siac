@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
-import br.ufc.petsi.model.Service;
+import br.ufc.petsi.model.SocialService;
 
 @Repository
 public class HBConsultation implements ConsultationDAO{
@@ -46,7 +47,7 @@ public class HBConsultation implements ConsultationDAO{
 	}
 
 	@Override
-	public List<Consultation> getConsultationsByService(Service service) {
+	public List<Consultation> getConsultationsByService(SocialService service) {
 		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.service = :service");
 		query.setParameter("service", service);
 		List<Consultation> cons = query.getResultList();
@@ -54,21 +55,20 @@ public class HBConsultation implements ConsultationDAO{
 	}
 
 	@Override
-	public List<Consultation> getConsultationsByServiceAndDate(Service service,
-			Date startDay, Date endDay) {
+	public List<Consultation> getConsultationsByServiceAndDate(SocialService service,
+			Date startDay) {
 		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE"
-				+ " cons.service = :service AND cons.schedule.dateInit = :startDay"
-				+ "and cons.schedule.dateEnd = :endDay");
+				+ " cons.service = :service AND cons.schedule.dateInit = :startDay");
 		query.setParameter("service", service);
 		query.setParameter("startDay", startDay);
-		query.setParameter("endDay", endDay);
 		
-		List<Consultation> cons = query.getResultList();
-		return cons;
+		try{
+			List<Consultation> cons = query.getResultList();
+			return cons;
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
-	
-	
 
-	
-	
+		
 }

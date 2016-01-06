@@ -7,10 +7,9 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		
 		<class>br.ufc.petsi.model.Consultation</class>
-		<class>br.ufc.petsi.model.Agenda</class>
 		<class>br.ufc.petsi.model.Rating</class>
-		<class>br.ufc.petsi.model.Schedule</class>
-		<class>br.ufc.petsi.model.Service</class>
+		<class>br.ufc.petsi.model.SocialService</class>
+		<class>br.ufc.petsi.model.Professional</class>
 		
 		<properties>
 			<!-- SEM as propriedades URL, login, senha e driver -->

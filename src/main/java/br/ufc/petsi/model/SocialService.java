@@ -9,21 +9,20 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table( name = "service" )
-public class Service {
+@Table( name = "social_service" )
+public class SocialService {
 	@Id
 	@GeneratedValue
 	private Long id;
 	
 	@NotEmpty
-	@NotNull(message="Informe o nome do serviço!")
 	private String name;
-
+	
 	private boolean active;
 
-	public Service() {}
+	public SocialService() {}
 	
-	public Service(Long id, String name, boolean active) {
+	public SocialService(Long id, String name, boolean active) {
 		this.id = id;
 		this.name = name;
 		this.active = active;
