@@ -57,7 +57,7 @@ public class Consultation {
 	private Rating rating;
 	
 	public Consultation(Long id, SocialService socialService, Professional profesisonal, Patient patient, 
-			ConsultationState states, Date dateInit, Date dateEnd) {
+			ConsultationState state, Date dateInit, Date dateEnd) {
 		this.id = id;
 		this.socialService = socialService;
 		this.state = state;

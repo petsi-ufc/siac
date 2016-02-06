@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import br.ufc.petsi.enums.Role;
 
 @Entity
-@Table( name = "professionals" )
+@Table( name = "professional" )
 public class Professional extends User {
 	
 	@OneToOne(targetEntity = SocialService.class, 

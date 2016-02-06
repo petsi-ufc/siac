@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
-import br.ufc.petsi.dao.ServiceDAO;
+import br.ufc.petsi.dao.SocialServiceDAO;
 import br.ufc.petsi.model.SocialService;
 
 @Named
-public class ServiceService {
+public class SocialServiceService {
 	
-	public void registerService(SocialService service, ServiceDAO serviceDao){
+	public void registerService(SocialService service, SocialServiceDAO serviceDao){
 		service.setActive(true);
 		serviceDao.save(service);
 	}
 	
-	public String getActiveServices(ServiceDAO serviceDao){
+	public String getActiveServices(SocialServiceDAO serviceDao){
 		List<SocialService> services = serviceDao.getActiveServices();
 		
 		Gson gson = new Gson();
@@ -35,7 +35,7 @@ public class ServiceService {
 		return json;
 	}
 	
-	public String getServices(ServiceDAO serviceDao){
+	public String getServices(SocialServiceDAO serviceDao){
 		
 		List<SocialService> services = serviceDao.getAllServices();
 		
@@ -47,7 +47,7 @@ public class ServiceService {
 		return json;
 	}
 	
-	public void setInactiveService(ServiceDAO serviceDao, SocialService service){
+	public void setInactiveService(SocialServiceDAO serviceDao, SocialService service){
 		
 		SocialService service2 = serviceDao.getServiceById(service.getId());
 		
@@ -56,7 +56,7 @@ public class ServiceService {
 		
 	}
 	
-	public void setActiveService(ServiceDAO serviceDao, SocialService service){
+	public void setActiveService(SocialServiceDAO serviceDao, SocialService service){
 		
 		SocialService service2 = serviceDao.getServiceById(service.getId());
 		
@@ -64,7 +64,7 @@ public class ServiceService {
 		serviceDao.edit(service2);
 	}
 	
-	public void editService(ServiceDAO serviceDao, SocialService service){
+	public void editService(SocialServiceDAO serviceDao, SocialService service){
 		
 		SocialService service2 = serviceDao.getServiceById(service.getId());
 		

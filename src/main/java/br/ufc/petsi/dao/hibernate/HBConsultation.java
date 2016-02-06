@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
+import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.SocialService;
 
 @Repository
@@ -47,18 +48,18 @@ public class HBConsultation implements ConsultationDAO{
 	}
 
 	@Override
-	public List<Consultation> getConsultationsByService(SocialService service) {
-		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.service = :service");
+	public List<Consultation> getConsultationsBySocialService(SocialService service) {
+		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.socialService = :service");
 		query.setParameter("service", service);
 		List<Consultation> cons = query.getResultList();
 		return cons;
 	}
 
 	@Override
-	public List<Consultation> getConsultationsByServiceAndDate(SocialService service,
+	public List<Consultation> getConsultationsBySocialServiceAndDate(SocialService service,
 			Date startDay) {
 		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE"
-				+ " cons.service = :service AND cons.schedule.dateInit = :startDay");
+				+ " cons.socialService = :service AND cons.schedule.dateInit = :startDay");
 		query.setParameter("service", service);
 		query.setParameter("startDay", startDay);
 		
@@ -66,6 +67,19 @@ public class HBConsultation implements ConsultationDAO{
 			List<Consultation> cons = query.getResultList();
 			return cons;
 		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Consultation> getConsultationsByPatient(Patient p) {
+		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.patient = :patient");
+		query.setParameter("patient", p);
+		
+		try{
+			List<Consultation> cons = query.getResultList();
+			return cons;
+		}catch(NoResultException e){
 			return null;
 		}
 	}
