@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.ufc.petsi.model.SocialService;
 
-public interface ServiceDAO {
+public interface SocialServiceDAO {
 	public void save(SocialService service);
 	public SocialService getServiceById(long id);
 	public SocialService getServiceByName(String name);

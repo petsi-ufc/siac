@@ -24,7 +24,7 @@
 
 		<div id="box-services">
 			<h3>Serviços disponí­veis</h3>
-			<ul id="list-services" class="nav nav-pills nav-stacked"
+			<ul id="ul-services" class="nav nav-pills nav-stacked"
 				role="tablist">
 				<li class="nav-divider"></li>
 				<li class="service active"><a class="link-service" id="0">Seu
@@ -38,7 +38,7 @@
 
 	<div id="right-bar">
 		<div class="alert alert-danger" id="alert-schedules">Não há
-			nenhum horário cadastrado!</div>
+			nenhum horário cadastrado para este serviço!</div>
 		<h2 id="my-calendar">Meu calendário</h2>
 		<div class="calendar" id="calendar-patient"></div>
 

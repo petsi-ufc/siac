@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import br.ufc.petsi.enums.Role;
 
 @Entity
-@Table(name="patients")
+@Table(name="patient")
 public class Patient extends User {
 	
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="patient")

@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.ufc.petsi.dao.ServiceDAO;
+import br.ufc.petsi.dao.SocialServiceDAO;
 import br.ufc.petsi.model.SocialService;
-import br.ufc.petsi.service.ServiceService;
+import br.ufc.petsi.service.SocialServiceService;
 
 @Controller
 @Transactional
-public class ServiceController {
+public class SocialServiceController {
 	
 	@Inject
-	private ServiceService serviceService;
+	private SocialServiceService serviceService;
 	
 	@Inject
-	private ServiceDAO serviceDao;
+	private SocialServiceDAO serviceDao;
 	
 	@RequestMapping("/registerService")
 	@ResponseBody

@@ -1,49 +1,42 @@
 package br.ufc.petsi.service;
 
-import javax.inject.Inject;
+import java.util.List;
+
+import javax.inject.Named;
 
 import br.ufc.petsi.dao.ConsultationDAO;
-import br.ufc.petsi.dao.RatingDAO;
-import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
-import br.ufc.petsi.model.Rating;
-import br.ufc.petsi.model.User;
+import br.ufc.petsi.model.Patient;
+import br.ufc.petsi.model.SocialService;
 
+import com.google.gson.Gson;
+
+
+
+@Named
 public class ConsultationService {
 	
-	@Inject
-	private ConsultationDAO conDAO;
-	
-	private RatingDAO ratDAO;
-	
-	public boolean edit(Consultation con) {
-		if(con == null)
-			return false;
-		
-		conDAO.update(con);
-		
-		return true;
+	public void registerConsultation(Consultation con, ConsultationDAO consDAO){
+		consDAO.save(con);
 	}
 	
-	public boolean cancel(Consultation con) {
-		if(con == null)
-			return false;
+	public String getConsultationsByPatient(Patient p, ConsultationDAO consDAO){
+		String json = "";
+		Gson gson = new Gson();
 		
-		con.setState(ConsultationState.CD);
+		List<Consultation> consultations = consDAO.getConsultationsByPatient(p);
+		json = gson.toJson(consultations);
 		
-		conDAO.update(con);
-		
-		return true;
+		return json;
 	}
 	
-	public boolean rate(Consultation con, Rating rating) {
-		if(con == null || rating == null)
-			return false;
+	public String getConsultationsBySocialService(SocialService socialService, ConsultationDAO consDAO){
+		String json = "";
+		Gson gson = new Gson();
 		
-		rating.setConsultation(con);
+		List<Consultation> consultations = consDAO.getConsultationsBySocialService(socialService);
+		json = gson.toJson(consultations);
 		
-		ratDAO.save(rating);
-		
-		return true;
+		return json;
 	}
 }

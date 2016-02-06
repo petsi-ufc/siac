@@ -23,6 +23,7 @@
 	<script type="text/javascript" src="<c:url value='/resources/js/bootstrap-timepicker.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/bootstrap-timepicker.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/siac-funcs.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/siac-funcs-patient.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/siac-funcs-professional.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/admin-funcs.js'/>"></script>
 	<title>

@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import br.ufc.petsi.enums.Role;
 
 @Entity
-@Table(name="administrators")
+@Table(name="administrator")
 public class Administrator extends User{
 	
 	public Administrator(String cpf, String name, String email, Role role) {
