@@ -8,14 +8,17 @@
 		<put-attribute name="header" value="/WEB-INF/views/templates/header.jsp"/>
 		<put-attribute name="body" value="Hello, world!"/>
 		<put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp" />
+		<put-attribute name="javascriptsrc" value="" />
 	</definition>
 	
 	<definition name="home_patient" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/users/patient/home.jsp"/>	
+		<put-attribute name="javascriptsrc" value="/resources/js/siac-funcs-patient.js"/>
 	</definition>
 		
 	<definition name="home_professional" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/users/professional/home.jsp"/>	
+		<put-attribute name="javascriptsrc" value="/resources/js/siac-funcs-professional.js"/>
 	</definition>
 	
 	<definition name="schedule_professional" extends="main">
@@ -23,7 +26,8 @@
 	</definition>
 	
 	<definition name="home_manager" extends="main">
-		<put-attribute name="body" value="/WEB-INF/views/users/manager/home.jsp"/>	
+		<put-attribute name="body" value="/WEB-INF/views/users/manager/home.jsp"/>
+		<put-attribute name="javascriptsrc" value="/resources/js/admin-funcs.js"/>	
 	</definition>
 	
 	<definition name="login" extends="main">
@@ -31,8 +35,6 @@
 		<put-attribute name="header" value=""></put-attribute>
 		<put-attribute name="footer" value=""></put-attribute>
 	</definition>
-	
-
 	
 </tiles-definitions>
 
