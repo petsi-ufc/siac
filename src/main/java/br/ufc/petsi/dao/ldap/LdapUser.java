@@ -30,6 +30,12 @@ public class LdapUser implements UserDAO {
 	}
 	
 	@Override
+	public List<User> getByNameLike(String name) {
+		LdapQuery query = LdapQueryBuilder.query().base(base).where("objectclass").is("person").and(Constants.NAME_USER).like("*"+name+"*");
+		return ldapTemplate.search(query, new UserAttributeMapper());
+	}
+	
+	@Override
 	public User getByCpf(String cpf) {
 		List<User> users = getByCpfList(cpf);
 		
