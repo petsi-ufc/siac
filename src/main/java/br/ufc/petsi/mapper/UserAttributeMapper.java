@@ -2,35 +2,53 @@ package br.ufc.petsi.mapper;
 
 import java.io.Serializable;
 
+import javax.inject.Named;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import br.ufc.petsi.constants.Constants;
+import br.ufc.petsi.model.Administrator;
+import br.ufc.petsi.model.Patient;
+import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.User;
+import br.ufc.petsi.session.CurrentSession;
 
+@Named
 public class UserAttributeMapper implements AttributesMapper<User>, Serializable {
 
 	@Override
 	public User mapFromAttributes(Attributes attrs) throws NamingException {
 		
-//		User user = new User();
+		HttpSession session = CurrentSession.getSession();
+		String role = (String)session.getAttribute("loginRole");
+		
+		User user = null;
+		
+		if(role.equals("Profissional"))
+			user = new Professional();
+		else if(role.equals("Administrador"))
+			user = new Administrator();
+		else
+			user = new Patient();
 		
 		if(attrs.get(Constants.CPF_USER) != null) {
-//			user.setCpf(attrs.get(Constants.CPF_USER).get().toString());
+			user.setCpf(attrs.get(Constants.CPF_USER).get().toString());
 		}
 		
 		if(attrs.get(Constants.NAME_USER) != null) {
-//			user.setName(attrs.get(Constants.NAME_USER).get().toString());
+			user.setName(attrs.get(Constants.NAME_USER).get().toString());
 		}
 		
 		if(attrs.get(Constants.EMAIL_USER) != null) {
-//			user.setEmail(attrs.get(Constants.EMAIL_USER).get().toString());
+			user.setEmail(attrs.get(Constants.EMAIL_USER).get().toString());
 		}
 		
-//		return user;
-		return null;
+		return user;
 	}
 	
 }

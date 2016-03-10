@@ -3,8 +3,6 @@ package br.ufc.petsi.model;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import br.ufc.petsi.enums.Role;
-
 @Entity
 @Table(name="administrator")
 public class Administrator extends User{
