@@ -9,17 +9,31 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<security:global-method-security secured-annotations="enabled"/>
 
-	<security:http auto-config="true" use-expressions="true">
-		<security:form-login
-			login-page="/"
-			default-target-url="/authentication/success"
-			authentication-failure-url="/"/>
-		
+	<security:http auto-config="false" use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
+		<security:custom-filter position="FORM_LOGIN_FILTER" ref="ldapAuthenticationFilter" />
 	</security:http>
-
+	
+	<bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+ 		<property name="loginFormUrl" value="/"/>
+	</bean>
+	
+	<bean id="ldapAuthenticationFilter" class="br.ufc.petsi.filter.LdapAuthenticationFilter" >
+		<property name="authenticationManager" ref="authenticationManager"/>
+		<property name="authenticationFailureHandler" ref="failureHandler"/>
+		<property name="authenticationSuccessHandler" ref="successHandler"/>
+	</bean>
+	
+	<bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<property name="defaultTargetUrl" value="/authentication/success"/>
+	</bean>
+	
+	<bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/"/>
+	</bean>
+	
 	<bean id="ldapAuthenticationProvider" class="br.ufc.petsi.security.LdapAuthenticationProvider"></bean>
 
-	<security:authentication-manager>
+	<security:authentication-manager alias="authenticationManager">
 		<!-- Nosso provedor -->
 		<security:authentication-provider ref="ldapAuthenticationProvider" />
 		<!-- Provedor baseado em memória -->
