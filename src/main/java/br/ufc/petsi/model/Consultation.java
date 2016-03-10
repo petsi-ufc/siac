@@ -51,7 +51,7 @@ public class Consultation {
 	@Enumerated( EnumType.STRING )
 	private ConsultationState state;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = false, 
+	@OneToOne(cascade = CascadeType.ALL, optional = true, 
 			fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="id_rating")
 	private Rating rating;
