@@ -70,7 +70,50 @@
 		</div>
 
 		<div id="set-professional">
-			<h2>Definir Profissionais</h2>
+			<h2>Gerenciar Profissionais</h2>
+			<br /> <br /> <br />
+			
+			<ul class="nav nav-tabs" role="tablist">
+			    <li role="presentation" class="active"><a href="#professional-registered" aria-controls="professional-registered" role="tab" data-toggle="tab">Profissionais cadastrados</a></li>
+			    <li role="presentation"><a href="#add-professional" aria-controls="add-professional" role="tab" data-toggle="tab">Adicionar profissional</a></li>
+			 </ul>
+			
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="professional-registered">
+					<br >
+					<table id="table-professional" class="table table-hover table-bordered">
+						<thead>
+							<tr>
+								<th>Nome</th>
+								<th>Email</th>
+								<th>Ativar / Desativar</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+		    	<div role="tabpanel" class="tab-pane" id="add-professional">
+		    		<div class="form-group">
+		    			<br>
+		    			
+						<div class="row">
+							<div class="col-xs-8">
+						  		<input type="text" class="form-control" id="field-search-professional">
+							</div>
+							<div class="col-xs-4">
+						  		<button type="submit" class="btn btn-primary pull-left" id="button-search-professional">Pesquisar</button>
+						  	</div>
+						</div>
+						
+						<br>
+						<div class="alert alert-danger" id="alert-search-professional">
+  							Digite, no mínimo, <strong>três caracteres</strong> para pesquisar!
+						</div>
+						
+					</div>
+		    	</div>
+		  	</div>
+			
+			
 		</div>
 
 		<div id="add-service">
@@ -102,7 +145,6 @@
 							<h4 class="modal-title" id="modal-service">Adicionar Serviço</h4>
 						</div>
 						<div class="modal-body">
-							
 								<div class="form-group">
 									<label>Nome do serviço: </label>
 									<input type="text" class="form-control" name="name" id="name-register-service"/>
@@ -116,7 +158,7 @@
 						
 					</div>
 				</div>
-			</div><!-- Fim da dvi #modal-add-service -->
+			</div><!-- Fim da div #modal-add-service -->
 			
 			<!-- Modal usado para editar um serviço -->
 			<div class="modal fade" id="modal-edit-service" tabindex="-1" role="dialog" aria-labelledby="modal-service">
@@ -144,6 +186,25 @@
 					</div>
 				</div>
 			</div><!-- Fim da dvi #modal-edit-service -->
+			
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+			      </div>
+			      <div class="modal-body">
+			        ...
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        <button type="button" class="btn btn-primary">Save changes</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
 			
 		</div>
 	</div>

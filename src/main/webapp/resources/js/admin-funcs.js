@@ -7,6 +7,7 @@ $("document").ready(function(){
 	onServiceEditButtonClick();
 	onServiceEditSaveButtonClick();
 	onServiceAddButtonClick();
+	onFieldSearchProfessionalChange();
 	
 });
 
@@ -159,7 +160,8 @@ function onServiceAddButtonClick(){
 		});
 		
 		$('#modal-add-service').modal('hide');
-	})
+	});
+	
 }
 
 function fillTableServices(json){
@@ -210,5 +212,26 @@ function fillTableServices(json){
 		}
 		
 		$("#table-services").append(newRow);
+	});
+}
+
+function onFieldSearchProfessionalChange(){
+	
+	$("#button-search-professional").on("click", function(){
+		var value = $("#field-search-professional").val();
+		if(value.length < 3){
+			document.getElementById("alert-search-professional").style.display = 'block';
+			
+		}else{
+			document.getElementById("alert-search-professional").style.display = 'none';
+			
+			var params = new Object();
+			params["userName"] = $("#field-search-professional").val();
+			
+			ajaxCall("/siac/getUserByName?name="+params["userName"], function(json){
+				
+			});
+			
+		}
 	});
 }

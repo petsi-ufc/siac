@@ -23,6 +23,11 @@ public class AuthenticationController {
 		return new ModelAndView("home_professional");
 	}
 	
+	@RequestMapping("/manager")
+	public ModelAndView manager() {
+		return new ModelAndView("home_manager");
+	}
+	
 	@RequestMapping("/professional/schedule")
 	public ModelAndView scheduleProfessional() {
 		return new ModelAndView("schedule_professional");
