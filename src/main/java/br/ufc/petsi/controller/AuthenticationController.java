@@ -32,4 +32,11 @@ public class AuthenticationController {
 	public ModelAndView scheduleProfessional() {
 		return new ModelAndView("schedule_professional");
 	}
+	
+	@RequestMapping("/patient")
+	public ModelAndView patient() {
+		return new ModelAndView("home_patient");
+	}
+	
+	
 }
