@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.event.Event;
+import br.ufc.petsi.event.EventsDay;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.SocialService;
@@ -55,6 +56,18 @@ public class ConsultationService {
 		List<Consultation> consultations = consDAO.getConsultationsBySocialService(socialService);
 		json = gson.toJson(consultations);
 
+		return json;
+	}
+	
+	public String getConsultationsById(long id, ConsultationDAO consDAO){
+		String json = "";
+		Gson gson = new Gson();
+		
+		Consultation c = consDAO.getConsultationById(id);		
+	
+			EventsDay eventsDay = new EventsDay(c);
+
+		json = gson.toJson(eventsDay);
 		return json;
 	}
 }
