@@ -2,13 +2,12 @@
  * Essa classe serve para gerênciar as datas e os
  * respectivos horários de consultas do profissional 
  * 
- * OBS: Essas classes possuem dependência da biblioteca moment.js
  */
 
 var ScheduleTime = function(){
 	var self = this;
-	var timeInit = moment();
-	var timeEnd = moment();
+	this.timeInit = moment();
+	this.timeEnd = moment();
 	
 	self.__construct = function(hourInit, minuteInit, hourEnd, minuteEnd){
 		self.setTimeInit(hourInit, minuteInit);
@@ -16,29 +15,33 @@ var ScheduleTime = function(){
 	}
 	
 	self.setTimeInit = function(hourInit, minuteInit){
-		self.timeInit.hours(hourInit);
-		self.timeInit.minutes(minuteInit);
+		this.timeInit.hours(hourInit);
+		this.timeInit.minutes(minuteInit);
 	}
 	
 	self.getTimeInit = function(){
-		return self.timeInit;
+		return timeInit;
 	}
 	
 	self.setTimeEnd = function(hourEnd, minuteEnd){
-		self.timeEnd.hours(hourEnd);
-		self.timeEnd.minutes(minuteEnd);
+		this.timeEnd.hours(hourEnd);
+		this.timeEnd.minutes(minuteEnd);
 	}
 	
 	self.getTimeEnd = function(){
-		return self.timeEnd;
+		return timeEnd;
 	}
 	
-}
+	ScheduleTime.prototype.toJSON = function(){
+		return {"timeInit":this.timeInit.format('HH:mm'), "timeEnd":this.timeEnd.format('HH:mm')};
+	}
+	
+};
 
 var ScheduleDay = function(){
 	var self = this;
 	var date = "";
-	var listSchedules = []
+	this.listSchedules = [];
 	
 	self.setDate = function(date){
 		self.date = date;
@@ -49,27 +52,46 @@ var ScheduleDay = function(){
 	}
 	
 	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd){
-		var schedule = new ScheduleTime().__construct(hourInit, minuteInit, hourEnd, minuteEnd);
-		listSchedules.append(schedule);
+		var sch = new ScheduleTime();
+		sch.__construct(hourInit, minuteInit, hourEnd, minuteEnd);
+		this.listSchedules.push(sch);
 	}
 	
-	self.toString = function(){
-		return JSON.stringify(self);
+	self.showListSchedules = function(){
+		this.listSchedules.forEach(function(element, index, listSchedules){
+			console.log(JSON.stringify(element));
+		});
 	}
-}
+	
+	ScheduleDay.prototype.toJSON = function(){
+		return {"date": this.date, "schedules": this.listSchedules};
+	}	
+};
 
 
 var ScheduleManager = function(){
 	var self = this;
-	var listScheduleDay = [];
+	var mapScheduleDay = new Map();
 	
-	self.addScheduleDay = function(scheduleDay){
-		listScheduleDay.append(scheduleDay);
+	
+	self.addScheduleDay = function(date, scheduleDay){
+		mapScheduleDay.set(date, scheduleDay);
 	}
 	
-	self.showAllSchedulesDay = function(){
-		listScheduleDay.forEach(function(element, index, listScheduleDay){
-			console.log(element.toString());
+	self.removeScheduleDay = function(date){
+		mapScheduleDay.delete(date);
+	}
+	
+	self.getSchedulesMap = function(){
+		return mapScheduleDay;
+	}
+	
+	
+	ScheduleManager.prototype.toJSON = function(){
+		var list = [];
+		mapScheduleDay.forEach(function(value, key, mapScheduleDay){
+			list.push(value);
 		});
+		return {"data":list};
 	}
 }

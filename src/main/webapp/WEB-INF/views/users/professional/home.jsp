@@ -92,14 +92,47 @@
 				</div>
 				<div class="modal-body">
 					<h4 id="modal-description-body"></h4>
-
+					<label id="label-date-clicked" class="hidden"></label>
+					
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Informações da Consulta</h3>
+						</div>
+						<div class="panel-body">
+							<form class="form-horizontal">
+								<div class="form-group">
+									<label for="input-count-vacancy" class="col-md-4 control-label">Quantidade de Vagas:</label>
+									<div class="col-md-5">
+										<input type="number" min="1" class="form-control input-schedule-info" id="input-count-vacancy">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="input-count-time" class="col-md-4 control-label">Tempo por Consulta:</label>
+									<div class="col-md-5">
+										<input type="number" min="1" class="form-control input-schedule-info" id="input-count-time" placeholder="Minutos">
+									</div>	
+								</div>
+								<div class="form-group">
+									<label for="input-count-time-init" class="col-md-4 control-label">Hora de Início:</label>
+									<div class="col-md-5 col-sm-offset-4 input-group bootstrap-timepicker timepicker">
+										<input id="tmp-init-0" type="text" class="input-schedule-info form-control input-small"> <span
+											class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+									</div>	
+								</div>
+							</form>
+							<div class="col-md-offset-5">
+								<button type="button" class="btn btn-primary" id="btn-generate-schedules">Gerar Horários <i class="glyphicon glyphicon-time"></i></button>
+							</div>
+						</div>
+					</div>
+					
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Horários</h3>
 						</div>
 						<div class="panel-body" id="panel-schedules">
 							<div class="row" id="row-add-schedules">
-
+								
 								<div class="col-md-1">
 									<h4>Início:</h4>
 								</div>
@@ -135,7 +168,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
+					<button type="button" class="btn btn-primary" id="btn-confirm-schedules" data-dismiss="modal">Confirmar</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
 				</div>
 			</div>

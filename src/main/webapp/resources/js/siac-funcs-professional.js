@@ -2,6 +2,8 @@
  * Funcionalidades javascript na visão do profissional
  */
 
+var scheduleManager = new ScheduleManager();
+
 var MY_CALENDAR = 0;
 var REGISTER_SCHEDULE = 1;
 
@@ -10,6 +12,9 @@ var SELECT_REPEAT_SCHEDULE_ID = "#select-repeat-schedule";
 var MAP_SELECTED_DAYS = "map_selected_days";
 var INPUT_FREQUENCI = "input_frequenci";
 var TABLE_DAYS = "table_days";
+
+var INPUT_COUNT_TIME = "input_count_time";
+var INPUT_VACANCY = "input_vacancy";
 
 var MAṔ_DAYS = "map_days"; 
 var MAP_WEEK_DAYS = "map_week_days";
@@ -23,8 +28,8 @@ var WEEKLY_FREQUENCI = "weekly";
 //dos horários.
 var frequenci = "w";
 
-var idTimepickersInit = 1;
-var idTimepickersEnd = 1;
+var idTimepickersInit = 0;
+var idTimepickersEnd = 0;
 
 // Mapa com todas as variáveis
 var mapVars = new Map();
@@ -37,6 +42,9 @@ $("document").ready(function(){
 	mapVars.set(SELECT_REPEAT_SCHEDULE_ID, $("#select-repeat-schedule"));
 	mapVars.set(INPUT_FREQUENCI, $("#input-frequenci"));
 	mapVars.set(TABLE_DAYS, $("#tbody-table-days"));
+	mapVars.set(INPUT_VACANCY, $("#input-count-vacancy"));
+	mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
+	
 	
 	initCalendarProfessional();	
 	onButtonAddScheduleClick();
@@ -44,6 +52,12 @@ $("document").ready(function(){
 	onButtonRepeatScheduleDayClick();
 	onInputFrequenciChange();
 	onLiItemServiceClick();
+	
+	onButtonGenerateSchedules();
+	
+	onButtonConfirmSchedulesClick();
+	
+	onButtonRegisterSchedulesClick();
 	
 	// Mapa que conterá todos os dias da semana
 	// que se repetirão, Mon, Tue...
@@ -104,20 +118,31 @@ function initCalendarProfessional(){
 		
 		businessHours: true,
 	    editable: false,
-	    dayClick: clickFunction,
-	    eventClick: clickEvent,
-		         
+	             
 	    dayClick: function(date, jsEvent, view, event) {
 	    	//Função que abre o modal para cadastrar horário
-	    	showModalRegisterSchedule(date.format("DD/MM/YYYY"));
+	    	//onCalendarDayCLicked(date.format("DD/MM/YYYY"));
 	    }  		         		         
 	});
 	
 }
 
+function onCalendarDayCLicked(date){
+	//Iniciando os dois times picker iniciais
+	showModalRegisterSchedule(date);
+}
+
 function showModalRegisterSchedule(date){
+	
+	var inputVacancy = mapVars.get(INPUT_VACANCY);
+	var inputTimePerConsult = mapVars.get(INPUT_COUNT_TIME);
+	
+	inputVacancy.val("");
+	inputTimePerConsult.val("");
+	
 	var modal =	$("#modal-day");
 	var modalDescription = $("#modal-description-body");
+	var labelDay = $("#label-date-clicked");
 	
 	//Removendo todos os timepickers clonados.
 	modal.find(".cloned-timepicker").remove();
@@ -126,61 +151,133 @@ function showModalRegisterSchedule(date){
 	idTimepickersInit = 1;
 	idTimepickersEnd = 1;
 	
+	initTimepicker("tmp-init-0", null);
+	initTimepicker("tmp-init-1", null);
+	initTimepicker("tmp-end-1", null);
+	
+	
+	today = moment(date,"DD/MM/YYYY").format("dddd");
+	
 	//Mostrando o modal
-	modalDescription.html("Cadastrar consultas para o dia <strong>"+date+"</strong>");
+	modalDescription.html("Cadastrar consultas para o dia <strong>"+date+" ("+today+")</strong>");
+	labelDay.text(date);
+	
 	modal.modal('show');
-    
-	//Iniciando os dois times picker iniciais
-	initTimepicker("tmp-init-1");
-	initTimepicker("tmp-end-1");
+		
+}
+
+function onButtonConfirmSchedulesClick(){
+	/*
+	 * Quando o profissional clicar para confirmar 
+	 * o cadastro de horários, todos as horas dos timepickers
+	 * devem ser pegues.
+	 */
+	$("#btn-confirm-schedules").click(function(event){
+		
+		var modal = $("#modal-day");
+		var timepickersObject = modal.find("#panel-schedules").find(".timepicker").find("input");
+		
+
+		var timepickersIdArray = []
+		var tempArray = $.makeArray(timepickersObject);
+		
+		for(var i = 0; i < tempArray.length-1; i+=2){
+			if(tempArray[i].id && tempArray[i+1].id){
+				timepickersIdArray.push([tempArray[i].id, tempArray[i+1].id]);
+			}
+		}
+		
+		
+		var labelDay = $("#label-date-clicked");
+		var date = labelDay.text();
+		if(timepickersIdArray.length > 0){
+			//Salvando os horários no objeto schedule manager
+			saveSchedules(timepickersIdArray, date);
+
+		}
+		
+	});
+
+}
+	
+
+
+function getTimePickerHourAndMinutes(timepickerId){
+	hour = $("#"+timepickerId).data("timepicker").hour;
+	minute = $("#"+timepickerId).data("timepicker").minute;
+	return {"hour":hour, "minute":minute};
+}
+
+
+function saveSchedules(timepickersId, date){
+	var scheduleDay = new ScheduleDay();
+	scheduleDay.setDate(date);
+
+	for(var i = 0; i < timepickersId.length; i++){
+		
+		var timeInit = getTimePickerHourAndMinutes(timepickersId[i][0]);
+		var timeEnd = getTimePickerHourAndMinutes(timepickersId[i][1]);
+		
+		scheduleDay.addSchedule(timeInit["hour"], timeInit["minute"], timeEnd["hour"], timeEnd["minute"]);
+	}
+	scheduleManager.addScheduleDay(date, scheduleDay);
+	
+	
 }
 
 // Função que inicia um timepicker passado por parâmetro
-function initTimepicker(idPicker){
+function initTimepicker(idPicker, time){
 	idPicker = "#"+idPicker;
 	$(idPicker).timepicker({showMeridian: false});
-	$(idPicker).timepicker('setTime', '08:00');
+	if(time != null){
+		$(idPicker).timepicker('setTime', time);
+	}else{
+		$(idPicker).timepicker('setTime', '08:00');
+	}
 }
 
 // Função que inicializa a ação de click no botão de adicionar horário 
 function onButtonAddScheduleClick(){
 	$(".add-schedule").click(function(){
-		var newRow = $("#row-add-schedules").clone();
-		newRow.attr("id","");
-		
-		timeInitId = "tmp-init-"+getNewInitTimePickerId();
-		timeEndId = "tmp-end-"+getNewEndTimePickerId();
-		
-		var timepickerInit = newRow.find(".timepicker-init"); 
-		var timepickerEnd = newRow.find(".timepicker-end"); 
-		
-		timepickerInit.find("input").attr("id", timeInitId);
-		timepickerEnd.find("input").attr("id", timeEndId);
-		
-		
-		//Adicionando a classe que informa que o timepicker é clonado.
-		newRow.addClass("cloned-timepicker");
-		newRow.addClass("cloned-timepicker");
-		
-		var button = newRow.find(".add-schedule");
-		button.removeClass("add-schedule");
-		button.addClass("remove-schedule");
-		button.removeClass("btn-primary");
-		button.addClass("btn-danger");
-		
-		var span = button.find("span");
-		span.removeClass("glyphicon-plus");
-		span.addClass("glyphicon-minus");
-		
-		$("#panel-schedules").append(newRow);
-
-		//Iniciando os timepickers
-		initTimepicker(timeInitId);
-		initTimepicker(timeEndId);		
-		
-		//Iniciando o metodo de remover os horários caso o usuário clique no botar de remover horário.
-		onButtonRemoveScheduleClick();
+		addSchedules(null, null);
 	});
+}
+function addSchedules(timeInit, timeEnd){
+	
+	var newRow = $("#row-add-schedules").clone();
+	newRow.attr("id","");
+	
+	timeInitId = "tmp-init-"+getNewInitTimePickerId();
+	timeEndId = "tmp-end-"+getNewEndTimePickerId();
+	
+	var timepickerInit = newRow.find(".timepicker-init"); 
+	var timepickerEnd = newRow.find(".timepicker-end"); 
+	
+	timepickerInit.find("input").attr("id", timeInitId);
+	timepickerEnd.find("input").attr("id", timeEndId);
+	
+	//Adicionando a classe que informa que o timepicker é clonado.
+	newRow.addClass("cloned-timepicker");
+	
+	var button = newRow.find(".add-schedule");
+	button.removeClass("add-schedule");
+	button.addClass("remove-schedule");
+	button.removeClass("btn-primary");
+	button.addClass("btn-danger");
+	
+	var span = button.find("span");
+	span.removeClass("glyphicon-plus");
+	span.addClass("glyphicon-minus");
+	
+	$("#panel-schedules").append(newRow);
+
+	//Iniciando os timepickers
+	initTimepicker(timeInitId, timeInit);
+	initTimepicker(timeEndId, timeEnd);		
+	
+	//Iniciando o metodo de remover os horários caso o usuário clique no botar de remover horário.
+	onButtonRemoveScheduleClick();
+
 }
 
 function onButtonRemoveScheduleClick(){
@@ -219,8 +316,6 @@ function onSelectScheduleRepeatClick(){
 			inputFrequenci.attr("placeholder","Quantidade de Meses");
 		}
 		setFrequenciDays();
-		
-		
 		
 	});
 }
@@ -262,6 +357,48 @@ function setFrequenciDays(){
 		fillTableDays(resultMap);
 	}
 }
+
+function onButtonGenerateSchedules(){  
+	$("#btn-generate-schedules").bind("click", function(event){
+		
+		//Removendo todos os timepickers clonados 
+		$(".cloned-timepicker").remove();
+		
+		var inputVacancy = mapVars.get(INPUT_VACANCY);
+		var inputTimePerConsult = mapVars.get(INPUT_COUNT_TIME);
+		
+		var vacancy = parseInt(inputVacancy.val());
+		var timePerConsult = parseInt(inputTimePerConsult.val());
+		var timeInit = getTimePickerHourAndMinutes("tmp-init-0");
+		
+		hour = timeInit["hour"];
+		minutes = timeInit["minute"];
+		
+		momentTime = moment();
+		momentTime.hours(hour);
+		momentTime.minutes(minutes);
+		
+		tempInit = momentTime.format("HH:mm");
+		momentTime.add('m', timePerConsult);
+		tempEnd = momentTime.format("HH:mm");
+		
+		//Iniciando os 2 timepickers fixos do modal
+		$("#tmp-init-1").timepicker('setTime', tempInit);
+		$("#tmp-end-1").timepicker('setTime', tempEnd);
+		
+		//Esse for adiciona novos timepickers em relação a quantidade
+		//de vagas e o tempo para cada consulta. Como já existe 2 timepickers fixos
+		//a quantidade informada pelo usuário deve ser diminuida em 1
+		for(var i = 0; i < vacancy-1; i++){
+			tempInit = momentTime.format("HH:mm");
+			momentTime.add('m', timePerConsult);
+			tempEnd = momentTime.format("HH:mm");
+			
+			addSchedules(tempInit, tempEnd);
+		}
+	});
+}
+
 
 //Função que atualiza a tabela quando o usuário 
 //insere a quantidade de meses ou semanas no input
@@ -338,7 +475,7 @@ function fillTableDays(mapDays){
 		row = $("<tr>");
 		data = '"<td class="day-name">'+mapPtBrDays.get(value)+'</td>"';
 		data += '"<td>'+key+'</td>"';
-		data += '<td class="action-day add-schedule" value="'+key+'"><button type="button" class="btn btn-primary">Cadastrar <i class="glyphicon glyphicon-time"></i></button></td>';
+		data += '<td><button type="button" value="'+key+'" class=" action-day add-schedule btn btn-primary">Cadastrar <i class="glyphicon glyphicon-time"></i></button></td>';
 		data += '<td class="action-day remove-day" value="'+key+'"><i class="glyphicon glyphicon-trash"></i></td>';
 		row.append(data);
 		table.append(row);
@@ -378,6 +515,21 @@ function onActionTableClick(){
 		}
 	});
 }
+
+
+
+function onButtonRegisterSchedulesClick(){
+	$("#btn-register-schedules").click(function(){
+		var json = JSON.stringify(scheduleManager);
+		var params = {"json" : json};
+		ajaxCall("/siac/saveConsultation", params, function(){
+			alert("Works save Consultation");
+		}, function(){
+			alert("Error save Consultation");
+		});
+	});
+}
+
 
 /*
    Função que recebe um valor e um mapa
