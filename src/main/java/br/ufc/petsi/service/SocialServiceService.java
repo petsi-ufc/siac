@@ -2,14 +2,7 @@ package br.ufc.petsi.service;
 
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 

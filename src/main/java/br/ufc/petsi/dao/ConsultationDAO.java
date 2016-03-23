@@ -16,4 +16,5 @@ public interface ConsultationDAO {
 	public List<Consultation> getConsultationsByState(ConsultationState state);
 	public List<Consultation> getConsultationsBySocialService(SocialService service);
 	public List<Consultation> getConsultationsBySocialServiceAndDate(SocialService service, Date startDay);
+	
 }

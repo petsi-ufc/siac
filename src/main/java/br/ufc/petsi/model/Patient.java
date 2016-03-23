@@ -7,8 +7,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import br.ufc.petsi.enums.Role;
-
 @Entity
 @Table(name="patient")
 public class Patient extends User {

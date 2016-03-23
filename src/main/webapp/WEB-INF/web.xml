@@ -35,6 +35,19 @@
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  
+  <!-- Meu filter -->
+  <filter>
+  	<filter-name>customFilter</filter-name>
+  	<filter-class>
+  		br.ufc.petsi.filter.LdapAuthenticationFilter
+  	</filter-class>
+  </filter>
+  
+  <filter-mapping>
+  	<filter-name>customFilter</filter-name>
+  	<url-pattern>/*</url-pattern>
+  </filter-mapping>
 
   <servlet>
     <servlet-name>springmvc</servlet-name>
