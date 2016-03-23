@@ -10,8 +10,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import br.ufc.petsi.enums.Role;
-
 @Entity
 @Table( name = "professional" )
 public class Professional extends User {

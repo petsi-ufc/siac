@@ -1,173 +1,123 @@
-/**
- * 
+/*
+ * Funcionalidades javascript na visão do paciente
  */
 
-/**
- *	Todas as funcionalidades do paciente javascript do siac. 
- */
-
-
-const MY_CALENDAR = "0";
-
-const NO_CONSULTATIONS_MESSAGE = "Não há nenhum horário cadastrado para este serviço!";
-
-//Essa variável é utilizada para saber qual o serviço que o usuário clicou.
-var serviceId = "0";
 
 $("document").ready(function(){
-	onClickModalConfig();
-	initCalendarPatient();
-	loadActiveServices();
-	
+	chargeEvents();
+	chargeServices();
+	//chargeScheduleDay(id);
+
+
 });
 
+function initCalendarPatient(json){
 
+	console.log(json);
 
-function openScheduleModal(schedules){
-	
-	$.each(schedules, function(schedule, status){
-		var newRow = $("<tr></tr>");
-		var tableData = "";
-		tableData += '<td>'+schedule+'</td>';
-		tableData += '<td>'+status+'</td>';
-		newRow.append(tableData);
-		$("#table-schedule").append(newRow);
-	});
-	
-	$("#modal-schedules").modal('show'); 
-	$("#modal-title-schedule").html("Horários dia <strong>"+date.format()+"</strong>");
-	
-}
-
-
-//Preenche a lista de serviços disponíveis para o paciente.
-function loadActiveServices(){
-	ajaxCall("/siac/getActiveServices", null, function(json){
-		$.each(json, function(key, obj){
-			fillPatientTableServices(obj["id"], obj["name"]);
-		});
-	});
-}
-
-function fillPatientTableServices(serviceId, serviceName){
-	var tableService = $("#ul-services");
-	tableService.append("<li class='service'><a class='link-service' id="+serviceId+">"+serviceName+"</a></li>" +
-	"<li class='nav-divider'></li>");
-	
-	//Carrega a ação de click nos links dos serviços sociais.
-	onServiceClick();
-}
-
-function onServiceClick(){
-	$(".link-service").click(function(){
-		$(".service").removeClass("active");
-		$(this).parent().addClass("active");
-
-		serviceId = $(this).attr('id');
-		
-		var params = new Object();
-		var url;
-		
-		if(serviceId == MY_CALENDAR){
-			$("#my-calendar").text("Meu Calendário");
-			//params["cpf"] = cpf;
-			//url = "/siac/getConsultationsByPatient"
-			alert("FALTA FAZER ESSA PARTE!\n COLOCAR TODAS AS CONSULTAS DO PACIENTE!!");
-		}else{
-			$("#my-calendar").text("Calendário "+$(this).text());
-			params["socialServiceId"] = serviceId;
-			url = "/siac/getConsultationsBySocialService";
-		}
-		ajaxCall(url, params, function(json){
-			setCalendarSchedules("#calendar_patient", json);
-		});
-	});
-}
-
-
-function onClickModalConfig(){
-	//Quando o usuário clicar na imagem o modal aparece...
-	$("#avatar-img").click(function(){
-		$("#modal-config").modal('show');
-	});
-}
-
-//Função que inicia o calendário.
-function initCalendarPatient(){
 	$("#calendar-patient").fullCalendar({
+
 		header: {
 			left: 'prev',
 			center: 'title',
 			right: 'next'
 		},
-				 businessHours: true,
-		         editable: false,
-		         dayClick: clickFunction,
-		         eventClick: clickEvent
+
+		businessHours: true,
+		editable: false,
+		dayClick: null,
+		eventClick: null,
+
+		dayClick: function(date, jsEvent, view, event) {
+
+			$("#modal-day").modal('show');
+			$(".modal-title").html(date.format('DD/MM/YYYY'));  
+
+		},
+
+
+		events: json,
+		eventClick: function(event, jsEvent, view ){
+			chargeScheduleDay(event.id);
+			$("#modal-day").modal('show');
+		}
+
 	});
-	
+
+
 }
 
-//Quando o usuário clica no evento essa função é chamada.
-function clickEvent(event, jsEvent, view){
-	alert("Event: "+event.title+"\nID: "+event.id);
-}
+function chargeScheduleDay(id){
 
-function openModalSchedules(idService){
-	
-}
+	ajaxCall("/siac/search/patient/scheduleday?id="+id, function(json){
+
+		var hour;
+		var state;
+
+		console.log(JSON.stringify(json));
+
+		$.each(json, function(name, value){
+
+			if(name=="hour"){
+				hour = value;
+			}
+			if(name=="status"){
+				state = value;
+			}					
 
 
-/*Essa função pega todos os dados vindos da requisição
-  AJAX e preche o calendário com elas.
-  Params: Id do calendário e json vindo do ajax.
-  */
-function setCalendarSchedules(idCalendar, json){
-	//Escondendo a mensagem de erro.
-	$("#alert-schedules").css({"display":"none"});
-	
-	/*Removendo todos os eventos para não haver duplicações. A função passada como argumento quando retorna
-	 * true remove o evento passado por parametro. Logo essa função irá remover todos os eventos.
-	*/
-	$(idCalendar).fullCalendar('removeEvents', function(event){
-		return true;
+		});
+
+		$("#table-schedule").append("<tr> <td>" +hour+ " </td> <td>" +state+ "</td> </tr>");
 	});
-	if(Object.keys(json).length == 0){
-		$("#alert-schedules").css({"display":"block"});
-		$("#alert-schedules").text(NO_CONSULTATIONS_MESSAGE);
-		hideElement("#alert-schedules", 4000);
-		return;
-	}
-	
 }
 
 
-function formatDate(date){
-	var dd = date.getDate();
-    var mm = date.getMonth()+1; //Janeiro é 0!
-
-    var yyyy = date.getFullYear();
-    if(dd<10){
-        dd='0'+dd
-    } 
-    if(mm<10){
-        mm='0'+mm
-    } 
-    res = yyyy+'-'+mm+'-'+dd;
-    return res;
-}
-
-//Essa função é responsável por adicionar um evento no calendário.
-function renderCalendarEvent(idCalendar, idService ,serviceName, dayStart, dayEnd){
-	$(idCalendar).fullCalendar('renderEvent',{
-		id: idService,
-		title: serviceName,
-		start: dayStart,
-		end: dayEnd
-	}, true);
+function chargeEvents(){
+	var params = new Object();
+	params["pat"] = 123; 
+	var j;
+	ajaxCall("/siac/search/patient/consultations?cpf="+params["pat"], function(json){
+		j = json;
+		initCalendarPatient(json);
+	})
 }
 
 
-function clickFunction(date, jsEvent, view){
-	
+function chargeServices(){
+
+	ajaxCall("/siac/getServices", function(json){
+
+		var serviceName;
+		var serviceActive;
+		var serviceId;
+
+		json.sort(function (obj1, obj2) {
+			return obj1.name < obj2.name ? -1 :
+				(obj1.name > obj2.name ? 1 : 0);
+		});
+
+		$.each(json, function(key, obj){
+
+			$.each(obj, function(name, value){
+				if(name=="name"){
+					serviceName = value;
+				}
+				if(name=="active"){
+					serviceActive = value;
+				}
+				if(name=="id"){
+					serviceId = value;
+				}
+			})
+
+
+			$("#ul-services").append("<li class='service'><a class='link-service' id='"+serviceId+"'>"+serviceName+"</a></li>");
+
+		});
+
+
+	});
+
 }
+

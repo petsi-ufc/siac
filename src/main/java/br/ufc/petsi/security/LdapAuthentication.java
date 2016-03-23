@@ -1,5 +1,6 @@
 package br.ufc.petsi.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,11 +9,11 @@ import javax.inject.Named;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import br.ufc.petsi.enums.Role;
+import br.ufc.petsi.model.Role;
 import br.ufc.petsi.model.User;
 
 @Named
-public class LdapAuthentication implements Authentication{
+public class LdapAuthentication implements Authentication {
 
 	private User user;
 	private String password;
@@ -22,10 +23,11 @@ public class LdapAuthentication implements Authentication{
 
 	}
 	
-	public LdapAuthentication(User user, String password, List<Role> roles) {
+	public LdapAuthentication(User user, String password, Role role) {
 		super();
 		this.user = user;
 		this.password = password;
+		this.user.setRole(role);
 	}
 
 
@@ -43,7 +45,7 @@ public class LdapAuthentication implements Authentication{
 	}
 
 	@Override
-	public Object getDetails() {
+	public Object getDetails() {	
 		return user;
 	}
 
@@ -70,13 +72,13 @@ public class LdapAuthentication implements Authentication{
 		this.user = user;
 	}
 
-//	public List<Role> getRoles() {
-//		return roles;
-//	}
+	public Role getRole() {
+		return user.getRole();
+	}
 
-//	public void setRoles(List<Role> roles) {
-//		this.roles = roles;
-//	}
+	public void setRole(Role role) {
+		this.user.setRole(role);
+	}
 
 	public String getPassword() {
 		return password;
@@ -88,8 +90,9 @@ public class LdapAuthentication implements Authentication{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Role> roles = new ArrayList<Role>();
+		roles.add(this.user.getRole());
+		return roles;
 	}
 
 	

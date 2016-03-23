@@ -27,19 +27,23 @@
 			<ul id="ul-services" class="nav nav-pills nav-stacked"
 				role="tablist">
 				<li class="nav-divider"></li>
-				<li class="service active"><a class="link-service" id="0">Seu
+				<li class="service active"><a class="link-service" id="0">Meu
 						calendário</a></li>
 			</ul>
 		</div>
 		<div id="calendar-legend">
 			<h3>LEGENDA AQUI</h3>
-		</div>
+			
+		</div>		
 	</div>
+	
+	
 
 	<div id="right-bar">
 		<div class="alert alert-danger" id="alert-schedules">Não há
 			nenhum horário cadastrado para este serviço!</div>
 		<h2 id="my-calendar">Meu calendário</h2>
+	
 		<div class="calendar" id="calendar-patient"></div>
 
 		<div id="my-consultations">
@@ -82,21 +86,20 @@
 
 	</div>
 
-	<div id="modal-schedules" class="modal fade" role="dialog">
+	<div id="modal-day" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">X</button>
-					<h4 class="modal-title" id="modal-title-schedule">Horários dia
-						xx</h4>
+					<h4 class="modal-title" id="modal-title-schedule"></h4>
 				</div>
 				<div class="modal-body">
 					<table id="table-schedule" class="table table-bordered table-hover">
 						<thead>
 							<tr>
-								<th></th>
+								
 								<th>Horário</th>
-								<th id="table-status">Status</th>
+								<th> Status </th>
 							</tr>
 						</thead>
 						<tbody>
