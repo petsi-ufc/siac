@@ -41,11 +41,11 @@ public class Consultation {
 	private Patient patient;
 	
 	@Column(name="date_init")
-	@Temporal(value = TemporalType.DATE)
+	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date dateInit;
 	
 	@Column(name="date_end")
-	@Temporal(value = TemporalType.DATE)
+	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date dateEnd;
 	
 	@Enumerated( EnumType.STRING )

@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,12 +11,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.model.Role;
 import br.ufc.petsi.model.User;
+import br.ufc.petsi.session.CurrentSession;
 
 @Named
 public class LdapAuthenticationProvider implements AuthenticationProvider, Serializable{
@@ -44,6 +42,8 @@ public class LdapAuthenticationProvider implements AuthenticationProvider, Seria
 				
 		LdapAuthentication result = new LdapAuthentication(user, password, user.getRole());
 		result.setAuthenticated( true );		
+		
+		CurrentSession.getSession().setAttribute("user", user);
 		
 		return result;
 	}

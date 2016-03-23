@@ -92,6 +92,8 @@ $("document").ready(function(){
 function onLiItemServiceClick(){
 	var calendar = mapVars.get(CALENDAR_ID);
 	$(".service-item").click(function(){
+		$(".service-item").removeClass("active");
+		$(this).addClass("active");
 		id = $(this).attr("id");
 		if(id == REGISTER_SCHEDULE){
 			calendar.addClass("hidden");
@@ -521,7 +523,9 @@ function onActionTableClick(){
 function onButtonRegisterSchedulesClick(){
 	$("#btn-register-schedules").click(function(){
 		var json = JSON.stringify(scheduleManager);
-		var params = {"json" : json};
+		
+		var params = {"json" : json, "cpf" : "123123", "social_service_id": 5};
+		console.log(params);
 		ajaxCall("/siac/saveConsultation", params, function(){
 			alert("Works save Consultation");
 		}, function(){

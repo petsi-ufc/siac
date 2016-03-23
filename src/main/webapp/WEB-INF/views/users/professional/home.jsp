@@ -1,5 +1,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<jsp:useBean id="user" class="br.ufc.petsi.model.Professional" scope="session" />
+<jsp:setProperty property="*" name="user" />
+
+
 <div id="home-content">
 	<div id="left-bar">
 		<img id="avatar-img" class="img-responsive"
@@ -9,7 +13,7 @@
 			<h3>Serviços disponí­veis</h3>
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
-				<li class="service-item" id="0"><a>Meu Calendário</a></li>
+				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
 				<li class="nav-divider"></li>
 				<li class="service-item" id="1"><a>Cadastrar Agenda</a></li>
 			</ul>
