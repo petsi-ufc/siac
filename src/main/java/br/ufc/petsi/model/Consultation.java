@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+
 import br.ufc.petsi.enums.ConsultationState;
 
 //Adicionar id ou cpf do profissional e o cpf ou id do pacientes

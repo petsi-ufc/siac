@@ -1,6 +1,5 @@
 package br.ufc.petsi.controller;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -73,22 +72,23 @@ public class ConsultationController {
 				String date = timeSchedule.get("date").getAsString();
 				JsonArray timeSchedules = timeSchedule.getAsJsonArray("schedules");
 				
-				Consultation consultation = new Consultation();
-				consultation.setProfessional(pro);
-				consultation.setService(serv);
-				consultation.setState(ConsultationState.SC);
-				
 				for(int j = 0; j < timeSchedules.size(); j++){
+					Consultation consultation = new Consultation();
+					consultation.setProfessional(pro);
+					consultation.setService(serv);
+					consultation.setState(ConsultationState.SC);
+					
 					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
 					JsonElement timeEnd = timeSchedules.get(j).getAsJsonObject().get("timeEnd");
 					
 					String sDateInit = date+" "+timeInit.getAsString();
 					String sDateEnd = date+" "+timeEnd.getAsString();
 					
-					System.out.println(sDateInit+"  -  "+sDateEnd);
 					
 					Date dateInit = format.parse(sDateInit);
 					Date dateEnd = format.parse(sDateEnd);
+					
+					System.out.println(dateInit.getHours()+" : "+dateInit.getMinutes()+"  |   "+dateEnd.getHours()+" : "+dateEnd.getMinutes());
 					
 					consultation.setDateInit(dateInit);
 					consultation.setDateEnd(dateEnd);
