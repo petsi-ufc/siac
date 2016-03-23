@@ -25,7 +25,10 @@
 	<script type="text/javascript" src="<c:url value='/resources/js/siac-funcs.js'/>"></script> 
 	
 	<tiles:useAttribute id='src' name='javascriptsrc'/>
-	<script type="text/javascript" src="<c:url value='${src}'/>"></script>
+	
+	<c:forEach var="item" items="${src}">
+		<script type="text/javascript" src="<c:url value='${item}'/>"></script>
+	</c:forEach>
 	
 	<title>
 		<tiles:getAsString name="title"/>

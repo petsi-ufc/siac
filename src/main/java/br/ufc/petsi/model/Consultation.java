@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+
 import br.ufc.petsi.enums.ConsultationState;
 
 //Adicionar id ou cpf do profissional e o cpf ou id do pacientes
@@ -41,17 +42,17 @@ public class Consultation {
 	private Patient patient;
 	
 	@Column(name="date_init")
-	@Temporal(value = TemporalType.DATE)
+	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date dateInit;
 	
 	@Column(name="date_end")
-	@Temporal(value = TemporalType.DATE)
+	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date dateEnd;
 	
 	@Enumerated( EnumType.STRING )
 	private ConsultationState state;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = false, 
+	@OneToOne(cascade = CascadeType.ALL, optional = true, 
 			fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="id_rating")
 	private Rating rating;
