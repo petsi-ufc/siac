@@ -18,6 +18,7 @@ import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ConsultationService;
+import br.ufc.petsi.session.CurrentSession;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -52,12 +53,19 @@ public class ConsultationController {
 	}
 	
 	@RequestMapping("/saveConsultation")
-	public String saveConsultation(@RequestParam("json") String json, @RequestParam("cpf") String cpf, @RequestParam("social_service_id") String serviceId){
-		System.out.println(json+" - "+cpf+" - "+serviceId);
-		Professional pro = new Professional();
-		pro.setCpf(cpf);
-		SocialService serv = new SocialService();
-		serv.setId(Long.parseLong(serviceId));
+	public String saveConsultation(@RequestParam("json") String json){
+		
+		System.out.println(json);
+		
+		SocialService serviceTemp = new SocialService();
+		serviceTemp.setId(5l);
+		Professional proTemp = new Professional();
+		proTemp.setCpf("123123");
+		proTemp.setSocialService(serviceTemp);
+		//CurrentSession.getSession().setAttribute("user", proTemp);
+		
+		Professional pro = proTemp;
+		SocialService serv = pro.getSocialService();
 		
 		try{
 			JsonParser parser = new JsonParser();
