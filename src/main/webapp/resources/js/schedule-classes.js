@@ -20,7 +20,7 @@ var ScheduleTime = function(){
 	}
 	
 	self.getTimeInit = function(){
-		return timeInit;
+		return this.timeInit.format("HH:mm");
 	}
 	
 	self.setTimeEnd = function(hourEnd, minuteEnd){
@@ -29,7 +29,7 @@ var ScheduleTime = function(){
 	}
 	
 	self.getTimeEnd = function(){
-		return timeEnd;
+		return this.timeEnd.format("HH:mm");
 	}
 	
 	ScheduleTime.prototype.toJSON = function(){
@@ -63,6 +63,14 @@ var ScheduleDay = function(){
 		});
 	}
 	
+	self.clearListSchedules = function(){
+		this.listSchedules = [];
+	}
+	
+	self.getListSchedules = function(){
+		return this.listSchedules;
+	}
+	
 	ScheduleDay.prototype.toJSON = function(){
 		return {"date": this.date, "schedules": this.listSchedules};
 	}	
@@ -72,7 +80,6 @@ var ScheduleDay = function(){
 var ScheduleManager = function(){
 	var self = this;
 	var mapScheduleDay = new Map();
-	
 	
 	self.addScheduleDay = function(date, scheduleDay){
 		mapScheduleDay.set(date, scheduleDay);
@@ -86,6 +93,37 @@ var ScheduleManager = function(){
 		return mapScheduleDay;
 	}
 	
+	/*
+	 * Essa função remove todos os horários que não estão
+	 * na lista de horários atualizados. 
+	 */
+	self.updateSchedules = function(mapUpdated){
+		var updatedMapSchedule = new Map();
+		
+		//Pegando todas as keys(datas) do mapa.
+		var keys = mapUpdated.keys();
+		for(var i = 0; i < mapUpdated.size; i++){
+			
+			date = keys.next().value;
+		
+			if(mapScheduleDay.has(date)){
+				updatedMapSchedule.set(date, mapScheduleDay.get(date));
+			}
+		}
+		mapScheduleDay = updatedMapSchedule;
+	}
+	
+	/*
+	 * Retorna true se existir horários cadastrados 
+	 * na data passada por parâmetro e false caso contrário.
+	 */
+	self.isScheduleRegistered = function(date){
+		var schedule = mapScheduleDay.get(date);
+		if(schedule){
+			return schedule.listSchedules.length > 0 ? true : false;
+		}
+		return false;
+	}
 	
 	ScheduleManager.prototype.toJSON = function(){
 		var list = [];

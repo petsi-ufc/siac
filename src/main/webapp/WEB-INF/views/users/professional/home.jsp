@@ -81,7 +81,7 @@
 							</table>
 						</div>
 					</div>
-					<button type="button" id="btn-register-schedules" class="btn btn-lg btn-primary">Cadastrar <i class="glyphicon glyphicon-floppy-saved"></i></button>
+					<button type="button" id="btn-register-schedules" class="disabled btn btn-lg btn-primary">Cadastrar <i class="glyphicon glyphicon-floppy-saved"></i></button>
 				</div>
 			</div>
 		</div>
@@ -92,7 +92,7 @@
 			<div class="modal-content">
 				<div id="title-header" class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">X</button>
-					<h3 class="modal-title">Cadastrar Horário</h3>
+					<h3 id="modal-schedule-title" class="modal-title">Cadastrar Horário</h3>
 				</div>
 				<div class="modal-body">
 					<h4 id="modal-description-body"></h4>

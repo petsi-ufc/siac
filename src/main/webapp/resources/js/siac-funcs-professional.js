@@ -4,6 +4,9 @@
 
 var scheduleManager = new ScheduleManager();
 
+var REGISTER_ACTION = "Cadastrar";
+var EDIT_ACTION = "Editar";
+
 var MY_CALENDAR = 0;
 var REGISTER_SCHEDULE = 1;
 
@@ -131,10 +134,15 @@ function initCalendarProfessional(){
 
 function onCalendarDayCLicked(date){
 	//Iniciando os dois times picker iniciais
-	showModalRegisterSchedule(date);
+	showModalSchedules(date, REGISTER_ACTION);
 }
 
-function showModalRegisterSchedule(date){
+
+/*Essa função abre o modal de cadastro e edição de horários.
+  Parametros: date: Data para cadastro ou edição de horários.
+  			  action: Se a ação é de cadastro ou de edição.
+*/
+function showModalSchedules(date, action){
 	
 	var inputVacancy = mapVars.get(INPUT_VACANCY);
 	var inputTimePerConsult = mapVars.get(INPUT_COUNT_TIME);
@@ -161,7 +169,8 @@ function showModalRegisterSchedule(date){
 	today = moment(date,"DD/MM/YYYY").format("dddd");
 	
 	//Mostrando o modal
-	modalDescription.html("Cadastrar consultas para o dia <strong>"+date+" ("+today+")</strong>");
+	$("#modal-schedule-title").text(action+" Horários");
+	modalDescription.html(action+" consultas para o dia <strong>"+date+" ("+today+")</strong>");
 	labelDay.text(date);
 	
 	modal.modal('show');
@@ -192,10 +201,23 @@ function onButtonConfirmSchedulesClick(){
 		
 		var labelDay = $("#label-date-clicked");
 		var date = labelDay.text();
+		
 		if(timepickersIdArray.length > 0){
 			//Salvando os horários no objeto schedule manager
 			saveSchedules(timepickersIdArray, date);
-
+			 
+			//Quando o profissional cadastrar os horários
+			//o botão do de cadastrar será alterado para o de editar
+			var panel = $("#panel-register-schedules");
+			
+			var buttonAddSchedules = panel.find("button[value='"+date+"']").filter(".add-schedule");
+			var buttonEditSchedules = buttonAddSchedules.siblings(".edit-schedule");
+			
+			buttonEditSchedules.removeClass("hidden");
+			buttonAddSchedules.addClass("hidden");
+			
+			
+			
 		}
 		
 	});
@@ -211,10 +233,25 @@ function getTimePickerHourAndMinutes(timepickerId){
 }
 
 
+/* Função que recebe uma data todos os timepickers referentes aos horários
+ * e salva no gerenciador de horários(scheduleManager).
+ * 
+ * Caso a data passada já esteja cadastrada no schedule manager
+ * então a operação será de edição, logo todos os horários daquela 
+ * data serão atualizados com os novos horários dos timepickers.
+*/
 function saveSchedules(timepickersId, date){
-	var scheduleDay = new ScheduleDay();
-	scheduleDay.setDate(date);
-
+	var scheduleDay = scheduleManager.getSchedulesMap().get(date);
+	/*Caso esse dia (date) já exista, a lista de horários antiga 
+	 *é apagada e os novos horários são cadastrados. 
+	*/
+	if(scheduleDay){
+		scheduleDay.clearListSchedules();
+	}else{
+		scheduleDay = new ScheduleDay();
+		scheduleDay.setDate(date);
+	}
+	
 	for(var i = 0; i < timepickersId.length; i++){
 		
 		var timeInit = getTimePickerHourAndMinutes(timepickersId[i][0]);
@@ -223,7 +260,6 @@ function saveSchedules(timepickersId, date){
 		scheduleDay.addSchedule(timeInit["hour"], timeInit["minute"], timeEnd["hour"], timeEnd["minute"]);
 	}
 	scheduleManager.addScheduleDay(date, scheduleDay);
-	
 	
 }
 
@@ -356,6 +392,10 @@ function setFrequenciDays(){
 	if(val != ""){
 		var resultMap = getDateByDays(mapDays, val);
 		mapVars.set(MAṔ_DAYS, resultMap);
+		
+		scheduleManager.updateSchedules(resultMap);
+		
+		//Preenchendo a tabela de dias;
 		fillTableDays(resultMap);
 	}
 }
@@ -473,17 +513,36 @@ function fillTableDays(mapDays){
 	//Removendo as linhas antigas
 	table.find("td").remove();
 	
+	
 	mapDays.forEach(function(value, key, mapDays){
 		row = $("<tr>");
 		data = '"<td class="day-name">'+mapPtBrDays.get(value)+'</td>"';
 		data += '"<td>'+key+'</td>"';
-		data += '<td><button type="button" value="'+key+'" class=" action-day add-schedule btn btn-primary">Cadastrar <i class="glyphicon glyphicon-time"></i></button></td>';
+		
+		var isScheduleRegistered = scheduleManager.isScheduleRegistered(key);
+		
+		var hiddenAddSchedule = "";
+		var hiddenEditSchedule = "hidden";
+		
+		if(isScheduleRegistered){
+			hiddenAddSchedule = "hidden";
+			hiddenEditSchedule = "";
+		}
+		
+		data += '<td>'+
+			'<button type="button" value="'+key+'" class="'+hiddenAddSchedule+' action-day add-schedule btn btn-primary">Cadastrar <i class="glyphicon glyphicon-time"></i></button>'
+			+'<button type="button" value="'+key+'" class="'+hiddenEditSchedule+' action-day edit-schedule btn btn-warning">Editar <i class="glyphicon glyphicon-pencil"></i></button>'
+			+'</td>';
 		data += '<td class="action-day remove-day" value="'+key+'"><i class="glyphicon glyphicon-trash"></i></td>';
+		
 		row.append(data);
 		table.append(row);
 	});
 	
 	onActionTableClick();
+	
+	//Desabilitando o botão de cadastrar horários caso não exista horários cadastrados.
+	mapDays.size > 0 ? $("#btn-register-schedules").removeClass("disabled") : $("#btn-register-schedules").addClass("disabled");
 }
 
 /*
@@ -497,13 +556,16 @@ function onActionTableClick(){
 		var key = action.attr("value");
 		
 		if(action.hasClass("add-schedule")){
-			showModalRegisterSchedule(key);
+			showModalSchedules(key, REGISTER_ACTION);
 		}else if(action.hasClass("remove-day")){
 			var dayName = map.get(key);
 			
 			//Removendo a data selecionada e preenchendo a tabela novamente
 			map.delete(key);
 			fillTableDays(map);
+			
+			//Removendo todos os horários cadastrados do dia removido.
+			scheduleManager.removeScheduleDay(key);
 			
 			//Conferindo se ainda existe uma ocorrencia do dia da semana exluído
 			if(!hasValue(dayName, map)){
@@ -513,6 +575,20 @@ function onActionTableClick(){
 				
 				//Informando que o dia não está mais selecionado
 				mapButtonDays.set(dayName, false);
+			}
+		}else if(action.hasClass("edit-schedule")){
+			var scheduleDay = scheduleManager.getSchedulesMap().get(key);
+			var listSchedules = scheduleDay.getListSchedules();
+			if(listSchedules && listSchedules.length){
+				showModalSchedules(key, EDIT_ACTION);
+				initTimepicker("tmp-init-1", listSchedules[0].getTimeInit());
+				initTimepicker("tmp-end-1", listSchedules[0].getTimeEnd());
+				
+				for(var i = 1; i < listSchedules.length; i++){
+					addSchedules(listSchedules[i].getTimeInit(), listSchedules[i].getTimeEnd());
+				}
+			}else{
+				console.log("O dia "+key+" não possui horários cadastrados!");
 			}
 		}
 	});
@@ -524,12 +600,12 @@ function onButtonRegisterSchedulesClick(){
 	$("#btn-register-schedules").click(function(){
 		var json = JSON.stringify(scheduleManager);
 		
-		var params = {"json" : json, "cpf" : "123123", "social_service_id": 5};
+		var params = {"json" : json};
 		console.log(params);
 		ajaxCall("/siac/saveConsultation", params, function(){
-			alert("Works save Consultation");
+			console.log("Works save Consultation");
 		}, function(){
-			alert("Error save Consultation");
+			console.log("Error save Consultation");
 		});
 	});
 }
