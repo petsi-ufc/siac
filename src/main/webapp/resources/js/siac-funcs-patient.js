@@ -6,8 +6,9 @@
 $("document").ready(function(){
 	chargeEvents();
 	chargeServices();
-	//chargeScheduleDay(id);
-
+	myConsultations();
+	myCalendar();
+	addRating();
 
 });
 
@@ -30,8 +31,8 @@ function initCalendarPatient(json){
 
 		dayClick: function(date, jsEvent, view, event) {
 
-			$("#modal-day").modal('show');
-			$(".modal-title").html(date.format('DD/MM/YYYY'));  
+			$(".modal-title").html(date.format('DD/MM/YYYY'));
+
 
 		},
 
@@ -39,6 +40,7 @@ function initCalendarPatient(json){
 		events: json,
 		eventClick: function(event, jsEvent, view ){
 			chargeScheduleDay(event.id);
+
 			$("#modal-day").modal('show');
 		}
 
@@ -48,13 +50,12 @@ function initCalendarPatient(json){
 }
 
 function chargeScheduleDay(id){
+	$(".tr-horary").remove();
 
 	ajaxCall("/siac/search/patient/scheduleday?id="+id, function(json){
 
 		var hour;
 		var state;
-
-		console.log(JSON.stringify(json));
 
 		$.each(json, function(name, value){
 
@@ -65,10 +66,21 @@ function chargeScheduleDay(id){
 				state = value;
 			}					
 
-
 		});
 
-		$("#table-schedule").append("<tr> <td>" +hour+ " </td> <td>" +state+ "</td> </tr>");
+		if(state == "Agendado"){
+			$("#table-schedule").append("<tr class='tr-horary'> <td>" +hour+ " </td> <td style= 'background-color: #4682B4; color: white'>" +state+ "</td> </tr>");
+		}
+		if(state == "Cancelado"){
+			$("#table-schedule").append("<tr class='tr-horary'> <td>" +hour+ " </td> <td style= 'background-color: #FF0000; color: white'>" +state+ "</td> </tr>");
+		}
+		if(state == "Realizado"){
+			$("#table-schedule").append("<tr class='tr-horary'> <td>" +hour+ " </td> <td style= 'background-color: grey; color: white'>" +state+ "</td> </tr>");
+		}
+		if(state == "Reservado"){
+			$("#table-schedule").append("<tr class='tr-horary'> <td>" +hour+ " </td> <td style= 'background-color: #D9D919; color: black'>" +state+ "</td> </tr>");
+		}
+
 	});
 }
 
@@ -121,3 +133,78 @@ function chargeServices(){
 
 }
 
+
+function myConsultations(){
+	$("#my-consults").click(function() {
+		$("#calendar-patient").css("display", "none");
+		$("#my-consultations").css("display", "block");
+	});
+
+	var params = new Object();
+	params["pat"] = 123; 
+	var j;
+	ajaxCall("/siac/search/patient/consultations?cpf="+params["pat"], function(json){
+		console.log(JSON.stringify(json));
+
+		var service;
+		var date;
+		var horary;
+		var state;
+
+
+		$.each(json, function(key, obj){
+
+			$.each(obj, function(name, value){
+				if(name=="start"){
+					date = value;
+				}
+				if(name=="title"){
+					service = value;
+				}
+				if(name=="hour"){
+					horary = value;
+				}
+				if(name=="state"){
+					state = value;
+				}
+			})
+
+
+			$("#my-consultations-table").append("<tr>" +
+					"<td>"+service+"</td><td>"+date+"</td><td>"+horary+"</td><td>"+state+"</td>" +
+					"<td> <div class='btn-group'> <button type='button' class='btn btn-warning dropdown-toggle'"
+					+"data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> Mais <span class='caret'></span>"
+					+"</button>	<ul class='dropdown-menu' data-target='#modal-rating' data-toggle='modal'><li><a href='#'>Avaliar</a></li><li><a href='#'>Cancelar</a></li>"
+					+"</ul></td></tr>");
+
+		});
+	})
+}
+
+function myCalendar(){
+	$("#my-calend").click(function() {
+		$("#calendar-patient").css("display", "block");
+		$("#my-consultations").css("display", "none");
+	});
+}
+
+
+function addRating(){
+	$("#cancel-rating").click(function(){
+		$("#my-calend").modal('fade');
+	});
+
+	$("#save-rating").click(function(){
+		/*		chamar o controller e passar o id, comment, id da consulta e o rating(nota) da avaliação*/
+
+		var params = new Object();
+		params["rating"] = $("#rating-grade").val();
+		params["comment"] = $("#rating-comment").val();
+		
+
+		ajaxCall("/siac/saveRating?rating="+params["rating"]+"&comment="+params["comment"]);
+
+//		$('#modal-edit-service').modal('hide');
+
+	});
+}
