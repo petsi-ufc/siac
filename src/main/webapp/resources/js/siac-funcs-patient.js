@@ -14,7 +14,6 @@ $("document").ready(function(){
 
 function initCalendarPatient(json){
 
-	console.log(json);
 
 	$("#calendar-patient").fullCalendar({
 
@@ -144,13 +143,13 @@ function myConsultations(){
 	params["pat"] = 123; 
 	var j;
 	ajaxCall("/siac/search/patient/consultations?cpf="+params["pat"], function(json){
-		console.log(JSON.stringify(json));
+	
 
 		var service;
 		var date;
 		var horary;
 		var state;
-
+		var id_cons;
 
 		$.each(json, function(key, obj){
 
@@ -167,12 +166,15 @@ function myConsultations(){
 				if(name=="state"){
 					state = value;
 				}
+				if(name=="id"){
+					id_cons = value;
+				}
 			})
 
 
 			$("#my-consultations-table").append("<tr>" +
 					"<td>"+service+"</td><td>"+date+"</td><td>"+horary+"</td><td>"+state+"</td>" +
-					"<td> <div class='btn-group'> <button type='button' class='btn btn-warning dropdown-toggle'"
+					"<td> <div class='btn-group'> <button type='button' class='btn btn-warning dropdown-toggle rating-button-id' id='"+id_cons+"'"
 					+"data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> Mais <span class='caret'></span>"
 					+"</button>	<ul class='dropdown-menu' data-target='#modal-rating' data-toggle='modal'><li><a href='#'>Avaliar</a></li><li><a href='#'>Cancelar</a></li>"
 					+"</ul></td></tr>");
@@ -190,21 +192,26 @@ function myCalendar(){
 
 
 function addRating(){
-	$("#cancel-rating").click(function(){
-		$("#my-calend").modal('fade');
+//	$("#cancel-rating").click(function(){
+//		$("#my-calend").modal('fade');
+//	});
+
+	
+	$(".rating-button-id").click(function(){
+		$("#input-rating-id").val($(this).attr("id"));
+			console.log("oi");
 	});
-
-	$("#save-rating").click(function(){
-		/*		chamar o controller e passar o id, comment, id da consulta e o rating(nota) da avaliação*/
-
+	
+/*	$("#save-rating").click(function(){
+				chamar o controller e passar o id, comment, id da consulta e o rating(nota) da avaliação
+		
 		var params = new Object();
 		params["rating"] = $("#rating-grade").val();
 		params["comment"] = $("#rating-comment").val();
-		
+		params["id_cons"] =  $("#input-rating-id").val();
 
 		ajaxCall("/siac/saveRating?rating="+params["rating"]+"&comment="+params["comment"]);
+		$("#my-calend").modal('fade');
 
-//		$('#modal-edit-service').modal('hide');
-
-	});
+	});*/
 }

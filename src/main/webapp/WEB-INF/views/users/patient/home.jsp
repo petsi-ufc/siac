@@ -183,29 +183,14 @@
 				</div>
 				<div class="modal-body">
 					<p><h4>Comentário*</h4></p>
+					<input type='text' id='input-rating-id'/>
 					<textarea id="rating-comment" class="form-control" rows="4"
 						placeholder="Deixe seu comentário..." style="overflow:auto;resize:none"></textarea>
 					<br />
 				
-				<!-- Preenchido com Francis -->
+				<!-- Preenchido com Francis/AJAX hehe -->
 				
 				
-					<!-- <p>Dê uma nota</p>
-					<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true">
-					</span> <label class="radio-inline"><input type="radio"
-						name="optradio"> 5<span class="glyphicon glyphicon-star"
-						aria-hidden="true"></span> </label> <label class="radio-inline"><input
-						type="radio" name="optradio"> 4<span
-						class="glyphicon glyphicon-star" aria-hidden="true"></span> </label> <label
-						class="radio-inline"><input type="radio" name="optradio">
-						3<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-					</label> <label class="radio-inline"><input type="radio"
-						name="optradio"> 2<span class="glyphicon glyphicon-star"
-						aria-hidden="true"></span> </label> <label class="radio-inline"><input
-						type="radio" name="optradio"> 1<span
-						class="glyphicon glyphicon-star" aria-hidden="true"></span> </label> <span
-						class="glyphicon glyphicon-thumbs-down" aria-hidden="true">
-					</span> -->
 					
 					<p><h4>Dê uma nota</h4></p>
 					<select id="rating-grade" class="form-control">
@@ -215,6 +200,8 @@
 						<option>4</option>
 						<option>5</option>
 					</select>
+					
+					
 
 				</div>
 				<div class="modal-footer">
