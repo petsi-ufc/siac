@@ -38,7 +38,7 @@ public class ConsultationService {
 
 			Event event = new Event(c);
 			events.add(event);
-			System.out.println(event);
+			
 
 
 		}

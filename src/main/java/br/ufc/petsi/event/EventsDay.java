@@ -18,6 +18,21 @@ public class EventsDay {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
 		this.hour = simpleDateFormat.format(c.getDateInit().getTime());
 		this.status = c.getState().name();
+		if(this.status == "SC"){
+			this.status = "Agendado";
+		}
+		if(this.status == "FR"){
+			this.status = "Disponível";
+		}
+		if(this.status == "CD"){
+			this.status = "Cancelado";
+		}
+		if(this.status == "RD"){
+			this.status = "Realizado";
+		}
+		if(this.status == "RV"){
+			this.status = "Reservado";
+		}
 		this.id = c.getId();
 	}
 
