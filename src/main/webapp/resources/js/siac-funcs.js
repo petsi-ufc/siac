@@ -11,15 +11,19 @@ function ajaxCall(_url, params, func, error){
 	});
 }
 
-function alertMessage(message, time){
+//Função que mostra a mensagem de alerta em cima do calendário.
+//Type: SUCESS ou ERROR
+//Time: tempo para que a mensagem desapareça
+function alertMessage(message,  time){
 	//Se o tempo para esconder a mensagem não for passado por paramentro
 	//o valor do tempo será 5 segundos.
 	time = !time ? 5000 : time;
-	var alert = $(".alert-message");
-	alert.text(message);
-	alert.removeClass("hidden");
-	alert.show();
-	hideElement(alert, time);
+	var alertMessage = $(".alert-message");
+	
+	alertMessage.text(message);
+	alertMessage.removeClass("hidden");
+	alertMessage.show();
+	hideElement(alertMessage, time);
 }
 
 function hideElement(element, time){

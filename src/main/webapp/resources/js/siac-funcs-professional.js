@@ -19,7 +19,7 @@ var TABLE_DAYS = "table_days";
 var INPUT_COUNT_TIME = "input_count_time";
 var INPUT_VACANCY = "input_vacancy";
 
-var MAṔ_DAYS = "map_days"; 
+var MAP_DAYS = "map_days"; 
 var MAP_WEEK_DAYS = "map_week_days";
 
 //Constantes usadas para indentificar qual a
@@ -98,6 +98,7 @@ $("document").ready(function(){
 function onLiItemServiceClick(){
 	var calendar = mapVars.get(CALENDAR_ID);
 	$(".service-item").click(function(){
+		
 		$(".service-item").removeClass("active");
 		$(this).addClass("active");
 		id = $(this).attr("id");
@@ -106,10 +107,10 @@ function onLiItemServiceClick(){
 			$("#my-calendar").addClass("hidden");
 			$("#panel-register-schedules").removeClass("hidden");
 		}else if(id == MY_CALENDAR){
-			fillProfessionalCalendar();
 			calendar.removeClass("hidden");
 			$("#my-calendar").removeClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
+			fillProfessionalCalendar();
 		}
 	});
 }
@@ -396,7 +397,7 @@ function setFrequenciDays(){
 	
 	if(val != ""){
 		var resultMap = getDateByDays(mapDays, val);
-		mapVars.set(MAṔ_DAYS, resultMap);
+		mapVars.set(MAP_DAYS, resultMap);
 		
 		scheduleManager.updateSchedules(resultMap);
 		
@@ -529,6 +530,8 @@ function fillTableDays(mapDays){
 		var hiddenAddSchedule = "";
 		var hiddenEditSchedule = "hidden";
 		
+		console.log("Key: "+key+" - "+isScheduleRegistered);
+		
 		if(isScheduleRegistered){
 			hiddenAddSchedule = "hidden";
 			hiddenEditSchedule = "";
@@ -554,7 +557,7 @@ function fillTableDays(mapDays){
  * Função que inicia as funções de cadastrar horário ou remove em um dia selecionado no mapa.
  */
 function onActionTableClick(){
-	map = mapVars.get(MAṔ_DAYS);
+	map = mapVars.get(MAP_DAYS);
 	mapButtonDays = mapVars.get(MAP_SELECTED_DAYS);
 	$(".action-day").click(function(){
 		action = $(this);
@@ -606,11 +609,11 @@ function onButtonRegisterSchedulesClick(){
 		var json = JSON.stringify(scheduleManager);
 		
 		var params = {"json" : json};
-		console.log(params);
 		ajaxCall("/siac/saveConsultation", params, function(){
-			console.log("Works save Consultation");
+			alert("LOL");
+			alertMessage("Horários cadastrados com sucesso!");
 		}, function(){
-			alertMessage("Ops, não foi possível salvar os horários!");
+			alertMessage("Ops, não foi possível cadastrar os horários!");
 		});
 	});
 }
@@ -625,11 +628,10 @@ function fillProfessionalCalendar(){
 		if(length == 0){
 			alertMessage("Ops, você ainda não possui nenhum horário de consulta cadastrado!");
 		}else{
-			console.log(JSON.stringify(json));
 			for(var i = 0; i < length; i++){
 				var obj = json[i]; 
 				
-				date = moment(obj.dateInit).format("DD/MM/YYYY");
+				date = moment(new Date(obj.dateInit)).format("DD/MM/YYYY");
 				var timeInit = moment(obj.dateInit);
 				var timeEnd = moment(obj.dateEnd);
 				scheduleManager.addNewScheduleTime(date, timeInit.hours(), timeInit.minutes(), timeEnd.hours(), timeEnd.minutes());
@@ -657,7 +659,6 @@ function fillProfessionalCalendar(){
 				events.push(event);
 			});
 			
-			console.log(JSON.stringify(events));
 			var calendar = mapVars.get(CALENDAR_ID);
 			
 			renderCalendarEvents(events, calendar);
@@ -674,7 +675,6 @@ function fillProfessionalCalendar(){
 function renderCalendarEvents(events, calendar){
 	calendar.fullCalendar('removeEvents');
 	events.forEach(function(value, index, events){
-		console.log(value);
 		calendar.fullCalendar('renderEvent', value, true);
 	});
 }

@@ -139,6 +139,7 @@ var ScheduleManager = function(){
 	 */
 	self.isScheduleRegistered = function(date){
 		var schedule = mapScheduleDay.get(date);
+		console.log("SCHEDULE of "+date+": "+schedule);
 		if(schedule){
 			return schedule.listSchedules.length > 0 ? true : false;
 		}
