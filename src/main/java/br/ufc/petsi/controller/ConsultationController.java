@@ -55,8 +55,6 @@ public class ConsultationController {
 	@RequestMapping("/saveConsultation")
 	public String saveConsultation(@RequestParam("json") String json){
 		
-		System.out.println(json);
-		
 		SocialService serviceTemp = new SocialService();
 		serviceTemp.setId(5l);
 		Professional proTemp = new Professional();
@@ -72,7 +70,7 @@ public class ConsultationController {
 			JsonObject jObject = parser.parse(json).getAsJsonObject(); 
 			JsonArray data = jObject.getAsJsonArray("data");
 			
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY HH:mm");
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 			
 			for(int i = 0; i < data.size(); i++){
 				JsonObject timeSchedule = data.get(i).getAsJsonObject();
@@ -96,7 +94,7 @@ public class ConsultationController {
 					Date dateInit = format.parse(sDateInit);
 					Date dateEnd = format.parse(sDateEnd);
 					
-					System.out.println(dateInit.getHours()+" : "+dateInit.getMinutes()+"  |   "+dateEnd.getHours()+" : "+dateEnd.getMinutes());
+					System.out.println(sDateInit+" : "+dateInit+" - "+dateEnd);
 					
 					consultation.setDateInit(dateInit);
 					consultation.setDateEnd(dateEnd);
@@ -112,5 +110,16 @@ public class ConsultationController {
 		return "home_professional";
 	}
 	
+	@RequestMapping("/getConsutationsByProfessional")
+	@ResponseBody
+	public String getConsultationsByProfessional(){
+		SocialService serviceTemp = new SocialService();
+		serviceTemp.setId(5l);
+		Professional proTemp = new Professional();
+		proTemp.setCpf("123123");
+		proTemp.setSocialService(serviceTemp);
+		
+		return consultationService.getConsultationsByProfessional(proTemp, consDAO);
+	}
 	
 }

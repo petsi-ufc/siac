@@ -21,6 +21,9 @@
 	</div>
 
 	<div id="right-bar">
+		
+		<div class="alert alert-danger alert-message hidden" role="alert">Alert de Mensagens</div>
+	
 		<h2 id="my-calendar">Meu calendário</h2>
 		<div id="calendar_professional" class="calendar"></div>
 
