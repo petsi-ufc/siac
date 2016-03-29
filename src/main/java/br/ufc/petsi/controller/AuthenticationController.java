@@ -14,7 +14,7 @@ public class AuthenticationController {
 	
 	@RequestMapping("/authentication/success")
 	public ModelAndView success() {
-		return new ModelAndView("home_patient");
+		return new ModelAndView("home_professional");
 	}
 	
 	

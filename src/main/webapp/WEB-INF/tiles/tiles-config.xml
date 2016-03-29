@@ -13,21 +13,24 @@
 	
 	<definition name="home_patient" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/users/patient/home.jsp"/>	
-		<put-attribute name="javascriptsrc" value="/resources/js/siac-funcs-patient.js"/>
+		<put-list-attribute name="javascriptsrc">
+			<add-attribute value="/resources/js/siac-funcs-patient.js"/>	
+		</put-list-attribute>
 	</definition>
 		
 	<definition name="home_professional" extends="main">
-		<put-attribute name="body" value="/WEB-INF/views/users/professional/home.jsp"/>	
-		<put-attribute name="javascriptsrc" value="/resources/js/siac-funcs-professional.js"/>
-	</definition>
-	
-	<definition name="schedule_professional" extends="main">
-		<put-attribute name="body" value="/WEB-INF/views/users/professional/schedule.jsp"/>	
+		<put-attribute name="body" value="/WEB-INF/views/users/professional/home.jsp"/>
+		<put-list-attribute name="javascriptsrc">
+			<add-attribute value="/resources/js/schedule-classes.js"/>
+			<add-attribute value="/resources/js/siac-funcs-professional.js"/>	
+		</put-list-attribute>
 	</definition>
 	
 	<definition name="home_manager" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/users/manager/home.jsp"/>
-		<put-attribute name="javascriptsrc" value="/resources/js/admin-funcs.js"/>	
+		<put-list-attribute name="javascriptsrc">
+			<add-attribute value="/resources/js/admin-funcs.js"/>	
+		</put-list-attribute>	
 	</definition>
 	
 	<definition name="login" extends="main">

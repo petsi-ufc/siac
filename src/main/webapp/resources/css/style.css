@@ -263,3 +263,51 @@ body html{
 	width: 23px;
 	height: 23px;
 }
+
+.fc-widget-content{
+	cursor: pointer;
+}
+
+.margin-left{
+	margin-left: 5px !important;
+}
+
+.margin-right{
+	margin-right: 5px !important;
+}
+
+.hidden{
+	display: hidden;
+}
+
+.margin-top{
+	margin-top: 10px !important;
+}
+
+#panel-schedules{
+	max-height: 200px;
+	overflow-y: scroll; 
+}
+
+#div-table-days{
+	max-height: 350px;
+	overflow-y: scroll;
+}
+
+.remove-day{
+	cursor: pointer;
+}
+
+.service-item{
+	cursor: pointer;
+}
+
+.input-schedules{
+	width: 80px !important;
+}
+
+.alert-message{
+	width: 70%;
+	margin-right: auto;
+	margin-left: auto;
+}

@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table( name = "rating")
 public class Rating {
+	
 	@Id
 	@GeneratedValue
 	private Long id;

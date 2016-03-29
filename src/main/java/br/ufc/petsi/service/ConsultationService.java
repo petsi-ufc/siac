@@ -10,9 +10,12 @@ import br.ufc.petsi.event.Event;
 import br.ufc.petsi.event.EventsDay;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
+import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.SocialService;
+import br.ufc.petsi.util.ConsultationExclusionStrategy;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
 
@@ -22,7 +25,6 @@ public class ConsultationService {
 	public void registerConsultation(Consultation con, ConsultationDAO consDAO){
 		consDAO.save(con);
 	}
-
 
 	public String getConsultationsByPatient(Patient p, ConsultationDAO consDAO){
 		String json;
@@ -48,7 +50,6 @@ public class ConsultationService {
 		return json;
 	}
 
-
 	public String getConsultationsBySocialService(SocialService socialService, ConsultationDAO consDAO){
 		String json = "";
 		Gson gson = new Gson();
@@ -56,6 +57,21 @@ public class ConsultationService {
 		List<Consultation> consultations = consDAO.getConsultationsBySocialService(socialService);
 		json = gson.toJson(consultations);
 
+		return json;
+	}
+	
+	public String getConsultationsByProfessional(Professional professional, ConsultationDAO consDAO){
+		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
+		
+		String json = "";
+		try{
+			Gson gson = new GsonBuilder().setExclusionStrategies(new ConsultationExclusionStrategy()).serializeNulls().create();
+			json = gson.toJson(cons);
+			
+		}catch(Exception e){
+			System.out.println("Error at getConsultationByProfessional Service: ");
+		}
+		System.out.println(json);
 		return json;
 	}
 	
