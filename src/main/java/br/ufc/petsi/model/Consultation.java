@@ -133,4 +133,9 @@ public class Consultation {
 	public void setRating(Rating rating) {
 		this.rating = rating;
 	}
+
+	
+	
+	
+	
 }

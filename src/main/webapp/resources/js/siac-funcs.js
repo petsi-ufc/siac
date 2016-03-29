@@ -11,10 +11,21 @@ function ajaxCall(_url, params, func, error){
 	});
 }
 
+function alertMessage(message, time){
+	//Se o tempo para esconder a mensagem não for passado por paramentro
+	//o valor do tempo será 5 segundos.
+	time = !time ? 5000 : time;
+	var alert = $(".alert-message");
+	alert.text(message);
+	alert.removeClass("hidden");
+	alert.show();
+	hideElement(alert, time);
+}
+
 function hideElement(element, time){
 	setTimeout(
 			function(){
-				$(element).hide(1000);
+				$(element).hide(1500);
 			}, time
 	);
 }

@@ -85,8 +85,28 @@ var ScheduleManager = function(){
 		mapScheduleDay.set(date, scheduleDay);
 	}
 	
+	/*
+	 * Adiciona um novo horário na data passada por parametro.
+	 * Se a data não estive no mapa um novo ScheduleDay é criado.
+	 */ 
+	self.addNewScheduleTime = function(date, hourInit, minuteInit, hourEnd, minuteEnd){
+		var scheduleDay = mapScheduleDay.get(date);
+		if(scheduleDay){
+			scheduleDay.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd);
+		}else{
+			var sch = new ScheduleDay();
+			sch.setDate(date);
+			sch.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd);
+			self.addScheduleDay(date, sch);
+		}
+	}
+	
 	self.removeScheduleDay = function(date){
 		mapScheduleDay.delete(date);
+	}
+	
+	self.clearSchedules = function(){
+		mapScheduleDay.clear();
 	}
 	
 	self.getSchedulesMap = function(){

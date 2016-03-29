@@ -300,3 +300,9 @@ body html{
 .input-schedules{
 	width: 80px !important;
 }
+
+.alert-message{
+	width: 70%;
+	margin-right: auto;
+	margin-left: auto;
+}

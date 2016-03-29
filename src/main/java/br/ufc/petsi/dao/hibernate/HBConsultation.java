@@ -1,5 +1,6 @@
 package br.ufc.petsi.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
+import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.SocialService;
 
 @Repository
@@ -82,6 +84,19 @@ public class HBConsultation implements ConsultationDAO{
 		}catch(NoResultException e){
 			return null;
 		}
+	}
+
+	@Override
+	public List<Consultation> getConsultationByProfessional(Professional professional) {
+		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.professional = :professional");
+		query.setParameter("professional", professional);
+		List<Consultation> cons = new ArrayList<Consultation>();
+		try{
+			cons = query.getResultList();
+		}catch(NoResultException e){
+			System.out.println("No result at getConsultationByProfessional: "+e);
+		}
+		return cons;
 	}
 
 

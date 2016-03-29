@@ -90,6 +90,9 @@ $("document").ready(function(){
 	
 	mapVars.set(MAP_WEEK_DAYS, mapWeekDays);
 	
+	//Carregando todas as consultas cadastradas no calendário do profissional.
+	fillProfessionalCalendar();
+	
 });
 
 function onLiItemServiceClick(){
@@ -103,6 +106,7 @@ function onLiItemServiceClick(){
 			$("#my-calendar").addClass("hidden");
 			$("#panel-register-schedules").removeClass("hidden");
 		}else if(id == MY_CALENDAR){
+			fillProfessionalCalendar();
 			calendar.removeClass("hidden");
 			$("#my-calendar").removeClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
@@ -316,6 +320,7 @@ function addSchedules(timeInit, timeEnd){
 	//Iniciando o metodo de remover os horários caso o usuário clique no botar de remover horário.
 	onButtonRemoveScheduleClick();
 
+	
 }
 
 function onButtonRemoveScheduleClick(){
@@ -605,8 +610,72 @@ function onButtonRegisterSchedulesClick(){
 		ajaxCall("/siac/saveConsultation", params, function(){
 			console.log("Works save Consultation");
 		}, function(){
-			console.log("Error save Consultation");
+			alertMessage("Ops, não foi possível salvar os horários!");
 		});
+	});
+}
+
+function fillProfessionalCalendar(){
+	ajaxCall("/siac/getConsutationsByProfessional", null, function(json){
+		var length = Object.keys(json).length;
+		
+		//Removendo todos os horários em memória.
+		scheduleManager.clearSchedules();
+		
+		if(length == 0){
+			alertMessage("Ops, você ainda não possui nenhum horário de consulta cadastrado!");
+		}else{
+			console.log(JSON.stringify(json));
+			for(var i = 0; i < length; i++){
+				var obj = json[i]; 
+				
+				date = moment(obj.dateInit).format("DD/MM/YYYY");
+				var timeInit = moment(obj.dateInit);
+				var timeEnd = moment(obj.dateEnd);
+				scheduleManager.addNewScheduleTime(date, timeInit.hours(), timeInit.minutes(), timeEnd.hours(), timeEnd.minutes());
+				
+			}
+			
+			var scheduleMap = scheduleManager.getSchedulesMap();
+			var events = [];
+			scheduleMap.forEach(function(value, key, scheduleMap){
+				
+				var sch = value;
+				
+				//Formatando a data para YYYY-DD-MM
+				//sch.getDate() retorna a data em DD/MM/YYYY
+				//Logo é feito um split que é usado para criar um objeto date no formato abaixo.
+				var from = sch.getDate().split("/");
+				
+				//Criando uma data no formato YYYY-DD-MM
+				var eventDate = moment(new Date(from[2], from[1] - 1, from[0]));
+				
+				var event = new Object();
+				event.title = "Consulta(s)";
+				event.start = eventDate;
+				event.allDay = false;
+				events.push(event);
+			});
+			
+			console.log(JSON.stringify(events));
+			var calendar = mapVars.get(CALENDAR_ID);
+			
+			renderCalendarEvents(events, calendar);
+		}
+	}, function(){
+		alertMessage("Ops, não foi possível preencher seu calendário!");
+	});
+	
+}
+
+/*
+ Essa função renderiza um evento no calendário passado por parâmetro.
+*/
+function renderCalendarEvents(events, calendar){
+	calendar.fullCalendar('removeEvents');
+	events.forEach(function(value, index, events){
+		console.log(value);
+		calendar.fullCalendar('renderEvent', value, true);
 	});
 }
 
