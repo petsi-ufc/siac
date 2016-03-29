@@ -13,17 +13,7 @@ http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/tx  
 http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
-	<context:component-scan base-package="br.ufc.petsi.controller" />
-	<context:component-scan base-package="br.ufc.petsi.dao.ldap.hibernate" />
-	<context:component-scan base-package="br.ufc.petsi.dao.ldap" />
-	<context:component-scan base-package="br.ufc.petsi.dao" />
-	<context:component-scan base-package="br.ufc.petsi.model" />
-	<context:component-scan base-package="br.ufc.petsi.mapper" />
-	<context:component-scan base-package="br.ufc.petsi.service" />
-	
 	<mvc:annotation-driven />
-	
-	<context:annotation-config />
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	

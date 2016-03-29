@@ -21,7 +21,6 @@ import br.ufc.petsi.session.CurrentSession;
 public class LdapAuthenticationProvider implements AuthenticationProvider, Serializable{
 
 	@Inject
-	@Qualifier("ldapUser")
 	private UserDAO userDAO;
 	
 	@Override
@@ -29,8 +28,6 @@ public class LdapAuthenticationProvider implements AuthenticationProvider, Seria
 			throws AuthenticationException {
 		String name = authen.getName();
 		String password = authen.getCredentials() != null ? (String) authen.getCredentials() : null;
-	
-		System.out.println(name + " | " + password); 
 		
 		User user = userDAO.getByCpf(name);
 		
@@ -42,8 +39,6 @@ public class LdapAuthenticationProvider implements AuthenticationProvider, Seria
 				
 		LdapAuthentication result = new LdapAuthentication(user, password, user.getRole());
 		result.setAuthenticated( true );		
-		
-		CurrentSession.getSession().setAttribute("user", user);
 		
 		return result;
 	}
