@@ -170,16 +170,17 @@ function myConsultations(){
 					id_cons = value;
 				}
 			})
-
+			
+			
 
 			$("#my-consultations-table").append("<tr>" +
 					"<td>"+service+"</td><td>"+date+"</td><td>"+horary+"</td><td>"+state+"</td>" +
-					"<td> <div class='btn-group'> <button type='button' class='btn btn-warning dropdown-toggle rating-button-id' id='"+id_cons+"'"
-					+"data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> Mais <span class='caret'></span>"
-					+"</button>	<ul class='dropdown-menu' data-target='#modal-rating' data-toggle='modal'><li><a href='#'>Avaliar</a></li><li><a href='#'>Cancelar</a></li>"
-					+"</ul></td></tr>");
+					"<td> <div class='btn-group'> <button type='button' class='btn btn-warning rating-button-id' id='"+id_cons+"' data-target='#modal-rating' data-toggle='modal'>Avaliar</button></td>"
+			+" <td><button type='button' class='btn btn-danger'> Cancelar </button> </td></tr>");
 
 		});
+		
+		addRating();
 	})
 }
 
@@ -192,26 +193,24 @@ function myCalendar(){
 
 
 function addRating(){
+	
 //	$("#cancel-rating").click(function(){
 //		$("#my-calend").modal('fade');
 //	});
 
-	
 	$(".rating-button-id").click(function(){
 		$("#input-rating-id").val($(this).attr("id"));
 			console.log("oi");
 	});
-	
-/*	$("#save-rating").click(function(){
-				chamar o controller e passar o id, comment, id da consulta e o rating(nota) da avaliação
-		
-		var params = new Object();
-		params["rating"] = $("#rating-grade").val();
-		params["comment"] = $("#rating-comment").val();
-		params["id_cons"] =  $("#input-rating-id").val();
 
-		ajaxCall("/siac/saveRating?rating="+params["rating"]+"&comment="+params["comment"]);
+	$("#save-rating").click(function(){		
+		var params = new Object();
+		params["rating.rating"] = $("#rating-grade").val();
+		params["rating.comment"] = $("#rating-comment").val();
+		params["id"] =  $("#input-rating-id").val();
+		
+		ajaxCall("/siac/updateConsultationRating", params);
 		$("#my-calend").modal('fade');
 
-	});*/
+	});
 }

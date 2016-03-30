@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import br.ufc.petsi.dao.RatingDAO;
+import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Rating;
 
 @Repository
@@ -28,6 +29,14 @@ public class HBRating implements RatingDAO{
 	@Override
 	public void save(Rating rating) {
 		manager.persist(rating);
+		
+	}
+
+	@Override
+	public Rating getRatingById(long id) {
+		Query query = (Query) manager.createQuery("SELECT rating FROM Rating cons WHERE rating.id = :id");
+		query.setParameter("id", id);
+		return (Rating) query.getSingleResult();
 	}
 	
 
