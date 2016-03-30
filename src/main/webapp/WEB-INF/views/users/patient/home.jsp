@@ -114,23 +114,11 @@
 							<th>Data</th>
 							<th>Horário</th>
 							<th>Status</th>
-							<th>Opções</th>
+							<th colspan="2">Opções</th>
 						</tr>
 					</thead>
 					<tbody>
-						<!-- <div class="btn-group">
-									<button type="button" class="btn btn-warning dropdown-toggle"
-										data-toggle="dropdown" aria-haspopup="true"
-										aria-expanded="false">
-										Mais <span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu">
-										<li><a href="#">Avaliar</a></li>
-										<li><a href="#">Cancelar</a></li>
-									</ul>
-								</div>
-							</td>
-						</tr> -->
+						
 					</tbody>
 				</table>
 			</div>
@@ -182,8 +170,8 @@
 					<h4 class="modal-title">Avaliação de Consulta</h4>
 				</div>
 				<div class="modal-body">
-					<p><h4>Comentário*</h4></p>
-					<input type='text' id='input-rating-id'/>
+					<p><h4>Comentário</h4></p>
+					<input type='hidden' id='input-rating-id' name='idCons'/>
 					<textarea id="rating-comment" class="form-control" rows="4"
 						placeholder="Deixe seu comentário..." style="overflow:auto;resize:none"></textarea>
 					<br />
@@ -192,7 +180,7 @@
 				
 				
 					
-					<p><h4>Dê uma nota</h4></p>
+					<p><h4>Dê uma nota*</h4></p>
 					<select id="rating-grade" class="form-control">
 						<option>1</option>
 						<option>2</option>
