@@ -1,11 +1,47 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<jsp:useBean id="user" class="br.ufc.petsi.model.Professional" scope="session" />
+<jsp:useBean id="user" class="br.ufc.petsi.model.Professional"
+	scope="session" />
 <jsp:setProperty property="*" name="user" />
 
 
 <div id="home-content">
 	<div id="left-bar">
+
+		<div id="modal-schedules-description" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title"><strong>Descrição do(s) Horário(s)</strong></h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>Hora Início</th>
+									<th>Hora Fim</th>
+									<th>Estado</th>
+									<th>Nota</th>
+								</tr>
+							</thead>
+							<tbody id="tbody-schedules-description">
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+
+
 		<img id="avatar-img" class="img-responsive"
 			src="<c:url value='/resources/images/user_avatar.png'/>">
 
@@ -18,16 +54,81 @@
 				<li class="service-item" id="1"><a>Cadastrar Agenda</a></li>
 			</ul>
 		</div>
+		<div id="calendar-legend">
+			<table style='margin-left: 70px'>
+				<thead>
+					<tr>
+						<th colspan="2"><h3>Legenda de Consultas</h3></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<h4>Grupo de Consultas</h4>
+						</td>
+						<td>
+							<div class='legend-color color-black'></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h4>Disponível</h4>
+						</td>
+						<td>
+							<div class='legend-color color-green'></div>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h4>Agendada</h4>
+						</td>
+						<td>
+							<div class='legend-color color-blue'></div>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h4>Realizada</h4>
+						</td>
+						<td>
+							<div class='legend-color color-grey'></div>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h4>Reservada</h4>
+						</td>
+						<td>
+							<div class='legend-color color-yellow'></div>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h4>Cancelada</h4>
+						</td>
+						<td>
+							<div class='legend-color color-red'></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 	<div id="right-bar">
-		
-		<div class="alert alert-danger alert-message hidden" role="alert">Alert de Mensagens</div>
-	
+
+		<div class="alert alert-danger alert-message hidden" role="alert">Alert
+			de Mensagens</div>
+
 		<h2 id="my-calendar">Meu calendário</h2>
 		<div id="calendar_professional" class="calendar"></div>
 
-		<div class="panel panel-primary margin-right hidden" id="panel-register-schedules">
+		<div class="panel panel-primary margin-right hidden"
+			id="panel-register-schedules">
 			<div class="panel-heading">
 				<h1 class="panel-title">Cadastrar Agenda</h1>
 			</div>
@@ -84,7 +185,10 @@
 							</table>
 						</div>
 					</div>
-					<button type="button" id="btn-register-schedules" class="disabled btn btn-lg btn-primary">Cadastrar <i class="glyphicon glyphicon-floppy-saved"></i></button>
+					<button type="button" id="btn-register-schedules"
+						class="disabled btn btn-lg btn-primary">
+						Cadastrar <i class="glyphicon glyphicon-floppy-saved"></i>
+					</button>
 				</div>
 			</div>
 		</div>
@@ -95,12 +199,13 @@
 			<div class="modal-content">
 				<div id="title-header" class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">X</button>
-					<h3 id="modal-schedule-title" class="modal-title">Cadastrar Horário</h3>
+					<h3 id="modal-schedule-title" class="modal-title">Cadastrar
+						Horário</h3>
 				</div>
 				<div class="modal-body">
 					<h4 id="modal-description-body"></h4>
 					<label id="label-date-clicked" class="hidden"></label>
-					
+
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Informações da Consulta</h3>
@@ -108,38 +213,51 @@
 						<div class="panel-body">
 							<form class="form-horizontal">
 								<div class="form-group">
-									<label for="input-count-vacancy" class="col-md-4 control-label">Quantidade de Vagas:</label>
+									<label for="input-count-vacancy" class="col-md-4 control-label">Quantidade
+										de Vagas:</label>
 									<div class="col-md-5">
-										<input type="number" min="1" class="form-control input-schedule-info" id="input-count-vacancy">
+										<input type="number" min="1"
+											class="form-control input-schedule-info"
+											id="input-count-vacancy">
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="input-count-time" class="col-md-4 control-label">Tempo por Consulta:</label>
+									<label for="input-count-time" class="col-md-4 control-label">Tempo
+										por Consulta:</label>
 									<div class="col-md-5">
-										<input type="number" min="1" class="form-control input-schedule-info" id="input-count-time" placeholder="Minutos">
-									</div>	
+										<input type="number" min="1"
+											class="form-control input-schedule-info"
+											id="input-count-time" placeholder="Minutos">
+									</div>
 								</div>
 								<div class="form-group">
-									<label for="input-count-time-init" class="col-md-4 control-label">Hora de Início:</label>
-									<div class="col-md-5 col-sm-offset-4 input-group bootstrap-timepicker timepicker">
-										<input id="tmp-init-0" type="text" class="input-schedule-info form-control input-small"> <span
-											class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-									</div>	
+									<label for="input-count-time-init"
+										class="col-md-4 control-label">Hora de Início:</label>
+									<div
+										class="col-md-5 col-sm-offset-4 input-group bootstrap-timepicker timepicker">
+										<input id="tmp-init-0" type="text"
+											class="input-schedule-info form-control input-small">
+										<span class="input-group-addon"><i
+											class="glyphicon glyphicon-time"></i></span>
+									</div>
 								</div>
 							</form>
 							<div class="col-md-offset-5">
-								<button type="button" class="btn btn-primary" id="btn-generate-schedules">Gerar Horários <i class="glyphicon glyphicon-time"></i></button>
+								<button type="button" class="btn btn-primary"
+									id="btn-generate-schedules">
+									Gerar Horários <i class="glyphicon glyphicon-time"></i>
+								</button>
 							</div>
 						</div>
 					</div>
-					
+
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Horários</h3>
 						</div>
 						<div class="panel-body" id="panel-schedules">
 							<div class="row" id="row-add-schedules">
-								
+
 								<div class="col-md-1">
 									<h4>Início:</h4>
 								</div>
@@ -175,7 +293,8 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" id="btn-confirm-schedules" data-dismiss="modal">Confirmar</button>
+					<button type="button" class="btn btn-primary"
+						id="btn-confirm-schedules" data-dismiss="modal">Confirmar</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
 				</div>
 			</div>

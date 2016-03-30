@@ -82,7 +82,7 @@ public class ConsultationController {
 					Consultation consultation = new Consultation();
 					consultation.setProfessional(pro);
 					consultation.setService(serv);
-					consultation.setState(ConsultationState.SC);
+					consultation.setState(ConsultationState.FR);
 					
 					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
 					JsonElement timeEnd = timeSchedules.get(j).getAsJsonObject().get("timeEnd");

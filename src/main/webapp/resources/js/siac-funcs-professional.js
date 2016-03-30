@@ -38,6 +38,17 @@ var idTimepickersEnd = 0;
 var mapVars = new Map();
 
 
+
+var colors = new Map();
+colors.set("SC", {hex : "#4682B4", css: "color-blue"});
+colors.set("FR", {hex : "#32CD32", css: "color-green"});
+colors.set("RD", {hex : "grey", css: "color-grey"});
+colors.set("RV", {hex : "#D9D919", css: "color-yellow"});
+colors.set("CD", {hex : "#FF0000", css: "color-red"});
+colors.set("GS", {hex : "#000000"});
+
+
+
 $("document").ready(function(){
 	
 	//Adicionando elementos DOM no mapa de variaveis
@@ -129,12 +140,39 @@ function initCalendarProfessional(){
 		businessHours: true,
 	    editable: false,
 	             
-	    dayClick: function(date, jsEvent, view, event) {
-	    	//Função que abre o modal para cadastrar horário
-	    	//onCalendarDayCLicked(date.format("DD/MM/YYYY"));
+	    eventClick: function(date, jsEvent, view, event) {
+	    	var date = moment(new Date(date.start._d)).format("DD/MM/YYYY");
+//	    	setEditModalSchedule(date, scheduleManager.getSchedulesMap().get(date).getListSchedules());
+	    	$("#modal-schedules-description").modal("show");
+	    	fillDescriptionSchedulesTable(scheduleManager.getScheduleDay(date));
 	    }  		         		         
 	});
 	
+}
+
+function fillDescriptionSchedulesTable(scheduleDay){
+	
+	if(!scheduleDay) return;
+	
+	var tbody = $("#tbody-schedules-description");
+
+	tbody.find("tr").remove();
+	
+	var listSchedules = scheduleDay.getListSchedules();
+	
+	listSchedules.forEach(function(sch, index, listSchedules){
+		
+		var css = colors.get(sch.getState()).css;
+		
+		var row = $("<tr>");
+		var data = "";
+		data += "<td>"+sch.getTimeInit()+"</td>";
+		data += "<td>"+sch.getTimeEnd()+"</td>";
+		data += "<td class='"+css+" td-schedule-state'>"+sch.getState()+"</td>";
+		data += "<td>"+sch.getRating()+"</td>";
+		row.append(data);
+		tbody.append(row);
+	});
 }
 
 function onCalendarDayCLicked(date){
@@ -285,6 +323,7 @@ function onButtonAddScheduleClick(){
 		addSchedules(null, null);
 	});
 }
+
 function addSchedules(timeInit, timeEnd){
 	
 	var newRow = $("#row-add-schedules").clone();
@@ -587,22 +626,26 @@ function onActionTableClick(){
 		}else if(action.hasClass("edit-schedule")){
 			var scheduleDay = scheduleManager.getSchedulesMap().get(key);
 			var listSchedules = scheduleDay.getListSchedules();
-			if(listSchedules && listSchedules.length){
-				showModalSchedules(key, EDIT_ACTION);
-				initTimepicker("tmp-init-1", listSchedules[0].getTimeInit());
-				initTimepicker("tmp-end-1", listSchedules[0].getTimeEnd());
-				
-				for(var i = 1; i < listSchedules.length; i++){
-					addSchedules(listSchedules[i].getTimeInit(), listSchedules[i].getTimeEnd());
-				}
-			}else{
-				console.log("O dia "+key+" não possui horários cadastrados!");
-			}
+			setEditModalSchedule(key, listSchedules);
 		}
 	});
 }
 
 
+function setEditModalSchedule(date, listSchedules){
+	console.log(date+" - "+listSchedules);
+	if(listSchedules && listSchedules.length){
+		showModalSchedules(date, EDIT_ACTION);
+		initTimepicker("tmp-init-1", listSchedules[0].getTimeInit());
+		initTimepicker("tmp-end-1", listSchedules[0].getTimeEnd());
+		
+		for(var i = 1; i < listSchedules.length; i++){
+			addSchedules(listSchedules[i].getTimeInit(), listSchedules[i].getTimeEnd());
+		}
+	}else{
+		console.log("O dia "+key+" não possui horários cadastrados!");
+	}
+}
 
 function onButtonRegisterSchedulesClick(){
 	$("#btn-register-schedules").click(function(){
@@ -628,13 +671,15 @@ function fillProfessionalCalendar(){
 		if(length == 0){
 			alertMessage("Ops, você ainda não possui nenhum horário de consulta cadastrado!");
 		}else{
+			console.log(JSON.stringify(obj));
 			for(var i = 0; i < length; i++){
 				var obj = json[i]; 
 				
 				date = moment(new Date(obj.dateInit)).format("DD/MM/YYYY");
 				var timeInit = moment(obj.dateInit);
 				var timeEnd = moment(obj.dateEnd);
-				scheduleManager.addNewScheduleTime(date, timeInit.hours(), timeInit.minutes(), timeEnd.hours(), timeEnd.minutes());
+				
+				scheduleManager.addNewScheduleTime(date, timeInit.hours(), timeInit.minutes(), timeEnd.hours(), timeEnd.minutes(), obj.state, obj.rating);
 				
 			}
 			
@@ -653,7 +698,8 @@ function fillProfessionalCalendar(){
 				var eventDate = moment(new Date(from[2], from[1] - 1, from[0]));
 				
 				var event = new Object();
-				event.title = "Consulta(s)";
+				event.color = colors.get("GS").hex;
+				event.title = "Consulta";
 				event.start = eventDate;
 				event.allDay = false;
 				events.push(event);
