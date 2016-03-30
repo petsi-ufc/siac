@@ -55,10 +55,20 @@
     <bean id="base" class="java.lang.String">
         <constructor-arg ref="ldapOu" />
     </bean>
-    
+    <!-- 
     <bean id="ldapUser" class="br.ufc.petsi.dao.ldap.LdapUser">
     	<property name="ldapTemplate" ref="ldapTemplate" />
     	<property name="base" ref="base" />
     </bean>
+    -->
+    <context:annotation-config />
     
+    <context:component-scan base-package="br.ufc.petsi.controller" />
+	<context:component-scan base-package="br.ufc.petsi.dao.hibernate" />
+	<context:component-scan base-package="br.ufc.petsi.dao.ldap" />
+	<context:component-scan base-package="br.ufc.petsi.dao" />
+	<context:component-scan base-package="br.ufc.petsi.model" />
+	<context:component-scan base-package="br.ufc.petsi.mapper" />
+	<context:component-scan base-package="br.ufc.petsi.service" />
+	<context:component-scan base-package="br.ufc.petsi.security" />
 </beans>

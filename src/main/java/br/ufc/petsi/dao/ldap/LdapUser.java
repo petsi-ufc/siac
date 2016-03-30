@@ -2,19 +2,26 @@ package br.ufc.petsi.dao.ldap;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
+import org.springframework.stereotype.Component;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.mapper.UserAttributeMapper;
 import br.ufc.petsi.model.User;
 
+@Named
+@Component
 public class LdapUser implements UserDAO {
 
+	@Inject
 	private LdapTemplate ldapTemplate;
-	
+	@Inject
 	private String base;
 	
 	@Override
