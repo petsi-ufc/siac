@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-
 @Named
 public class ConsultationService {
 
@@ -85,5 +84,16 @@ public class ConsultationService {
 
 		json = gson.toJson(eventsDay);
 		return json;
+	}
+	
+	
+	public Consultation getConsultationsByIdC(long id, ConsultationDAO consDAO){
+		Consultation c = consDAO.getConsultationById(id);		
+		return c;
+	}
+	
+	
+	public void updateConsultation(Consultation consultation, ConsultationDAO consDAO){
+		consDAO.update(consultation);
 	}
 }

@@ -1,8 +1,10 @@
 package br.ufc.petsi.controller;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,14 +18,23 @@ import br.ufc.petsi.model.User;
 @Transactional
 public class UserController {
 	
-//	@Inject
-//	@Qualifier("ldapUser")
-//	private UserDAO userDAO;
+	@Inject
+	private UserDAO userDAO;
 	
 	@RequestMapping("/getUserByName")
 	@ResponseBody
 	public String getUserByName(String name){
 		return "";
+	}
+	
+	public User getUserLogged(HttpSession session)
+	{
+		if(session.getAttribute("userLogged") == null)
+		{
+			User user = userDAO.getByCpf(SecurityContextHolder.getContext().getAuthentication().getName());
+			session.setAttribute("userLogged", user);
+		}
+		return (User) session.getAttribute("userLogged");
 	}
 	
 }

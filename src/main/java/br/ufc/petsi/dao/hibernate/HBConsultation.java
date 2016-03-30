@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.enums.ConsultationState;
@@ -30,6 +31,7 @@ public class HBConsultation implements ConsultationDAO{
 	}
 
 	@Override
+	@Transactional
 	public void update(Consultation con) {
 		manager.merge(con);
 	}

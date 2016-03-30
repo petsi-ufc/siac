@@ -16,6 +16,12 @@ public class RatingService {
 		ratingDAO.save(rating);
 	}
 	
+	public Rating getRatingById(long id, RatingDAO ratingDAO){
+		return ratingDAO.getRatingById(id);
+	}
+	
+	
+	
 
 	
 }

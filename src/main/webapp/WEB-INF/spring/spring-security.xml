@@ -10,6 +10,12 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 	<security:global-method-security secured-annotations="enabled"/>
 
 	<security:http auto-config="false" use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
+ 		<!-- 
+ 		<security:intercept-url pattern="/" access="permitAll" />
+ 		<security:intercept-url pattern="/resources/**" access="permitAll" />
+ 		<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+		<security:logout logout-success-url="/" invalidate-session="true"/>
+		-->
 		<security:custom-filter position="FORM_LOGIN_FILTER" ref="ldapAuthenticationFilter" />
 	</security:http>
 	
@@ -36,12 +42,6 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 	<security:authentication-manager alias="authenticationManager">
 		<!-- Nosso provedor -->
 		<security:authentication-provider ref="ldapAuthenticationProvider" />
-		<!-- Provedor baseado em memória -->
-		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="admin" password="admin" authorities="ROLE_USER"/>
-			</security:user-service>
-		</security:authentication-provider>
 	</security:authentication-manager>
 	
 

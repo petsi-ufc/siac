@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.dao.ConsultationDAO;
+import br.ufc.petsi.dao.RatingDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
+import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ConsultationService;
-import br.ufc.petsi.session.CurrentSession;
+import br.ufc.petsi.service.RatingService;
+
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -34,7 +37,13 @@ public class ConsultationController {
 	private ConsultationService consultationService;
 	
 	@Inject
+	private RatingService ratingService;
+	
+	@Inject
 	private ConsultationDAO consDAO;
+	
+	@Inject
+	private RatingDAO ratingDAO;
 	
 	@RequestMapping("/getConsultationsBySocialService")
 	@ResponseBody
@@ -121,5 +130,17 @@ public class ConsultationController {
 		
 		return consultationService.getConsultationsByProfessional(proTemp, consDAO);
 	}
+	
+	@RequestMapping("/updateConsultationRating")
+	@ResponseBody
+	public void updateConsultation(Consultation c){		
+		Consultation consultation = consultationService.getConsultationsByIdC(c.getId(), consDAO);
+		consultation.setRating(c.getRating());
+		consultationService.updateConsultation(consultation, consDAO);
+		
+		
+	}
+	
+	
 	
 }
