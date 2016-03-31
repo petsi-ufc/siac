@@ -25,6 +25,7 @@
 									<th>Hora Fim</th>
 									<th>Estado</th>
 									<th>Nota</th>
+									<th>Detalhes</th>
 								</tr>
 							</thead>
 							<tbody id="tbody-schedules-description">
@@ -50,6 +51,8 @@
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
 				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
+				<li class="nav-divider"></li>
+				<li class="service-item" id="2"><a>Minhas Consultas</a></li>
 				<li class="nav-divider"></li>
 				<li class="service-item" id="1"><a>Cadastrar Agenda</a></li>
 			</ul>

@@ -38,13 +38,12 @@ var idTimepickersEnd = 0;
 var mapVars = new Map();
 
 
-
 var colors = new Map();
-colors.set("SC", {hex : "#4682B4", css: "color-blue"});
-colors.set("FR", {hex : "#32CD32", css: "color-green"});
-colors.set("RD", {hex : "grey", css: "color-grey"});
-colors.set("RV", {hex : "#D9D919", css: "color-yellow"});
-colors.set("CD", {hex : "#FF0000", css: "color-red"});
+colors.set("SC", {text: "Agendada", hex : "#4682B4", css: "color-blue"});
+colors.set("FR", {text: "Disponível", hex : "#32CD32", css: "color-green"});
+colors.set("RD", {text: "Realizada", hex : "grey", css: "color-grey"});
+colors.set("RV", {text: "Reservada", hex : "#D9D919", css: "color-yellow"});
+colors.set("CD", {text: "Cancelada", hex : "#FF0000", css: "color-red"});
 colors.set("GS", {hex : "#000000"});
 
 
@@ -168,8 +167,9 @@ function fillDescriptionSchedulesTable(scheduleDay){
 		var data = "";
 		data += "<td>"+sch.getTimeInit()+"</td>";
 		data += "<td>"+sch.getTimeEnd()+"</td>";
-		data += "<td class='"+css+" td-schedule-state'>"+sch.getState()+"</td>";
+		data += "<td>"+colors.get(sch.getState()).text+"</td>";
 		data += "<td>"+sch.getRating()+"</td>";
+		data += "<td><button class='btn btn-primary'><span class='glyphicon glyphicon-info-sign'></span></button></td>";
 		row.append(data);
 		tbody.append(row);
 	});

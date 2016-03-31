@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
+import br.ufc.petsi.dao.ProfessionalDAO;
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.model.Role;
 import br.ufc.petsi.model.User;
@@ -22,6 +23,9 @@ public class LdapAuthenticationProvider implements AuthenticationProvider, Seria
 
 	@Inject
 	private UserDAO userDAO;
+	
+	@Inject
+	private ProfessionalDAO profDAO;
 	
 	@Override
 	public Authentication authenticate(Authentication authen)
@@ -35,8 +39,15 @@ public class LdapAuthenticationProvider implements AuthenticationProvider, Seria
 			throw new BadCredentialsException("Login e/ou senha inválidos");
 		}
 		
+		String role = (String)CurrentSession.getSession().getAttribute("loginRole");
+		if(role.equals("Profissional")) {
+			User u = profDAO.getByCpf(name);
+			if( u == null )
+				throw new BadCredentialsException("Você não possui essa permissão!");
+			else
+				user.setRole(new Role("ROLE_PROF"));
+		}
 		user.setRole(new Role("ROLE_USER"));
-				
 		LdapAuthentication result = new LdapAuthentication(user, password, user.getRole());
 		result.setAuthenticated( true );		
 		

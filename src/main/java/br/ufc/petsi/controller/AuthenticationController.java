@@ -1,8 +1,12 @@
 package br.ufc.petsi.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import br.ufc.petsi.model.User;
 
 @Controller
 public class AuthenticationController {
@@ -13,7 +17,7 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping("/authentication/success")
-	public ModelAndView success() {
+	public ModelAndView success(HttpSession session) {
 		return new ModelAndView("home_professional");
 	}
 	
