@@ -8,10 +8,28 @@ var ScheduleTime = function(){
 	var self = this;
 	this.timeInit = moment();
 	this.timeEnd = moment();
+	var state = "---";
+	var rating = "---";
 	
 	self.__construct = function(hourInit, minuteInit, hourEnd, minuteEnd){
 		self.setTimeInit(hourInit, minuteInit);
 		self.setTimeEnd(hourEnd, minuteEnd);
+	}
+	
+	self.setRating = function(rating){
+		self.rating = rating;
+	}
+	
+	self.getRating = function(){
+		return self.rating;
+	}
+	
+	self.setState = function(state){
+		self.state = state;
+	}
+	
+	self.getState = function(){
+		return self.state;
 	}
 	
 	self.setTimeInit = function(hourInit, minuteInit){
@@ -43,6 +61,7 @@ var ScheduleDay = function(){
 	var date = "";
 	this.listSchedules = [];
 	
+	
 	self.setDate = function(date){
 		self.date = date;
 	}
@@ -51,8 +70,16 @@ var ScheduleDay = function(){
 		return self.date;
 	}
 	
-	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd){
+	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd, state, rating){
 		var sch = new ScheduleTime();
+		
+		state = state ? state : "Sem Estado"; 
+		
+		rating = rating ? rating : "Sem Nota";
+		
+		sch.setRating(rating);
+		sch.setState(state);
+		
 		sch.__construct(hourInit, minuteInit, hourEnd, minuteEnd);
 		this.listSchedules.push(sch);
 	}
@@ -89,14 +116,14 @@ var ScheduleManager = function(){
 	 * Adiciona um novo horário na data passada por parametro.
 	 * Se a data não estive no mapa um novo ScheduleDay é criado.
 	 */ 
-	self.addNewScheduleTime = function(date, hourInit, minuteInit, hourEnd, minuteEnd){
+	self.addNewScheduleTime = function(date, hourInit, minuteInit, hourEnd, minuteEnd, state, rating){
 		var scheduleDay = mapScheduleDay.get(date);
 		if(scheduleDay){
-			scheduleDay.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd);
+			scheduleDay.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating);
 		}else{
 			var sch = new ScheduleDay();
 			sch.setDate(date);
-			sch.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd);
+			sch.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating);
 			self.addScheduleDay(date, sch);
 		}
 	}
@@ -139,10 +166,15 @@ var ScheduleManager = function(){
 	 */
 	self.isScheduleRegistered = function(date){
 		var schedule = mapScheduleDay.get(date);
+		console.log("SCHEDULE of "+date+": "+schedule);
 		if(schedule){
 			return schedule.listSchedules.length > 0 ? true : false;
 		}
 		return false;
+	}
+	
+	self.getScheduleDay = function(date){
+		return mapScheduleDay.get(date);
 	}
 	
 	ScheduleManager.prototype.toJSON = function(){

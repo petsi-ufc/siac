@@ -67,7 +67,7 @@ public class ConsultationController {
 		SocialService serviceTemp = new SocialService();
 		serviceTemp.setId(5l);
 		Professional proTemp = new Professional();
-		proTemp.setCpf("123123");
+		proTemp.setCpf("00104294337");
 		proTemp.setSocialService(serviceTemp);
 		//CurrentSession.getSession().setAttribute("user", proTemp);
 		
@@ -91,7 +91,7 @@ public class ConsultationController {
 					Consultation consultation = new Consultation();
 					consultation.setProfessional(pro);
 					consultation.setService(serv);
-					consultation.setState(ConsultationState.SC);
+					consultation.setState(ConsultationState.FR);
 					
 					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
 					JsonElement timeEnd = timeSchedules.get(j).getAsJsonObject().get("timeEnd");
@@ -125,7 +125,7 @@ public class ConsultationController {
 		SocialService serviceTemp = new SocialService();
 		serviceTemp.setId(5l);
 		Professional proTemp = new Professional();
-		proTemp.setCpf("123123");
+		proTemp.setCpf("00104294337");
 		proTemp.setSocialService(serviceTemp);
 		
 		return consultationService.getConsultationsByProfessional(proTemp, consDAO);
