@@ -38,13 +38,9 @@ public class ConsultationService {
 			Event event = new Event(c);
 			events.add(event);
 			
-
-
 		}
 
 		json = gson.toJson(events);
-
-		System.out.println(json);
 
 		return json;
 	}

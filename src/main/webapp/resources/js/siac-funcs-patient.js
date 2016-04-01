@@ -9,7 +9,7 @@ $("document").ready(function(){
 	myConsultations();
 	myCalendar();
 	addRating();
-
+	onServiceClick()
 });
 
 function initCalendarPatient(json){
@@ -123,7 +123,7 @@ function chargeServices(){
 			})
 
 
-			$("#ul-services").append("<li class='service'><a class='link-service' id='"+serviceId+"'>"+serviceName+"</a></li>");
+			$("#ul-services").append("<li class='service'><a class='link-service social-service' id='"+serviceId+"'>"+serviceName+"</a></li>");
 
 		});
 
@@ -213,4 +213,26 @@ function addRating(){
 		$("#my-calend").modal('fade');
 
 	});
+}
+
+function onServiceClick(){
+	
+	$(document).on("click", ".link-service", function(){
+		$(".service").removeClass("active");
+		$(this).parent().addClass("active");
+		
+		if($(this).hasClass("social-service")){
+			var idSocialService = $(this).attr("id");
+			
+			ajaxCall("/siac//getConsultationBySocialService?id="+idSocialService, function(json){
+				
+				$(".calendar").remove();
+				$(".content-calendar").append($("<div class='calendar' id='calendar-patient'></div>"));				
+				initCalendarPatient(json);
+				
+			});
+			
+		}
+	});
+	
 }

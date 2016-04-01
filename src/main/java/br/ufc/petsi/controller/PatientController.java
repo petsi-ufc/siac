@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.RatingDAO;
+import br.ufc.petsi.dao.SocialServiceDAO;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Rating;
+import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ConsultationService;
 import br.ufc.petsi.service.RatingService;
 
@@ -33,8 +35,8 @@ public class PatientController {
 		@Inject
 		private RatingDAO ratingDAO;
 		
-		
-		
+		@Inject
+		private SocialServiceDAO socialServiceDAO;
 		
 		@RequestMapping("/search/patient/consultations")
 		@ResponseBody
@@ -55,6 +57,14 @@ public class PatientController {
 		@ResponseBody
 		public void saveRating(Rating rating){
 			ratingService.saveRating(rating, ratingDAO);
+			
+		}
+		
+		@RequestMapping("/getConsultationBySocialService")
+		@ResponseBody
+		public String getConsultationsBySocialService(SocialService socialService){
+			
+			return this.consService.getConsultationsBySocialService(socialService, consDAO);
 			
 		}
 		
