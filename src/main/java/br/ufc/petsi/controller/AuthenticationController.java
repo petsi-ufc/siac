@@ -1,15 +1,22 @@
 package br.ufc.petsi.controller;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import br.ufc.petsi.constants.Constants;
+import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.model.User;
 
 @Controller
 public class AuthenticationController {
+	
+	@Inject
+	private LdapUser userDAO;
 	
 	@RequestMapping( value = {"/", "/home"} )
 	public ModelAndView home() {
@@ -18,7 +25,13 @@ public class AuthenticationController {
 	
 	@RequestMapping("/authentication/success")
 	public ModelAndView success(HttpSession session) {
-		return new ModelAndView("home_professional");
+		User user = this.getUserLogged(session);
+		if(user.getRole().equals(Constants.ROLE_PROFESSIONAL))
+			return new ModelAndView("home_professional");
+		else if(user.getRole().equals(Constants.ROLE_ADMIN))
+			return new ModelAndView("home_manager");
+		else
+			return new ModelAndView("home_patient");
 	}
 	
 	
@@ -42,5 +55,14 @@ public class AuthenticationController {
 		return new ModelAndView("home_patient");
 	}
 	
+	public User getUserLogged(HttpSession session)
+	{
+		if(session.getAttribute("userLogged") == null)
+		{
+			User user = userDAO.getByCpf(SecurityContextHolder.getContext().getAuthentication().getName());
+			session.setAttribute("userLogged", user);
+		}
+		return (User) session.getAttribute("userLogged");
+	}
 	
 }
