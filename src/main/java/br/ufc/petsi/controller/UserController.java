@@ -30,7 +30,6 @@ public class UserController {
 	{
 		if(session.getAttribute("userLogged") == null)
 		{
-			System.out.println("lLALAALALALALALLALA "+userDAO);
 			User user = userDAO.getByCpf(SecurityContextHolder.getContext().getAuthentication().getName());
 			session.setAttribute("userLogged", user);
 		}
