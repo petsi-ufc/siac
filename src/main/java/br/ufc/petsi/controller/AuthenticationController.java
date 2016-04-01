@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.model.User;
 
 @Controller
@@ -18,7 +19,13 @@ public class AuthenticationController {
 	
 	@RequestMapping("/authentication/success")
 	public ModelAndView success(HttpSession session) {
-		return new ModelAndView("home_professional");
+		User user = (new UserController()).getUserLogged(session);
+		if(user.getRole().equals(Constants.ROLE_PROFESSIONAL))
+			return new ModelAndView("home_professional");
+		else if(user.getRole().equals(Constants.ROLE_ADMIN))
+			return new ModelAndView("home_manager");
+		else
+			return new ModelAndView("home_patient");
 	}
 	
 	

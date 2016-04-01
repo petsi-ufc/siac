@@ -29,9 +29,9 @@ public class UserAttributeMapper implements AttributesMapper<User>, Serializable
 		
 		User user = null;
 		
-		if(role.equals("Profissional"))
+		if(role.equals(Constants.ROLE_PROFESSIONAL))
 			user = new Professional();
-		else if(role.equals("Administrador"))
+		else if(role.equals(Constants.ROLE_ADMIN))
 			user = new Administrator();
 		else
 			user = new Patient();

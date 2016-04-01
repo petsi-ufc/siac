@@ -3,6 +3,7 @@ package br.ufc.petsi.model;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -10,8 +11,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import br.ufc.petsi.constants.Constants;
+
 @Entity
 @Table( name = "professional" )
+@DiscriminatorValue(value=Constants.ROLE_PROFESSIONAL)
 public class Professional extends User {
 	
 	@OneToOne(targetEntity = SocialService.class, 
@@ -23,7 +27,7 @@ public class Professional extends User {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="professional")
 	private List<Consultation> listConsultations;
 	
-	public Professional(String cpf, String name, String email, Role role, SocialService socialService, List<Consultation> listConsultations) {
+	public Professional(String cpf, String name, String email, String role, SocialService socialService, List<Consultation> listConsultations) {
 		super(cpf, name, email, role);
 		this.socialService = socialService;
 		this.listConsultations = listConsultations;

@@ -12,9 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
-import br.ufc.petsi.dao.ProfessionalDAO;
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.UserDAO;
-import br.ufc.petsi.model.Role;
+import br.ufc.petsi.dao.hibernate.HBUserDAO;
+import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.session.CurrentSession;
 
@@ -22,10 +23,10 @@ import br.ufc.petsi.session.CurrentSession;
 public class LdapAuthenticationProvider implements AuthenticationProvider, Serializable{
 
 	@Inject
-	private UserDAO userDAO;
+	private LdapUser ldapDAO;
 	
 	@Inject
-	private ProfessionalDAO profDAO;
+	private HBUserDAO userDAO;
 	
 	@Override
 	public Authentication authenticate(Authentication authen)
@@ -35,19 +36,15 @@ public class LdapAuthenticationProvider implements AuthenticationProvider, Seria
 		
 		User user = userDAO.getByCpf(name);
 		
-		if( user == null || !userDAO.authenticate(name, password)) {
+		if( user == null || !ldapDAO.authenticate(name, password)) {
 			throw new BadCredentialsException("Login e/ou senha inválidos");
 		}
 		
 		String role = (String)CurrentSession.getSession().getAttribute("loginRole");
-		if(role.equals("Profissional")) {
-			User u = profDAO.getByCpf(name);
-			if( u == null )
-				throw new BadCredentialsException("Você não possui essa permissão!");
-			else
-				user.setRole(new Role("ROLE_PROF"));
+		if(!role.equals(user.getRole())) {
+			throw new BadCredentialsException("Você não possui essa permissão!");
 		}
-		user.setRole(new Role("ROLE_USER"));
+		
 		LdapAuthentication result = new LdapAuthentication(user, password, user.getRole());
 		result.setAuthenticated( true );		
 		

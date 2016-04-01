@@ -2,14 +2,17 @@ package br.ufc.petsi.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.Transient;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Entity(name="users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "role", length = 17, discriminatorType = DiscriminatorType.STRING)
 public abstract class User implements Serializable {
 	
 	@Id
@@ -19,14 +22,14 @@ public abstract class User implements Serializable {
 	
 	private String email;
 	
-	@Transient
-	private Role role;
+	@Column(insertable=false, updatable=false)
+	private String role;
 	
 	public User() {
 		//DEFAUTL
 	}
 	
-	public User(String cpf, String name, String email, Role role) {
+	public User(String cpf, String name, String email, String role) {
 		this.cpf = cpf;
 		this.name = name;
 		this.email = email;
@@ -57,11 +60,11 @@ public abstract class User implements Serializable {
 		this.email = email;
 	}
 
-	public Role getRole() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 	
