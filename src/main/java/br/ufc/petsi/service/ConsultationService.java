@@ -50,7 +50,17 @@ public class ConsultationService {
 		Gson gson = new Gson();
 
 		List<Consultation> consultations = consDAO.getConsultationsBySocialService(socialService);
-		json = gson.toJson(consultations);
+		
+		List<Event> events = new ArrayList<Event>();
+
+		for(Consultation c : consultations){
+
+			Event event = new Event(c);
+			events.add(event);
+			
+		}
+		
+		json = gson.toJson(events);
 
 		return json;
 	}

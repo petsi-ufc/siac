@@ -227,7 +227,8 @@ function onServiceClick(){
 			ajaxCall("/siac//getConsultationBySocialService?id="+idSocialService, function(json){
 				
 				$(".calendar").remove();
-				$(".content-calendar").append($("<div class='calendar' id='calendar-patient'></div>"));				
+				$(".content-calendar").append($("<div class='calendar' id='calendar-patient'></div>"));
+				
 				initCalendarPatient(json);
 				
 			});
