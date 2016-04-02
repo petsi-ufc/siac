@@ -26,10 +26,8 @@
 			<h3>Serviços disponí­veis</h3>
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
-				<li id="my-calend" class="service active"><a
-					class="link-service" id="0">Meu calendário</a></li>
-				<li id="my-consults" class="service"><a class="link-service"
-					id="1">Minhas consultas </a></li>
+				<li id="my-calend" class="service active"><a class="link-service" id="0">Meu calendário</a></li>
+				<li id="my-consults" class="service"><a class="link-service" id="1">Minhas consultas </a></li>
 			</ul>
 		</div>
 		<div id="calendar-legend">
@@ -99,9 +97,11 @@
 		<div class="alert alert-danger" id="alert-schedules">Não há
 			nenhum horário cadastrado para este serviço!</div>
 		<h2 id="my-calendar">Meu calendário</h2>
-
-		<div class="calendar" id="calendar-patient"></div>
-
+		
+		<div class="content-calendar">
+			<div class="calendar" id="calendar-patient"></div>
+		</div>
+		
 		<div id="my-consultations">
 			<div id="constutaions-panel" class="panel panel-primary">
 				<div class="panel-heading">
