@@ -8,20 +8,26 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table( name = "rating")
 public class Rating {
 	
+	@Expose
 	@Id
 	@GeneratedValue
 	private Long id;
 	
+	@Expose
 	@NotNull
 	private String comment;
 	
+	@Expose
 	@Column(nullable = false)
 	private int rating;
 
+	
 	@OneToOne(mappedBy="rating")
 	private Consultation consultation;
 	

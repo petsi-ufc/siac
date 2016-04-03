@@ -12,17 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.dao.ConsultationDAO;
-import br.ufc.petsi.dao.RatingDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
-import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ConsultationService;
-import br.ufc.petsi.service.RatingService;
-
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,20 +32,18 @@ public class ConsultationController {
 	private ConsultationService consultationService;
 	
 	@Inject
-	private RatingService ratingService;
-	
-	@Inject
 	private ConsultationDAO consDAO;
-	
-	@Inject
-	private RatingDAO ratingDAO;
 	
 	@RequestMapping("/getConsultationsBySocialService")
 	@ResponseBody
 	public String getConsultationsBySocialServices(Long socialServiceId){
 		SocialService socialService = new SocialService();
 		socialService.setId(socialServiceId);
-		return consultationService.getConsultationsBySocialService(socialService, consDAO);
+		Patient patient = new Patient();
+		patient.setCpf("12345678900");
+		patient.setEmail("paciente@siac.com");
+		patient.setName("Paciente Coisa de Coisado");
+		return consultationService.getConsultationsBySocialService(patient, socialService, consDAO);
 	}
 	
 	@RequestMapping("/getConsultationsByPatient")
@@ -136,6 +129,7 @@ public class ConsultationController {
 	public void updateConsultation(Consultation c){		
 		Consultation consultation = consultationService.getConsultationsByIdC(c.getId(), consDAO);
 		consultation.setRating(c.getRating());
+		System.out.println(c.getRating().getComment());
 		consultationService.updateConsultation(consultation, consDAO);
 		
 		

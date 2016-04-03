@@ -7,6 +7,7 @@ import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
+import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.SocialService;
 
 public interface ConsultationDAO {
@@ -18,5 +19,7 @@ public interface ConsultationDAO {
 	public List<Consultation> getConsultationsBySocialService(SocialService service);
 	public List<Consultation> getConsultationsBySocialServiceAndDate(SocialService service, Date startDay);
 	public List<Consultation> getConsultationByProfessional(Professional professional);
+	public boolean isRatingNull(Consultation consultation);
+	public Rating getRatingByIdConsultation(long idConsultation);
 	
 }

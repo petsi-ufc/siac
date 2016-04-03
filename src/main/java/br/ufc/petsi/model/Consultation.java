@@ -1,6 +1,7 @@
 package br.ufc.petsi.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -56,6 +58,9 @@ public class Consultation {
 			fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="id_rating")
 	private Rating rating;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="consultation")
+	private List<Reserve> reserves;
 	
 	public Consultation(Long id, SocialService socialService, Professional profesisonal, Patient patient, 
 			ConsultationState state, Date dateInit, Date dateEnd) {

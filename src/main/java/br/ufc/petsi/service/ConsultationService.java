@@ -6,8 +6,8 @@ import java.util.List;
 import javax.inject.Named;
 
 import br.ufc.petsi.dao.ConsultationDAO;
+import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.event.Event;
-import br.ufc.petsi.event.EventsDay;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
@@ -25,17 +25,17 @@ public class ConsultationService {
 		consDAO.save(con);
 	}
 
-	public String getConsultationsByPatient(Patient p, ConsultationDAO consDAO){
+	public String getConsultationsByPatient(Patient patient, ConsultationDAO consDAO){
 		String json;
 		Gson gson = new Gson();
 
-		List<Consultation> consultations = consDAO.getConsultationsByPatient(p);
+		List<Consultation> consultations = consDAO.getConsultationsByPatient(patient);
 
 		List<Event> events = new ArrayList<Event>();
 
 		for(Consultation c : consultations){
 
-			Event event = new Event(c);
+			Event event = new Event(patient, c);
 			events.add(event);
 			
 		}
@@ -45,7 +45,7 @@ public class ConsultationService {
 		return json;
 	}
 
-	public String getConsultationsBySocialService(SocialService socialService, ConsultationDAO consDAO){
+	public String getConsultationsBySocialService(Patient patient, SocialService socialService, ConsultationDAO consDAO){
 		String json = "";
 		Gson gson = new Gson();
 
@@ -54,10 +54,16 @@ public class ConsultationService {
 		List<Event> events = new ArrayList<Event>();
 
 		for(Consultation c : consultations){
-
-			Event event = new Event(c);
-			events.add(event);
+			if(c.getState().name() == ConsultationState.RD.name()){
+				if(c.getPatient().getCpf().equals(patient.getCpf())){
+					Event event = new Event(patient, c);
+					events.add(event);
+				}				
 			
+			}else{
+				Event event = new Event(patient, c);
+				events.add(event);
+			}
 		}
 		
 		json = gson.toJson(events);
@@ -80,15 +86,15 @@ public class ConsultationService {
 		return json;
 	}
 	
-	public String getConsultationsById(long id, ConsultationDAO consDAO){
+	public String getConsultationsById(Patient patient, long id, ConsultationDAO consDAO){
 		String json = "";
 		Gson gson = new Gson();
 		
 		Consultation c = consDAO.getConsultationById(id);		
 	
-			EventsDay eventsDay = new EventsDay(c);
+			Event event = new Event(patient, c);
 
-		json = gson.toJson(eventsDay);
+		json = gson.toJson(event);
 		return json;
 	}
 	
@@ -101,5 +107,21 @@ public class ConsultationService {
 	
 	public void updateConsultation(Consultation consultation, ConsultationDAO consDAO){
 		consDAO.update(consultation);
+	}
+	
+	
+	public String getRatingByConsultation(Consultation consultation, ConsultationDAO consultationDAO){
+		String json = "";
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		json = gson.toJson(consultationDAO.getRatingByIdConsultation(consultation.getId()));
+		return json;
+	
+	}
+	
+	public String cancelConsultation(Consultation consultation, ConsultationDAO consultationDAO){
+		consultation.setState(ConsultationState.FR);
+		consultation.setPatient(null);
+		consultationDAO.update(consultation);
+		return "{'msg':Consulta cancelada com sucesso}";
 	}
 }

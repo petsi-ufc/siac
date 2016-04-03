@@ -4,9 +4,11 @@ import java.text.SimpleDateFormat;
 
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
+import br.ufc.petsi.model.Patient;
 
 public class Event {
 
+	
 	private String start;
 	private String end;
 	private String title;
@@ -15,8 +17,9 @@ public class Event {
 	private Long id;	
 	private String hour;
 	private String state;
+	private boolean isRatingNull;
 
-	public Event(Consultation consultation) {
+	public Event(Patient patient,Consultation consultation) {
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
 		SimpleDateFormat simpleHourFormat = new SimpleDateFormat("HH:mm:ss");
@@ -26,41 +29,37 @@ public class Event {
 		this.end = simpleDateFormat.format(consultation.getDateEnd());
 		this.title = consultation.getService().getName();
 		this.state = consultation.getState().name();
-		
+		if(consultation.getRating() != null) this.isRatingNull = false;
+		else this.isRatingNull = true;
 
-		if(this.state == "SC"){
-			this.state = "Agendado";
-		}
-		if(this.state == "FR"){
-			this.state = "Disponível";
-		}
-		if(this.state == "CD"){
+
+		if(this.state == ConsultationState.SC.name()){
+			if(!patient.getCpf().equals(consultation.getPatient().getCpf())){
+				this.color = "#FF7F00";
+				this.textColor = "white";
+				this.state = "Ocupado";
+			}else{
+				this.color = "#4682B4";
+				this.textColor = "white";
+				this.state = "Agendado";
+			}
+			
+		}else if(this.state == ConsultationState.FR.name()){
+			this.color = "#32CD32";
+			this.textColor = "white";
+			this.state = "Disponivel";
+		}else if(this.state == ConsultationState.CD.name()){
+			this.color = "#FF0000";
+			this.textColor = "white";
 			this.state = "Cancelado";
-		}
-		if(this.state == "RD"){
-			this.state = "Realizado";
-		}
-		if(this.state == "RV"){
-			this.state = "Reservado";
-		}
-		
-
-		if(consultation.getState() == ConsultationState.RD){
+		}else if(this.state == ConsultationState.RD.name()){
 			this.color = "grey";
 			this.textColor = "white";
-
-		}
-		if(consultation.getState() == ConsultationState.SC){
-			this.color = "#4682B4";
-			this.textColor = "white";
-		}
-		if(consultation.getState() == ConsultationState.CD){
-			this.color = "red";
-			this.textColor = "white";
-		}
-		if(consultation.getState() == ConsultationState.RV){
-			this.color = "yellow";
+			this.state = "Realizado";
+		}else if(this.state == ConsultationState.RV.name()){
+			this.color = "#D9D919";
 			this.textColor = "black";
+			this.state = "Reservado";
 		}
 
 		this.id = consultation.getId();
@@ -135,6 +134,14 @@ public class Event {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public boolean isRatingNull() {
+		return isRatingNull;
+	}
+
+	public void setRatingNull(boolean isRatingNull) {
+		this.isRatingNull = isRatingNull;
 	}
 
 }
