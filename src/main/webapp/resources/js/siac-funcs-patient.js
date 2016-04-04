@@ -2,7 +2,6 @@
  * Funcionalidades javascript na visão do paciente
  */
 
-
 $("document").ready(function(){
 	chargeEvents();
 	chargeServices();
@@ -13,6 +12,8 @@ $("document").ready(function(){
 	scheduleConsultation();
 	showRating();
 	cancelConsultation();
+	reserveConsultation();
+	cancelReserve();
 });
 
 function initCalendarPatient(json){
@@ -59,6 +60,7 @@ function chargeScheduleDay(id){
 		var hour;
 		var state;
 		var  is_rating_null;
+		var idReserve;
 
 		$.each(json, function(name, value){
 
@@ -70,6 +72,9 @@ function chargeScheduleDay(id){
 			}
 			if(name=="isRatingNull"){
 				is_rating_null = value;
+			}
+			if(name=="idReserve"){
+				idReserve = value;
 			}
 
 		});
@@ -104,7 +109,11 @@ function chargeScheduleDay(id){
 			$("#body-table-event").append(newRow);
 
 		}else if(state == "Reservado"){
-			$("#body-table-event").append("<tr class='tr-horary warning'> <td>" +hour+ " </td> <td>" +state+ "</td> </tr>");
+			var newRow = $("<tr class='tr-horary warning'> </tr>");
+			newRow.append("<td>" +hour+ " </td> <td>" +state+ "</td>");
+			newRow.append($("<td><button type='button' class='btn btn-danger btn-sm cancel-reserve' data-id-reserve='"+idReserve+"' id='cancel-reserve'>Cancelar</button></td>"));
+			$("#body-table-event").append(newRow);
+		
 		}else if(state == "Disponivel"){
 			var newRow = $("<tr class='tr-horary success'></tr>");
 			newRow.append($("<td>" +hour+ " </td>"));
@@ -117,7 +126,7 @@ function chargeScheduleDay(id){
 			var newRow = $("<tr class='tr-horary warning'> </tr>");
 			newRow.append($("<td>" +hour+ "</td>"));
 			newRow.append($("<td>" +state+ "</td>"));
-			newRow.append($("<td><button type='button' class='btn btn-info btn-sm' data-id='"+id+"' id='reserve-consultation'>Reservar</button></td>"));
+			newRow.append($("<td><button type='button' class='btn btn-info btn-sm reserve-button' data-id='"+id+"' id='reserve-consultation'>Reservar</button></td>"));
 			$("#body-table-event").append(newRow);
 		}
 
@@ -186,6 +195,7 @@ function myConsultations(){
 			var state;
 			var id_cons;
 			var is_rating_null;
+			var idReserve;
 
 			$.each(json, function(key, obj){
 
@@ -208,6 +218,9 @@ function myConsultations(){
 					if(name=="isRatingNull"){
 						is_rating_null = value;
 					}
+					if(name=="idReserve"){
+						idReserve = value;
+					}
 				});
 
 				var newRow = $("<tr class='tr-my-consultations'></tr>");
@@ -224,8 +237,12 @@ function myConsultations(){
 
 				if(state == "Agendado"){
 					newRow.append($("<td><button type='button' class='btn btn-danger' id='cancel-consultation' data-id='"+id_cons+"'> Cancelar </button> </td>"));
-				}else{
+				}else if(state == "Realizado"){
 					newRow.append($("<td><button disabled='disabled' type='button' class='btn btn-danger'> Cancelar </button> </td>"));
+				}
+				else if(state == "Reservado"){
+					newRow.append($("<td><button type='button' class='btn btn-warning' disabled='disabled'> Avaliar </button> </td>"));
+					newRow.append($("<td><button type='button' class='btn btn-danger cancel-reserve' data-id-reserve='"+idReserve+"'> Cancelar </button> </td>"));
 				}
 
 				$("#my-consultations-table").append(newRow);
@@ -374,3 +391,30 @@ function cancelConsultation(){
 		location.reload();
 	});
 }
+
+function reserveConsultation(){
+	
+	$(document).on("click", ".reserve-button", function(){
+		var id = $(this).attr("data-id");
+		ajaxCall("/siac/reserveConsultation?id="+id, function(json) {
+			
+		})
+		location.reload();
+	});
+	
+	
+}
+
+
+function cancelReserve(){
+	$(document).on("click", ".cancel-reserve", function(){
+		var idReserve = $(this).attr("data-id-reserve");
+		ajaxCall("/siac/cancelReserve?id="+idReserve, function(json){
+			
+		})
+		location.reload();
+	});
+}
+
+
+

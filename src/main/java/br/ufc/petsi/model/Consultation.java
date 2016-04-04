@@ -139,8 +139,12 @@ public class Consultation {
 		this.rating = rating;
 	}
 
-	
-	
-	
-	
+	public List<Reserve> getReserves() {
+		return reserves;
+	}
+
+	public void setReserves(List<Reserve> reserves) {
+		this.reserves = reserves;
+	}
+
 }

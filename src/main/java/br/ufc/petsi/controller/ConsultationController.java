@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.dao.ConsultationDAO;
+import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
@@ -34,6 +35,9 @@ public class ConsultationController {
 	@Inject
 	private ConsultationDAO consDAO;
 	
+	@Inject
+	private ReserveDAO reserveDAO;
+	
 	@RequestMapping("/getConsultationsBySocialService")
 	@ResponseBody
 	public String getConsultationsBySocialServices(Long socialServiceId){
@@ -51,7 +55,7 @@ public class ConsultationController {
 	public String getConsultationsByPatient(String cpf){
 		Patient p = new Patient();
 		p.setCpf(cpf);
-		return consultationService.getConsultationsByPatient(p, consDAO);
+		return consultationService.getConsultationsByPatient(p, consDAO, reserveDAO);
 	}
 	
 	@RequestMapping("/saveConsultation")

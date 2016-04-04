@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
+import br.ufc.petsi.model.Reserve;
 
 public class Event {
 
@@ -18,6 +19,7 @@ public class Event {
 	private String hour;
 	private String state;
 	private boolean isRatingNull;
+	private long idReserve;
 
 	public Event(Patient patient,Consultation consultation) {
 
@@ -32,12 +34,26 @@ public class Event {
 		if(consultation.getRating() != null) this.isRatingNull = false;
 		else this.isRatingNull = true;
 
-
+		boolean isReserved = false;
+		
 		if(this.state == ConsultationState.SC.name()){
 			if(!patient.getCpf().equals(consultation.getPatient().getCpf())){
-				this.color = "#FF7F00";
-				this.textColor = "white";
-				this.state = "Ocupado";
+				for(Reserve reserve:consultation.getReserves()){
+					if(patient.getCpf().equals(reserve.getPatient().getCpf()) && reserve.isActive()){
+						isReserved = true;
+						this.idReserve = reserve.getId();
+					}
+				}
+				if(isReserved){
+					this.color = "#D9D919";
+					this.textColor = "white";
+					this.state = "Reservado";
+				}else{
+					this.color = "#FF7F00";
+					this.textColor = "white";
+					this.state = "Ocupado";
+				}
+				
 			}else{
 				this.color = "#4682B4";
 				this.textColor = "white";
@@ -56,10 +72,6 @@ public class Event {
 			this.color = "grey";
 			this.textColor = "white";
 			this.state = "Realizado";
-		}else if(this.state == ConsultationState.RV.name()){
-			this.color = "#D9D919";
-			this.textColor = "black";
-			this.state = "Reservado";
 		}
 
 		this.id = consultation.getId();
@@ -143,5 +155,16 @@ public class Event {
 	public void setRatingNull(boolean isRatingNull) {
 		this.isRatingNull = isRatingNull;
 	}
+
+	public long getIdReserve() {
+		return idReserve;
+	}
+
+	public void setIdReserve(long idReserve) {
+		this.idReserve = idReserve;
+	}
+	
+	
+	
 
 }

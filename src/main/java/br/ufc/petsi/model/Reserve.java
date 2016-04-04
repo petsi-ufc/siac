@@ -14,7 +14,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "reserve")
-public class Reserve {
+public class Reserve implements Comparable<Reserve>{
 
 	@Id
 	@GeneratedValue
@@ -30,15 +30,18 @@ public class Reserve {
 	@ManyToOne
 	private Patient patient;
 	
+	private boolean active;
+	
 	public Reserve() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Reserve(Long id, Date date, Consultation consultation, Patient patient) {
+	public Reserve(Long id, Date date, Consultation consultation, Patient patient, boolean active) {
 		this.id = id;
 		this.date = date;
 		this.consultation = consultation;
 		this.patient = patient;
+		this.active = active;
 	}
 
 	public Long getId() {
@@ -71,6 +74,21 @@ public class Reserve {
 
 	public void setPatient(Patient patient) {
 		this.patient = patient;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	@Override
+	public int compareTo(Reserve reserve) {
+		if(this.getDate().before(reserve.getDate())) return 1;
+		else if(this.getDate().after(reserve.getDate())) return -1;
+		return 0;
 	}
 	
 	
