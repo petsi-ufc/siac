@@ -5,14 +5,16 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import br.ufc.petsi.constants.Constants;
+
 @Entity(name="users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "role", length = 17, discriminatorType = DiscriminatorType.STRING)
 public class User implements Serializable {
 	
 	@Id
@@ -22,7 +24,6 @@ public class User implements Serializable {
 	
 	private String email;
 	
-	@Column(insertable=false, updatable=false)
 	private String role;
 	
 	public User() {

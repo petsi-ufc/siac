@@ -12,12 +12,13 @@ import org.springframework.stereotype.Component;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.UserDAO;
+import br.ufc.petsi.dao.UserLdapDAO;
 import br.ufc.petsi.mapper.UserAttributeMapper;
 import br.ufc.petsi.model.User;
 
 @Named
 @Component
-public class LdapUser implements UserDAO {
+public class LdapUser implements UserLdapDAO {
 
 	@Inject
 	private LdapTemplate ldapTemplate;
@@ -81,7 +82,6 @@ public class LdapUser implements UserDAO {
 	public void setBase(String base) {
 		this.base = base;
 	}
-	
 	
 	
 }

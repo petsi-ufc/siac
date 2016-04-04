@@ -2,23 +2,22 @@ package br.ufc.petsi.dao.hibernate;
 
 import java.util.List;
 
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.model.User;
 
-@Named
 @Repository
 public class HBUserDAO implements UserDAO{
 
 	@PersistenceContext
-	private EntityManager manager;
+	protected EntityManager manager;
 	
 	@Override
 	public List<User> getAll() {
@@ -26,7 +25,7 @@ public class HBUserDAO implements UserDAO{
 		try {
 			listUsers = manager.createQuery("from User").getResultList();
 		} catch (NoResultException e) {
-			System.out.println("Erro USERDAO getALL: "+e);
+			System.out.println("Erro HBDAO getALL: "+e);
 		}
 		return listUsers;
 	}
@@ -39,7 +38,7 @@ public class HBUserDAO implements UserDAO{
 			query.setParameter("paramCpf", cpf);
 			u = (User) query.getSingleResult();
 		}catch(NoResultException e){
-			System.out.println("Erro USERDAO getALL: "+e);	
+			System.out.println("Erro HBDAO getALL: "+e);	
 		}
 		return u;
 	}
@@ -52,7 +51,7 @@ public class HBUserDAO implements UserDAO{
 			query.setParameter("paramCpf", cpf);
 			listUsers = query.getResultList();
 		} catch (NoResultException e) {
-			System.out.println("Erro USERDAO getALL: "+e);
+			System.out.println("Erro HBDAO getALL: "+e);
 		}
 		return listUsers;
 	}
@@ -65,14 +64,14 @@ public class HBUserDAO implements UserDAO{
 			query.setParameter("paramName", name);
 			listUsers = query.getResultList();
 		}catch(NoResultException e){
-			System.out.println("Erro USERDAO getALL: "+e);	
+			System.out.println("Erro HBDAO getALL: "+e);	
 		}
 		return listUsers;
 	}
 
 	@Override
-	public boolean authenticate(String login, String password) {
-		return false;
+	@Transactional
+	public void save(User u) {
+		this.manager.persist(u);
 	}
-
 }
