@@ -21,7 +21,6 @@ function ajaxCallNoJSON(_url, params, func, fail){
 	).done(func).fail(fail);
 }
 
-
 const ALERT_SUCCESS = "alert-success";
 const ALERT_ERROR = "alert-danger";
 //Função que mostra a mensagem de alerta em cima do calendário.
