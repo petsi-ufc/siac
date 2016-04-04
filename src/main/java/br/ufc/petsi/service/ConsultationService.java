@@ -89,7 +89,7 @@ public class ConsultationService {
 		return json;
 	}
 	
-	public String getConsultationsByProfessional(Professional professional, ConsultationDAO consDAO){
+	public String getConsultationsByProfessionalJSON(Professional professional, ConsultationDAO consDAO){
 		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
 		
 		String json = "";
@@ -102,6 +102,11 @@ public class ConsultationService {
 		}
 		System.out.println(json);
 		return json;
+	}
+	
+	public List<Consultation> getConsultationsByProfessional(Professional professional, ConsultationDAO consDAO){
+		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
+		return cons;
 	}
 	
 	public String getConsultationsById(Patient patient, long id, ConsultationDAO consDAO){
@@ -125,6 +130,10 @@ public class ConsultationService {
 	
 	public void updateConsultation(Consultation consultation, ConsultationDAO consDAO){
 		consDAO.update(consultation);
+	}
+	
+	public void cancelConsultationById(long id, ConsultationDAO consDAO){
+		consDAO.cancelConsultationById(id);
 	}
 	
 	
