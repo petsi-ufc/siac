@@ -13,7 +13,7 @@ import javax.persistence.InheritanceType;
 @Entity(name="users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", length = 17, discriminatorType = DiscriminatorType.STRING)
-public abstract class User implements Serializable {
+public class User implements Serializable {
 	
 	@Id
 	private String cpf;
@@ -66,6 +66,12 @@ public abstract class User implements Serializable {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	@Override
+	public String toString() {
+		return "User [cpf=" + cpf + ", name=" + name + ", email=" + email
+				+ ", role=" + role + "]";
 	}
 	
 	
