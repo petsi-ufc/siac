@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.ufc.petsi.constants.Constants;
 
+import br.ufc.petsi.dao.hibernate.HBUserDAO;
 import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.model.User;
 
@@ -17,24 +18,41 @@ import br.ufc.petsi.model.User;
 public class AuthenticationController {
 	
 	@Inject
-	private LdapUser userDAO;
+	private LdapUser ldapDAO;
 	
-	@RequestMapping( value = {"/", "/home"} )
+	@Inject
+	private HBUserDAO userDAO;
+	
+	@RequestMapping( value = {"/", "/login"} )
 	public ModelAndView home() {
 		return new ModelAndView("login");
 	}
 	
 	@RequestMapping("/authentication/success")
 	public ModelAndView success(HttpSession session) {
-		User user = this.getUserLogged(session);
-		if(user.getRole().equals(Constants.ROLE_PROFESSIONAL))
-			return new ModelAndView("home_professional");
-		else if(user.getRole().equals(Constants.ROLE_ADMIN))
-			return new ModelAndView("home_manager");
-		else
-			return new ModelAndView("home_patient");
+		try{
+			User user = (User)this.getUserLogged(session);
+			
+			if(user.getRole().equals(Constants.ROLE_PROFESSIONAL))
+				return new ModelAndView("redirect:/professional");
+			else if(user.getRole().equals(Constants.ROLE_ADMIN))
+				return new ModelAndView("redirect:/manager");
+			else
+				return new ModelAndView("redirect:/patient");
+		}
+		catch(NullPointerException e)
+		{
+			System.out.println("Error: " + e);
+		}
+		return new ModelAndView("redirect:/");
 	}
 	
+	@RequestMapping("/logout")
+	public ModelAndView logout(HttpSession session)
+	{
+		session.invalidate();
+		return new ModelAndView("redirect:/");
+	}
 	
 	@RequestMapping("/professional")
 	public ModelAndView professional() {
@@ -60,7 +78,7 @@ public class AuthenticationController {
 	{
 		if(session.getAttribute("userLogged") == null)
 		{
-			User user = userDAO.getByCpf(SecurityContextHolder.getContext().getAuthentication().getName());
+			User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
 			session.setAttribute("userLogged", user);
 		}
 		return (User) session.getAttribute("userLogged");

@@ -1,6 +1,8 @@
 package br.ufc.petsi.security;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,6 +18,7 @@ import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.dao.hibernate.HBUserDAO;
 import br.ufc.petsi.dao.ldap.LdapUser;
+import br.ufc.petsi.model.Role;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.session.CurrentSession;
 
@@ -35,6 +38,8 @@ public class LdapAuthenticationProvider implements AuthenticationProvider, Seria
 		String password = authen.getCredentials() != null ? (String) authen.getCredentials() : null;
 		
 		User user = userDAO.getByCpf(name);
+		
+		System.out.println(user);
 		
 		if( user == null || !ldapDAO.authenticate(name, password)) {
 			throw new BadCredentialsException("Login e/ou senha inválidos");
