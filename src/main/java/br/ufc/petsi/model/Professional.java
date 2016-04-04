@@ -15,7 +15,6 @@ import br.ufc.petsi.constants.Constants;
 
 @Entity
 @Table( name = "professional" )
-@DiscriminatorValue(value=Constants.ROLE_PROFESSIONAL)
 public class Professional extends User {
 	
 	@OneToOne(targetEntity = SocialService.class, 

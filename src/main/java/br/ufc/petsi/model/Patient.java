@@ -12,7 +12,6 @@ import br.ufc.petsi.constants.Constants;
 
 @Entity
 @Table(name="patient")
-@DiscriminatorValue(value=Constants.ROLE_PATIENT)
 public class Patient extends User {
 	
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="patient")

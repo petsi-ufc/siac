@@ -15,6 +15,9 @@
    					<option>Administrador</option>
    				</select>
    			</div>
+   			<c:if test="${not empty error}">
+   				<div id="errorLogin" class="alert-danger">${error}</div>
+   			</c:if>
    			<input type="submit" class="btn btn-info" value="Entrar" id="bt-enter"><br>
 			<a href="#" data-toggle="modal" data-target="#modal-forgot-pass">Esqueceu a senha?</a>
 			
