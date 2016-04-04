@@ -17,6 +17,7 @@ import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
+import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.SocialService;
 
 @Repository
@@ -99,6 +100,34 @@ public class HBConsultation implements ConsultationDAO{
 			System.out.println("No result at getConsultationByProfessional: "+e);
 		}
 		return cons;
+	}
+
+	@Override
+	public void cancelConsultationById(long id) {
+		try{
+			Consultation con = manager.find(Consultation.class, id);
+			if(con != null){
+				con.setState(ConsultationState.CD);
+				this.update(con);
+			}
+		}catch(Exception e){
+			System.out.println("Error at cancelConsultation by id: "+e);
+		}
+	}
+	
+	@Override
+	public boolean isRatingNull(Consultation consultation) {
+		Query query = (Query) manager.createQuery("SELECT cons.rating FROM Consultation cons WHERE cons.id = :id");
+		query.setParameter("id", consultation.getId());
+				
+		return false;
+	}
+
+	@Override
+	public Rating getRatingByIdConsultation(long idConsultation) {
+		Query query = (Query) manager.createQuery("SELECT cons.rating FROM Consultation cons WHERE cons.id = :id");
+		query.setParameter("id", idConsultation);
+		return (Rating) query.getSingleResult();
 	}
 
 

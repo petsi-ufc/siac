@@ -5,102 +5,86 @@
 		<img id="avatar-img" class="img-responsive"
 			src="<c:url value='/resources/images/user_avatar.png'/>">
 
-		<!-- 		<div id="modal-config" class="modal fade" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">X</button>
-						<h4 class="modal-title">Seus Dados</h4>
-					</div>
-					<div class="modal-body">
-						<h4>BODY MODAL</h4>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-					</div>
-				</div>
-			</div>
-		</div> -->
-
 		<div id="box-services">
 			<h3>Serviços disponí­veis</h3>
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
-				<li id="my-calend" class="service active"><a
+				<li id="my-calend" class="service active service-item"><a
 					class="link-service" id="0">Meu calendário</a></li>
-				<li id="my-consults" class="service"><a class="link-service"
-					id="1">Minhas consultas </a></li>
+				<li class="service service-item"><a class="link-service"
+					id="my-consults">Minhas consultas </a></li>
 			</ul>
 		</div>
-		<div id="calendar-legend">
-			<table style='margin-left: 70px'>
-				<thead>
-					<tr>
-						<th colspan="2"><h3>Legenda de Consultas</h3></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<h4>Disponível</h4>
-						</td>
-						<td>
-							<div class='legend-color' style='background-color: #32CD32'></div>
-						</td>
-					</tr>
-
-					<tr>
-						<td>
-							<h4>Agendada</h4>
-						</td>
-						<td>
-							<div class='legend-color' style='background-color: #4682B4'></div>
-						</td>
-					</tr>
-
-					<tr>
-						<td>
-							<h4>Realizada</h4>
-						</td>
-						<td>
-							<div class='legend-color' style='background-color: grey'></div>
-						</td>
-					</tr>
-
-					<tr>
-						<td>
-							<h4>Reservada</h4>
-						</td>
-						<td>
-							<div class='legend-color' style='background-color: #D9D919'></div>
-						</td>
-					</tr>
-
-					<tr>
-						<td>
-							<h4>Cancelada</h4>
-						</td>
-						<td>
-							<div class='legend-color' style='background-color: #FF0000'></div>
-						</td>
-					</tr>
-				</tbody>
-
-			</table>
-
-
-
-		</div>
 	</div>
-
-
 
 	<div id="right-bar">
 		<div class="alert alert-danger" id="alert-schedules">Não há
 			nenhum horário cadastrado para este serviço!</div>
-		<h2 id="my-calendar">Meu calendário</h2>
 
-		<div class="calendar" id="calendar-patient"></div>
+		<div class="content-calendar">
+			<h2 id="my-calendar">Meu calendário</h2>
+
+			<div id="calendar-legend" style="margin-left: 100px">
+				<table style="margin-left: 40px">
+					<thead>
+						<tr>
+							<th colspan="10"><h3 style="text-align: center">Legenda
+									de Consultas</h3></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h4>Disponível</h4>
+							</td>
+							<td>
+								<div class='legend-color'
+									style="background-color: #32CD32; margin-left: 15px; margin-right: 15px"></div>
+							</td>
+
+
+
+							<td>
+								<h4>Agendada</h4>
+							</td>
+							<td>
+								<div class='legend-color'
+									style="background-color: #4682B4; margin-left: 15px; margin-right: 15px"></div>
+							</td>
+
+							<td>
+								<h4>Realizada</h4>
+							</td>
+							<td>
+								<div class='legend-color'
+									style='background-color: grey; margin-left: 15px; margin-right: 15px'></div>
+							</td>
+
+							<td>
+								<h4>Reservada</h4>
+							</td>
+							<td>
+								<div class='legend-color'
+									style='background-color: #D9D919; margin-left: 15px; margin-right: 15px'></div>
+							</td>
+
+							<td>
+								<h4>Cancelada</h4>
+							</td>
+							<td>
+								<div class='legend-color'
+									style='background-color: #FF0000; margin-left: 15px; margin-right: 15px'></div>
+							</td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+
+			<div class="calendar" id="calendar-patient"></div>
+
+		</div>
 
 		<div id="my-consultations">
 			<div id="constutaions-panel" class="panel panel-primary">
@@ -118,7 +102,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						
+
 					</tbody>
 				</table>
 			</div>
@@ -126,26 +110,26 @@
 
 	</div>
 
-	<div id="modal-day" class="modal fade" role="dialog">
-		<div class="modal-dialog modal-sm">
+	<div id="modal-event" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-md">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">X</button>
 					<h4 class="modal-title" id="modal-title-schedule"></h4>
 				</div>
 				<div class="modal-body">
-					<table id="table-schedule" class="table table-bordered table-hover">
+					<input type="hidden" id="id-service-temp" />
+					<table id="table-schedule" class="table table-hover">
 						<thead>
 							<tr>
 
 								<th>Horário</th>
 								<th>Status</th>
+								<th>Ação</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<!-- ESSA TABELA É PREENCHIDA DINAMICAMENTE COM AJAX -->
-							</tr>
+						<tbody id="body-table-event">
+
 						</tbody>
 					</table>
 				</div>
@@ -170,17 +154,20 @@
 					<h4 class="modal-title">Avaliação de Consulta</h4>
 				</div>
 				<div class="modal-body">
-					<p><h4>Comentário</h4></p>
-					<input type='hidden' id='input-rating-id' name='idCons'/>
+					<p>
+					<h4>Comentário</h4>
+					</p>
+					<input type='hidden' id='input-rating-id' name='idCons' />
 					<textarea id="rating-comment" class="form-control" rows="4"
-						placeholder="Deixe seu comentário..." style="overflow:auto;resize:none"></textarea>
+						placeholder="Deixe seu comentário..."
+						style="overflow: auto; resize: none"></textarea>
 					<br />
-				
-				<!-- Preenchido com Francis/AJAX hehe -->
-				
-				
-					
-					<p><h4>Dê uma nota*</h4></p>
+
+					<!-- Preenchido com Francis/AJAX hehe -->
+
+					<p>
+					<h4>Dê uma nota*</h4>
+					</p>
 					<select id="rating-grade" class="form-control">
 						<option>1</option>
 						<option>2</option>
@@ -188,12 +175,13 @@
 						<option>4</option>
 						<option>5</option>
 					</select>
-					
-					
+
+
 
 				</div>
 				<div class="modal-footer">
-					<button id="cancel-rating" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					<button id="cancel-rating" type="button" class="btn btn-default"
+						data-dismiss="modal">Cancelar</button>
 					<button id="save-rating" type="button" class="btn btn-primary">Salvar</button>
 				</div>
 			</div>
@@ -203,6 +191,35 @@
 	</div>
 	<!-- /.modal -->
 
+
+	<div id="modal-read-rating" class="modal fade" tabindex="-1"
+		role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Avaliação da Consulta</h4>
+				</div>
+				<div class="modal-body modal-body-rating">
+					
+					<div id="content-rating">
+					</div>
+					<!-- Preenchido com Francis/AJAX hehe -->
+
+				</div>
+				<div class="modal-footer">
+					<button id="cancel-rating" type="button" class="btn btn-default"
+						data-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
 
 
 </div>

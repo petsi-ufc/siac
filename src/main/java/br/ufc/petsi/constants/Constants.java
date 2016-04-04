@@ -31,5 +31,12 @@ public class Constants {
 	public static final String FORMAT_DATE_BIRTH = "dd/MM/yyyy";
 	
 	public static final String FORMAT_DATE_AFFILIATION = "yyyyMMdd";
+	
+	public static final String ROLE_PROFESSIONAL = "ROLE_PROFESSIONAL";
+	
+	public static final String ROLE_ADMIN = "ROLE_ADMIN";
+	
+	public static final String ROLE_PATIENT = "ROLE_PATIENT";
+	
 		
 }

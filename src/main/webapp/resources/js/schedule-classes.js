@@ -8,10 +8,46 @@ var ScheduleTime = function(){
 	var self = this;
 	this.timeInit = moment();
 	this.timeEnd = moment();
+	var id = -1;
+	var state = "---";
+	var rating = "---";
+	var comment = "Nenhum comentário cadastrado!"
 	
 	self.__construct = function(hourInit, minuteInit, hourEnd, minuteEnd){
 		self.setTimeInit(hourInit, minuteInit);
 		self.setTimeEnd(hourEnd, minuteEnd);
+	}
+	
+	self.getComment = function(){
+		return self.comment;
+	}
+	
+	self.setComment = function(comment){
+		self.comment = comment;
+	}
+	
+	self.setRating = function(rating){
+		self.rating = rating;
+	}
+	
+	self.getRating = function(){
+		return self.rating;
+	}
+	
+	self.setState = function(state){
+		self.state = state;
+	}
+	
+	self.getState = function(){
+		return self.state;
+	}
+	
+	self.setId = function(id){
+		self.id = id;
+	}
+	
+	self.getId = function(){
+		return self.id;
 	}
 	
 	self.setTimeInit = function(hourInit, minuteInit){
@@ -43,6 +79,7 @@ var ScheduleDay = function(){
 	var date = "";
 	this.listSchedules = [];
 	
+	
 	self.setDate = function(date){
 		self.date = date;
 	}
@@ -51,8 +88,22 @@ var ScheduleDay = function(){
 		return self.date;
 	}
 	
-	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd){
+	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id){
 		var sch = new ScheduleTime();
+		
+		state = state ? state : "Sem Estado"; 
+		
+		rating = rating ? rating : "Sem Nota";
+		
+		comment = comment ? comment : "Sem comentário cadastrádo!";
+	
+		id = id ? id : -1;
+		
+		sch.setRating(rating);
+		sch.setState(state);
+		sch.setComment(comment);
+		sch.setId(id);
+		
 		sch.__construct(hourInit, minuteInit, hourEnd, minuteEnd);
 		this.listSchedules.push(sch);
 	}
@@ -89,14 +140,14 @@ var ScheduleManager = function(){
 	 * Adiciona um novo horário na data passada por parametro.
 	 * Se a data não estive no mapa um novo ScheduleDay é criado.
 	 */ 
-	self.addNewScheduleTime = function(date, hourInit, minuteInit, hourEnd, minuteEnd){
+	self.addNewScheduleTime = function(date, hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id){
 		var scheduleDay = mapScheduleDay.get(date);
 		if(scheduleDay){
-			scheduleDay.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd);
+			scheduleDay.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id);
 		}else{
 			var sch = new ScheduleDay();
 			sch.setDate(date);
-			sch.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd);
+			sch.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id);
 			self.addScheduleDay(date, sch);
 		}
 	}
@@ -143,6 +194,10 @@ var ScheduleManager = function(){
 			return schedule.listSchedules.length > 0 ? true : false;
 		}
 		return false;
+	}
+	
+	self.getScheduleDay = function(date){
+		return mapScheduleDay.get(date);
 	}
 	
 	ScheduleManager.prototype.toJSON = function(){

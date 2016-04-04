@@ -23,7 +23,7 @@ public class LdapAuthentication implements Authentication {
 
 	}
 	
-	public LdapAuthentication(User user, String password, Role role) {
+	public LdapAuthentication(User user, String password, String role) {
 		super();
 		this.user = user;
 		this.password = password;
@@ -72,11 +72,11 @@ public class LdapAuthentication implements Authentication {
 		this.user = user;
 	}
 
-	public Role getRole() {
+	public String getRole() {
 		return user.getRole();
 	}
 
-	public void setRole(Role role) {
+	public void setRole(String role) {
 		this.user.setRole(role);
 	}
 
@@ -91,7 +91,7 @@ public class LdapAuthentication implements Authentication {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<Role> roles = new ArrayList<Role>();
-		roles.add(this.user.getRole());
+		roles.add(new Role(this.user.getRole()));
 		return roles;
 	}
 

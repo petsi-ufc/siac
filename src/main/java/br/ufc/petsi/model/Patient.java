@@ -2,13 +2,17 @@ package br.ufc.petsi.model;
 
 import java.util.List;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import br.ufc.petsi.constants.Constants;
+
 @Entity
 @Table(name="patient")
+@DiscriminatorValue(value=Constants.ROLE_PATIENT)
 public class Patient extends User {
 	
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="patient")
@@ -18,7 +22,7 @@ public class Patient extends User {
 		//DEFAULT
 	}
 	
-	public Patient(String cpf, String name, String email, Role role, List<Consultation> listConsultations) {
+	public Patient(String cpf, String name, String email, String role, List<Consultation> listConsultations) {
 		super(cpf, name, email, role);
 		this.listConsultations = listConsultations;
 	}

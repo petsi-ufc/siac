@@ -2,26 +2,27 @@ package br.ufc.petsi.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.dao.ConsultationDAO;
-import br.ufc.petsi.dao.RatingDAO;
+import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
-import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ConsultationService;
-import br.ufc.petsi.service.RatingService;
 
+import br.ufc.petsi.service.RatingService;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -37,20 +38,21 @@ public class ConsultationController {
 	private ConsultationService consultationService;
 	
 	@Inject
-	private RatingService ratingService;
-	
-	@Inject
 	private ConsultationDAO consDAO;
 	
 	@Inject
-	private RatingDAO ratingDAO;
+	private ReserveDAO reserveDAO;
 	
 	@RequestMapping("/getConsultationsBySocialService")
 	@ResponseBody
 	public String getConsultationsBySocialServices(Long socialServiceId){
 		SocialService socialService = new SocialService();
 		socialService.setId(socialServiceId);
-		return consultationService.getConsultationsBySocialService(socialService, consDAO);
+		Patient patient = new Patient();
+		patient.setCpf("12345678900");
+		patient.setEmail("paciente@siac.com");
+		patient.setName("Paciente Coisa de Coisado");
+		return consultationService.getConsultationsBySocialService(patient, socialService, consDAO);
 	}
 	
 	@RequestMapping("/getConsultationsByPatient")
@@ -58,7 +60,14 @@ public class ConsultationController {
 	public String getConsultationsByPatient(String cpf){
 		Patient p = new Patient();
 		p.setCpf(cpf);
-		return consultationService.getConsultationsByPatient(p, consDAO);
+		return consultationService.getConsultationsByPatient(p, consDAO, reserveDAO);
+	}
+
+
+	@RequestMapping(value = "/cancelConsultation", method = RequestMethod.GET)
+	@ResponseBody
+	public void cancelConsultation(@RequestParam("id") long id){
+		consultationService.cancelConsultationById(id, consDAO);
 	}
 	
 	@RequestMapping("/saveConsultation")
@@ -67,9 +76,11 @@ public class ConsultationController {
 		SocialService serviceTemp = new SocialService();
 		serviceTemp.setId(5l);
 		Professional proTemp = new Professional();
-		proTemp.setCpf("123123");
+		proTemp.setCpf("27240450848");
 		proTemp.setSocialService(serviceTemp);
 		//CurrentSession.getSession().setAttribute("user", proTemp);
+		
+		System.out.println("JSON   :"+ json);
 		
 		Professional pro = proTemp;
 		SocialService serv = pro.getSocialService();
@@ -91,7 +102,7 @@ public class ConsultationController {
 					Consultation consultation = new Consultation();
 					consultation.setProfessional(pro);
 					consultation.setService(serv);
-					consultation.setState(ConsultationState.SC);
+					consultation.setState(ConsultationState.FR);
 					
 					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
 					JsonElement timeEnd = timeSchedules.get(j).getAsJsonObject().get("timeEnd");
@@ -102,8 +113,6 @@ public class ConsultationController {
 					
 					Date dateInit = format.parse(sDateInit);
 					Date dateEnd = format.parse(sDateEnd);
-					
-					System.out.println(sDateInit+" : "+dateInit+" - "+dateEnd);
 					
 					consultation.setDateInit(dateInit);
 					consultation.setDateEnd(dateEnd);
@@ -119,16 +128,16 @@ public class ConsultationController {
 		return "home_professional";
 	}
 	
-	@RequestMapping("/getConsutationsByProfessional")
+	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
-	public String getConsultationsByProfessional(){
+	public String getConsultationsByProfessionalJSON(){
 		SocialService serviceTemp = new SocialService();
 		serviceTemp.setId(5l);
 		Professional proTemp = new Professional();
-		proTemp.setCpf("123123");
+		proTemp.setCpf("27240450848");
 		proTemp.setSocialService(serviceTemp);
 		
-		return consultationService.getConsultationsByProfessional(proTemp, consDAO);
+		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
 	@RequestMapping("/updateConsultationRating")
@@ -136,6 +145,7 @@ public class ConsultationController {
 	public void updateConsultation(Consultation c){		
 		Consultation consultation = consultationService.getConsultationsByIdC(c.getId(), consDAO);
 		consultation.setRating(c.getRating());
+		System.out.println(c.getRating().getComment());
 		consultationService.updateConsultation(consultation, consDAO);
 		
 		

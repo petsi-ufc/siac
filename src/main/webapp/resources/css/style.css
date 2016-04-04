@@ -262,6 +262,7 @@ body html{
 .legend-color{
 	width: 23px;
 	height: 23px;
+	border-radius: 20px;
 }
 
 .fc-widget-content{
@@ -289,6 +290,11 @@ body html{
 	overflow-y: scroll; 
 }
 
+#panel-my-consultations .panel-body{
+	max-height: 600px;
+	overflow-y: scroll;
+}
+
 #div-table-days{
 	max-height: 350px;
 	overflow-y: scroll;
@@ -310,4 +316,33 @@ body html{
 	width: 70%;
 	margin-right: auto;
 	margin-left: auto;
+}
+
+.color-green{
+	background-color: #32CD32;
+}
+
+.color-blue{
+	background-color: #4682B4;	
+}
+
+.color-grey{
+	background-color: grey;
+}
+
+.color-yellow{
+	background-color: #D9D919;
+}
+
+.color-red{
+	background-color: #FF0000;
+}
+
+.color-black{
+	background-color: #000000;
+}
+
+.td-schedule-state{
+	font-weight: bold;
+	color: white;
 }
