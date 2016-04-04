@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.ufc.petsi.constants.Constants;
+
 import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.model.User;
 
