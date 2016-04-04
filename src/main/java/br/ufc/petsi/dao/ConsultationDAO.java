@@ -12,6 +12,7 @@ import br.ufc.petsi.model.SocialService;
 public interface ConsultationDAO {
 	public void save(Consultation cons);
 	public void update(Consultation con);
+	public void cancelConsultationById(long id);
 	public Consultation getConsultationById(long id);
 	public List<Consultation> getConsultationsByPatient(Patient p);
 	public List<Consultation> getConsultationsByState(ConsultationState state);
