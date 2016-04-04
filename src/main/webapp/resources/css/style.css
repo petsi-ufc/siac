@@ -290,6 +290,11 @@ body html{
 	overflow-y: scroll; 
 }
 
+#panel-my-consultations .panel-body{
+	max-height: 600px;
+	overflow-y: scroll;
+}
+
 #div-table-days{
 	max-height: 350px;
 	overflow-y: scroll;

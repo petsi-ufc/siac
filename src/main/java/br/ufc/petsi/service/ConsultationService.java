@@ -65,7 +65,7 @@ public class ConsultationService {
 		return json;
 	}
 	
-	public String getConsultationsByProfessional(Professional professional, ConsultationDAO consDAO){
+	public String getConsultationsByProfessionalJSON(Professional professional, ConsultationDAO consDAO){
 		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
 		
 		String json = "";
@@ -78,6 +78,11 @@ public class ConsultationService {
 		}
 		System.out.println(json);
 		return json;
+	}
+	
+	public List<Consultation> getConsultationsByProfessional(Professional professional, ConsultationDAO consDAO){
+		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
+		return cons;
 	}
 	
 	public String getConsultationsById(long id, ConsultationDAO consDAO){

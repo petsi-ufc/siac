@@ -10,10 +10,19 @@ var ScheduleTime = function(){
 	this.timeEnd = moment();
 	var state = "---";
 	var rating = "---";
+	var comment = "Nenhum comentário cadastrado!"
 	
 	self.__construct = function(hourInit, minuteInit, hourEnd, minuteEnd){
 		self.setTimeInit(hourInit, minuteInit);
 		self.setTimeEnd(hourEnd, minuteEnd);
+	}
+	
+	self.getComment = function(){
+		return self.comment;
+	}
+	
+	self.setComment = function(comment){
+		self.comment = comment;
 	}
 	
 	self.setRating = function(rating){
@@ -70,15 +79,18 @@ var ScheduleDay = function(){
 		return self.date;
 	}
 	
-	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd, state, rating){
+	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment){
 		var sch = new ScheduleTime();
 		
 		state = state ? state : "Sem Estado"; 
 		
 		rating = rating ? rating : "Sem Nota";
 		
+		comment = comment ? comment : "Sem comentário cadastrádo!";
+		
 		sch.setRating(rating);
 		sch.setState(state);
+		sch.setComment(comment);
 		
 		sch.__construct(hourInit, minuteInit, hourEnd, minuteEnd);
 		this.listSchedules.push(sch);
