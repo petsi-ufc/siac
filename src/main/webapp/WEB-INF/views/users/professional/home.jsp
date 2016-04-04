@@ -207,7 +207,8 @@
 			</div>
 			<div class="panel-body">
 				<div class="panel-group" id="collapse-panel-group">
-					<div id="fixed-panel-collapse" class="panel panel-default my-collapse-panel hidden">
+					<div id="fixed-panel-collapse"
+						class="panel panel-default my-collapse-panel hidden">
 						<div class="panel-heading">
 							<h4 class="panel-title">
 								<a class="collapse-header" data-toggle="collapse"
@@ -236,6 +237,23 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="modal fade" role="dialog" id="modal-cancel-consultation">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4>Cancelar Horário</h4>
+					</div>
+					<div class="modal-title">Deseja realmente cancelar esse horário?</div>
+					<div class="modal-body">
+						<button id="btn-cancel-consultation" class="btn btn-danger" value="" name="id">Sim, cancelar</button>
+						<button id="btn-cancel-consultation" class="btn btn-default" value="">Voltar</button>						
+					</div>
+				</div>
+			</div>
+		</div>
+		
 	</div>
 
 	<div id="modal-day" class="modal fade" role="dialog">

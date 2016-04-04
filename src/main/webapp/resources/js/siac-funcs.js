@@ -48,7 +48,7 @@ function alertMessage(message, time, type){
 	
 	alertMessage.addClass(type);
 	
-	alertMessage.find("#alert-icon").addClass("glyphicon glyphicon-ok-sign");
+	alertMessage.find("#alert-icon").addClass(icon);
 	
 	alertMessage.find("#alert-text").text(message);
 	alertMessage.removeClass("hidden");

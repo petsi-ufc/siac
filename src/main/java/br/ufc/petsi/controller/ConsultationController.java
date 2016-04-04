@@ -2,14 +2,17 @@ package br.ufc.petsi.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.RatingDAO;
@@ -17,11 +20,9 @@ import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
-import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ConsultationService;
 import br.ufc.petsi.service.RatingService;
-
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -60,6 +61,13 @@ public class ConsultationController {
 		p.setCpf(cpf);
 		return consultationService.getConsultationsByPatient(p, consDAO);
 	}
+
+
+	@RequestMapping(value = "/cancelConsultation", method = RequestMethod.GET)
+	@ResponseBody
+	public void cancelConsultation(@RequestParam("id") long id){
+		consultationService.cancelConsultationById(id, consDAO);
+	}
 	
 	@RequestMapping("/saveConsultation")
 	public String saveConsultation(@RequestParam("json") String json){
@@ -67,9 +75,11 @@ public class ConsultationController {
 		SocialService serviceTemp = new SocialService();
 		serviceTemp.setId(5l);
 		Professional proTemp = new Professional();
-		proTemp.setCpf("00104294337");
+		proTemp.setCpf("27240450848");
 		proTemp.setSocialService(serviceTemp);
 		//CurrentSession.getSession().setAttribute("user", proTemp);
+		
+		System.out.println("JSON   :"+ json);
 		
 		Professional pro = proTemp;
 		SocialService serv = pro.getSocialService();
@@ -103,8 +113,6 @@ public class ConsultationController {
 					Date dateInit = format.parse(sDateInit);
 					Date dateEnd = format.parse(sDateEnd);
 					
-					System.out.println(sDateInit+" : "+dateInit+" - "+dateEnd);
-					
 					consultation.setDateInit(dateInit);
 					consultation.setDateEnd(dateEnd);
 					
@@ -119,16 +127,16 @@ public class ConsultationController {
 		return "home_professional";
 	}
 	
-	@RequestMapping("/getConsutationsByProfessional")
+	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
-	public String getConsultationsByProfessional(){
+	public String getConsultationsByProfessionalJSON(){
 		SocialService serviceTemp = new SocialService();
 		serviceTemp.setId(5l);
 		Professional proTemp = new Professional();
-		proTemp.setCpf("00104294337");
+		proTemp.setCpf("27240450848");
 		proTemp.setSocialService(serviceTemp);
 		
-		return consultationService.getConsultationsByProfessional(proTemp, consDAO);
+		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
 	@RequestMapping("/updateConsultationRating")

@@ -104,6 +104,8 @@ $("document").ready(function(){
 	//Carregando todas as consultas cadastradas no calendário do profissional.
 	getProfessionalConsultations(fillProfessionalCalendar);
 	
+	onBtnCancelConsultationClick();
+	
 });
 
 function onLiItemServiceClick(){
@@ -117,13 +119,15 @@ function onLiItemServiceClick(){
 			calendar.addClass("hidden");
 			$("#my-calendar").addClass("hidden");
 			$("#panel-register-schedules").removeClass("hidden");
+			$("#panel-my-consultations").addClass("hidden");
 		}else if(id == MY_CALENDAR){
 			getProfessionalConsultations(fillProfessionalCalendar);
 			calendar.removeClass("hidden");
 			$("#my-calendar").removeClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
+			$("#panel-my-consultations").addClass("hidden");
 		}else if(id == MY_CONSULTATIONS){
-			getProfessionalConsultations(fillMyConsultationsTables);
+			getProfessionalConsultations(fillMyConsultationsCollapses);
 			calendar.addClass("hidden");
 			$("#my-calendar").addClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
@@ -183,16 +187,21 @@ function fillDescriptionSchedulesTable(scheduleDay){
 
 
 //Preenche o painel de minhas consutlas e seus respectivos horários
-function fillMyConsultationsTables(){
+function fillMyConsultationsCollapses(){
 	var map = scheduleManager.getSchedulesMap();
 	var panelGroup = $("#collapse-panel-group");
 	var fixedPanel = $("#fixed-panel-collapse");
+	
+	//Removendo todos os collapses clonados...
+	$(".cloned-collapse").remove();
+	
 	map.forEach(function(scheduleDay, key){
 		var clonedCollapse = fixedPanel.clone();
 		clonedCollapse.removeClass("hidden");
 		var collapseId = "collapse-id-"+key.replace(/\//g,"-");
 		
 		clonedCollapse.attr("id","cloned-panel-collapse-"+collapseId);
+		clonedCollapse.addClass("cloned-collapse");
 		
 		var clonedCollapseHeader = clonedCollapse.find("a");
 		clonedCollapseHeader.html("Consultas do dia <strong>"+key+"</strong>");
@@ -217,6 +226,8 @@ function fillMyConsultationsTables(){
 	$('.collapse').on('hidden.bs.collapse', function () {
 		$(".my-collapse-panel").removeClass("panel-primary").addClass("panel-default");
 	});
+	
+	
 }
 
 function fillMyConsultationTable(tbodyId, scheduleList){
@@ -230,15 +241,36 @@ function fillMyConsultationTable(tbodyId, scheduleList){
 		tdata += "<td>"+colors.get(sday.getState()).text+"</td>";
 		
 		var disabled = "";
-		if((sday.getState() == "RD") && (sday.getState() == "CD")){
+		if((sday.getState() == "RD") || (sday.getState() == "CD")){
 			disabled = "disabled='disabled'";
 		}
-		tdata += '<td><button type="button" class="btn btn btn-primary" '+disabled+' ><span class="glyphicon glyphicon-info-sign"></span></button></td>'
-		tdata += '<td><button type="button" class="btn btn btn-danger" '+disabled+' ">Cancelar Horário <span class="glyphicon glyphicon-remove-circle"></span></button></td>'
+		tdata += '<td><button type="button" class="btn btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span></button></td>'
+		tdata += '<td><button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar Horário <span class="glyphicon glyphicon-remove-circle"></span></button></td>'
 			
 		row.append(tdata);
 		tbody.append(row);
 		
+	});
+	
+	$(".action-cancel-consultation").click(function(){
+		var scheduleId = $(this).attr("value"); 
+		var modalCancel = $("#modal-cancel-consultation");
+		modalCancel.find("#btn-cancel-consultation").attr("value", scheduleId);
+		modalCancel.modal("show");
+	});
+}
+
+function onBtnCancelConsultationClick(){
+	$("#btn-cancel-consultation").click(function(){
+		var modalCancel = $("#modal-cancel-consultation");
+		modalCancel.modal("hide");
+		var scheduleId = $(this).attr("value"); 
+		ajaxCallNoJSON("/siac/cancelConsultation", {"id":scheduleId}, function(){
+			alertMessage("Consulta cancelada com sucesso!", null, ALERT_SUCCESS);
+			$(".action-cancel-consultation[value="+scheduleId+"]").addClass("disabled");
+		}, function(){
+			alertMessage("Ops, não foi possível cancelar essa consulta", null, ALERT_ERROR);
+		});
 	});
 }
 
@@ -700,7 +732,7 @@ function onActionTableClick(){
 
 
 function setEditModalSchedule(date, listSchedules){
-	console.log(date+" - "+listSchedules);
+	
 	if(listSchedules && listSchedules.length){
 		showModalSchedules(date, EDIT_ACTION);
 		initTimepicker("tmp-init-1", listSchedules[0].getTimeInit());
@@ -739,7 +771,6 @@ function getProfessionalConsultations(func){
 
 function updateScheduleManagerList(json){
 	var length = Object.keys(json).length;
-	
 	if(length == 0){
 		alertMessage("Ops, você ainda não possui nenhum horário de consulta cadastrado!");
 	}else{
@@ -759,7 +790,9 @@ function updateScheduleManagerList(json){
 				rating = obj.rating.rating;
 				comment = obj.rating.comment;
 			}
-			scheduleManager.addNewScheduleTime(date, timeInit.hours(), timeInit.minutes(), timeEnd.hours(), timeEnd.minutes(), obj.state, rating, comment);
+			console.log("ID Schedule: "+obj.id);
+			
+			scheduleManager.addNewScheduleTime(date, timeInit.hours(), timeInit.minutes(), timeEnd.hours(), timeEnd.minutes(), obj.state, rating, comment, obj.id);
 		}	
 	}
 		

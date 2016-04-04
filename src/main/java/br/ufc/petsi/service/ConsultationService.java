@@ -107,4 +107,8 @@ public class ConsultationService {
 	public void updateConsultation(Consultation consultation, ConsultationDAO consDAO){
 		consDAO.update(consultation);
 	}
+	
+	public void cancelConsultationById(long id, ConsultationDAO consDAO){
+		consDAO.cancelConsultationById(id);
+	}
 }
