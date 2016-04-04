@@ -8,7 +8,7 @@ var ScheduleTime = function(){
 	var self = this;
 	this.timeInit = moment();
 	this.timeEnd = moment();
-	var id = -1;
+	var id = null;
 	var state = "---";
 	var rating = "---";
 	var comment = "Nenhum comentário cadastrado!"
@@ -69,7 +69,7 @@ var ScheduleTime = function(){
 	}
 	
 	ScheduleTime.prototype.toJSON = function(){
-		return {"timeInit":this.timeInit.format('HH:mm'), "timeEnd":this.timeEnd.format('HH:mm')};
+		return {"id":this.id, "timeInit":this.timeInit.format('HH:mm'), "timeEnd":this.timeEnd.format('HH:mm')};
 	}
 	
 };
@@ -97,7 +97,7 @@ var ScheduleDay = function(){
 		
 		comment = comment ? comment : "Sem comentário cadastrádo!";
 	
-		id = id ? id : -1;
+		id = id ? id : null;
 		
 		sch.setRating(rating);
 		sch.setState(state);

@@ -346,3 +346,20 @@ body html{
 	font-weight: bold;
 	color: white;
 }
+
+#table-legend{
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
+#tbody-legend td{
+	padding-right: 6px !important;
+}
+
+.collapse-icon {
+	float: right;	
+}
+
