@@ -363,3 +363,5 @@ body html{
 	float: right;	
 }
 
+#textarea-comment { resize:none; }
+

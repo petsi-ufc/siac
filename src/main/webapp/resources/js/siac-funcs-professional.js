@@ -254,7 +254,7 @@ function fillMyConsultationTable(tbodyId, scheduleList){
 		if((sday.getState() == "RD") || (sday.getState() == "CD")){
 			disabled = "disabled='disabled'";
 		}
-		tdata += '<td><button type="button" class="btn btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span></button></td>'
+		tdata += '<td><button type="button" value='+sday.getId()+' class="action-info-consultation btn btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span></button></td>'
 		tdata += '<td><button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar Horário <span class="glyphicon glyphicon-remove-circle"></span></button></td>'
 			
 		row.append(tdata);
@@ -268,6 +268,20 @@ function fillMyConsultationTable(tbodyId, scheduleList){
 		modalCancel.find("#btn-cancel-consultation").attr("value", scheduleId);
 		modalCancel.modal("show");
 	});
+	
+	$(".action-info-consultation").click(function(){
+		var scheduleId = $(this).attr("value");
+		var res = scheduleList.filter(function(scheduleDay){
+			if(scheduleDay.getId() == scheduleId)
+				return scheduleDay;
+		});
+		var schDay = res[0];
+		$("#modal-consultation-details").modal("show");
+		$("#textarea-comment").text(schDay.getComment());
+		$("#div-rating").html(schDay.getRating());
+	});
+	
+	
 }
 
 function onBtnCancelConsultationClick(){
