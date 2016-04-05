@@ -34,7 +34,7 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 	</bean>
 	
 	<bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-		<property name="defaultFailureUrl" value="/"/>
+		<property name="defaultFailureUrl" value="/failureLogin"/>
 	</bean>
 	
 	<bean id="ldapAuthenticationProvider" class="br.ufc.petsi.security.LdapAuthenticationProvider"></bean>

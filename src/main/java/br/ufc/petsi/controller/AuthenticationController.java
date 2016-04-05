@@ -6,22 +6,15 @@ import javax.servlet.http.HttpSession;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.ufc.petsi.constants.Constants;
 
-import br.ufc.petsi.dao.hibernate.HBUserDAO;
-import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.model.User;
 
 @Controller
 public class AuthenticationController {
-	
-	@Inject
-	private LdapUser ldapDAO;
-	
-	@Inject
-	private HBUserDAO userDAO;
 	
 	@RequestMapping( value = {"/", "/login"} )
 	public ModelAndView home() {
@@ -29,22 +22,33 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping("/authentication/success")
-	public ModelAndView success(HttpSession session) {
+	public ModelAndView success(@RequestParam(value = "error", required = false) String error, HttpSession session) {
+		ModelAndView mv = new ModelAndView("redirect:/");
+		if(error != null)
+			mv.addObject("error", "Login e/ou senha inválidos");
 		try{
 			User user = (User)this.getUserLogged(session);
 			
 			if(user.getRole().equals(Constants.ROLE_PROFESSIONAL))
-				return new ModelAndView("redirect:/professional");
+				mv.setViewName("redirect:/professional");
 			else if(user.getRole().equals(Constants.ROLE_ADMIN))
-				return new ModelAndView("redirect:/manager");
+				mv.setViewName("redirect:/manager");
 			else
-				return new ModelAndView("redirect:/patient");
+				mv.setViewName("redirect:/patient");
 		}
 		catch(NullPointerException e)
 		{
 			System.out.println("Error: " + e);
-		}
-		return new ModelAndView("redirect:/");
+		} 
+		return mv;
+	}
+	
+	@RequestMapping("/failureLogin")
+	public ModelAndView failure()
+	{
+		ModelAndView mv = new ModelAndView("login");
+		mv.addObject("error", "Login e/ou senha inválidos");
+		return mv;
 	}
 	
 	@RequestMapping("/logout")
