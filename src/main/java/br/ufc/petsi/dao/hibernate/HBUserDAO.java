@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.model.User;
+import br.ufc.petsi.model.UserPrimaryKey;
 
 @Repository
 public class HBUserDAO implements UserDAO{
@@ -32,6 +33,7 @@ public class HBUserDAO implements UserDAO{
 
 	@Override
 	public User getByCpf(String cpf, String role) {
+		System.out.println("CPF: "+cpf+" - Role: "+role);
 		User u = null;
 		try{
 			Query query = manager.createQuery("from users WHERE cpf = :paramCpf AND role = :paramRole");
