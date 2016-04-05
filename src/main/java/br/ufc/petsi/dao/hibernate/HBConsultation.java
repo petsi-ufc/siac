@@ -93,6 +93,7 @@ public class HBConsultation implements ConsultationDAO{
 	public List<Consultation> getConsultationByProfessional(Professional professional) {
 		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.professional = :professional");
 		query.setParameter("professional", professional);
+//		query.setParameter("role", professional.getRole());
 		List<Consultation> cons = new ArrayList<Consultation>();
 		try{
 			cons = query.getResultList();

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.enums.ConsultationState;
@@ -46,13 +47,11 @@ public class ConsultationController {
 	
 	@RequestMapping("/getConsultationsBySocialService")
 	@ResponseBody
-	public String getConsultationsBySocialServices(Long socialServiceId){
+	public String getConsultationsBySocialServices(Long socialServiceId, HttpSession session){
+		Patient patient = (Patient) session.getAttribute("userLogged");
 		SocialService socialService = new SocialService();
 		socialService.setId(socialServiceId);
-		Patient patient = new Patient();
-		patient.setCpf("12345678900");
-		patient.setEmail("paciente@siac.com");
-		patient.setName("Paciente Coisa de Coisado");
+		
 		return consultationService.getConsultationsBySocialService(patient, socialService, consDAO);
 	}
 	
@@ -73,17 +72,16 @@ public class ConsultationController {
 	
 	@RequestMapping("/saveConsultation")
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
-		System.out.println("USER:  "+((User) session.getAttribute("userLogged")));
-		SocialService serviceTemp = new SocialService();
-		serviceTemp.setId(5l);
-		Professional proTemp = new Professional();
-		proTemp.setCpf("27240450848");
-		proTemp.setSocialService(serviceTemp);
+		Professional proTemp = (Professional) session.getAttribute("userLogged");
+//		System.out.println("JSON   :"+ json);
+//		SocialService serviceTemp = new SocialService();
+//		serviceTemp.setId(5l);
+//		Professional proTemp = new Professional();
+//		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
+//		proTemp.setCpf("27240450848");
+//		proTemp.setSocialService(serviceTemp);
 		
-		System.out.println("JSON   :"+ json);
-		
-		Professional pro = proTemp;
-		SocialService serv = pro.getSocialService();
+		SocialService serv = proTemp.getSocialService();
 		
 		try{
 			JsonParser parser = new JsonParser();
@@ -100,7 +98,8 @@ public class ConsultationController {
 				
 				for(int j = 0; j < timeSchedules.size(); j++){
 					Consultation consultation = new Consultation();
-					consultation.setProfessional(pro);
+					consultation.setProfessional(proTemp);
+					System.out.println("detached entity passed to persist:lalsalsalsalsaalssalasl");
 					consultation.setService(serv);
 					consultation.setState(ConsultationState.FR);
 					
@@ -130,14 +129,16 @@ public class ConsultationController {
 	
 	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
-	public String getConsultationsByProfessionalJSON(){
-		SocialService serviceTemp = new SocialService();
-		serviceTemp.setId(5l);
-		Professional proTemp = new Professional();
-		proTemp.setCpf("27240450848");
-		proTemp.setSocialService(serviceTemp);
-		
-		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
+	public String getConsultationsByProfessionalJSON(HttpSession session){
+//		SocialService serviceTemp = new SocialService();
+//		serviceTemp.setId(5l);
+//		Professional proTemp = new Professional();
+//		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
+//		proTemp.setCpf("27240450848");
+//		proTemp.setSocialService(serviceTemp);
+		Professional p = (Professional) session.getAttribute("userLogged");
+		System.out.println("Along: "+p.getId());
+		return consultationService.getConsultationsByProfessionalJSON(p, consDAO);
 	}
 	
 	@RequestMapping("/updateConsultationRating")
