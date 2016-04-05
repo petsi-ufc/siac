@@ -81,7 +81,7 @@ public class ConsultationController {
 //		proTemp.setCpf("27240450848");
 //		proTemp.setSocialService(serviceTemp);
 		
-		SocialService serv = proTemp.getSocialService();
+	SocialService serv = proTemp.getSocialService();
 		
 		try{
 			JsonParser parser = new JsonParser();

@@ -153,6 +153,7 @@ public class ConsultationService {
 			consultation.setState(ConsultationState.FR);
 			consultation.setPatient(null);
 			consultationDAO.update(consultation);
+			
 		}else{
 			Collections.sort(reserves);
 			Reserve reserve = reserves.get(0);

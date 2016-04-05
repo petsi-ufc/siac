@@ -17,63 +17,84 @@
 		</div>
 	</div>
 
+
 	<div id="right-bar">
+
 		<div class="alert alert-danger" id="alert-schedules">Não há
 			nenhum horário cadastrado para este serviço!</div>
 
 		<div class="content-calendar">
-			<h2 id="my-calendar">Meu calendário</h2>
-
+			<h2 id="my-calendar-title">Meu Calendário</h2>
+			<div class="alert alert-danger alert-message hidden" role="alert">
+				<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
+			</div>
 			<div id="calendar-legend" style="margin-left: 100px">
-				<table style="margin-left: 40px">
+				<table style="margin-left: 0px; margin-bottom: 10px">
 					<thead>
 						<tr>
-							<th colspan="10"><h3 style="text-align: center">Legenda
+							<th colspan="12"><h3 style="text-align: center">Legenda
 									de Consultas</h3></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
+
+							<td>
+								<div class='legend-color'
+									style="background-color: #32CD32; margin-left: 12px; margin-right: 12px"></div>
+							</td>
 							<td>
 								<h4>Disponível</h4>
 							</td>
+
+
+
 							<td>
 								<div class='legend-color'
-									style="background-color: #32CD32; margin-left: 15px; margin-right: 15px"></div>
+									style="background-color: #4682B4; margin-left: 12px; margin-right: 12px"></div>
 							</td>
-
-
 
 							<td>
 								<h4>Agendada</h4>
 							</td>
+
+
 							<td>
 								<div class='legend-color'
-									style="background-color: #4682B4; margin-left: 15px; margin-right: 15px"></div>
+									style='background-color: grey; margin-left: 12px; margin-right: 12px'></div>
 							</td>
 
 							<td>
 								<h4>Realizada</h4>
 							</td>
+
+
 							<td>
 								<div class='legend-color'
-									style='background-color: grey; margin-left: 15px; margin-right: 15px'></div>
+									style='background-color: #D9D919; margin-left: 12px; margin-right: 12px'></div>
 							</td>
 
 							<td>
 								<h4>Reservada</h4>
 							</td>
+
+
 							<td>
 								<div class='legend-color'
-									style='background-color: #D9D919; margin-left: 15px; margin-right: 15px'></div>
+									style='background-color: #FF0000; margin-left: 12px; margin-right: 12px'></div>
 							</td>
 
 							<td>
 								<h4>Cancelada</h4>
 							</td>
+
 							<td>
 								<div class='legend-color'
-									style='background-color: #FF0000; margin-left: 15px; margin-right: 15px'></div>
+									style='background-color: #FF7F00; margin-left: 12px; margin-right: 12px'></div>
+							</td>
+
+							<td>
+								<h4>Ocupada</h4>
 							</td>
 						</tr>
 					</tbody>
@@ -87,9 +108,15 @@
 		</div>
 
 		<div id="my-consultations">
+			<h2 id="my-calendar-title">Histórico de Consultas</h2>
+			<div class="alert alert-danger alert-message hidden" role="alert">
+				<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
+			</div>
+
 			<div id="constutaions-panel" class="panel panel-primary">
 				<div class="panel-heading">
-					<h3>Suas Consultas</h3>
+					<h3>Minhas Consultas</h3>
+
 				</div>
 				<table id="my-consultations-table" class="table table-hover">
 					<thead>
@@ -204,9 +231,8 @@
 					<h4 class="modal-title">Avaliação da Consulta</h4>
 				</div>
 				<div class="modal-body modal-body-rating">
-					
-					<div id="content-rating">
-					</div>
+
+					<div id="content-rating"></div>
 					<!-- Preenchido com Francis/AJAX hehe -->
 
 				</div>
