@@ -115,6 +115,9 @@ function onLiItemServiceClick(){
 		$(".service-item").removeClass("active");
 		$(this).addClass("active");
 		id = $(this).attr("id");
+		
+		$("#calendar-legend").addClass("hidden");
+		
 		if(id == REGISTER_SCHEDULE){
 			calendar.addClass("hidden");
 			$("#my-calendar").addClass("hidden");
@@ -126,6 +129,7 @@ function onLiItemServiceClick(){
 			$("#my-calendar").removeClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
 			$("#panel-my-consultations").addClass("hidden");
+			$("#calendar-legend").removeClass("hidden");
 		}else if(id == MY_CONSULTATIONS){
 			getProfessionalConsultations(fillMyConsultationsCollapses);
 			calendar.addClass("hidden");
@@ -189,6 +193,11 @@ function fillDescriptionSchedulesTable(scheduleDay){
 //Preenche o painel de minhas consutlas e seus respectivos horários
 function fillMyConsultationsCollapses(){
 	var map = scheduleManager.getSchedulesMap();
+	$("#message-no-cosultations").addClass("hidden");
+	if(map.size == 0){
+		$("#message-no-cosultations").removeClass("hidden");
+		alertMessage("Ops, Você não possui consultas cadastradas!", null, ALERT_ERROR);
+	}
 	var panelGroup = $("#collapse-panel-group");
 	var fixedPanel = $("#fixed-panel-collapse");
 	
@@ -221,12 +230,13 @@ function fillMyConsultationsCollapses(){
 	$(".collapse-header").click(function(){
 		$(".my-collapse-panel").removeClass("panel-primary").addClass("panel-default");
 		$(this).parents(".panel-default").removeClass("panel-default").addClass("panel-primary");
+		$(this).siblings(".collapse-icon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
 	});
 	
 	$('.collapse').on('hidden.bs.collapse', function () {
 		$(".my-collapse-panel").removeClass("panel-primary").addClass("panel-default");
+		$(".my-collapse-panel").find(".collapse-icon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
 	});
-	
 	
 }
 
@@ -244,7 +254,7 @@ function fillMyConsultationTable(tbodyId, scheduleList){
 		if((sday.getState() == "RD") || (sday.getState() == "CD")){
 			disabled = "disabled='disabled'";
 		}
-		tdata += '<td><button type="button" class="btn btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span></button></td>'
+		tdata += '<td><button type="button" value='+sday.getId()+' class="action-info-consultation btn btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span></button></td>'
 		tdata += '<td><button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar Horário <span class="glyphicon glyphicon-remove-circle"></span></button></td>'
 			
 		row.append(tdata);
@@ -258,6 +268,20 @@ function fillMyConsultationTable(tbodyId, scheduleList){
 		modalCancel.find("#btn-cancel-consultation").attr("value", scheduleId);
 		modalCancel.modal("show");
 	});
+	
+	$(".action-info-consultation").click(function(){
+		var scheduleId = $(this).attr("value");
+		var res = scheduleList.filter(function(scheduleDay){
+			if(scheduleDay.getId() == scheduleId)
+				return scheduleDay;
+		});
+		var schDay = res[0];
+		$("#modal-consultation-details").modal("show");
+		$("#textarea-comment").text(schDay.getComment());
+		$("#div-rating").html(schDay.getRating());
+	});
+	
+	
 }
 
 function onBtnCancelConsultationClick(){
@@ -790,7 +814,6 @@ function updateScheduleManagerList(json){
 				rating = obj.rating.rating;
 				comment = obj.rating.comment;
 			}
-			console.log("ID Schedule: "+obj.id);
 			
 			scheduleManager.addNewScheduleTime(date, timeInit.hours(), timeInit.minutes(), timeEnd.hours(), timeEnd.minutes(), obj.state, rating, comment, obj.id);
 		}	
@@ -805,12 +828,20 @@ function fillProfessionalCalendar(){
 		
 		var sch = value;
 		
+		
 		//Criando uma data no formato YYYY-DD-MM
 		var eventDate = moment(getFormatedDate( sch.getDate()));
 		
+		
 		var event = new Object();
 		event.id = 10;
-		event.color = colors.get("GS").hex;
+		
+		if(sch.getListSchedules().length > 1){
+			event.color = colors.get("GS").hex;
+		}else{
+			console.log(sch.getListSchedules());
+			event.color = colors.get(sch.getListSchedules()[0].getState()).hex;
+		} 
 		event.title = "Consulta";
 		event.start = eventDate;
 		event.allDay = false;

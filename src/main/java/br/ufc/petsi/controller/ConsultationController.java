@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +21,8 @@ import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.SocialService;
+import br.ufc.petsi.model.User;
 import br.ufc.petsi.service.ConsultationService;
-
 import br.ufc.petsi.service.RatingService;
 
 import com.google.gson.JsonArray;
@@ -71,14 +72,13 @@ public class ConsultationController {
 	}
 	
 	@RequestMapping("/saveConsultation")
-	public String saveConsultation(@RequestParam("json") String json){
-		
+	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
+		System.out.println("USER:  "+((User) session.getAttribute("userLogged")));
 		SocialService serviceTemp = new SocialService();
 		serviceTemp.setId(5l);
 		Professional proTemp = new Professional();
 		proTemp.setCpf("27240450848");
 		proTemp.setSocialService(serviceTemp);
-		//CurrentSession.getSession().setAttribute("user", proTemp);
 		
 		System.out.println("JSON   :"+ json);
 		
