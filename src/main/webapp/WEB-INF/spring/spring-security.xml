@@ -14,8 +14,9 @@ http://www.springframework.org/schema/security/spring-security.xsd">
  		<security:intercept-url pattern="/" access="permitAll" />
  		<security:intercept-url pattern="/resources/**" access="permitAll" />
  		<security:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER, ROLE_PROF')" />
+ 		-->
 		<security:logout logout-success-url="/" invalidate-session="true"/>
-		-->
+		
 		<security:custom-filter position="FORM_LOGIN_FILTER" ref="ldapAuthenticationFilter" />
 	</security:http>
 	
