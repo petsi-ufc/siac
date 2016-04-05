@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.dao.ConsultationDAO;
@@ -84,20 +85,29 @@ public class PatientController {
 
 	@RequestMapping("/scheduleConsultation")
 	@ResponseBody
-	public String scheduleConsultation(Consultation consultation){
+	public void scheduleConsultation(Consultation consultation){
 		Consultation consultation2 = this.consService.getConsultationsByIdC(consultation.getId(), this.consDAO);
 
-		Patient patient = new Patient();
+		/*Patient patient = new Patient();
 		patient.setCpf("05771147354");
 		patient.setEmail("pacientao@siac.com");
-		patient.setName("Pacientão Diferentão");
+		patient.setName("Pacientão Diferentão");*/
+		
+		
+		Patient patient = new Patient();
+		patient.setCpf("12345678900");
+		patient.setEmail("paciente@siac.com");
+		patient.setName("Paciente Coisa de Coisado");
+		
 
 		consultation2.setPatient(patient);
-		consultation2.setState(ConsultationState.SC);
-
-		this.consService.updateConsultation(consultation2, this.consDAO);
-
-		return "{'id':"+consultation2.getId()+"}";
+		
+		if(consultation2.getState() == ConsultationState.FR){
+			consultation2.setState(ConsultationState.SC);
+			this.consService.updateConsultation(consultation2, this.consDAO);
+			
+		}
+		
 	}
 
 	@RequestMapping("/showRating")
@@ -106,7 +116,7 @@ public class PatientController {
 		return consService.getRatingByConsultation(consultation, consDAO);
 	}
 
-	@RequestMapping("/cancelConsultation")
+	@RequestMapping("/cancelConsultationPatient")
 	@ResponseBody
 	public String cancelConsultation(Consultation consultation){
 
@@ -130,11 +140,12 @@ public class PatientController {
 
 	}
 
-
 	@RequestMapping("/cancelReserve")
 	@ResponseBody
-	public String cancelReserve(Reserve reserve){
-
+	public String cancelReserve(@RequestParam("id") long id){
+		
+		Reserve reserve = new Reserve();
+		reserve.setId(id);
 		Reserve reserve2 = this.reserveDAO.getReserveById(reserve);
 
 		return consService.cancelReserve(reserve2, reserveDAO);

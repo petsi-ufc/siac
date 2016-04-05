@@ -74,7 +74,7 @@ public class ConsultationController {
 	public String saveConsultation(@RequestParam("json") String json){
 		
 		SocialService serviceTemp = new SocialService();
-		serviceTemp.setId(5l);
+		serviceTemp.setId(5l);	
 		Professional proTemp = new Professional();
 		proTemp.setCpf("27240450848");
 		proTemp.setSocialService(serviceTemp);
