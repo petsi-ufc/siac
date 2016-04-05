@@ -31,11 +31,12 @@ public class HBUserDAO implements UserDAO{
 	}
 
 	@Override
-	public User getByCpf(String cpf) {
+	public User getByCpf(String cpf, String role) {
 		User u = null;
 		try{
-			Query query = manager.createQuery("from users WHERE cpf = :paramCpf");
+			Query query = manager.createQuery("from users WHERE cpf = :paramCpf AND role = :paramRole");
 			query.setParameter("paramCpf", cpf);
+			query.setParameter("paramRole", role);
 			u = (User) query.getSingleResult();
 		}catch(NoResultException e){
 			System.out.println("Erro HBDAO getALL: "+e);	
