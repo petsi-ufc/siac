@@ -1,6 +1,7 @@
 package br.ufc.petsi.controller;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,12 +42,9 @@ public class PatientController {
 
 	@RequestMapping("/getMyConsultations")
 	@ResponseBody
-	public String getConsultationsByPatient(){
+	public String getConsultationsByPatient(HttpSession session){
 
-		Patient patient = new Patient();
-		patient.setCpf("12345678900");
-		patient.setEmail("paciente@siac.com");
-		patient.setName("Paciente Coisa de Coisado");
+		Patient patient = (Patient) session.getAttribute("userLogged");
 
 		return consService.getConsultationsByPatient(patient, consDAO, reserveDAO);
 	}

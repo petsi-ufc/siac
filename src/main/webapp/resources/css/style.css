@@ -9,7 +9,7 @@ body html{
 	width:370px;
 	height:350px;
 	max-width: 370px;
-	max-height: 350px;
+	max-height: 450px;
 	top:0;
 	bottom:0;
 	left:0;
@@ -99,6 +99,10 @@ body html{
 
 .nav-stacked li{
 	margin: 0 !important;
+}
+
+#errorLogin {
+	background-color: rgba(1,1,1,0);
 }
 
 #calendar-legend{
@@ -346,3 +350,22 @@ body html{
 	font-weight: bold;
 	color: white;
 }
+
+#table-legend{
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
+#tbody-legend td{
+	padding-right: 6px !important;
+}
+
+.collapse-icon {
+	float: right;	
+}
+
+#textarea-comment { resize:none; }
+

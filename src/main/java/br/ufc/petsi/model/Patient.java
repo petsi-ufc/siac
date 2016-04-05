@@ -2,6 +2,8 @@ package br.ufc.petsi.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,10 +14,10 @@ import br.ufc.petsi.constants.Constants;
 
 @Entity
 @Table(name="patient")
-@DiscriminatorValue(value=Constants.ROLE_PATIENT)
+@DiscriminatorValue(Constants.ROLE_PATIENT)
 public class Patient extends User {
 	
-	@OneToMany(fetch=FetchType.EAGER, mappedBy="patient")
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="patient", cascade=CascadeType.ALL)
 	private List<Consultation> listConsultations;
 
 	public Patient() {

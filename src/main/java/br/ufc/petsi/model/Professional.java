@@ -7,6 +7,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -15,7 +16,7 @@ import br.ufc.petsi.constants.Constants;
 
 @Entity
 @Table( name = "professional" )
-@DiscriminatorValue(value=Constants.ROLE_PROFESSIONAL)
+@DiscriminatorValue(Constants.ROLE_PROFESSIONAL)
 public class Professional extends User {
 	
 	@OneToOne(targetEntity = SocialService.class, 
@@ -24,7 +25,7 @@ public class Professional extends User {
 	@JoinColumn( name = "id_social_service" )
 	private SocialService socialService;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="professional")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="professional", cascade=CascadeType.MERGE)
 	private List<Consultation> listConsultations;
 	
 	public Professional(String cpf, String name, String email, String role, SocialService socialService, List<Consultation> listConsultations) {
