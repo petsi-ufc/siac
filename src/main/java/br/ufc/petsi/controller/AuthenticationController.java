@@ -1,6 +1,7 @@
 package br.ufc.petsi.controller;
 
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,11 +11,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.ufc.petsi.constants.Constants;
-
+import br.ufc.petsi.model.Email;
 import br.ufc.petsi.model.User;
+import br.ufc.petsi.service.EmailService;
 
 @Controller
 public class AuthenticationController {
+	
+	@Inject
+	private EmailService emailService;
 	
 	@RequestMapping( value = {"/", "/login"} )
 	public ModelAndView home() {
@@ -88,4 +93,21 @@ public class AuthenticationController {
 		return (User) session.getAttribute("userLogged");
 	}
 	
+	@RequestMapping("/teste")
+	public ModelAndView teste()
+	{
+		final Email email = new Email();
+		email.setFrom("siac.ufc@gmail.com");
+		email.setTo("lucashenriquejbe@gmail.com");
+		email.setText("teste");
+		email.setSubject("não responda este email");
+		
+		try {
+			emailService.sendEmail(email);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		
+		return new ModelAndView("redirect:/");
+	}
 }
