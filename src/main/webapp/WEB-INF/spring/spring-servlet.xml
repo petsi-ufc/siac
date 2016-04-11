@@ -19,6 +19,7 @@ http://www.springframework.org/schema/jee http://www.springframework.org/schema/
 
 	<context:annotation-config />
     
+    <context:component-scan base-package="br.ufc.petsi.dao.ldap" />
 	<context:component-scan base-package="br.ufc.petsi.*" />
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
