@@ -63,7 +63,6 @@ public class ConsultationController {
 		return consultationService.getConsultationsByPatient(p, consDAO, reserveDAO);
 	}
 
-
 	@RequestMapping(value = "/cancelConsultation", method = RequestMethod.GET)
 	@ResponseBody
 	public void cancelConsultation(@RequestParam("id") long id){
@@ -99,7 +98,6 @@ public class ConsultationController {
 				for(int j = 0; j < timeSchedules.size(); j++){
 					Consultation consultation = new Consultation();
 					consultation.setProfessional(proTemp);
-					System.out.println("detached entity passed to persist:lalsalsalsalsaalssalasl");
 					consultation.setService(serv);
 					consultation.setState(ConsultationState.FR);
 					
@@ -116,7 +114,7 @@ public class ConsultationController {
 					consultation.setDateInit(dateInit);
 					consultation.setDateEnd(dateEnd);
 					
-					consultationService.registerConsultation(consultation, consDAO);
+					consultationService.saveConsultation(consultation, consDAO);
 					
 				}
 				
@@ -130,15 +128,16 @@ public class ConsultationController {
 	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
 	public String getConsultationsByProfessionalJSON(HttpSession session){
-//		SocialService serviceTemp = new SocialService();
-//		serviceTemp.setId(5l);
-//		Professional proTemp = new Professional();
-//		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
-//		proTemp.setCpf("27240450848");
-//		proTemp.setSocialService(serviceTemp);
-		Professional p = (Professional) session.getAttribute("userLogged");
-		System.out.println("Along: "+p.getId());
-		return consultationService.getConsultationsByProfessionalJSON(p, consDAO);
+		SocialService serviceTemp = new SocialService();
+		serviceTemp.setId(5l);
+		Professional proTemp = new Professional();
+		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
+		proTemp.setCpf("27240450848");
+		proTemp.setId(18);
+		proTemp.setSocialService(serviceTemp);
+//		Professional p = (Professional) session.getAttribute("userLogged");
+//		System.out.println("Along: "+p.getId());
+		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
 	@RequestMapping("/updateConsultationRating")
@@ -152,6 +151,10 @@ public class ConsultationController {
 		
 	}
 	
+	@RequestMapping("/registerConsultation")
+	public void registerConsultation(Consultation cons){
+		consultationService.registerConsultation(cons, consDAO);
+	}
 	
 	
 }

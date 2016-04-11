@@ -14,6 +14,7 @@ public interface ConsultationDAO {
 	public void save(Consultation cons);
 	public void update(Consultation con);
 	public void cancelConsultationById(long id);
+	public void registerConsultation(Consultation cons);
 	public Consultation getConsultationById(long id);
 	public List<Consultation> getConsultationsByPatient(Patient p);
 	public List<Consultation> getConsultationsByState(ConsultationState state);

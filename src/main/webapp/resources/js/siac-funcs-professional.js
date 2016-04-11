@@ -254,8 +254,11 @@ function fillMyConsultationTable(tbodyId, scheduleList){
 		if((sday.getState() == "RD") || (sday.getState() == "CD")){
 			disabled = "disabled='disabled'";
 		}
-		tdata += '<td><button type="button" value='+sday.getId()+' class="action-info-consultation btn btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span></button></td>'
-		tdata += '<td><button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar Horário <span class="glyphicon glyphicon-remove-circle"></span></button></td>'
+		tdata += '<td><button type="button" value='+sday.getId()+' class="action-info-consultation btn btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span></button></td>';
+		tdata += '<td>'+
+			'<button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar Horário <span class="glyphicon glyphicon-remove-circle"></span></button>'+
+			'<button type="button" value='+sday.getId()+' class="btn btn btn-success action-register-consultation" '+disabled+' ">Registrar Consulta <span class="glyphicon glyphicon-ok"></span></button>'+
+			+'</td>';
 			
 		row.append(tdata);
 		tbody.append(row);

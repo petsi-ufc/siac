@@ -39,7 +39,7 @@ public class Consultation {
 	@ManyToOne(cascade=CascadeType.MERGE)
 	private Professional professional;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	private Patient patient;
 	
 	@Column(name="date_init")
