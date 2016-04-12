@@ -71,15 +71,15 @@ public class ConsultationController {
 	
 	@RequestMapping("/saveConsultation")
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
-//		Professional proTemp = (Professional) session.getAttribute("userLogged");
-		System.out.println("JSON   :"+ json);
-		SocialService serviceTemp = new SocialService();
-		serviceTemp.setName("Odontologia");
-		serviceTemp.setId(5l);
-		Professional proTemp = new Professional();
-		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
-		proTemp.setId(18);
-		proTemp.setSocialService(serviceTemp);
+		Professional proTemp = (Professional) session.getAttribute("userLogged");
+//		System.out.println("JSON   :"+ json);
+//		SocialService serviceTemp = new SocialService();
+//		serviceTemp.setName("Odontologia");
+//		serviceTemp.setId(5l);
+//		Professional proTemp = new Professional();
+//		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
+//		proTemp.setId(18);
+//		proTemp.setSocialService(serviceTemp);
 		
 		try{
 			JsonParser parser = new JsonParser();
@@ -97,7 +97,7 @@ public class ConsultationController {
 				for(int j = 0; j < timeSchedules.size(); j++){
 					Consultation consultation = new Consultation();
 					consultation.setProfessional(proTemp);
-					consultation.setService(serviceTemp);
+					consultation.setService(proTemp.getSocialService());
 					consultation.setState(ConsultationState.FR);
 					
 					long consultationId = 0;
@@ -137,15 +137,14 @@ public class ConsultationController {
 	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
 	public String getConsultationsByProfessionalJSON(HttpSession session){
-		SocialService serviceTemp = new SocialService();
-		serviceTemp.setId(5l);
-		Professional proTemp = new Professional();
-		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
-		proTemp.setCpf("27240450848");
-		proTemp.setId(18);
-		proTemp.setSocialService(serviceTemp);
-//		Professional p = (Professional) session.getAttribute("userLogged");
-//		System.out.println("Along: "+p.getId());
+//		SocialService serviceTemp = new SocialService();
+//		serviceTemp.setId(5l);
+//		Professional proTemp = new Professional();
+//		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
+//		proTemp.setCpf("27240450848");
+//		proTemp.setId(18);
+//		proTemp.setSocialService(serviceTemp);
+		Professional proTemp = (Professional) session.getAttribute("userLogged");
 		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
