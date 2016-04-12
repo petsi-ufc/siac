@@ -367,5 +367,13 @@ body html{
 	float: right;	
 }
 
+#days-buttons button{
+	min-width: 100px;
+}
+
+#panel-register-schedules{
+	min-height: 300px;
+}
+
 #textarea-comment { resize:none; }
 

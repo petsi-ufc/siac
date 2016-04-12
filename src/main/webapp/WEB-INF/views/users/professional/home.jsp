@@ -181,10 +181,6 @@
 							</table>
 						</div>
 					</div>
-					<button type="button" id="btn-register-schedules"
-						class="disabled btn btn-lg btn-primary">
-						Cadastrar <i class="glyphicon glyphicon-floppy-saved"></i>
-					</button>
 				</div>
 			</div>
 		</div>
@@ -265,15 +261,16 @@
 					<div class="modal-body">
 						<form>
 							<div class="form-group">
-								<label>Comentário:</label> 
-								<textarea id="textarea-comment" class="form-control" disabled="disabled" rows="3">Sem comentários cadastrados!</textarea>
+								<label>Comentário:</label>
+								<textarea id="textarea-comment" class="form-control"
+									disabled="disabled" rows="3">Sem comentários cadastrados!</textarea>
 							</div>
 							<div class="form-group">
-								<label>Nota:</label> 
+								<label>Nota:</label>
 								<div id="div-rating"></div>
 							</div>
 						</form>
-						
+
 						<button class="btn btn-default" data-dismiss="modal">Voltar</button>
 					</div>
 				</div>
@@ -344,37 +341,39 @@
 							<h3 class="panel-title">Horários</h3>
 						</div>
 						<div class="panel-body" id="panel-schedules">
-							<div class="row" id="row-add-schedules">
+							<div id="row-add-schedules">
+								<div class="row row-schedule-id">
 
-								<div class="col-md-1">
-									<h4>Início:</h4>
-								</div>
-								<div class="col-md-4">
-									<div
-										class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
-										<input id="tmp-init-1" type="text"
-											class="form-control input-small"> <span
-											class="input-group-addon"><i
-											class="glyphicon glyphicon-time"></i></span>
+									<div class="col-md-1">
+										<h4>Início:</h4>
 									</div>
-								</div>
+									<div class="col-md-4">
+										<div
+											class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
+											<input id="tmp-init-1" type="text"
+												class="form-control input-small"> <span
+												class="input-group-addon"><i
+												class="glyphicon glyphicon-time"></i></span>
+										</div>
+									</div>
 
-								<div class="col-md-1">
-									<h4>Fim:</h4>
-								</div>
-								<div class="col-md-4">
-									<div
-										class="timepicker-end input-group bootstrap-timepicker timepicker">
-										<input id="tmp-end-1" type="text"
-											class="form-control input-small"> <span
-											class="input-group-addon"><i
-											class="glyphicon glyphicon-time"></i></span>
+									<div class="col-md-1">
+										<h4>Fim:</h4>
 									</div>
-								</div>
-								<div class="col-md-2">
-									<button type="button" class="btn btn-primary add-schedule">
-										<span class="glyphicon glyphicon glyphicon-plus"></span>
-									</button>
+									<div class="col-md-4">
+										<div
+											class="timepicker-end input-group bootstrap-timepicker timepicker">
+											<input id="tmp-end-1" type="text"
+												class="form-control input-small"> <span
+												class="input-group-addon"><i
+												class="glyphicon glyphicon-time"></i></span>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<button type="button" class="btn btn-primary add-schedule">
+											<span class="glyphicon glyphicon glyphicon-plus"></span>
+										</button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -382,7 +381,9 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary"
-						id="btn-confirm-schedules" data-dismiss="modal">Confirmar</button>
+						id="btn-confirm-schedules" data-dismiss="modal">
+						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
+					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
 				</div>
 			</div>

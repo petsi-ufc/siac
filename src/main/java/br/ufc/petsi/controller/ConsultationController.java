@@ -71,16 +71,15 @@ public class ConsultationController {
 	
 	@RequestMapping("/saveConsultation")
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
-		Professional proTemp = (Professional) session.getAttribute("userLogged");
-//		System.out.println("JSON   :"+ json);
-//		SocialService serviceTemp = new SocialService();
-//		serviceTemp.setId(5l);
-//		Professional proTemp = new Professional();
-//		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
-//		proTemp.setCpf("27240450848");
-//		proTemp.setSocialService(serviceTemp);
-		
-	SocialService serv = proTemp.getSocialService();
+//		Professional proTemp = (Professional) session.getAttribute("userLogged");
+		System.out.println("JSON   :"+ json);
+		SocialService serviceTemp = new SocialService();
+		serviceTemp.setName("Odontologia");
+		serviceTemp.setId(5l);
+		Professional proTemp = new Professional();
+		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
+		proTemp.setId(18);
+		proTemp.setSocialService(serviceTemp);
 		
 		try{
 			JsonParser parser = new JsonParser();
@@ -98,8 +97,16 @@ public class ConsultationController {
 				for(int j = 0; j < timeSchedules.size(); j++){
 					Consultation consultation = new Consultation();
 					consultation.setProfessional(proTemp);
-					consultation.setService(serv);
+					consultation.setService(serviceTemp);
 					consultation.setState(ConsultationState.FR);
+					
+					long consultationId = 0;
+					
+					if(!timeSchedules.get(j).getAsJsonObject().get("id").isJsonNull()){
+						consultationId = timeSchedules.get(j).getAsJsonObject().get("id").getAsLong();
+					}
+					
+					System.out.println("CONSULTATION ID: "+consultationId+" --- "+timeSchedules.get(j).getAsJsonObject().get("id"));
 					
 					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
 					JsonElement timeEnd = timeSchedules.get(j).getAsJsonObject().get("timeEnd");
@@ -113,6 +120,8 @@ public class ConsultationController {
 					
 					consultation.setDateInit(dateInit);
 					consultation.setDateEnd(dateEnd);
+					
+					consultation.setId(consultationId);
 					
 					consultationService.saveConsultation(consultation, consDAO);
 					
