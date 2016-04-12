@@ -28,7 +28,7 @@ public class HBConsultation implements ConsultationDAO{
 	
 	@Override
 	public void save(Consultation cons) {
-		manager.persist(cons);
+		manager.merge(cons);
 	}
 
 	@Override
@@ -93,7 +93,6 @@ public class HBConsultation implements ConsultationDAO{
 	public List<Consultation> getConsultationByProfessional(Professional professional) {
 		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.professional = :professional");
 		query.setParameter("professional", professional);
-//		query.setParameter("role", professional.getRole());
 		List<Consultation> cons = new ArrayList<Consultation>();
 		try{
 			cons = query.getResultList();
@@ -129,6 +128,13 @@ public class HBConsultation implements ConsultationDAO{
 		Query query = (Query) manager.createQuery("SELECT cons.rating FROM Consultation cons WHERE cons.id = :id");
 		query.setParameter("id", idConsultation);
 		return (Rating) query.getSingleResult();
+	}
+
+	@Override
+	public void registerConsultation(Consultation cons) {
+		Consultation oldCons = manager.find(Consultation.class, cons.getId());
+		oldCons.setState(ConsultationState.RD);
+		update(oldCons);
 	}
 
 

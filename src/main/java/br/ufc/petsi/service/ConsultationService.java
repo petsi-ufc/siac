@@ -25,11 +25,15 @@ import com.google.gson.GsonBuilder;
 
 @Named
 public class ConsultationService {
-
-	public void registerConsultation(Consultation con, ConsultationDAO consDAO){
+	
+	public void saveConsultation(Consultation con, ConsultationDAO consDAO){
 		consDAO.save(con);
 	}
 
+	public void registerConsultation(Consultation con, ConsultationDAO consDAO){
+		consDAO.registerConsultation(con);
+	}
+	
 	public String getConsultationsByPatient(Patient patient, ConsultationDAO consDAO, ReserveDAO reserveDAO){
 		String json;
 		Gson gson = new Gson();
@@ -121,12 +125,10 @@ public class ConsultationService {
 		return json;
 	}
 	
-	
 	public Consultation getConsultationsByIdC(long id, ConsultationDAO consDAO){
 		Consultation c = consDAO.getConsultationById(id);		
 		return c;
 	}
-	
 	
 	public void updateConsultation(Consultation consultation, ConsultationDAO consDAO){
 		consDAO.update(consultation);
@@ -135,7 +137,6 @@ public class ConsultationService {
 	public void cancelConsultationById(long id, ConsultationDAO consDAO){
 		consDAO.cancelConsultationById(id);
 	}
-	
 	
 	public String getRatingByConsultation(Consultation consultation, ConsultationDAO consultationDAO){
 		String json = "";
@@ -166,7 +167,6 @@ public class ConsultationService {
 		return "{'msg':Consulta cancelada com sucesso}";
 	}
 	
-	
 	public String reserveConsultation(Patient patient, Consultation consultation, ReserveDAO reserveDAO){
 		
 		Reserve reserve = new Reserve();
@@ -179,7 +179,6 @@ public class ConsultationService {
 
 		return "{'msg':Consulta reservada com sucesso}";
 	}
-	
 	
 	public String cancelReserve(Reserve reserve, ReserveDAO reserveDAO){
 		reserve.setActive(false);

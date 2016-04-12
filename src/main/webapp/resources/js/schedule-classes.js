@@ -108,6 +108,20 @@ var ScheduleDay = function(){
 		this.listSchedules.push(sch);
 	}
 	
+	/*
+	 * Função utilizada para saber se um horário pode ser
+	 * removido ou nao na tela de cadastrar horários.
+	 * 
+	 * Caso esse dia contenha algum horário com id != null
+	 * Então esse horário está cadastrado no banco, e não pode 
+	 * ser removido na tela de cadastro.
+	 */
+	self.isSheduleDayRegistered = function(){
+		return this.listSchedules.some(function(element){
+			return (element.getId() ? true : false)
+		});
+	}
+	
 	self.showListSchedules = function(){
 		this.listSchedules.forEach(function(element, index, listSchedules){
 			console.log(JSON.stringify(element));
@@ -120,6 +134,12 @@ var ScheduleDay = function(){
 	
 	self.getListSchedules = function(){
 		return this.listSchedules;
+	}
+	
+	self.removeScheduleTimeById = function(id){
+		this.listSchedules = this.listSchedules.fitler(function(element){
+			return (!(element == id))
+		});
 	}
 	
 	ScheduleDay.prototype.toJSON = function(){
@@ -176,11 +196,19 @@ var ScheduleManager = function(){
 		for(var i = 0; i < mapUpdated.size; i++){
 			
 			date = keys.next().value;
-		
+			
+			var schDay = mapScheduleDay.get(date);
+			
 			if(mapScheduleDay.has(date)){
 				updatedMapSchedule.set(date, mapScheduleDay.get(date));
 			}
 		}
+		mapScheduleDay.forEach(function(sch, key){
+			if(sch.isSheduleDayRegistered()){
+				updatedMapSchedule.set(key, sch);
+			}
+		});
+		
 		mapScheduleDay = updatedMapSchedule;
 	}
 	
@@ -198,6 +226,11 @@ var ScheduleManager = function(){
 	
 	self.getScheduleDay = function(date){
 		return mapScheduleDay.get(date);
+	}
+	
+	self.getScheduleDayAsJSON = function(date){
+		var list = [mapScheduleDay.get(date)];
+		return {"data":list};
 	}
 	
 	ScheduleManager.prototype.toJSON = function(){

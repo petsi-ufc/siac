@@ -63,7 +63,6 @@ public class ConsultationController {
 		return consultationService.getConsultationsByPatient(p, consDAO, reserveDAO);
 	}
 
-
 	@RequestMapping(value = "/cancelConsultation", method = RequestMethod.GET)
 	@ResponseBody
 	public void cancelConsultation(@RequestParam("id") long id){
@@ -75,13 +74,12 @@ public class ConsultationController {
 		Professional proTemp = (Professional) session.getAttribute("userLogged");
 //		System.out.println("JSON   :"+ json);
 //		SocialService serviceTemp = new SocialService();
+//		serviceTemp.setName("Odontologia");
 //		serviceTemp.setId(5l);
 //		Professional proTemp = new Professional();
 //		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
-//		proTemp.setCpf("27240450848");
+//		proTemp.setId(18);
 //		proTemp.setSocialService(serviceTemp);
-		
-	SocialService serv = proTemp.getSocialService();
 		
 		try{
 			JsonParser parser = new JsonParser();
@@ -99,9 +97,16 @@ public class ConsultationController {
 				for(int j = 0; j < timeSchedules.size(); j++){
 					Consultation consultation = new Consultation();
 					consultation.setProfessional(proTemp);
-					System.out.println("detached entity passed to persist:lalsalsalsalsaalssalasl");
-					consultation.setService(serv);
+					consultation.setService(proTemp.getSocialService());
 					consultation.setState(ConsultationState.FR);
+					
+					long consultationId = 0;
+					
+					if(!timeSchedules.get(j).getAsJsonObject().get("id").isJsonNull()){
+						consultationId = timeSchedules.get(j).getAsJsonObject().get("id").getAsLong();
+					}
+					
+					System.out.println("CONSULTATION ID: "+consultationId+" --- "+timeSchedules.get(j).getAsJsonObject().get("id"));
 					
 					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
 					JsonElement timeEnd = timeSchedules.get(j).getAsJsonObject().get("timeEnd");
@@ -116,7 +121,9 @@ public class ConsultationController {
 					consultation.setDateInit(dateInit);
 					consultation.setDateEnd(dateEnd);
 					
-					consultationService.registerConsultation(consultation, consDAO);
+					consultation.setId(consultationId);
+					
+					consultationService.saveConsultation(consultation, consDAO);
 					
 				}
 				
@@ -135,10 +142,10 @@ public class ConsultationController {
 //		Professional proTemp = new Professional();
 //		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
 //		proTemp.setCpf("27240450848");
+//		proTemp.setId(18);
 //		proTemp.setSocialService(serviceTemp);
-		Professional p = (Professional) session.getAttribute("userLogged");
-		System.out.println("Along: "+p.getId());
-		return consultationService.getConsultationsByProfessionalJSON(p, consDAO);
+		Professional proTemp = (Professional) session.getAttribute("userLogged");
+		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
 	@RequestMapping("/updateConsultationRating")
@@ -152,6 +159,10 @@ public class ConsultationController {
 		
 	}
 	
+	@RequestMapping("/registerConsultation")
+	public void registerConsultation(Consultation cons){
+		consultationService.registerConsultation(cons, consDAO);
+	}
 	
 	
 }

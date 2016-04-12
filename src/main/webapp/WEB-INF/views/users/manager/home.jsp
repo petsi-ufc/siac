@@ -30,7 +30,7 @@
 						Relatórios</a></li>
 				<li class="nav-divider"></li>
 				<li class="action"><a class="link-action" id="1">Gerenciar
-						Profissionais</a></li>
+						Profissionais</a></li> 
 				<li class="nav-divider"></li>
 				<li class="action"><a class="link-action" id="2">Gerenciar
 						Serviços</a></li>
