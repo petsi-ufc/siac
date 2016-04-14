@@ -29,23 +29,23 @@ public class AuthenticationController {
 	@RequestMapping("/authentication/success")
 	public ModelAndView success(@RequestParam(value = "error", required = false) String error, HttpSession session) {
 		ModelAndView mv = new ModelAndView("redirect:/");
-
-		if(error != null)
-			mv.addObject("error", "Login e/ou senha inválidos");
-		try{
-			User user = (User)this.getUserLogged(session);
-			
-			if(user.getRole().equals(Constants.ROLE_PROFESSIONAL))
-				mv.setViewName("redirect:/professional");
-			else if(user.getRole().equals(Constants.ROLE_ADMIN))
-				mv.setViewName("redirect:/manager");
-			else
-				mv.setViewName("redirect:/patient");
-		}
-		catch(NullPointerException e)
-		{
-			System.out.println("Error: " + e);
-		} 
+		mv.setViewName("redirect:/professional");
+//		if(error != null)
+//			mv.addObject("error", "Login e/ou senha inválidos");
+//		try{
+//			User user = (User)this.getUserLogged(session);
+//			
+//			if(user.getRole().equals(Constants.ROLE_PROFESSIONAL))
+//				mv.setViewName("redirect:/professional");
+//			else if(user.getRole().equals(Constants.ROLE_ADMIN))
+//				mv.setViewName("redirect:/manager");
+//			else
+//				mv.setViewName("redirect:/patient");
+//		}
+//		catch(NullPointerException e)
+//		{
+//			System.out.println("Error: " + e);
+//		} 
 		return mv;
 	}
 	

@@ -71,15 +71,15 @@ public class ConsultationController {
 	
 	@RequestMapping("/saveConsultation")
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
-		Professional proTemp = (Professional) session.getAttribute("userLogged");
-//		System.out.println("JSON   :"+ json);
-//		SocialService serviceTemp = new SocialService();
-//		serviceTemp.setName("Odontologia");
-//		serviceTemp.setId(5l);
-//		Professional proTemp = new Professional();
-//		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
-//		proTemp.setId(18);
-//		proTemp.setSocialService(serviceTemp);
+//		Professional proTemp = (Professional) session.getAttribute("userLogged");
+		System.out.println("JSON   :"+ json);
+		SocialService serviceTemp = new SocialService();
+		serviceTemp.setName("Odontologia");
+		serviceTemp.setId(5l);
+		Professional proTemp = new Professional();
+		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
+		proTemp.setId(18);
+		proTemp.setSocialService(serviceTemp);
 		
 		try{
 			JsonParser parser = new JsonParser();
@@ -137,14 +137,15 @@ public class ConsultationController {
 	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
 	public String getConsultationsByProfessionalJSON(HttpSession session){
-//		SocialService serviceTemp = new SocialService();
-//		serviceTemp.setId(5l);
-//		Professional proTemp = new Professional();
-//		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
-//		proTemp.setCpf("27240450848");
-//		proTemp.setId(18);
-//		proTemp.setSocialService(serviceTemp);
-		Professional proTemp = (Professional) session.getAttribute("userLogged");
+		SocialService serviceTemp = new SocialService();
+		serviceTemp.setId(5l);
+		Professional proTemp = new Professional();
+		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
+		proTemp.setCpf("27240450848");
+		proTemp.setId(18);
+		proTemp.setSocialService(serviceTemp);
+//		Professional p = (Professional) session.getAttribute("userLogged");
+
 		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
@@ -160,9 +161,12 @@ public class ConsultationController {
 	}
 	
 	@RequestMapping("/registerConsultation")
-	public void registerConsultation(Consultation cons){
-		consultationService.registerConsultation(cons, consDAO);
+	@ResponseBody
+	public String registerConsultation(Consultation cons){
+		Consultation consOld = consDAO.getConsultationById(cons.getId());
+		return consultationService.registerConsultation(cons, consDAO);
 	}
+	
 	
 	
 }

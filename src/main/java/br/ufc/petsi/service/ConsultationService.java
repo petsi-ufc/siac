@@ -18,6 +18,7 @@ import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.Reserve;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.util.ConsultationExclusionStrategy;
+import br.ufc.petsi.util.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,8 +31,25 @@ public class ConsultationService {
 		consDAO.save(con);
 	}
 
-	public void registerConsultation(Consultation con, ConsultationDAO consDAO){
+	public String registerConsultation(Consultation con, ConsultationDAO consDAO){
+		Consultation oldConsultation = consDAO.getConsultationById(con.getId());
+		Gson gson = new Gson();
+		Response res = new Response();
+		if(oldConsultation.getPatient() == null){
+			res.setCode(Response.ERROR);
+			res.setMessage("Ops, não é possível registrar uma consulta quando a mesma não possui nenhum paciente!");
+			return gson.toJson(res);
+		}
+		Date today = new Date();
+		if(today.before(oldConsultation.getDateEnd())){
+			res.setCode(Response.ERROR);
+			res.setMessage("Ops, não é possível registrar uma consulta que ainda não aconteceu!");
+			return gson.toJson(res);
+		}
 		consDAO.registerConsultation(con);
+		res.setCode(Response.SUCCESS);
+		res.setMessage("Consulta registrada com sucesso!");
+		return gson.toJson(res);
 	}
 	
 	public String getConsultationsByPatient(Patient patient, ConsultationDAO consDAO, ReserveDAO reserveDAO){

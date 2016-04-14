@@ -91,7 +91,7 @@ public class HBConsultation implements ConsultationDAO{
 
 	@Override
 	public List<Consultation> getConsultationByProfessional(Professional professional) {
-		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.professional = :professional");
+		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.professional = :professional ORDER BY cons.dateInit DESC");
 		query.setParameter("professional", professional);
 		List<Consultation> cons = new ArrayList<Consultation>();
 		try{

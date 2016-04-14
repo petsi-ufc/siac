@@ -255,8 +255,8 @@ function fillMyConsultationTable(tbodyId, scheduleList){
 		}
 		tdata += '<td><button type="button" value='+sday.getId()+' class="action-info-consultation btn btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span></button></td>';
 		tdata += '<td>'+
-			'<button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar Horário <span class="glyphicon glyphicon-remove-circle"></span></button>'+
-			'<button type="button" value='+sday.getId()+' class="btn btn btn-success action-register-consultation" '+disabled+' ">Registrar Consulta <span class="glyphicon glyphicon-ok"></span></button>'+
+		'<button type="button" value='+sday.getId()+' class="btn btn btn-success action-register-consultation" '+disabled+' ">Registrar Consulta <span class="glyphicon glyphicon-ok"></span></button>'+
+			'<button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar Horário <span class="glyphicon glyphicon-remove-circle"></span></button>'
 			+'</td>';
 			
 		row.append(tdata);
@@ -264,14 +264,30 @@ function fillMyConsultationTable(tbodyId, scheduleList){
 		
 	});
 	
-	$(".action-cancel-consultation").click(function(){
+	$(".action-cancel-consultation").off("click").click(function(){
 		var scheduleId = $(this).attr("value"); 
 		var modalCancel = $("#modal-cancel-consultation");
 		modalCancel.find("#btn-cancel-consultation").attr("value", scheduleId);
 		modalCancel.modal("show");
 	});
 	
-	$(".action-info-consultation").click(function(){
+	$(".action-register-consultation").off("click").click(function(){
+		var scheduleId = $(this).attr("value"); 
+		
+		
+		ajaxCall("/siac/registerConsultation", {"id": scheduleId}, function(response){
+			if(response.code == RESPONSE_SUCCESS)
+				alertMessage(response.message, null, ALERT_SUCCESS);
+			else
+				alertMessage(response.message, null, ALERT_ERROR);
+				
+		}, function(a,b){
+			console.log(a+" "+b);
+			alertMessage("Não foi possível registar a consulta!", null, ALERT_ERROR);
+		});
+	});
+	
+	$(".action-info-consultation").off("click").click(function(){
 		var scheduleId = $(this).attr("value");
 		var res = scheduleList.filter(function(scheduleDay){
 			if(scheduleDay.getId() == scheduleId)
@@ -292,13 +308,16 @@ function onBtnCancelConsultationClick(){
 		modalCancel.modal("hide");
 		var scheduleId = $(this).attr("value"); 
 		ajaxCallNoJSON("/siac/cancelConsultation", {"id":scheduleId}, function(){
+			var cancelButton = $(".action-cancel-consultation[value="+scheduleId+"]");
+			cancelButton.addClass("disabled");
+			cancelButton.siblings(".action-register-consultation").addClass("disabled");
 			alertMessage("Consulta cancelada com sucesso!", null, ALERT_SUCCESS);
-			$(".action-cancel-consultation[value="+scheduleId+"]").addClass("disabled");
 		}, function(){
 			alertMessage("Ops, não foi possível cancelar essa consulta", null, ALERT_ERROR);
 		});
 	});
 }
+
 
 function onCalendarDayCLicked(date){
 	//Iniciando os dois times picker iniciais
