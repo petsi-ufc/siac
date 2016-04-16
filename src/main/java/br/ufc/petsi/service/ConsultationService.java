@@ -1,6 +1,7 @@
 package br.ufc.petsi.service;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -22,13 +23,79 @@ import br.ufc.petsi.util.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
 @Named
 public class ConsultationService {
 	
-	public void saveConsultation(Consultation con, ConsultationDAO consDAO){
-		consDAO.save(con);
+	public String saveConsultation(Professional proTemp, String json, ConsultationDAO consDAO){
+		Gson gson = new Gson();
+		Response response = new Response();
+		try{
+			JsonParser parser = new JsonParser();
+			JsonObject jObject = parser.parse(json).getAsJsonObject(); 
+			JsonArray data = jObject.getAsJsonArray("data");
+			
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			
+			for(int i = 0; i < data.size(); i++){
+				JsonObject timeSchedule = data.get(i).getAsJsonObject();
+				
+				String date = timeSchedule.get("date").getAsString();
+				JsonArray timeSchedules = timeSchedule.getAsJsonArray("schedules");
+				
+				for(int j = 0; j < timeSchedules.size(); j++){
+					Consultation consultation = new Consultation();
+					consultation.setProfessional(proTemp);
+					consultation.setService(proTemp.getSocialService());
+					consultation.setState(ConsultationState.FR);
+					
+					long consultationId = 0;
+					
+					if(!timeSchedules.get(j).getAsJsonObject().get("id").isJsonNull()){
+						consultationId = timeSchedules.get(j).getAsJsonObject().get("id").getAsLong();
+					}
+					
+					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
+					JsonElement timeEnd = timeSchedules.get(j).getAsJsonObject().get("timeEnd");
+					
+					String sDateInit = date+" "+timeInit.getAsString();
+					String sDateEnd = date+" "+timeEnd.getAsString();
+					
+					
+					Date dateInit = format.parse(sDateInit);
+					Date dateEnd = format.parse(sDateEnd);
+					
+					if(dateInit.after(dateEnd)){
+						response.setCode(Response.ERROR);
+						response.setMessage("Ops, existe uma consulta com horário de inicio superior ao de fim");
+						return gson.toJson(response);
+					}
+					
+					consultation.setDateInit(dateInit);
+					consultation.setDateEnd(dateEnd);
+					
+					consultation.setId(consultationId);
+					
+					consDAO.save(consultation);
+				}
+				
+			}
+		}catch(Exception e){
+			System.out.println("Erro ao transformar o JSON: "+e);
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível cadastrar a(s) consulta(s)");
+			return gson.toJson(response);
+		}
+		
+		response.setCode(Response.SUCCESS);
+		response.setMessage("Consulta(s) cadastrada(s) com sucesso");
+		return gson.toJson(response);
+		
 	}
 
 	public String registerConsultation(Consultation con, ConsultationDAO consDAO){

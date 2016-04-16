@@ -9,13 +9,22 @@ var ScheduleTime = function(){
 	this.timeInit = moment();
 	this.timeEnd = moment();
 	var id = null;
-	var state = "---";
-	var rating = "---";
-	var comment = "Nenhum comentário cadastrado!"
-	
+	var state;
+	var rating;
+	var comment;
+	var patient;
+		
 	self.__construct = function(hourInit, minuteInit, hourEnd, minuteEnd){
 		self.setTimeInit(hourInit, minuteInit);
 		self.setTimeEnd(hourEnd, minuteEnd);
+	}
+	
+	self.setPatient = function(patient){
+		self.patient = patient;
+	}
+	
+	self.getPatient = function(){
+		return self.patient;
 	}
 	
 	self.getComment = function(){
@@ -88,12 +97,14 @@ var ScheduleDay = function(){
 		return self.date;
 	}
 	
-	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id){
+	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient){
 		var sch = new ScheduleTime();
 		
 		state = state ? state : "Sem Estado"; 
 		
 		rating = rating ? rating : "Sem Nota";
+		
+		patient = patient ? patient : {"name" : "---", "email": null};
 		
 		comment = comment ? comment : "Sem comentário cadastrádo!";
 	
@@ -103,6 +114,7 @@ var ScheduleDay = function(){
 		sch.setState(state);
 		sch.setComment(comment);
 		sch.setId(id);
+		sch.setPatient(patient);
 		
 		sch.__construct(hourInit, minuteInit, hourEnd, minuteEnd);
 		this.listSchedules.push(sch);
@@ -160,14 +172,15 @@ var ScheduleManager = function(){
 	 * Adiciona um novo horário na data passada por parametro.
 	 * Se a data não estive no mapa um novo ScheduleDay é criado.
 	 */ 
-	self.addNewScheduleTime = function(date, hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id){
+	self.addNewScheduleTime = function(date, hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient){
+		
 		var scheduleDay = mapScheduleDay.get(date);
 		if(scheduleDay){
-			scheduleDay.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id);
+			scheduleDay.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient);
 		}else{
 			var sch = new ScheduleDay();
 			sch.setDate(date);
-			sch.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id);
+			sch.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient);
 			self.addScheduleDay(date, sch);
 		}
 	}

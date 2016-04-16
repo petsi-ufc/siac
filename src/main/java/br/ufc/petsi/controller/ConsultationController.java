@@ -25,6 +25,7 @@ import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.service.ConsultationService;
 import br.ufc.petsi.service.RatingService;
+import br.ufc.petsi.util.Response;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -70,9 +71,10 @@ public class ConsultationController {
 	}
 	
 	@RequestMapping("/saveConsultation")
+	@ResponseBody
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
 //		Professional proTemp = (Professional) session.getAttribute("userLogged");
-		System.out.println("JSON   :"+ json);
+		
 		SocialService serviceTemp = new SocialService();
 		serviceTemp.setName("Odontologia");
 		serviceTemp.setId(5l);
@@ -81,57 +83,7 @@ public class ConsultationController {
 		proTemp.setId(18);
 		proTemp.setSocialService(serviceTemp);
 		
-		try{
-			JsonParser parser = new JsonParser();
-			JsonObject jObject = parser.parse(json).getAsJsonObject(); 
-			JsonArray data = jObject.getAsJsonArray("data");
-			
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			
-			for(int i = 0; i < data.size(); i++){
-				JsonObject timeSchedule = data.get(i).getAsJsonObject();
-				
-				String date = timeSchedule.get("date").getAsString();
-				JsonArray timeSchedules = timeSchedule.getAsJsonArray("schedules");
-				
-				for(int j = 0; j < timeSchedules.size(); j++){
-					Consultation consultation = new Consultation();
-					consultation.setProfessional(proTemp);
-					consultation.setService(proTemp.getSocialService());
-					consultation.setState(ConsultationState.FR);
-					
-					long consultationId = 0;
-					
-					if(!timeSchedules.get(j).getAsJsonObject().get("id").isJsonNull()){
-						consultationId = timeSchedules.get(j).getAsJsonObject().get("id").getAsLong();
-					}
-					
-					System.out.println("CONSULTATION ID: "+consultationId+" --- "+timeSchedules.get(j).getAsJsonObject().get("id"));
-					
-					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
-					JsonElement timeEnd = timeSchedules.get(j).getAsJsonObject().get("timeEnd");
-					
-					String sDateInit = date+" "+timeInit.getAsString();
-					String sDateEnd = date+" "+timeEnd.getAsString();
-					
-					
-					Date dateInit = format.parse(sDateInit);
-					Date dateEnd = format.parse(sDateEnd);
-					
-					consultation.setDateInit(dateInit);
-					consultation.setDateEnd(dateEnd);
-					
-					consultation.setId(consultationId);
-					
-					consultationService.saveConsultation(consultation, consDAO);
-					
-				}
-				
-			}
-		}catch(Exception e){
-			System.out.println("Erro ao transformar o JSON: "+e);
-		}
-		return "home_professional";
+		return consultationService.saveConsultation(proTemp, json, consDAO);
 	}
 	
 	@RequestMapping("/getConsutationsByProfessionalJSON")
@@ -144,7 +96,7 @@ public class ConsultationController {
 		proTemp.setCpf("27240450848");
 		proTemp.setId(18);
 		proTemp.setSocialService(serviceTemp);
-//		Professional p = (Professional) session.getAttribute("userLogged");
+//		Professional proTemp = (Professional) session.getAttribute("userLogged");
 
 		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
@@ -163,7 +115,6 @@ public class ConsultationController {
 	@RequestMapping("/registerConsultation")
 	@ResponseBody
 	public String registerConsultation(Consultation cons){
-		Consultation consOld = consDAO.getConsultationById(cons.getId());
 		return consultationService.registerConsultation(cons, consDAO);
 	}
 	

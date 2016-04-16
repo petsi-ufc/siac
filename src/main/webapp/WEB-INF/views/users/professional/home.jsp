@@ -10,7 +10,7 @@
 
 		<div id="modal-schedules-description" class="modal fade" tabindex="-1"
 			role="dialog">
-			<div class="modal-dialog">
+			<div class="modal-admin">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
@@ -22,18 +22,22 @@
 						</h4>
 					</div>
 					<div class="modal-body">
-						<table class="table table-bordered table-hover">
-							<thead>
-								<tr>
-									<th>Hora Início</th>
-									<th>Hora Fim</th>
-									<th>Estado</th>
-									<th>Nota</th>
-								</tr>
-							</thead>
-							<tbody id="tbody-schedules-description">
-							</tbody>
-						</table>
+						<div id="container-details-consultation">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>Hora Início</th>
+										<th>Hora Fim</th>
+										<th>Estado</th>
+										<th>Paciente</th>
+										<th>Horário</th>
+									</tr>
+								</thead>
+								<tbody id="tbody-schedules-description">
+									<!-- Preenchida dinamicamente -->
+								</tbody>
+							</table>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
@@ -56,8 +60,8 @@
 				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
 				<li class="nav-divider"></li>
 				<li class="service-item" id="1"><a>Cadastrar Agenda</a></li>
-				<li class="nav-divider"></li>
-				<li class="service-item" id="2"><a>Minhas Consultas</a></li>
+				<!--<li class="nav-divider"></li>
+				<li class="service-item" id="2"><a>Minhas Consultas</a></li> -->
 			</ul>
 		</div>
 	</div>
@@ -68,59 +72,69 @@
 			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 		</div>
 
-		<h2 id="my-calendar">Meu calendário</h2>
+		<div id="calendar-container">
+			<h2 id="my-calendar">Meu calendário</h2>
+			<div id="container-goto-date">
+				<div class="input-group">
+					<input id="input-goto-date" type="date" class="form-control"
+						placeholder="Ir para data..."> <span
+						class="input-group-btn">
+						<button class="btn btn-default" id="btn-goto-date" type="button">Ir!</button>
+					</span>
+				</div>
+			</div>
+			<div id="calendar_professional" class="calendar"></div>
 
-		<div id="calendar_professional" class="calendar"></div>
+			<div id="calendar-legend">
+				<h3>Legenda de Consultas</h3>
+				<table id="table-legend">
+					<tbody id="tbody-legend">
+						<tr>
+							<td>
+								<div class='legend-color color-black'></div>
+							</td>
+							<td>
+								<h4>Grupo de Consultas</h4>
+							</td>
 
-		<div id="calendar-legend">
-			<h3>Legenda de Consultas</h3>
-			<table id="table-legend">
-				<tbody id="tbody-legend">
-					<tr>
-						<td>
-							<div class='legend-color color-black'></div>
-						</td>
-						<td>
-							<h4>Grupo de Consultas</h4>
-						</td>
+							<td>
+								<div class='legend-color color-green'></div>
+							</td>
+							<td>
+								<h4>Disponível</h4>
+							</td>
 
-						<td>
-							<div class='legend-color color-green'></div>
-						</td>
-						<td>
-							<h4>Disponível</h4>
-						</td>
+							<td>
+								<div class='legend-color color-blue'></div>
+							</td>
+							<td>
+								<h4>Agendada</h4>
+							</td>
 
-						<td>
-							<div class='legend-color color-blue'></div>
-						</td>
-						<td>
-							<h4>Agendada</h4>
-						</td>
+							<td>
+								<div class='legend-color color-grey'></div>
+							</td>
+							<td>
+								<h4>Realizada</h4>
+							</td>
 
-						<td>
-							<div class='legend-color color-grey'></div>
-						</td>
-						<td>
-							<h4>Realizada</h4>
-						</td>
+							<td>
+								<div class='legend-color color-yellow'></div>
+							</td>
+							<td>
+								<h4>Reservada</h4>
+							</td>
 
-						<td>
-							<div class='legend-color color-yellow'></div>
-						</td>
-						<td>
-							<h4>Reservada</h4>
-						</td>
-
-						<td>
-							<div class='legend-color color-red'></div>
-						</td>
-						<td>
-							<h4>Cancelada</h4>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+							<td>
+								<div class='legend-color color-red'></div>
+							</td>
+							<td>
+								<h4>Cancelada</h4>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
 		<div class="panel panel-primary margin-right hidden"
@@ -293,7 +307,7 @@
 
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Informações da Consulta</h3>
+							<h3 class="panel-title">Gerador de Horários</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -381,7 +395,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary"
-						id="btn-confirm-schedules" data-dismiss="modal">
+						id="btn-confirm-schedules">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
