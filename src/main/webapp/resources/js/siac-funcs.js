@@ -3,6 +3,9 @@
  *	Todas as principais funcionalidades javascript do siac. 
  */
 
+var RESPONSE_ERROR = 500;
+var RESPONSE_SUCCESS = 200;
+
 //Função que fax uma chamada ajax contendo a url e os parametros devidos.
 //O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
 function ajaxCall(_url, params, func){
