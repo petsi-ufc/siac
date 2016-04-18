@@ -45,7 +45,7 @@ colors.set("FR", {text: "Disponível", hex : "#32CD32", css: "color-green"});
 colors.set("RD", {text: "Realizada", hex : "grey", css: "color-grey"});
 colors.set("RV", {text: "Reservada", hex : "#D9D919", css: "color-yellow"});
 colors.set("CD", {text: "Cancelada", hex : "#FF0000", css: "color-red"});
-colors.set("GS", {hex : "#000000"});
+colors.set("GS", {hex : "#FA6900"});
 
 
 
@@ -159,7 +159,11 @@ function initCalendarProfessional(){
 		businessHours: true,
 	    
 		editable: false,
-
+		
+		eventRender: function (event, element) {
+		    element.find(".fc-time").text(event.id);  
+		},
+		
 	    eventClick: function(date, jsEvent, view, event) {
 	    	var date = moment(new Date(date.start._d)).format("DD/MM/YYYY");
 	    	var modal = $("#modal-schedules-description");
@@ -174,15 +178,17 @@ function fillDescriptionSchedulesTable(scheduleDay){
 	
 	if(!scheduleDay) return;
 	
-	fillDetailsConsultationTable("tbody-schedules-description", scheduleDay.getListSchedules());
+	fillDetailsConsultationTable("tbody-schedules-description", scheduleDay.getDate(), scheduleDay.getListSchedules());
 
 }
 
 
 
-function fillDetailsConsultationTable(tbodyId, scheduleList){
+function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 	var tbody = $("#"+tbodyId);
 	tbody.find("tr").remove();
+	
+	var dateSchedule = getFormatedDate(date);
 	
 	scheduleList.forEach(function(sday){
 		var row = $("<tr>");
@@ -192,8 +198,18 @@ function fillDetailsConsultationTable(tbodyId, scheduleList){
 		tdata += "<td>"+sday.getTimeEnd()+"</td>";
 		tdata += "<td>"+colors.get(sday.getState()).text+"</td>";
 		
+		var arrayTime = sday.getTimeEnd().split(":");
+		var hourEnd = arrayTime[0];
+		var minuteEnd = arrayTime[1];
+		
+		var today = new Date();
+		
+		dateSchedule.setHours(hourEnd);
+		dateSchedule.setMinutes(minuteEnd);
+		
 		var disabled = "";
-		if((sday.getState() == "RD") || (sday.getState() == "CD")){
+		console.log((dateSchedule.getTime() < today.getTime())+" - "+dateSchedule.getTime()+" < "+today.getTime());
+		if((sday.getState() == "RD") || (sday.getState() == "CD") || dateSchedule.getTime() < today.getTime()){
 			disabled = "disabled='disabled'";
 		}
 		tdata += '<td>'+sday.getPatient().name+'</td>';
@@ -229,18 +245,6 @@ function fillDetailsConsultationTable(tbodyId, scheduleList){
 		});
 	});
 	
-	$(".action-info-consultation").off("click").click(function(){
-		var scheduleId = $(this).attr("value");
-		var res = scheduleList.filter(function(scheduleDay){
-			if(scheduleDay.getId() == scheduleId)
-				return scheduleDay;
-		});
-		var schDay = res[0];
-		$("#modal-consultation-details").modal("show");
-		$("#textarea-comment").text(schDay.getComment());
-		$("#div-rating").html(schDay.getRating());
-	});
-	
 	
 }
 
@@ -249,12 +253,18 @@ function onBtnCancelConsultationClick(){
 		var modalCancel = $("#modal-cancel-consultation");
 		modalCancel.modal("hide");
 		var scheduleId = $(this).attr("value"); 
-		ajaxCallNoJSON("/siac/cancelConsultation", {"id":scheduleId}, function(){
-			var cancelButton = $(".action-cancel-consultation[value="+scheduleId+"]");
-			cancelButton.addClass("disabled");
-			cancelButton.siblings(".action-register-consultation").addClass("disabled");
-			alertMessage("Consulta cancelada com sucesso!", null, ALERT_SUCCESS);
-			getProfessionalConsultations(fillProfessionalCalendar);
+		ajaxCall("/siac/cancelConsultation", {"id":scheduleId}, function(response){
+			var type = ALERT_ERROR;
+			if(response.code == RESPONSE_SUCCESS){
+				var cancelButton = $(".action-cancel-consultation[value="+scheduleId+"]");
+				cancelButton.addClass("disabled");
+				cancelButton.siblings(".action-register-consultation").addClass("disabled");
+				
+				alertMessage(response.message, null, ALERT_SUCCESS);
+				getProfessionalConsultations(fillProfessionalCalendar);
+				
+			}else
+				alertMessage(response.message, null, ALERT_ERROR);
 		}, function(){
 			alertMessage("Ops, não foi possível cancelar essa consulta", null, ALERT_ERROR);
 		});
@@ -295,6 +305,8 @@ function showModalSchedules(date, action){
 	initTimepicker("tmp-init-1", null);
 	initTimepicker("tmp-end-1", null);
 	
+	$("#tmp-init-1").removeAttr("disabled");
+	$("#tmp-end-1").removeAttr("disabled");
 	
 	today = moment(date,"DD/MM/YYYY").format("dddd");
 	
@@ -486,10 +498,20 @@ function addSchedules(obj){
 	timeEndId = "tmp-end-"+getNewEndTimePickerId();
 	
 	var timepickerInit = newRow.find(".timepicker-init"); 
-	var timepickerEnd = newRow.find(".timepicker-end"); 
+	var timepickerEnd = newRow.find(".timepicker-end");
 	
-	timepickerInit.find("input").attr("id", timeInitId);
-	timepickerEnd.find("input").attr("id", timeEndId);
+	var inputInit = timepickerInit.find("input"); 
+	var inputEnd = timepickerEnd.find("input");
+	if(!obj.disabled){
+		inputInit.removeAttr("disabled");
+		inputEnd.removeAttr("disabled");
+	}else{
+		inputInit.attr("disabled", obj.disabled);
+		inputEnd.attr("disabled", obj.disabled);
+	}
+	
+	inputInit.attr("id", timeInitId);
+	inputEnd.attr("id", timeEndId);
 	
 	//Adicionando a classe que informa que o timepicker é clonado.
 	newRow.addClass("cloned-timepicker");
@@ -499,6 +521,10 @@ function addSchedules(obj){
 	button.addClass("remove-schedule");
 	button.removeClass("btn-primary");
 	button.addClass("btn-danger");
+	
+	if(obj.disabled){
+		button.attr("disabled","disabled");
+	}
 	
 	var span = button.find("span");
 	span.removeClass("glyphicon-plus");
@@ -582,7 +608,7 @@ function onButtonRepeatScheduleDayClick(){
 
 function setFrequenciDays(){
 	var inputFrequenci = mapVars.get(INPUT_FREQUENCI);
-	val = inputFrequenci.val();
+	val = inputFrequenci.val() <= 48 ? inputFrequenci.val() : 48;
 	if(val == "")
 		return;
 	
@@ -732,6 +758,7 @@ function fillTableDays(mapDays){
 			disableRemoveDay = "disabled"
 		}
 		
+		
 		var trashData = '<td><button value="'+key+'" class="'+disableRemoveDay+' btn btn-danger action-day remove-day"><i class="glyphicon glyphicon-trash"></button></i></td>';
 		
 		data += '<td>'+
@@ -797,18 +824,45 @@ function setEditModalSchedule(date, listSchedules){
 	
 	if(listSchedules && listSchedules.length){
 		showModalSchedules(date, EDIT_ACTION);
-		$("#row-add-schedules").find(".row-schedule-id").attr("id",listSchedules[0].getId());
+		
+		var rowsTimepickers =  $("#row-add-schedules").find(".row-schedule-id");
+		rowsTimepickers.attr("id",listSchedules[0].getId());
+		
 		initTimepicker("tmp-init-1", listSchedules[0].getTimeInit());
 		initTimepicker("tmp-end-1", listSchedules[0].getTimeEnd());
 		
+		if(isOldSchedule(date, listSchedules[0])){
+			$("#tmp-init-1").attr("disabled","disabled");
+			$("#tmp-end-1").attr("disabled","disabled");
+		}
+		
 		for(var i = 1; i < listSchedules.length; i++){
 			var tempSch = listSchedules[i];
-			addSchedules({"timeInit":tempSch.getTimeInit(), "timeEnd":tempSch.getTimeEnd(), "idSchedule":tempSch.getId()});
+			var disabled = "";
+			if(isOldSchedule(date, tempSch)){
+				disabled = "disabled";
+			}
+			addSchedules({"timeInit":tempSch.getTimeInit(), "timeEnd":tempSch.getTimeEnd(), "idSchedule":tempSch.getId(), "disabled" : disabled});
 		}
 	}else{
 		console.log("O dia "+key+" não possui horários cadastrados!");
 	}
 }
+
+function isOldSchedule(date, sch){
+	var timeNow = new Date();
+	var timeSchedule = getFormatedDate(date);
+	var arrayTime = sch.getTimeInit().split(":");
+	var hour = arrayTime[0];
+	var minute = arrayTime[1];
+	
+	timeSchedule.setHours(hour);
+	timeSchedule.setMinutes(minute);
+	
+	return ( timeSchedule.getTime() < timeNow.getTime() )
+	
+}
+
 
 function getProfessionalConsultations(func){
 	ajaxCall("/siac/getConsutationsByProfessionalJSON", null, function(json){
@@ -863,14 +917,16 @@ function fillProfessionalCalendar(){
 		
 		
 		var event = new Object();
-		event.id = 10;
+		event.id = sch.getListSchedules().length;
 		
 		if(sch.getListSchedules().length > 1){
 			event.color = colors.get("GS").hex;
+			event.title = "Consultas";
 		}else{
 			event.color = colors.get(sch.getListSchedules()[0].getState()).hex;
+			event.title = "Consulta";
 		} 
-		event.title = "Consulta";
+		
 		event.start = eventDate;
 		event.allDay = false;
 		events.push(event);
@@ -882,13 +938,6 @@ function fillProfessionalCalendar(){
 	
 }
 
-function getFormatedDate(stringDate){
-	//Formatando a data para YYYY-DD-MM
-	//sch.getDate() retorna a data em DD/MM/YYYY
-	//Logo é feito um split que é usado para criar um objeto date no formato abaixo.
-	var from = stringDate.split("/");
-	return new Date(from[2], from[1] - 1, from[0]);
-}
 
 /*
  Essa função renderiza um evento no calendário passado por parâmetro.

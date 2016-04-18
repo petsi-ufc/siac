@@ -149,7 +149,7 @@ var ScheduleDay = function(){
 	}
 	
 	self.removeScheduleTimeById = function(id){
-		this.listSchedules = this.listSchedules.fitler(function(element){
+		this.listSchedules = this.listSchedules.filter(function(element){
 			return (!(element == id))
 		});
 	}
