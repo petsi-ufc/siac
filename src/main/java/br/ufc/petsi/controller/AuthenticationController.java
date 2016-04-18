@@ -29,8 +29,6 @@ public class AuthenticationController {
 	@RequestMapping("/authentication/success")
 	public ModelAndView success(@RequestParam(value = "error", required = false) String error, HttpSession session) {
 		ModelAndView mv = new ModelAndView("redirect:/");
-		mv.setViewName("redirect:/professional");
-		
 		if(error != null)
 			mv.addObject("error", "Login e/ou senha inválidos");
 		try{

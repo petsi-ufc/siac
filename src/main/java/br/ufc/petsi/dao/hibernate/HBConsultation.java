@@ -103,16 +103,9 @@ public class HBConsultation implements ConsultationDAO{
 	}
 
 	@Override
-	public void cancelConsultationById(long id) {
-		try{
-			Consultation con = manager.find(Consultation.class, id);
-			if(con != null){
-				con.setState(ConsultationState.CD);
-				this.update(con);
-			}
-		}catch(Exception e){
-			System.out.println("Error at cancelConsultation by id: "+e);
-		}
+	public void cancelConsultation(Consultation con) {
+		con.setState(ConsultationState.CD);
+		this.update(con);
 	}
 	
 	@Override

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
@@ -66,8 +67,8 @@ public class ConsultationController {
 
 	@RequestMapping(value = "/cancelConsultation", method = RequestMethod.GET)
 	@ResponseBody
-	public void cancelConsultation(@RequestParam("id") long id){
-		consultationService.cancelConsultationById(id, consDAO);
+	public String cancelConsultation(@RequestParam("id") long id){
+		return consultationService.cancelConsultationById(id, consDAO);
 	}
 	
 	@RequestMapping("/saveConsultation")
@@ -82,7 +83,6 @@ public class ConsultationController {
 		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
 		proTemp.setId(18);
 		proTemp.setSocialService(serviceTemp);
-		
 		return consultationService.saveConsultation(proTemp, json, consDAO);
 	}
 	
@@ -104,7 +104,7 @@ public class ConsultationController {
 	@RequestMapping("/updateConsultationRating")
 	@ResponseBody
 	public void updateConsultation(Consultation c){		
-		Consultation consultation = consultationService.getConsultationsByIdC(c.getId(), consDAO);
+		Consultation consultation = consultationService.getConsultationsById(c.getId(), consDAO);
 		consultation.setRating(c.getRating());
 		System.out.println(c.getRating().getComment());
 		consultationService.updateConsultation(consultation, consDAO);

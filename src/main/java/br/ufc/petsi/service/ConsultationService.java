@@ -210,7 +210,7 @@ public class ConsultationService {
 		return json;
 	}
 	
-	public Consultation getConsultationsByIdC(long id, ConsultationDAO consDAO){
+	public Consultation getConsultationsById(long id, ConsultationDAO consDAO){
 		Consultation c = consDAO.getConsultationById(id);		
 		return c;
 	}
@@ -219,8 +219,35 @@ public class ConsultationService {
 		consDAO.update(consultation);
 	}
 	
-	public void cancelConsultationById(long id, ConsultationDAO consDAO){
-		consDAO.cancelConsultationById(id);
+	public String cancelConsultationById(long id, ConsultationDAO consDAO){
+		
+		Gson gson = new Gson();
+		Response response = new Response();
+		
+		try{
+			Consultation oldCons = getConsultationsById(id, consDAO);
+			if(oldCons != null){
+				Date today = new Date();
+				
+				if(oldCons.getDateEnd().before(today)){
+					response.setCode(Response.ERROR);
+					response.setMessage("Ops, não é possível cancelar consultas anteriores a data de hoje");
+				}else{
+					consDAO.cancelConsultation(oldCons);
+					response.setCode(Response.SUCCESS);
+					response.setMessage("Consulta cancelada com sucesso!");
+				}
+				return gson.toJson(response);
+			}
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível cancelar a consulta pois a mesma não existe");
+			return gson.toJson(response);
+		}catch(Exception e){
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível cancelar a consulta");
+			System.out.println("Error at cancelConsultation by id: "+e);
+			return gson.toJson(response);
+		}
 	}
 	
 	public String getRatingByConsultation(Consultation consultation, ConsultationDAO consultationDAO){

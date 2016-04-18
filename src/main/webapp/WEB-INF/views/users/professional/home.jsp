@@ -155,8 +155,7 @@
 					</div>
 
 					<div class="form-group">
-						<input id="input-frequenci" type="number" min="0"
-							class="form-control" placeholder="Quantidade de Semanas">
+						<input id="input-frequenci" type="number" min="0" class="form-control" placeholder="Quantidade de Semanas">
 					</div>
 				</form>
 				<div id="div-days-week" class="margin-top">
@@ -257,35 +256,6 @@
 						<button id="btn-cancel-consultation" class="btn btn-danger"
 							value="" name="id">Sim, cancelar</button>
 						<button class="btn btn-default" value="">Voltar</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="modal fade" role="dialog" id="modal-consultation-details">
-			<div class="modal-dialog modal-sm">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4>Detalhes da Consulta</h4>
-					</div>
-					<div class="modal-body">
-						<form>
-							<div class="form-group">
-								<label>Comentário:</label>
-								<textarea id="textarea-comment" class="form-control"
-									disabled="disabled" rows="3">Sem comentários cadastrados!</textarea>
-							</div>
-							<div class="form-group">
-								<label>Nota:</label>
-								<div id="div-rating"></div>
-							</div>
-						</form>
-
-						<button class="btn btn-default" data-dismiss="modal">Voltar</button>
 					</div>
 				</div>
 			</div>
