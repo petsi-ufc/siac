@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufc.petsi.dao.ConsultationDAO;
@@ -31,6 +32,10 @@ import com.google.gson.JsonParser;
 
 @Named
 public class ConsultationService {
+	
+	@Inject
+	private EmailService emailService;
+	
 	
 	public String saveConsultation(Professional proTemp, String json, ConsultationDAO consDAO){
 		Gson gson = new Gson();
@@ -219,10 +224,14 @@ public class ConsultationService {
 		consDAO.update(consultation);
 	}
 	
-	public String cancelConsultationById(long id, ConsultationDAO consDAO){
+	public String cancelConsultationById(long id, String message, ConsultationDAO consDAO){
 		
 		Gson gson = new Gson();
 		Response response = new Response();
+		
+		if( message == "" || message == null){
+			message = "Informanmos que sua consulta foi cancelada!";
+		}
 		
 		try{
 			Consultation oldCons = getConsultationsById(id, consDAO);
@@ -236,6 +245,10 @@ public class ConsultationService {
 					consDAO.cancelConsultation(oldCons);
 					response.setCode(Response.SUCCESS);
 					response.setMessage("Consulta cancelada com sucesso!");
+					
+					if(oldCons.getPatient() != null){
+						emailService.sendConsultationCancelEmail(oldCons, message);
+					}
 				}
 				return gson.toJson(response);
 			}

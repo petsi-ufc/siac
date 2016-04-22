@@ -1,9 +1,5 @@
 package br.ufc.petsi.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -13,25 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
-import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.SocialService;
-import br.ufc.petsi.model.User;
 import br.ufc.petsi.service.ConsultationService;
-import br.ufc.petsi.service.RatingService;
-import br.ufc.petsi.util.Response;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 
 @Controller
@@ -46,6 +31,8 @@ public class ConsultationController {
 	
 	@Inject
 	private ReserveDAO reserveDAO;
+	
+	
 	
 	@RequestMapping("/getConsultationsBySocialService")
 	@ResponseBody
@@ -67,37 +54,21 @@ public class ConsultationController {
 
 	@RequestMapping(value = "/cancelConsultation", method = RequestMethod.GET)
 	@ResponseBody
-	public String cancelConsultation(@RequestParam("id") long id){
-		return consultationService.cancelConsultationById(id, consDAO);
+	public String cancelConsultation(@RequestParam("id") long id, @RequestParam("message") String message){
+		return consultationService.cancelConsultationById(id, message, consDAO);
 	}
 	
 	@RequestMapping("/saveConsultation")
 	@ResponseBody
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
-//		Professional proTemp = (Professional) session.getAttribute("userLogged");
-		
-		SocialService serviceTemp = new SocialService();
-		serviceTemp.setName("Odontologia");
-		serviceTemp.setId(5l);
-		Professional proTemp = new Professional();
-		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
-		proTemp.setId(18);
-		proTemp.setSocialService(serviceTemp);
+		Professional proTemp = (Professional) session.getAttribute("userLogged");
 		return consultationService.saveConsultation(proTemp, json, consDAO);
 	}
 	
 	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
 	public String getConsultationsByProfessionalJSON(HttpSession session){
-		SocialService serviceTemp = new SocialService();
-		serviceTemp.setId(5l);
-		Professional proTemp = new Professional();
-		proTemp.setRole(Constants.ROLE_PROFESSIONAL);
-		proTemp.setCpf("27240450848");
-		proTemp.setId(18);
-		proTemp.setSocialService(serviceTemp);
-//		Professional proTemp = (Professional) session.getAttribute("userLogged");
-
+		Professional proTemp = (Professional) session.getAttribute("userLogged");
 		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
@@ -108,8 +79,6 @@ public class ConsultationController {
 		consultation.setRating(c.getRating());
 		System.out.println(c.getRating().getComment());
 		consultationService.updateConsultation(consultation, consDAO);
-		
-		
 	}
 	
 	@RequestMapping("/registerConsultation")
