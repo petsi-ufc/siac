@@ -241,7 +241,7 @@
 		</div>
 
 		<div class="modal fade" role="dialog" id="modal-cancel-consultation">
-			<div class="modal-dialog modal-sm">
+			<div class="modal-dialog modal-md">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
@@ -250,12 +250,17 @@
 						</button>
 						<h4>Cancelar Horário</h4>
 					</div>
-					<div class="modal-title">Deseja realmente cancelar esse
-						horário?</div>
+					<div class="modal-title"><h4>Deseja realmente cancelar esse
+						horário?</h4></div>
 					<div class="modal-body">
-						<button id="btn-cancel-consultation" class="btn btn-danger"
-							value="" name="id">Sim, cancelar</button>
-						<button class="btn btn-default" value="">Voltar</button>
+						<div>
+							<textarea placeholder="Escrever email..." id="text-area-email" class="no-resize form-control" rows="3"></textarea>
+						</div>
+						<div class="margin-top">
+							<button id="btn-cancel-consultation" class="btn btn-danger"
+								value="" name="id">Sim, cancelar</button>
+							<button class="btn btn-default" data-dismiss="modal">Voltar</button>
+						</div>
 					</div>
 				</div>
 			</div>

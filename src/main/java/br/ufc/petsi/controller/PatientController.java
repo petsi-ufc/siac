@@ -78,7 +78,7 @@ public class PatientController {
 	@RequestMapping("/scheduleConsultation")
 	@ResponseBody
 	public void scheduleConsultation(Consultation consultation, HttpSession session){
-		Consultation consultation2 = this.consService.getConsultationsByIdC(consultation.getId(), this.consDAO);
+		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
 
 		Patient patient = (Patient) session.getAttribute("userLogged");
 
@@ -102,7 +102,7 @@ public class PatientController {
 	@ResponseBody
 	public String cancelConsultation(Consultation consultation){
 
-		Consultation consultation2 = this.consService.getConsultationsByIdC(consultation.getId(), consDAO);
+		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), consDAO);
 
 		return consService.cancelConsultation(consultation2, consDAO, reserveDAO);
 	}
@@ -111,7 +111,7 @@ public class PatientController {
 	@ResponseBody
 	public String reserveConsultation(Consultation consultation, HttpSession session){
 
-		Consultation consultation2 = this.consService.getConsultationsByIdC(consultation.getId(), this.consDAO);
+		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
 		
 		Patient patient = (Patient) session.getAttribute("userLogged");
 

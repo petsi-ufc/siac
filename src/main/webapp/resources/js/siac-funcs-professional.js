@@ -253,7 +253,8 @@ function onBtnCancelConsultationClick(){
 		var modalCancel = $("#modal-cancel-consultation");
 		modalCancel.modal("hide");
 		var scheduleId = $(this).attr("value"); 
-		ajaxCall("/siac/cancelConsultation", {"id":scheduleId}, function(response){
+		var message = $("#text-area-email").val();
+		ajaxCall("/siac/cancelConsultation", {"id":scheduleId, "message": message}, function(response){
 			var type = ALERT_ERROR;
 			if(response.code == RESPONSE_SUCCESS){
 				var cancelButton = $(".action-cancel-consultation[value="+scheduleId+"]");

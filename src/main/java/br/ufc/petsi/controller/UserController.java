@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.model.User;
 
