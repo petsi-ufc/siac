@@ -163,13 +163,31 @@ function initCalendarProfessional(){
 		eventRender: function (event, element) {
 		    element.find(".fc-time").text(event.id);  
 		},
-		
+		dayClick: function(mDate, jsEvent, view){
+			var date = mDate.format("DD/MM/YYYY");
+			var scheduleDay = scheduleManager.getSchedulesMap().get(date);
+			
+			if(scheduleDay){
+				var listSchedules = scheduleDay.getListSchedules();
+				if(listSchedules.length > 0){
+					setEditModalSchedule(date, listSchedules);
+				}
+			}else{
+				//Só pode cadastrar horários se o dia for maior que o dia de hoje.
+				today = moment();
+				if(!mDate.isBefore(today)){
+					showModalSchedules(date, REGISTER_ACTION);
+				}else{
+					alertMessage("Ops, não é possível cadastrar horários de um dia que já passou", null, ALERT_ERROR);
+				}
+			}
+		},
 	    eventClick: function(date, jsEvent, view, event) {
 	    	var date = moment(new Date(date.start._d)).format("DD/MM/YYYY");
 	    	var modal = $("#modal-schedules-description");
 	    	fillDescriptionSchedulesTable(scheduleManager.getScheduleDay(date));
 	    	modal.modal("show");
-	    }  		         		         
+	    } 		         		         
 	});
 	
 }
