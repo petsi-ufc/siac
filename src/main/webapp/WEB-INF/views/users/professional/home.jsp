@@ -254,6 +254,7 @@
 						horário?</h4></div>
 					<div class="modal-body">
 						<div>
+							<label>Enviar email para o paciente:</label>
 							<textarea placeholder="Escrever email..." id="text-area-email" class="no-resize form-control" rows="3"></textarea>
 						</div>
 						<div class="margin-top">

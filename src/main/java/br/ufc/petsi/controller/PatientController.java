@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.RatingDAO;
 import br.ufc.petsi.dao.ReserveDAO;
@@ -44,7 +45,7 @@ public class PatientController {
 	@ResponseBody
 	public String getConsultationsByPatient(HttpSession session){
 
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.getConsultationsByPatient(patient, consDAO, reserveDAO);
 	}
@@ -53,7 +54,7 @@ public class PatientController {
 	@ResponseBody
 	public String getConsultationById(long id, HttpSession session){
 
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.getConsultationsById(patient, id, consDAO);
 	}
@@ -69,7 +70,7 @@ public class PatientController {
 	@ResponseBody
 	public String getConsultationsBySocialService(SocialService socialService, HttpSession session){
 
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return this.consService.getConsultationsBySocialService(patient, socialService, consDAO);
 
@@ -80,7 +81,7 @@ public class PatientController {
 	public void scheduleConsultation(Consultation consultation, HttpSession session){
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
 
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		consultation2.setPatient(patient);
 		
@@ -113,7 +114,7 @@ public class PatientController {
 
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
 		
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.reserveConsultation(patient, consultation2, reserveDAO);
 

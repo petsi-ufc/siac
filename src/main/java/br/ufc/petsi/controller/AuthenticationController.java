@@ -82,8 +82,8 @@ public class AuthenticationController {
 		if(session.getAttribute("userLogged") == null)
 		{
 			User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
-			session.setAttribute("userLogged", user);
+			session.setAttribute(Constants.USER_SESSION, user);
 		}
-		return (User) session.getAttribute("userLogged");
+		return (User) session.getAttribute(Constants.USER_SESSION);
 	}
 }

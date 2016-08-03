@@ -38,7 +38,7 @@ public class ConsultationController {
 	@RequestMapping("/getConsultationsBySocialService")
 	@ResponseBody
 	public String getConsultationsBySocialServices(Long socialServiceId, HttpSession session){
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 		SocialService socialService = new SocialService();
 		socialService.setId(socialServiceId);
 		
@@ -62,14 +62,14 @@ public class ConsultationController {
 	@RequestMapping("/saveConsultation")
 	@ResponseBody
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
-		Professional proTemp = (Professional) session.getAttribute("userLogged");
+		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
 		return consultationService.saveConsultation(proTemp, json, consDAO);
 	}
 	
 	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
 	public String getConsultationsByProfessionalJSON(HttpSession session){
-		Professional proTemp = (Professional) session.getAttribute("userLogged");
+		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
 		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
@@ -78,7 +78,6 @@ public class ConsultationController {
 	public void updateConsultation(Consultation c){		
 		Consultation consultation = consultationService.getConsultationsById(c.getId(), consDAO);
 		consultation.setRating(c.getRating());
-		System.out.println(c.getRating().getComment());
 		consultationService.updateConsultation(consultation, consDAO);
 	}
 	

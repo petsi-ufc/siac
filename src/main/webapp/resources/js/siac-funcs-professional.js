@@ -200,8 +200,6 @@ function fillDescriptionSchedulesTable(scheduleDay){
 
 }
 
-
-
 function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 	var tbody = $("#"+tbodyId);
 	tbody.find("tr").remove();
@@ -226,14 +224,19 @@ function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 		dateSchedule.setMinutes(minuteEnd);
 		
 		var disabled = "";
-		console.log((dateSchedule.getTime() < today.getTime())+" - "+dateSchedule.getTime()+" < "+today.getTime());
+		
 		if((sday.getState() == "RD") || (sday.getState() == "CD") || dateSchedule.getTime() < today.getTime()){
 			disabled = "disabled='disabled'";
 		}
-		tdata += '<td>'+sday.getPatient().name+'</td>';
+		
+		var patient = sday.getPatient();
+		patient = patient ? patient : {name: "Sem Paciente", email: null};
+		
+		tdata += '<td>'+patient.name+'</td>';
 		tdata += '<td>'+
 		'<button type="button" value='+sday.getId()+' class="btn btn btn-success action-register-consultation" '+disabled+' ">Registrar <span class="glyphicon glyphicon-ok"></span></button>'+
-			'<button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar <span class="glyphicon glyphicon-remove-circle"></span></button>'
+			'<button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar <span class="glyphicon glyphicon-remove-circle"></span></button>'+
+			'<button type="button" value='+sday.getId()+' class="btn btn btn-warning action-reschedule-consultation" '+disabled+' ">Reagendar <span class="glyphicon glyphicon-time"></span></button>'
 			+'</td>';
 			
 		row.append(tdata);
@@ -258,9 +261,12 @@ function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 				alertMessage(response.message, null, ALERT_ERROR);
 			
 		}, function(a,b){
-			console.log(a+" "+b);
 			alertMessage("Não foi possível registar a consulta!", null, ALERT_ERROR);
 		});
+	});
+	
+	$(".action-reschedule-consultation").off("click").click(function(){
+		
 	});
 	
 	
@@ -338,6 +344,7 @@ function showModalSchedules(date, action){
 		
 }
 
+
 function onButtonConfirmSchedulesClick(){
 	/*
 	 * Quando o profissional clicar para confirmar 
@@ -402,7 +409,6 @@ function onButtonConfirmSchedulesClick(){
 			updateScheduleManagerList();
 		}, function(){
 			alertMessage("Ops, não foi possível cadastrar o horário para o dia "+date+"");
-			console.log("Erro at register schedules!");
 		});
 		
 		modal.modal("hide");
@@ -451,8 +457,6 @@ function saveSchedules(timepickersId, date){
 		if(!isValidTimePickers(timeInit, timeEnd)){
 			$("#"+timepickersId[i].timePickInit).parents(".row-schedule-id").addClass("has-error");
 			$("#"+timepickersId[i].timePickEnd).parents(".row-schedule-id").addClass("has-error");
-			console.log("ID: "+timepickersId[i].timePickEnd);
-			console.log($("#"+timepickersId[i].timePickEnd).parent(".row-schedule-id"));
 			
 			return false;
 		}
@@ -460,7 +464,6 @@ function saveSchedules(timepickersId, date){
 		scheduleDay.addSchedule(timeInit["hour"], timeInit["minute"], timeEnd["hour"], timeEnd["minute"], null, null, null, scheduleId, null);
 		
 	}
-	console.log(JSON.stringify(scheduleDay));
 	scheduleManager.addScheduleDay(date, scheduleDay);
 	return true;
 }
@@ -475,9 +478,7 @@ function isValidTimePickers(objTimeInit, objTimeEnd){
 	var dateEnd = new Date();
 	dateEnd.setHours(objTimeEnd.hour);
 	dateEnd.setMinutes(objTimeEnd.minute);
-	console.log("Init "+dateInit.getHours()+":"+dateInit.getMinutes());
-	console.log("End "+dateEnd.getHours()+":"+dateEnd.getMinutes());
-	console.log(dateInit.getTime() > dateEnd.getTime());
+	
 	if( dateInit.getTime() >= dateEnd.getTime() )
 		return false;
 	return true;
@@ -503,7 +504,6 @@ function onButtonAddScheduleClick(){
 
 function addSchedules(obj){
 	
-	console.log(JSON.stringify(obj));
 	
 	var timeInit = obj.timeInit;
 	var timeEnd = obj.timeEnd;
@@ -576,7 +576,7 @@ function getNewEndTimePickerId(){
 	idTimepickersEnd = idTimepickersEnd+1;
 	return idTimepickersEnd;
 }
-null
+
 function onSelectScheduleRepeatClick(){
 	var select = mapVars.get(SELECT_REPEAT_SCHEDULE_ID);
 	select.change(function(){
