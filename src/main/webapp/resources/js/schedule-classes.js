@@ -104,8 +104,6 @@ var ScheduleDay = function(){
 		
 		rating = rating ? rating : "Sem Nota";
 		
-		patient = patient ? patient : {"name" : "---", "email": null};
-		
 		comment = comment ? comment : "Sem comentário cadastrádo!";
 	
 		id = id ? id : null;

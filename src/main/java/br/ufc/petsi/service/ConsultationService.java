@@ -179,13 +179,11 @@ public class ConsultationService {
 		}
 		
 		json = gson.toJson(events);
-
 		return json;
 	}
 	
 	public String getConsultationsByProfessionalJSON(Professional professional, ConsultationDAO consDAO){
 		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
-		
 		String json = "";
 		try{
 			Gson gson = new GsonBuilder().setExclusionStrategies(new ConsultationExclusionStrategy()).serializeNulls().create();
@@ -194,7 +192,6 @@ public class ConsultationService {
 		}catch(Exception e){
 			System.out.println("Error at getConsultationByProfessional Service: ");
 		}
-		System.out.println(json);
 		return json;
 	}
 	

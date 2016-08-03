@@ -390,6 +390,11 @@ body html{
 	overflow-y: scroll;
 }
 
+#container-details-consultation button{
+	margin-right: 3px;
+	margin-left: 3px;
+}
+
 .modal-admin{
 	max-width: 70%;
 	left: 15%;

@@ -38,5 +38,7 @@ public class Constants {
 	
 	public static final String ROLE_PATIENT = "ROLE_PATIENT";
 	
+	public static final String USER_SESSION = "userLogged";
+	
 		
 }
