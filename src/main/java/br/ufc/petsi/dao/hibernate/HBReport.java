@@ -59,31 +59,31 @@ public class HBReport implements ReportDAO{
 		query.setParameter("serviceId", serviceId);
 		serviceReport.setService((String)query.getSingleResult());
 				
-		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.dateInit BETWEEN '2013-01-01' and '2015-11-11'");
+		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.dateInit BETWEEN :dateBegin and :dateEnd");
 		query.setParameter("professionalId", professionalId);
-		//query.setParameter("dateBegin", dateBegin);
-		//query.setParameter("dateEnd", dateEnd);
+		query.setParameter("dateBegin", dateBegin);
+		query.setParameter("dateEnd", dateEnd);
 		Long total = (Long) query.getSingleResult();
 		serviceReport.setTotal(total.intValue());
 		
-		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'RD' and c.dateInit BETWEEN '2013-01-01' and '2015-11-11'");
+		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'RD' and c.dateInit BETWEEN :dateBegin and :dateEnd");
 		query.setParameter("professionalId", professionalId);
-		//query.setParameter("dateBegin", dateBegin);
-		//query.setParameter("dateEnd", dateEnd);
+		query.setParameter("dateBegin", dateBegin);
+		query.setParameter("dateEnd", dateEnd);
 		Long scheduled = (Long) query.getSingleResult();
 		serviceReport.setScheduled(scheduled.intValue());
 		
-		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'UD' and c.dateInit BETWEEN '2013-01-01' and '2015-11-11'");
+		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'UD' and c.dateInit BETWEEN :dateBegin and :dateEnd");
 		query.setParameter("professionalId", professionalId);
-		//query.setParameter("dateBegin", dateBegin);
-		//query.setParameter("dateEnd", dateEnd);
+		query.setParameter("dateBegin", dateBegin);
+		query.setParameter("dateEnd", dateEnd);
 		Long unscheduled = (Long) query.getSingleResult();
 		serviceReport.setUnscheduled(unscheduled.intValue());
 		
-		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'CD' and c.dateInit BETWEEN '2013-01-01' and '2015-11-11'");
+		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'CD' and c.dateInit BETWEEN :dateBegin and :dateEnd");
 		query.setParameter("professionalId", professionalId);
-		//query.setParameter("dateBegin", dateBegin);
-		//query.setParameter("dateEnd", dateEnd);
+		query.setParameter("dateBegin", dateBegin);
+		query.setParameter("dateEnd", dateEnd);
 		Long canceled = (Long) query.getSingleResult();
 		serviceReport.setCanceled(canceled.intValue());
 		
@@ -92,12 +92,12 @@ public class HBReport implements ReportDAO{
 				+ "sum(case when c.state = 'UD' then 1 else 0 end), "
 				+ "sum(case when c.state = 'CD' then 1 else 0 end), "
 				+ "count(*) FROM Consultation c "
-				+ "WHERE c.professional.id = :professionalId and c.dateInit BETWEEN '2014/09/09' and '2015/09/09' "
+				+ "WHERE c.professional.id = :professionalId and c.dateInit BETWEEN :dateBegin and :dateEnd "
 				+ "GROUP BY to_char(c.dateEnd, 'YYYY/MM'),  to_char(c.dateInit, 'MM/YYYY') "
 				+ "ORDER BY to_char(c.dateEnd, 'YYYY/MM')");
 		query2.setParameter("professionalId", professionalId);
-		//query.setParameter("dateBegin", dateBegin);
-		//query.setParameter("dateEnd", dateEnd);
+		query2.setParameter("dateBegin", dateBegin);
+		query2.setParameter("dateEnd", dateEnd);
 		
 		List<Object[]> list = query2.getResultList();
 
