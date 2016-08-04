@@ -3,6 +3,9 @@
  *	Todas as principais funcionalidades javascript do siac. 
  */
 
+var RESPONSE_ERROR = 500;
+var RESPONSE_SUCCESS = 200;
+
 //Função que fax uma chamada ajax contendo a url e os parametros devidos.
 //O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
 function ajaxCall(_url, params, func){
@@ -20,6 +23,15 @@ function ajaxCallNoJSON(_url, params, func, fail){
 		}
 	).done(func).fail(fail);
 }
+
+function getFormatedDate(stringDate){
+	//Formatando a data para YYYY-DD-MM
+	//sch.getDate() retorna a data em DD/MM/YYYY
+	//Logo é feito um split que é usado para criar um objeto date no formato abaixo.
+	var from = stringDate.split("/");
+	return new Date(from[2], from[1] - 1, from[0]);
+}
+
 
 const ALERT_SUCCESS = "alert-success";
 const ALERT_ERROR = "alert-danger";

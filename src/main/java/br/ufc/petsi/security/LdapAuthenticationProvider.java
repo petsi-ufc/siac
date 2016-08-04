@@ -1,13 +1,8 @@
 package br.ufc.petsi.security;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,19 +11,15 @@ import org.springframework.security.core.AuthenticationException;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.UserDAO;
-import br.ufc.petsi.dao.hibernate.HBUserDAO;
-import br.ufc.petsi.dao.ldap.LdapUser;
-import br.ufc.petsi.model.Patient;
-import br.ufc.petsi.model.Role;
+import br.ufc.petsi.dao.UserLdapDAO;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.session.CurrentSession;
 
 @Named
-public class LdapAuthenticationProvider implements AuthenticationProvider, Serializable{
+public class LdapAuthenticationProvider implements AuthenticationProvider {
 
-	//@Inject
-	private LdapUser ldapDAO;
-	
+	@Inject
+	private UserLdapDAO ldapDAO;
 	@Inject
 	private UserDAO userDAO;
 	
@@ -43,6 +34,8 @@ public class LdapAuthenticationProvider implements AuthenticationProvider, Seria
 		
 		if( user == null )
 		{
+			if(!role.equals(Constants.ROLE_PATIENT))
+				throw new BadCredentialsException("Você não possui essa permissão!");
 			User u = (User)ldapDAO.getByCpf(name);
 			if( u != null )
 			{

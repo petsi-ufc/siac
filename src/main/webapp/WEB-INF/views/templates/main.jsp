@@ -8,10 +8,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css'/>">
-	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap.min.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/fullcalendar.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/datepicker.css'/>">
-	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-timepicker.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-timepicker.min.css'/>">
 	
 	<script type="text/javascript" src="<c:url value='/resources/js/jquery-2.1.3.min.js'/>"></script>

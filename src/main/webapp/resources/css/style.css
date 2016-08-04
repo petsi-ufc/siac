@@ -7,7 +7,7 @@ body html{
 #main-container{
 	position: absolute;
 	width:370px;
-	height:350px;
+	height:375px;
 	max-width: 370px;
 	max-height: 450px;
 	top:0;
@@ -43,6 +43,10 @@ body html{
 
 #main-container #container-content a{
 	font-size: 13px;
+}
+
+.fc-event{
+   box-shadow: 2px 2px 2px #706868;
 }
 
 #img-banner{
@@ -343,7 +347,7 @@ body html{
 }
 
 .color-black{
-	background-color: #000000;
+	background-color: #FA6900;
 }
 
 .td-schedule-state{
@@ -367,5 +371,45 @@ body html{
 	float: right;	
 }
 
-#textarea-comment { resize:none; }
+#days-buttons button{
+	min-width: 100px;
+}
 
+#panel-register-schedules{
+	min-height: 300px;
+}
+
+.no-resize { resize:none; }
+
+.action-register-consultation{
+	margin-right: 5px;
+}
+
+#container-details-consultation{
+	max-height: 500px !important;
+	overflow-y: scroll;
+}
+
+#container-details-consultation button{
+	margin-right: 3px;
+	margin-left: 3px;
+}
+
+.modal-admin{
+	max-width: 70%;
+	left: 15%;
+	margin-top: 20px;
+	margin-right: auto;
+	margin-left: auto; 
+}
+
+#container-goto-date{
+	margin-left: 15%;
+	margin-bottom: 10px;
+	max-width: 17%;
+}
+
+.has-error{
+	color : red !important;
+	border-color: red !important; 
+}

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.RatingDAO;
 import br.ufc.petsi.dao.ReserveDAO;
@@ -44,19 +45,16 @@ public class PatientController {
 	@ResponseBody
 	public String getConsultationsByPatient(HttpSession session){
 
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.getConsultationsByPatient(patient, consDAO, reserveDAO);
 	}
 
 	@RequestMapping("/getConsultationById")
 	@ResponseBody
-	public String getConsultationById(long id){
+	public String getConsultationById(long id, HttpSession session){
 
-		Patient patient = new Patient();
-		patient.setCpf("12345678900");
-		patient.setEmail("paciente@siac.com");
-		patient.setName("Paciente Coisa de Coisado");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.getConsultationsById(patient, id, consDAO);
 	}
@@ -70,12 +68,9 @@ public class PatientController {
 
 	@RequestMapping("/getConsultationBySocialService")
 	@ResponseBody
-	public String getConsultationsBySocialService(SocialService socialService){
+	public String getConsultationsBySocialService(SocialService socialService, HttpSession session){
 
-		Patient patient = new Patient();
-		patient.setCpf("12345678900");
-		patient.setEmail("paciente@siac.com");
-		patient.setName("Paciente Coisa de Coisado");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return this.consService.getConsultationsBySocialService(patient, socialService, consDAO);
 
@@ -83,20 +78,10 @@ public class PatientController {
 
 	@RequestMapping("/scheduleConsultation")
 	@ResponseBody
-	public void scheduleConsultation(Consultation consultation){
-		Consultation consultation2 = this.consService.getConsultationsByIdC(consultation.getId(), this.consDAO);
+	public void scheduleConsultation(Consultation consultation, HttpSession session){
+		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
 
-		/*Patient patient = new Patient();
-		patient.setCpf("05771147354");
-		patient.setEmail("pacientao@siac.com");
-		patient.setName("Pacientão Diferentão");*/
-		
-		
-		Patient patient = new Patient();
-		patient.setCpf("12345678900");
-		patient.setEmail("paciente@siac.com");
-		patient.setName("Paciente Coisa de Coisado");
-		
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		consultation2.setPatient(patient);
 		
@@ -118,21 +103,18 @@ public class PatientController {
 	@ResponseBody
 	public String cancelConsultation(Consultation consultation){
 
-		Consultation consultation2 = this.consService.getConsultationsByIdC(consultation.getId(), consDAO);
+		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), consDAO);
 
 		return consService.cancelConsultation(consultation2, consDAO, reserveDAO);
 	}
 
 	@RequestMapping("/reserveConsultation")
 	@ResponseBody
-	public String reserveConsultation(Consultation consultation){
+	public String reserveConsultation(Consultation consultation, HttpSession session){
 
-		Consultation consultation2 = this.consService.getConsultationsByIdC(consultation.getId(), this.consDAO);
-
-		Patient patient = new Patient();
-		patient.setCpf("12345678900");
-		patient.setEmail("paciente@siac.com");
-		patient.setName("Paciente Coisa de Coisado");
+		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
+		
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.reserveConsultation(patient, consultation2, reserveDAO);
 

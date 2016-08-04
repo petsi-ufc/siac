@@ -6,9 +6,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
-import org.springframework.stereotype.Component;
  
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.UserLdapDAO;
@@ -16,10 +16,11 @@ import br.ufc.petsi.mapper.UserAttributeMapper;
 import br.ufc.petsi.model.User;
 
 @Named
-@Component
 public class LdapUser implements UserLdapDAO {
 
-	//@Inject
+	@Inject
+	private LdapContextSource contextSource;
+	@Inject
 	private LdapTemplate ldapTemplate;
 	@Inject
 	private String base;

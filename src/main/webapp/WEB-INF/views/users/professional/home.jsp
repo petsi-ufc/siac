@@ -10,7 +10,7 @@
 
 		<div id="modal-schedules-description" class="modal fade" tabindex="-1"
 			role="dialog">
-			<div class="modal-dialog">
+			<div class="modal-admin">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
@@ -22,18 +22,22 @@
 						</h4>
 					</div>
 					<div class="modal-body">
-						<table class="table table-bordered table-hover">
-							<thead>
-								<tr>
-									<th>Hora Início</th>
-									<th>Hora Fim</th>
-									<th>Estado</th>
-									<th>Nota</th>
-								</tr>
-							</thead>
-							<tbody id="tbody-schedules-description">
-							</tbody>
-						</table>
+						<div id="container-details-consultation">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>Hora Início</th>
+										<th>Hora Fim</th>
+										<th>Estado</th>
+										<th>Paciente</th>
+										<th>Horário</th>
+									</tr>
+								</thead>
+								<tbody id="tbody-schedules-description">
+									<!-- Preenchida dinamicamente -->
+								</tbody>
+							</table>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
@@ -56,8 +60,8 @@
 				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
 				<li class="nav-divider"></li>
 				<li class="service-item" id="1"><a>Cadastrar Agenda</a></li>
-				<li class="nav-divider"></li>
-				<li class="service-item" id="2"><a>Minhas Consultas</a></li>
+				<!--<li class="nav-divider"></li>
+				<li class="service-item" id="2"><a>Minhas Consultas</a></li> -->
 			</ul>
 		</div>
 	</div>
@@ -68,59 +72,69 @@
 			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 		</div>
 
-		<h2 id="my-calendar">Meu calendário</h2>
+		<div id="calendar-container">
+			<h2 id="my-calendar">Meu calendário</h2>
+			<div id="container-goto-date">
+				<div class="input-group">
+					<input id="input-goto-date" type="date" class="form-control"
+						placeholder="Ir para data..."> <span
+						class="input-group-btn">
+						<button class="btn btn-default" id="btn-goto-date" type="button">Ir!</button>
+					</span>
+				</div>
+			</div>
+			<div id="calendar_professional" class="calendar"></div>
 
-		<div id="calendar_professional" class="calendar"></div>
+			<div id="calendar-legend">
+				<h3>Legenda de Consultas</h3>
+				<table id="table-legend">
+					<tbody id="tbody-legend">
+						<tr>
+							<td>
+								<div class='legend-color color-black'></div>
+							</td>
+							<td>
+								<h4>Grupo de Consultas</h4>
+							</td>
 
-		<div id="calendar-legend">
-			<h3>Legenda de Consultas</h3>
-			<table id="table-legend">
-				<tbody id="tbody-legend">
-					<tr>
-						<td>
-							<div class='legend-color color-black'></div>
-						</td>
-						<td>
-							<h4>Grupo de Consultas</h4>
-						</td>
+							<td>
+								<div class='legend-color color-green'></div>
+							</td>
+							<td>
+								<h4>Disponível</h4>
+							</td>
 
-						<td>
-							<div class='legend-color color-green'></div>
-						</td>
-						<td>
-							<h4>Disponível</h4>
-						</td>
+							<td>
+								<div class='legend-color color-blue'></div>
+							</td>
+							<td>
+								<h4>Agendada</h4>
+							</td>
 
-						<td>
-							<div class='legend-color color-blue'></div>
-						</td>
-						<td>
-							<h4>Agendada</h4>
-						</td>
+							<td>
+								<div class='legend-color color-grey'></div>
+							</td>
+							<td>
+								<h4>Realizada</h4>
+							</td>
 
-						<td>
-							<div class='legend-color color-grey'></div>
-						</td>
-						<td>
-							<h4>Realizada</h4>
-						</td>
+							<td>
+								<div class='legend-color color-yellow'></div>
+							</td>
+							<td>
+								<h4>Reservada</h4>
+							</td>
 
-						<td>
-							<div class='legend-color color-yellow'></div>
-						</td>
-						<td>
-							<h4>Reservada</h4>
-						</td>
-
-						<td>
-							<div class='legend-color color-red'></div>
-						</td>
-						<td>
-							<h4>Cancelada</h4>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+							<td>
+								<div class='legend-color color-red'></div>
+							</td>
+							<td>
+								<h4>Cancelada</h4>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
 		<div class="panel panel-primary margin-right hidden"
@@ -141,8 +155,7 @@
 					</div>
 
 					<div class="form-group">
-						<input id="input-frequenci" type="number" min="0"
-							class="form-control" placeholder="Quantidade de Semanas">
+						<input id="input-frequenci" type="number" min="0" class="form-control" placeholder="Quantidade de Semanas">
 					</div>
 				</form>
 				<div id="div-days-week" class="margin-top">
@@ -181,10 +194,6 @@
 							</table>
 						</div>
 					</div>
-					<button type="button" id="btn-register-schedules"
-						class="disabled btn btn-lg btn-primary">
-						Cadastrar <i class="glyphicon glyphicon-floppy-saved"></i>
-					</button>
 				</div>
 			</div>
 		</div>
@@ -232,7 +241,7 @@
 		</div>
 
 		<div class="modal fade" role="dialog" id="modal-cancel-consultation">
-			<div class="modal-dialog modal-sm">
+			<div class="modal-dialog modal-md">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
@@ -241,40 +250,18 @@
 						</button>
 						<h4>Cancelar Horário</h4>
 					</div>
-					<div class="modal-title">Deseja realmente cancelar esse
-						horário?</div>
+					<div class="modal-title"><h4>Deseja realmente cancelar esse
+						horário?</h4></div>
 					<div class="modal-body">
-						<button id="btn-cancel-consultation" class="btn btn-danger"
-							value="" name="id">Sim, cancelar</button>
-						<button class="btn btn-default" value="">Voltar</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="modal fade" role="dialog" id="modal-consultation-details">
-			<div class="modal-dialog modal-sm">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4>Detalhes da Consulta</h4>
-					</div>
-					<div class="modal-body">
-						<form>
-							<div class="form-group">
-								<label>Comentário:</label> 
-								<textarea id="textarea-comment" class="form-control" disabled="disabled" rows="3">Sem comentários cadastrados!</textarea>
-							</div>
-							<div class="form-group">
-								<label>Nota:</label> 
-								<div id="div-rating"></div>
-							</div>
-						</form>
-						
-						<button class="btn btn-default" data-dismiss="modal">Voltar</button>
+						<div>
+							<label>Enviar email para o paciente:</label>
+							<textarea placeholder="Escrever email..." id="text-area-email" class="no-resize form-control" rows="3"></textarea>
+						</div>
+						<div class="margin-top">
+							<button id="btn-cancel-consultation" class="btn btn-danger"
+								value="" name="id">Sim, cancelar</button>
+							<button class="btn btn-default" data-dismiss="modal">Voltar</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -296,7 +283,7 @@
 
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Informações da Consulta</h3>
+							<h3 class="panel-title">Gerador de Horários</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -344,37 +331,39 @@
 							<h3 class="panel-title">Horários</h3>
 						</div>
 						<div class="panel-body" id="panel-schedules">
-							<div class="row" id="row-add-schedules">
+							<div id="row-add-schedules">
+								<div class="row row-schedule-id">
 
-								<div class="col-md-1">
-									<h4>Início:</h4>
-								</div>
-								<div class="col-md-4">
-									<div
-										class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
-										<input id="tmp-init-1" type="text"
-											class="form-control input-small"> <span
-											class="input-group-addon"><i
-											class="glyphicon glyphicon-time"></i></span>
+									<div class="col-md-1">
+										<h4>Início:</h4>
 									</div>
-								</div>
+									<div class="col-md-4">
+										<div
+											class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
+											<input id="tmp-init-1" type="text"
+												class="form-control input-small"> <span
+												class="input-group-addon"><i
+												class="glyphicon glyphicon-time"></i></span>
+										</div>
+									</div>
 
-								<div class="col-md-1">
-									<h4>Fim:</h4>
-								</div>
-								<div class="col-md-4">
-									<div
-										class="timepicker-end input-group bootstrap-timepicker timepicker">
-										<input id="tmp-end-1" type="text"
-											class="form-control input-small"> <span
-											class="input-group-addon"><i
-											class="glyphicon glyphicon-time"></i></span>
+									<div class="col-md-1">
+										<h4>Fim:</h4>
 									</div>
-								</div>
-								<div class="col-md-2">
-									<button type="button" class="btn btn-primary add-schedule">
-										<span class="glyphicon glyphicon glyphicon-plus"></span>
-									</button>
+									<div class="col-md-4">
+										<div
+											class="timepicker-end input-group bootstrap-timepicker timepicker">
+											<input id="tmp-end-1" type="text"
+												class="form-control input-small"> <span
+												class="input-group-addon"><i
+												class="glyphicon glyphicon-time"></i></span>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<button type="button" class="btn btn-primary add-schedule">
+											<span class="glyphicon glyphicon glyphicon-plus"></span>
+										</button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -382,7 +371,9 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary"
-						id="btn-confirm-schedules" data-dismiss="modal">Confirmar</button>
+						id="btn-confirm-schedules">
+						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
+					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
 				</div>
 			</div>

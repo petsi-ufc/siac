@@ -1,8 +1,6 @@
 package br.ufc.petsi.service.impl;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.activation.DataSource;
 import javax.inject.Inject;
@@ -18,7 +16,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import br.ufc.petsi.model.Attachment;
+import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Email;
+import br.ufc.petsi.model.Patient;
+import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.service.EmailService;
 
 @Named
@@ -28,6 +29,24 @@ public class EmailServiceImpl implements EmailService
 	@Inject
 	private JavaMailSender mailSender;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	public void sendConsultationCancelEmail(Consultation cons, String message) {
+		final Email email = new Email();
+		email.setFrom("siac@quixada.ufc.br");
+		
+		Patient patient = cons.getPatient();
+		email.setTo(patient.getEmail());
+		
+		Professional prof = cons.getProfessional();
+		
+		email.setText("Sua consulta do dia "+cons.getDateInit()+" foi cancelada.\n"+message);
+		email.setSubject("SIAC - "+prof.getSocialService().getName());
+		try {
+			this.sendEmail(email);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public void sendEmail(final Email email) throws MessagingException 

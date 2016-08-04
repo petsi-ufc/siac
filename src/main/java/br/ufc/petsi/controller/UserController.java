@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.ufc.petsi.dao.UserDAO;
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.model.User;
 
@@ -28,12 +28,12 @@ public class UserController {
 	
 	public User getUserLogged(HttpSession session)
 	{
-		if(session.getAttribute("userLogged") == null)
+		if(session.getAttribute(Constants.USER_SESSION) == null)
 		{
 			User user = userDAO.getByCpf(SecurityContextHolder.getContext().getAuthentication().getName());
-			session.setAttribute("userLogged", user);
+			session.setAttribute(Constants.USER_SESSION, user);
 		}
-		return (User) session.getAttribute("userLogged");
+		return (User) session.getAttribute(Constants.USER_SESSION);
 	}
 	
 }
