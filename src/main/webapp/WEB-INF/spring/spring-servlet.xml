@@ -54,4 +54,9 @@ http://www.springframework.org/schema/jee http://www.springframework.org/schema/
 
 	<tx:annotation-driven />
 
+	<bean class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="location" value="WEB-INF/spring/jasper-views.xml" />
+		<property name="order" value="0" />
+	</bean>
+
 </beans>

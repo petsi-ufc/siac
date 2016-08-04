@@ -26,7 +26,7 @@ import br.ufc.petsi.session.CurrentSession;
 @Named
 public class LdapAuthenticationProvider implements AuthenticationProvider, Serializable{
 
-	@Inject
+	//@Inject
 	private LdapUser ldapDAO;
 	
 	@Inject

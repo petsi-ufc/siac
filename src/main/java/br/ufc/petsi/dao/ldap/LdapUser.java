@@ -19,7 +19,7 @@ import br.ufc.petsi.model.User;
 @Component
 public class LdapUser implements UserLdapDAO {
 
-	@Inject
+	//@Inject
 	private LdapTemplate ldapTemplate;
 	@Inject
 	private String base;
