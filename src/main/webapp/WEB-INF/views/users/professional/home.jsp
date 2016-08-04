@@ -54,7 +54,7 @@
 			src="<c:url value='/resources/images/user_avatar.png'/>">
 
 		<div id="box-services">
-			<h3>Serviços disponí­veis</h3>
+			<h3>Serviços<br> disponí­veis</h3>
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
 				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
@@ -94,42 +94,42 @@
 								<div class='legend-color color-black'></div>
 							</td>
 							<td>
-								<h4>Grupo de Consultas</h4>
+								<h5>Grupo de Consultas</h5>
 							</td>
 
 							<td>
 								<div class='legend-color color-green'></div>
 							</td>
 							<td>
-								<h4>Disponível</h4>
+								<h5>Disponível</h5>
 							</td>
 
 							<td>
 								<div class='legend-color color-blue'></div>
 							</td>
 							<td>
-								<h4>Agendada</h4>
+								<h5>Agendada</h5>
 							</td>
 
 							<td>
 								<div class='legend-color color-grey'></div>
 							</td>
 							<td>
-								<h4>Realizada</h4>
+								<h5>Realizada</h5>
 							</td>
 
 							<td>
 								<div class='legend-color color-yellow'></div>
 							</td>
 							<td>
-								<h4>Reservada</h4>
+								<h5>Reservada</h5>
 							</td>
 
 							<td>
 								<div class='legend-color color-red'></div>
 							</td>
 							<td>
-								<h4>Cancelada</h4>
+								<h5>Cancelada</h5>
 							</td>
 						</tr>
 					</tbody>
