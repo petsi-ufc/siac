@@ -245,8 +245,19 @@ function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 	});
 	
 	$(".action-cancel-consultation").off("click").click(function(){
-		var scheduleId = $(this).attr("value"); 
+		var scheduleId = $(this).attr("value");
+		
+		var schedule = scheduleManager.getScheduleTimeById(scheduleId);
+		console.log(schedule);
 		var modalCancel = $("#modal-cancel-consultation");
+		
+		var $divEmail= $("#div-send-email");
+		$divEmail.removeClass("hidden");
+		
+		if(!schedule.getPatient()){
+			$divEmail.addClass("hidden");
+		}
+		
 		modalCancel.find("#btn-cancel-consultation").attr("value", scheduleId);
 		modalCancel.modal("show");
 	});
@@ -397,7 +408,7 @@ function onButtonConfirmSchedulesClick(){
 		}
 		
 		var json = JSON.stringify(scheduleManager.getScheduleDayAsJSON(date));
-		var params = {"json" : json};
+		var params = {"consultation.dateEnd" : "9:40"};
 		
 		ajaxCall("/siac/saveConsultation", params, function(response){
 			var type = ALERT_SUCCESS;
@@ -407,7 +418,7 @@ function onButtonConfirmSchedulesClick(){
 			alertMessage(response.message, null, type);
 			//Atualizando a lista com os horários cadastrados.
 			updateScheduleManagerList();
-		}, function(){
+		}, function(e, a){
 			alertMessage("Ops, não foi possível cadastrar o horário para o dia "+date+"");
 		});
 		

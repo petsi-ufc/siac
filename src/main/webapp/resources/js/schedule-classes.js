@@ -146,6 +146,15 @@ var ScheduleDay = function(){
 		return this.listSchedules;
 	}
 	
+	self.getScheduleTimeById = function(id){
+		var result = null;
+		this.listSchedules.forEach(function(scheduleTime){
+			if(scheduleTime.getId() == id)
+				result = scheduleTime;
+		});
+		return result;
+	}
+	
 	self.removeScheduleTimeById = function(id){
 		this.listSchedules = this.listSchedules.filter(function(element){
 			return (!(element == id))
@@ -242,6 +251,16 @@ var ScheduleManager = function(){
 	self.getScheduleDayAsJSON = function(date){
 		var list = [mapScheduleDay.get(date)];
 		return {"data":list};
+	}
+	
+	self.getScheduleTimeById = function(idSchedule){
+		var schedule = {patient: null};
+		mapScheduleDay.forEach(function(scheduleDay){
+			var schTemp = scheduleDay.getScheduleTimeById(idSchedule);
+			if(schTemp)
+				schedule = schTemp;	
+		});
+		return schedule;
 	}
 	
 	ScheduleManager.prototype.toJSON = function(){

@@ -1,5 +1,7 @@
 package br.ufc.petsi.controller;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -59,7 +61,7 @@ public class ConsultationController {
 		return consultationService.cancelConsultationById(id, message, consDAO);
 	}
 	
-	@RequestMapping("/saveConsultation")
+	@RequestMapping(value = "/saveConsultation", method = RequestMethod.POST)
 	@ResponseBody
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
 		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
