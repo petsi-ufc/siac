@@ -69,5 +69,15 @@
     <bean id="base" class="java.lang.String">
         <constructor-arg ref="ldapOu" />
     </bean>
+    <!-- 
+    <bean id="ldapUser" class="br.ufc.petsi.dao.ldap.LdapUser">
+    	<property name="ldapTemplate" ref="ldapTemplate" />
+    	<property name="base" ref="base" />
+    </bean>
+    -->
+    <bean class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="location" value="WEB-INF/spring/jasper-views.xml" />
+		<property name="order" value="0" />
+	</bean>
 
 </beans>
