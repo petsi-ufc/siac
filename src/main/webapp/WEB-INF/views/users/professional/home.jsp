@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <jsp:useBean id="user" class="br.ufc.petsi.model.Professional"
 	scope="session" />
@@ -145,7 +146,7 @@
 			<div class="panel-body">
 				<form class="form-inline">
 					<div class="form-group">
-						<h4>Frequência:</h4>
+						<h5>Frequência:</h5>
 					</div>
 					<div class="form-group">
 						<select class="form-control" id="select-repeat-schedule">
@@ -155,7 +156,8 @@
 					</div>
 
 					<div class="form-group">
-						<input id="input-frequenci" type="number" min="0" class="form-control" placeholder="Quantidade de Semanas">
+						<input id="input-frequenci" type="number" min="0"
+							class="form-control" placeholder="Quantidade de Semanas">
 					</div>
 				</form>
 				<div id="div-days-week" class="margin-top">
@@ -250,12 +252,14 @@
 						</button>
 						<h4>Cancelar Horário</h4>
 					</div>
-					<div class="modal-title"><h4>Deseja realmente cancelar esse
-						horário?</h4></div>
+					<div class="modal-title">
+						<h4>Deseja realmente cancelar esse horário?</h4>
+					</div>
 					<div class="modal-body">
-						<div>
+						<div id="div-send-email">
 							<label>Enviar email para o paciente:</label>
-							<textarea placeholder="Escrever email..." id="text-area-email" class="no-resize form-control" rows="3"></textarea>
+							<textarea placeholder="Escrever email..." id="text-area-email"
+								class="no-resize form-control" rows="3"></textarea>
 						</div>
 						<div class="margin-top">
 							<button id="btn-cancel-consultation" class="btn btn-danger"
@@ -331,46 +335,43 @@
 							<h3 class="panel-title">Horários</h3>
 						</div>
 						<div class="panel-body" id="panel-schedules">
-							<div id="row-add-schedules">
-								<div class="row row-schedule-id">
-
-									<div class="col-md-1">
-										<h4>Início:</h4>
-									</div>
-									<div class="col-md-4">
-										<div
-											class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
-											<input id="tmp-init-1" type="text"
-												class="form-control input-small"> <span
-												class="input-group-addon"><i
-												class="glyphicon glyphicon-time"></i></span>
+							<form class="form-horizontal">
+								<div id="row-add-schedules">
+									<div class="row row-schedule-id">
+										<label class="col-lg-1 control-label">Início</label>
+										<div class="col-md-4">
+											<div
+												class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
+												<input id="tmp-init-1" type="text"  
+													class="form-control input-small"> <span
+													class="input-group-addon"><i
+													class="glyphicon glyphicon-time"></i></span>
+											</div>
 										</div>
-									</div>
-
-									<div class="col-md-1">
-										<h4>Fim:</h4>
-									</div>
-									<div class="col-md-4">
-										<div
-											class="timepicker-end input-group bootstrap-timepicker timepicker">
-											<input id="tmp-end-1" type="text"
-												class="form-control input-small"> <span
-												class="input-group-addon"><i
-												class="glyphicon glyphicon-time"></i></span>
+	
+										<label class="col-lg-1 control-label">Fim</label>
+										<div class="col-md-4">
+											<div
+												class="timepicker-end input-group bootstrap-timepicker timepicker">
+												<input id="tmp-end-1" type="text" class="form-control input-small"> 
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-time"></i>
+												</span>
+											</div>
 										</div>
-									</div>
-									<div class="col-md-2">
-										<button type="button" class="btn btn-primary add-schedule">
-											<span class="glyphicon glyphicon glyphicon-plus"></span>
-										</button>
+										<div class="col-md-2">
+											<button type="button" class="btn btn-primary add-schedule">
+												<span class="glyphicon glyphicon glyphicon-plus"></span>
+											</button>
+										</div>
 									</div>
 								</div>
-							</div>
+							</form>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
+					<button type="submit" class="btn btn-primary"
 						id="btn-confirm-schedules">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>

@@ -255,7 +255,11 @@ public class ConsultationService {
 		}catch(Exception e){
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível cancelar a consulta");
+			
+			e.printStackTrace();
+			
 			System.out.println("Error at cancelConsultation by id: "+e);
+			
 			return gson.toJson(response);
 		}
 	}
