@@ -418,7 +418,7 @@ function onButtonConfirmSchedulesClick(){
 			alertMessage(response.message, null, type);
 			//Atualizando a lista com os horários cadastrados.
 			updateScheduleManagerList();
-		}, function(e, a){
+		}, 	"POST" , function(e, a){
 			alertMessage("Ops, não foi possível cadastrar o horário para o dia "+date+"");
 		});
 		

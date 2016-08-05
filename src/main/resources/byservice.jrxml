@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ByService" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="143"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SubReportByServiceLocation" class="java.lang.String"/>
+	<parameter name="dateBegin" class="java.util.Date"/>
+	<parameter name="dateEnd" class="java.util.Date"/>
+	<parameter name="service" class="java.lang.String"/>
+	<parameter name="professional" class="java.lang.String"/>
+	<parameter name="total" class="java.lang.Integer"/>
+	<parameter name="scheduled" class="java.lang.Integer"/>
+	<parameter name="unscheduled" class="java.lang.Integer"/>
+	<parameter name="canceled" class="java.lang.Integer"/>
+	<parameter name="byMonth" class="java.util.List"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="76" splitType="Stretch">
+			<image>
+				<reportElement x="419" y="4" width="95" height="70"/>
+				<imageExpression><![CDATA["./logo-ufc-qx.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="30" y="4" width="310" height="70"/>
+				<imageExpression><![CDATA["./logo-ufc.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="420" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="22" width="555" height="48"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO ESTATÍSTICO DE ATENDIMENTO
+UFC - CAMPUS QUIXADÁ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="112" width="555" height="1" forecolor="#787373"/>
+			</line>
+			<staticText>
+				<reportElement x="22" y="92" width="231" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório referente ao período:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="383" y="92" width="36" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="253" y="92" width="130" height="20"/>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dateBegin}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="419" y="92" width="133" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dateEnd}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="22" y="125" width="67" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serviço:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="206" width="181" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total de Agendamentos - ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="286" width="181" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Consultas Canceladas -]]></text>
+			</staticText>
+			<ellipse>
+				<reportElement x="134" y="250" width="5" height="5"/>
+			</ellipse>
+			<staticText>
+				<reportElement x="140" y="246" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Agendadas  - ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="226" width="160" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Consultas realizadas:]]></text>
+			</staticText>
+			<ellipse>
+				<reportElement x="89" y="210" width="5" height="5" backcolor="#000000"/>
+			</ellipse>
+			<staticText>
+				<reportElement x="145" y="266" width="128" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Não Agendadas -]]></text>
+			</staticText>
+			<ellipse>
+				<reportElement x="134" y="269" width="5" height="5"/>
+			</ellipse>
+			<staticText>
+				<reportElement x="22" y="145" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Profissional:]]></text>
+			</staticText>
+			<ellipse>
+				<reportElement x="89" y="291" width="5" height="5" backcolor="#000000"/>
+			</ellipse>
+			<staticText>
+				<reportElement x="30" y="174" width="149" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Informações Gerais: ]]></text>
+			</staticText>
+			<ellipse>
+				<reportElement x="89" y="230" width="5" height="5" backcolor="#000000"/>
+			</ellipse>
+			<textField isBlankWhenNull="true">
+				<reportElement x="114" y="145" width="430" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{professional}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="278" y="206" width="100" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="242" y="246" width="100" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{scheduled}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="273" y="266" width="123" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{unscheduled}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="273" y="286" width="100" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{canceled}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="18" y="339" width="181" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Especificações mensais: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="359" width="419" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[CONSULTAS]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="83" y="125" width="461" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{service}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="437" y="379" width="100" height="40"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="314" y="379" width="123" height="40"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Canceladas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="379" width="196" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Realizadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="379" width="100" height="40"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Mês]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="399" width="98" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="false" isItalic="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Agendadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="399" width="98" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="false" isItalic="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Não Agendadas]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="63" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="63"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{byMonth})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SubReportByServiceLocation}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="49">
+			<image>
+				<reportElement  x="419" y="0" width="136" height="45"/>
+				<imageExpression><![CDATA["./logo-siac.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="19" y="29" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[www.siac.com.br]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>
