@@ -77,6 +77,10 @@ var ScheduleTime = function(){
 		return this.timeEnd.format("HH:mm");
 	}
 	
+	self.toEmail = function(){
+		return this.timeInit.format("DD/MM/YYYY")+" "+this.timeInit.format('HH:mm')+" às "+this.timeEnd.format('HH:mm');
+	}
+	
 	ScheduleTime.prototype.toJSON = function(){
 		return {"id":this.id, "timeInit":this.timeInit.format('HH:mm'), "timeEnd":this.timeEnd.format('HH:mm')};
 	}

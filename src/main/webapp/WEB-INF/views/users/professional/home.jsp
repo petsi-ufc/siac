@@ -1,6 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:useBean id="user" class="br.ufc.petsi.model.Professional"
 	scope="session" />
 <jsp:setProperty property="*" name="user" />
@@ -19,7 +19,7 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 						<h4 class="modal-title">
-							<strong>Descrição do(s) Horário(s)</strong>
+							<strong>DescriÃ§Ã£o do(s) HorÃ¡rio(s)</strong>
 						</h4>
 					</div>
 					<div class="modal-body">
@@ -27,11 +27,11 @@
 							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
-										<th>Hora Início</th>
+										<th>Hora InÃ­cio</th>
 										<th>Hora Fim</th>
 										<th>Estado</th>
 										<th>Paciente</th>
-										<th>Horário</th>
+										<th>HorÃ¡rio</th>
 									</tr>
 								</thead>
 								<tbody id="tbody-schedules-description">
@@ -55,10 +55,11 @@
 			src="<c:url value='/resources/images/user_avatar.png'/>">
 
 		<div id="box-services">
-			<h3>Serviços<br> disponí­veis</h3>
+			<h3>ServiÃ§os disponÃ­Â­veis</h3>
+
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
-				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
+				<li class="service-item active" id="0"><a>Meu CalendÃ¡rio</a></li>
 				<li class="nav-divider"></li>
 				<li class="service-item" id="1"><a>Cadastrar Agenda</a></li>
 				<!--<li class="nav-divider"></li>
@@ -69,12 +70,12 @@
 
 	<div id="right-bar">
 
-		<div class="alert alert-danger alert-message hidden" role="alert">
+		<div class="alert alert-message hidden" role="alert">
 			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 		</div>
 
 		<div id="calendar-container">
-			<h2 id="my-calendar">Meu calendário</h2>
+			<h2 id="my-calendar">Meu calendÃ¡rio</h2>
 			<div id="container-goto-date">
 				<div class="input-group">
 					<input id="input-goto-date" type="date" class="form-control"
@@ -102,7 +103,7 @@
 								<div class='legend-color color-green'></div>
 							</td>
 							<td>
-								<h5>Disponível</h5>
+								<h4>DisponÃ­vel</h4>
 							</td>
 
 							<td>
@@ -146,7 +147,7 @@
 			<div class="panel-body">
 				<form class="form-inline">
 					<div class="form-group">
-						<h5>Frequência:</h5>
+						<h5>FrequÃªncia:</h5>
 					</div>
 					<div class="form-group">
 						<select class="form-control" id="select-repeat-schedule">
@@ -166,7 +167,7 @@
 							<button type="button" class="btn btn-default btn-day"
 								value="Monday">Segunda</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Tuesday">Terça</button>
+								value="Tuesday">TerÃ§a</button>
 							<button type="button" class="btn btn-default btn-day"
 								value="Wednesday">Quarta</button>
 							<button type="button" class="btn btn-default btn-day"
@@ -174,7 +175,7 @@
 							<button type="button" class="btn btn-default btn-day"
 								value="Friday">Sexta</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Saturday">Sábado</button>
+								value="Saturday">SÃ¡bado</button>
 							<button type="button" class="btn btn-default btn-day"
 								value="Sunday">Domingo</button>
 						</div>
@@ -186,7 +187,7 @@
 									<tr>
 										<th>Dia</th>
 										<th>Data</th>
-										<th>Horários</th>
+										<th>HorÃ¡rios</th>
 										<th>Remover</th>
 									</tr>
 								</thead>
@@ -224,11 +225,11 @@
 								<table class="table table-bordered table-hover">
 									<thead>
 										<tr>
-											<th>Hora Início</th>
+											<th>Hora InÃ­cio</th>
 											<th>Hora Fim</th>
 											<th>Estado</th>
 											<th>Detalhes</th>
-											<th>Ações</th>
+											<th>AÃ§Ãµes</th>
 										</tr>
 									</thead>
 									<tbody class="collapse-tbody">
@@ -250,10 +251,10 @@
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4>Cancelar Horário</h4>
+						<h4>Cancelar HorÃ¡rio</h4>
 					</div>
 					<div class="modal-title">
-						<h4>Deseja realmente cancelar esse horário?</h4>
+						<h4>Deseja realmente cancelar este horÃ¡rio?</h4>
 					</div>
 					<div class="modal-body">
 						<div id="div-send-email">
@@ -279,7 +280,7 @@
 				<div id="title-header" class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">X</button>
 					<h3 id="modal-schedule-title" class="modal-title">Cadastrar
-						Horário</h3>
+						HorÃ¡rio</h3>
 				</div>
 				<div class="modal-body">
 					<h4 id="modal-description-body"></h4>
@@ -287,7 +288,7 @@
 
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Gerador de Horários</h3>
+							<h3 class="panel-title">Gerador de HorÃ¡rios</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -311,7 +312,7 @@
 								</div>
 								<div class="form-group">
 									<label for="input-count-time-init"
-										class="col-md-4 control-label">Hora de Início:</label>
+										class="col-md-4 control-label">Hora de InÃ­cio:</label>
 									<div
 										class="col-md-5 col-sm-offset-4 input-group bootstrap-timepicker timepicker">
 										<input id="tmp-init-0" type="text"
@@ -324,7 +325,7 @@
 							<div class="col-md-offset-5">
 								<button type="button" class="btn btn-primary"
 									id="btn-generate-schedules">
-									Gerar Horários <i class="glyphicon glyphicon-time"></i>
+									Gerar HorÃ¡rios <i class="glyphicon glyphicon-time"></i>
 								</button>
 							</div>
 						</div>
@@ -332,13 +333,13 @@
 
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Horários</h3>
+							<h3 class="panel-title">HorÃ¡rios</h3>
 						</div>
 						<div class="panel-body" id="panel-schedules">
 							<form class="form-horizontal">
 								<div id="row-add-schedules">
 									<div class="row row-schedule-id">
-										<label class="col-lg-1 control-label">Início</label>
+										<label class="col-lg-1 control-label">InÃ­cio</label>
 										<div class="col-md-4">
 											<div
 												class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
