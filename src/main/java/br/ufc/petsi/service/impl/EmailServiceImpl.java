@@ -40,8 +40,6 @@ public class EmailServiceImpl implements EmailService
 		Professional prof = cons.getProfessional();
 		
 		email.setText(message);
-		System.out.println("EMAIL: "+prof.getSocialService().getName());
-		System.out.println("MESSAGE: "+message);
 		email.setSubject("SIAC - "+prof.getSocialService().getName());
 		try {
 			this.sendEmail(email);

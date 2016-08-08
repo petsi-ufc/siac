@@ -248,7 +248,7 @@ function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 		var scheduleId = $(this).attr("value");
 		
 		var schedule = scheduleManager.getScheduleTimeById(scheduleId);
-		console.log(schedule);
+		
 		var modalCancel = $("#modal-cancel-consultation");
 		
 		var $divEmail= $("#div-send-email");
@@ -288,9 +288,10 @@ function onBtnCancelConsultationClick(){
 	$("#btn-cancel-consultation").click(function(){
 		var modalCancel = $("#modal-cancel-consultation");
 		modalCancel.modal("hide");
+		
 		var scheduleId = $(this).attr("value"); 
 		var message = $("#text-area-email").val();
-		console.log(message);
+		
 		ajaxCall("/siac/cancelConsultation", {"id":scheduleId, "message": message}, function(response){
 			var type = ALERT_ERROR;
 			if(response.code == RESPONSE_SUCCESS){
@@ -304,7 +305,7 @@ function onBtnCancelConsultationClick(){
 			}else
 				alertMessage(response.message, null, ALERT_ERROR);
 		}, function(){
-			alertMessage("Ops, não foi possível cancelar essa consulta", null, ALERT_ERROR);
+			alertMessage("Ops, algo de errado aconteceu!", null, ALERT_ERROR);
 		});
 	});
 }
@@ -924,7 +925,6 @@ function getProfessionalConsultations(func){
 }
 
 function updateScheduleManagerList(json){
-	console.log("UPDATE "+json);
 	var length = Object.keys(json).length;
 	if(length == 0){
 		alertMessage("Ops, você ainda não possui nenhum horário de consulta cadastrado!");
