@@ -8,6 +8,7 @@ var RESPONSE_SUCCESS = 200;
 
 //Função que fax uma chamada ajax contendo a url e os parametros devidos.
 //O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
+
 function ajaxCall(_url, params, funcSucc, funcErr, method){
 	method : method ? method : "GET";
 	var ajax = $.ajax({
@@ -17,6 +18,7 @@ function ajaxCall(_url, params, funcSucc, funcErr, method){
 		data: params
 	});
 	
+
 	ajax.done(funcSucc);
 	
 	if(funcErr)
@@ -27,7 +29,7 @@ function ajaxCall(_url, params, funcSucc, funcErr, method){
 			console.log(textStatus+" - "+error);
 		});
 	}
-	
+
 }
 
 function ajaxCallNoJSON(_url, params, func, fail){

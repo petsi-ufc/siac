@@ -67,11 +67,6 @@ public class AuthenticationController {
 		return new ModelAndView("home_manager");
 	}
 	
-	@RequestMapping("/professional/schedule")
-	public ModelAndView scheduleProfessional() {
-		return new ModelAndView("schedule_professional");
-	}
-	
 	@RequestMapping("/patient")
 	public ModelAndView patient() {
 		return new ModelAndView("home_patient");
@@ -86,4 +81,23 @@ public class AuthenticationController {
 		}
 		return (User) session.getAttribute(Constants.USER_SESSION);
 	}
+	
+	@RequestMapping("/403")
+	public ModelAndView error403()
+	{
+		return new ModelAndView("403");
+	}
+	
+	@RequestMapping("/404")
+	public ModelAndView error404()
+	{
+		return new ModelAndView("404");
+	}
+	
+	@RequestMapping("/500")
+	public ModelAndView error500()
+	{
+		return new ModelAndView("500");
+	}
+	
 }
