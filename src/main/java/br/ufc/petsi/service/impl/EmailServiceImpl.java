@@ -39,7 +39,9 @@ public class EmailServiceImpl implements EmailService
 		
 		Professional prof = cons.getProfessional();
 		
-		email.setText("Sua consulta do dia "+cons.getDateInit()+" foi cancelada.\n"+message);
+		email.setText(message);
+		System.out.println("EMAIL: "+prof.getSocialService().getName());
+		System.out.println("MESSAGE: "+message);
 		email.setSubject("SIAC - "+prof.getSocialService().getName());
 		try {
 			this.sendEmail(email);

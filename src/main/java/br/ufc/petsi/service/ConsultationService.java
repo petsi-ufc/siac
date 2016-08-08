@@ -39,6 +39,7 @@ public class ConsultationService {
 	
 	public String saveConsultation(Professional proTemp, String json, ConsultationDAO consDAO){
 		Gson gson = new Gson();
+		System.out.println("JSON: "+json);
 		Response response = new Response();
 		try{
 			JsonParser parser = new JsonParser();

@@ -33,7 +33,7 @@ function onActionClick(){
 			$("#set-professional").css("display", "block");
 		}else if($(this).attr("id") == 2){
 			$("#add-service").css("display", "block");
-			ajaxCall("/siac/getServices", function(json){
+			ajaxCall("/siac/getServices", null ,function(json){
 				
 				fillTableServices(json);
 				

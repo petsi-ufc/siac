@@ -8,11 +8,26 @@ var RESPONSE_SUCCESS = 200;
 
 //Função que fax uma chamada ajax contendo a url e os parametros devidos.
 //O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
-function ajaxCall(_url, params, func){
-	$.getJSON(_url, params).done(func).error(function(textStatus, error){
-		alertMessage("Ops! Aconteceu algo de errado.");
-		console.log(textStatus+" - "+error);
+function ajaxCall(_url, params, funcSucc, funcErr, method){
+	method : method ? method : "GET";
+	var ajax = $.ajax({
+		method : method,
+		url: _url,
+		dataType: "json",
+		data: params
 	});
+	
+	ajax.done(funcSucc);
+	
+	if(funcErr)
+		ajax.error(funcErr);
+	else{
+		ajax.error(function(textStatus, error){
+			alertMessage("Ops! Aconteceu algo de errado.");
+			console.log(textStatus+" - "+error);
+		});
+	}
+	
 }
 
 function ajaxCallNoJSON(_url, params, func, fail){
@@ -34,7 +49,7 @@ function getFormatedDate(stringDate){
 
 
 const ALERT_SUCCESS = "alert-success";
-const ALERT_ERROR = "alert-danger";
+const ALERT_ERROR = "alert-warning";
 //Função que mostra a mensagem de alerta em cima do calendário.
 //Type: SUCCESS ou ERROR
 //Time: tempo para que a mensagem desapareça
@@ -44,8 +59,8 @@ function alertMessage(message, time, type){
 	time = !time ? 5000 : time;
 	var alertMessage = $(".alert-message");
 	
-	alertMessage.removeClass("alert-success");
-	alertMessage.removeClass("alert-danger");
+	alertMessage.removeClass(ALERT_SUCCESS);
+	alertMessage.removeClass(ALERT_ERROR);
 	
 	var icon = "glyphicon glyphicon-exclamation-sign";
 
