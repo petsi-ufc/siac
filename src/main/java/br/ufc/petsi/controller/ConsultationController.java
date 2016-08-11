@@ -1,8 +1,11 @@
 package br.ufc.petsi.controller;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +36,7 @@ public class ConsultationController {
 	@Inject
 	private ReserveDAO reserveDAO;
 	
-	
-	
+	@Secured({"ROLE_PATIENT", "ROLE_PROFESSIONAL"})
 	@RequestMapping("/getConsultationsBySocialService")
 	@ResponseBody
 	public String getConsultationsBySocialServices(Long socialServiceId, HttpSession session){
@@ -45,6 +47,7 @@ public class ConsultationController {
 		return consultationService.getConsultationsBySocialService(patient, socialService, consDAO);
 	}
 	
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/getConsultationsByPatient")
 	@ResponseBody
 	public String getConsultationsByPatient(String cpf){
@@ -52,20 +55,23 @@ public class ConsultationController {
 		p.setCpf(cpf);
 		return consultationService.getConsultationsByPatient(p, consDAO, reserveDAO);
 	}
-
+	
+	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping(value = "/cancelConsultation", method = RequestMethod.GET)
 	@ResponseBody
 	public String cancelConsultation(@RequestParam("id") long id, @RequestParam("message") String message){
 		return consultationService.cancelConsultationById(id, message, consDAO);
 	}
 	
-	@RequestMapping("/saveConsultation")
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping(value = "/saveConsultation", method = RequestMethod.POST)
 	@ResponseBody
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
 		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
 		return consultationService.saveConsultation(proTemp, json, consDAO);
 	}
 	
+	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
 	public String getConsultationsByProfessionalJSON(HttpSession session){
@@ -73,6 +79,7 @@ public class ConsultationController {
 		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/updateConsultationRating")
 	@ResponseBody
 	public String updateConsultationRating(Consultation c, HttpSession session){		
@@ -83,6 +90,7 @@ public class ConsultationController {
 		return consultationService.updateRating(consultation, consDAO, patient);
 	}
 	
+	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/registerConsultation")
 	@ResponseBody
 	public String registerConsultation(Consultation cons){

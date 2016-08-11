@@ -3,6 +3,7 @@ package br.ufc.petsi.controller;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,7 @@ public class PatientController {
 	@Inject
 	private ReserveDAO reserveDAO;
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/getMyConsultations")
 	@ResponseBody
 	public String getConsultationsByPatient(HttpSession session){
@@ -49,6 +51,7 @@ public class PatientController {
 		return consService.getConsultationsByPatient(patient, consDAO, reserveDAO);
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/getConsultationById")
 	@ResponseBody
 	public String getConsultationById(long id, HttpSession session){
@@ -58,6 +61,7 @@ public class PatientController {
 		return consService.getConsultationsById(patient, id, consDAO);
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/saveRating")
 	@ResponseBody
 	public void saveRating(Rating rating){
@@ -65,6 +69,7 @@ public class PatientController {
 
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/getConsultationBySocialService")
 	@ResponseBody
 	public String getConsultationsBySocialService(SocialService socialService, HttpSession session){
@@ -75,6 +80,7 @@ public class PatientController {
 
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/scheduleConsultation")
 	@ResponseBody
 	public String scheduleConsultation(Consultation consultation, HttpSession session){
@@ -85,12 +91,14 @@ public class PatientController {
 
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/showRating")
 	@ResponseBody
 	public String getRatingByConsultation(Consultation consultation){
 		return consService.getRatingByConsultation(consultation, consDAO);
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/cancelConsultationPatient")
 	@ResponseBody
 	public String cancelConsultation(Consultation consultation){
@@ -100,6 +108,7 @@ public class PatientController {
 		return consService.cancelConsultation(consultation2, consDAO, reserveDAO);
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/reserveConsultation")
 	@ResponseBody
 	public String reserveConsultation(Consultation consultation, HttpSession session){
@@ -112,6 +121,7 @@ public class PatientController {
 
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/cancelReserve")
 	@ResponseBody
 	public String cancelReserve(@RequestParam("id") long id){

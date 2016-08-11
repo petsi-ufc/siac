@@ -20,12 +20,6 @@ public class UserController {
 	@Inject
 	private LdapUser userDAO;
 	
-	@RequestMapping("/getUserByName")
-	@ResponseBody
-	public String getUserByName(String name){
-		return "";
-	}
-	
 	public User getUserLogged(HttpSession session)
 	{
 		if(session.getAttribute(Constants.USER_SESSION) == null)

@@ -39,6 +39,7 @@ public class ConsultationService {
 
 	public String saveConsultation(Professional proTemp, String json, ConsultationDAO consDAO){
 		Gson gson = new Gson();
+		System.out.println("JSON: "+json);
 		Response response = new Response();
 		try{
 			JsonParser parser = new JsonParser();
@@ -283,7 +284,11 @@ public class ConsultationService {
 		}catch(Exception e){
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível cancelar a consulta");
+			
+			e.printStackTrace();
+			
 			System.out.println("Error at cancelConsultation by id: "+e);
+			
 			return gson.toJson(response);
 		}
 	}

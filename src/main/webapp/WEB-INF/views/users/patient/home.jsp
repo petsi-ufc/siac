@@ -7,7 +7,7 @@
 			src="<c:url value='/resources/images/user_avatar.png'/>">
 
 		<div id="box-services">
-			<h3>Serviços disponí­veis</h3>
+			<h3>Serviços <br>disponí­veis</h3>
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
 				<li id="my-calend" class="service active service-item" value="meu"><a
@@ -29,7 +29,10 @@
 			<div class="alert alert-danger alert-message hidden" role="alert">
 				<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 			</div>
-			<div id="calendar-legend" style="margin-left: 100px">
+			
+			<div class="calendar" id="calendar-patient"></div>
+			
+			<div id="calendar-legend" style="margin-left: 60px">
 				<table style="margin-left: 0px; margin-bottom: 10px">
 					<thead>
 						<tr>
@@ -45,7 +48,7 @@
 									style="background-color: #32CD32; margin-left: 12px; margin-right: 12px"></div>
 							</td>
 							<td>
-								<a id= 'aaaa' href="#" data-toggle="tooltip" data-placement="right" title="Hooray!"><h4>Disponível</h4></a>
+								<h5>Disponível</h5>
 							</td>
 
 
@@ -56,7 +59,7 @@
 							</td>
 
 							<td>
-								<h4>Agendada</h4>
+								<h5>Agendada</h5>
 							</td>
 
 
@@ -66,7 +69,7 @@
 							</td>
 
 							<td>
-								<h4>Realizada</h4>
+								<h5>Realizada</h5>
 							</td>
 
 
@@ -76,7 +79,7 @@
 							</td>
 
 							<td>
-								<h4>Reservada</h4>
+								<h5>Reservada</h5>
 							</td>
 
 
@@ -86,7 +89,7 @@
 							</td>
 
 							<td>
-								<h4>Cancelada</h4>
+								<h5>Cancelada</h5>
 							</td>
 
 							<td>
@@ -95,7 +98,7 @@
 							</td>
 
 							<td>
-								<h4>Ocupada</h4>
+								<h5>Ocupada</h5>
 							</td>
 						</tr>
 					</tbody>
@@ -103,9 +106,8 @@
 				</table>
 
 			</div>
-
-			<div class="calendar" id="calendar-patient"></div>
-
+			
+			
 		</div>
 
 		<div id="my-consultations">
@@ -177,7 +179,7 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
+						<span aria-hidden="true">×</span>
 					</button>
 					<h4 class="modal-title">Avaliação de Consulta</h4>
 				</div>
@@ -227,7 +229,7 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
+						<span aria-hidden="true">×</span>
 					</button>
 					<h5 class="modal-title">Avaliação da Consulta</h5>
 				</div>

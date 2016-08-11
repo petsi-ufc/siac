@@ -1,13 +1,10 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
-
-<img id="img-banner" src="<c:url value='/resources/images/banner.jpg'/>">
-
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">SIAC</a>
+      <a class="navbar-brand" href="#"><img id="img-logo" width="100" src="<c:url value='/resources/images/logotipo.png'/>"></a>
     </div>
     <div>
       <ul class="nav navbar-nav" id="main-navbar">

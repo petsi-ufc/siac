@@ -7,9 +7,9 @@ body html{
 #main-container{
 	position: absolute;
 	width:370px;
-	height:375px;
+	height:400px;
 	max-width: 370px;
-	max-height: 450px;
+	max-height: 500px;
 	top:0;
 	bottom:0;
 	left:0;
@@ -26,7 +26,7 @@ body html{
 }
 
 #container-content img{
-	margin-top: 20px;
+	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
@@ -417,4 +417,14 @@ body html{
 #rating-grade{
 	min-height: 200px !important;
 	min-width: 100px !important;
+}
+
+#date-report #date-left{
+	margin-left: 10%;
+	float: left;
+}
+
+#date-report #date-right{
+	margin-right: 10%;
+	float: right;
 }

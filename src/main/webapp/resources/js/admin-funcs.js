@@ -8,8 +8,48 @@ $("document").ready(function(){
 	onServiceEditSaveButtonClick();
 	onServiceAddButtonClick();
 	onFieldSearchProfessionalChange();
+	onGenerateReportButtonClicked();
 	
+	$("#input-dtpckr-start-report").datepicker({
+		 format: 'dd/mm/yyyy',                
+		 language: 'pt-BR'
+	});
+	
+	$("#input-dtpckr-end-report").datepicker({
+		 format: 'dd/mm/yyyy',                
+		 language: 'pt-BR'
+	});
+	
+	$("#select-servico").find('select').prop('disabled',true);
+	$("#select-professional").find('select').prop('disabled',true);
+	$("#select-report-type").change(function(){
+		onSelectReportChaged()
+	});
+
 });
+
+function onSelectReportChaged(){
+	var value = $("#select-report-type").val();
+	if(value === "by-type"){
+		$("#select-servico").show().find('select').prop('disabled', false);
+		$("#select-professional").show().find('select').prop('disabled', false);
+		
+		ajaxCall("/getActiveServices", null, function(json){
+			
+		});
+		
+	} else {
+		if(value === "general") {
+			$("#select-servico").hide().find('select').prop('disabled', true);
+			$("#select-professional").hide().find('select').prop('disabled', true);
+		} else {
+			$("#select-servico").show().find('select').prop('disabled', true);
+			$("#select-professional").show().find('select').prop('disabled', true);
+		}
+	}
+}
+
+
 
 function onActionClick(){
 	$(".link-action").click(function(){
@@ -33,7 +73,7 @@ function onActionClick(){
 			$("#set-professional").css("display", "block");
 		}else if($(this).attr("id") == 2){
 			$("#add-service").css("display", "block");
-			ajaxCall("/siac/getServices", function(json){
+			ajaxCall("/siac/getServices", null ,function(json){
 				
 				fillTableServices(json);
 				
@@ -233,5 +273,15 @@ function onFieldSearchProfessionalChange(){
 			});
 			
 		}
+	});
+}
+
+function onGenerateReportButtonClicked(){
+	$("#button-generate-report").click(function (){
+		var reportType = $("#select-report-type").val();
+		var serviceType = $("#select-service-type").val();
+		var dataInicio = $("#input-dtpckr-start-report").val();
+		var dataFim = $("#input-dtpckr-end-report").val();
+		
 	});
 }
