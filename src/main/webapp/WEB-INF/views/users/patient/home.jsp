@@ -1,5 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
 <div id="home-content">
 	<div id="left-bar">
 		<img id="avatar-img" class="img-responsive"
@@ -9,7 +10,7 @@
 			<h3>Serviços disponí­veis</h3>
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
-				<li id="my-calend" class="service active service-item"><a
+				<li id="my-calend" class="service active service-item" value="meu"><a
 					class="link-service" id="0">Meu calendário</a></li>
 				<li class="service service-item"><a class="link-service"
 					id="my-consults">Minhas consultas </a></li>
@@ -44,7 +45,7 @@
 									style="background-color: #32CD32; margin-left: 12px; margin-right: 12px"></div>
 							</td>
 							<td>
-								<h4>Disponível</h4>
+								<a id= 'aaaa' href="#" data-toggle="tooltip" data-placement="right" title="Hooray!"><h4>Disponível</h4></a>
 							</td>
 
 
@@ -145,7 +146,7 @@
 					<h4 class="modal-title" id="modal-title-schedule"></h4>
 				</div>
 				<div class="modal-body">
-					<input type="hidden" id="id-service-temp" />
+					<input type="hidden" id="id-service-temp"/>
 					<table id="table-schedule" class="table table-hover">
 						<thead>
 							<tr>
@@ -182,7 +183,7 @@
 				</div>
 				<div class="modal-body">
 					<p>
-					<h4>Comentário</h4>
+					<h5>Comentário</h5>
 					</p>
 					<input type='hidden' id='input-rating-id' name='idCons' />
 					<textarea id="rating-comment" class="form-control" rows="4"
@@ -190,17 +191,17 @@
 						style="overflow: auto; resize: none"></textarea>
 					<br />
 
-					<!-- Preenchido com Francis/AJAX hehe -->
+					<!-- Preenchido com AJAX -->
 
 					<p>
-					<h4>Dê uma nota*</h4>
+					<h5>Dê uma nota: </h5>
 					</p>
-					<select id="rating-grade" class="form-control">
-						<option>1</option>
-						<option>2</option>
-						<option>3</option>
-						<option>4</option>
-						<option>5</option>
+					<select id="rating-grade">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
 					</select>
 
 
@@ -228,12 +229,12 @@
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title">Avaliação da Consulta</h4>
+					<h5 class="modal-title">Avaliação da Consulta</h5>
 				</div>
 				<div class="modal-body modal-body-rating">
 
 					<div id="content-rating"></div>
-					<!-- Preenchido com Francis/AJAX hehe -->
+					<!-- Preenchido com AJAX-->
 
 				</div>
 				<div class="modal-footer">

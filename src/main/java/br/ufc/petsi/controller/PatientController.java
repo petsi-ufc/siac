@@ -13,7 +13,6 @@ import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.RatingDAO;
 import br.ufc.petsi.dao.ReserveDAO;
-import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Rating;
@@ -78,19 +77,12 @@ public class PatientController {
 
 	@RequestMapping("/scheduleConsultation")
 	@ResponseBody
-	public void scheduleConsultation(Consultation consultation, HttpSession session){
+	public String scheduleConsultation(Consultation consultation, HttpSession session){
+
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
-
 		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
+		return this.consService.updateConsultation(consultation2, this.consDAO, patient);
 
-		consultation2.setPatient(patient);
-		
-		if(consultation2.getState() == ConsultationState.FR){
-			consultation2.setState(ConsultationState.SC);
-			this.consService.updateConsultation(consultation2, this.consDAO);
-			
-		}
-		
 	}
 
 	@RequestMapping("/showRating")
@@ -113,7 +105,7 @@ public class PatientController {
 	public String reserveConsultation(Consultation consultation, HttpSession session){
 
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
-		
+
 		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.reserveConsultation(patient, consultation2, reserveDAO);
@@ -123,7 +115,7 @@ public class PatientController {
 	@RequestMapping("/cancelReserve")
 	@ResponseBody
 	public String cancelReserve(@RequestParam("id") long id){
-		
+
 		Reserve reserve = new Reserve();
 		reserve.setId(id);
 		Reserve reserve2 = this.reserveDAO.getReserveById(reserve);

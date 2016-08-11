@@ -413,3 +413,8 @@ body html{
 	color : red !important;
 	border-color: red !important; 
 }
+
+#rating-grade{
+	min-height: 200px !important;
+	min-width: 100px !important;
+}

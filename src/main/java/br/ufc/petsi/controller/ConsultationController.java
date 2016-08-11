@@ -75,10 +75,12 @@ public class ConsultationController {
 	
 	@RequestMapping("/updateConsultationRating")
 	@ResponseBody
-	public void updateConsultation(Consultation c){		
+	public String updateConsultationRating(Consultation c, HttpSession session){		
+		
 		Consultation consultation = consultationService.getConsultationsById(c.getId(), consDAO);
 		consultation.setRating(c.getRating());
-		consultationService.updateConsultation(consultation, consDAO);
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
+		return consultationService.updateRating(consultation, consDAO, patient);
 	}
 	
 	@RequestMapping("/registerConsultation")
