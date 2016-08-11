@@ -7,18 +7,17 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import net.sf.jasperreports.engine.JREmptyDataSource;
-
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.ufc.petsi.dao.ReportDAO;
-import br.ufc.petsi.model.DetailByMonth;
 import br.ufc.petsi.model.GeneralReport;
 import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.RatingReport;
 import br.ufc.petsi.model.ServiceReport;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 
 @Controller
 public class ReportController {
@@ -27,18 +26,10 @@ public class ReportController {
 	private ReportDAO reportDAO;
 	
 	@RequestMapping("/relatorio/servico")
-	 public String gerarRelatorioPorServico(Model model, HttpSession session){ 
-		
-		
-		List<DetailByMonth> detail = new ArrayList<DetailByMonth>();
-		
-		
-		// ****** modificar o recebimento das variáveis *****************
-		int serviceId = 1;
-		int professionalId = 1;
-		Date dateBegin = new Date();
-		Date dateEnd = new Date();
-		//*******************
+	 public String gerarRelatorioPorServico(Model model, HttpSession session,
+			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateBegin, 
+			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateEnd, 
+			 int serviceId, int professionalId){ 
 		
 		
 		ServiceReport serviceReport = reportDAO.getServiceReport(serviceId, professionalId, dateBegin, dateEnd);
@@ -87,14 +78,7 @@ public class ReportController {
 	 }	
 
 	@RequestMapping("/relatorio/geral")
-	 public String gerarRelatorioGeral(Model model, HttpSession session){ 
-
-		List<DetailByMonth> d = new ArrayList<DetailByMonth>();
-		
-		// ****** modificar o recebimento das variáveis *****************
-		Date dateBegin = new Date();
-		Date dateEnd = new Date();
-		//*******************
+	 public String gerarRelatorioGeral(Model model, HttpSession session, @DateTimeFormat(pattern="dd/MM/yyyy") Date dateBegin, @DateTimeFormat(pattern="dd/MM/yyyy") Date dateEnd){ 
 		
 		GeneralReport generalReport = reportDAO.getGeneralReport(dateBegin, dateEnd);
 		

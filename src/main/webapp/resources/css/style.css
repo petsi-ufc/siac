@@ -413,3 +413,13 @@ body html{
 	color : red !important;
 	border-color: red !important; 
 }
+
+#date-report #date-left{
+	margin-left: 10%;
+	float: left;
+}
+
+#date-report #date-right{
+	margin-right: 10%;
+	float: right;
+}
