@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap.min.css'/>">
@@ -35,7 +35,7 @@
 	</c:forEach>
 	
 	<title>
-		<tiles:getAsString name="title"/>
+		<tiles:getAsString name="title" />
 	</title>
 </head>
 <body>
