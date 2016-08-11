@@ -9,7 +9,6 @@ import br.ufc.petsi.model.Reserve;
 
 public class Event {
 
-	
 	private String start;
 	private String end;
 	private String title;

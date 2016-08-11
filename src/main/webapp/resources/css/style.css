@@ -414,6 +414,11 @@ body html{
 	border-color: red !important; 
 }
 
+#rating-grade{
+	min-height: 200px !important;
+	min-width: 100px !important;
+}
+
 #date-report #date-left{
 	margin-left: 10%;
 	float: left;
