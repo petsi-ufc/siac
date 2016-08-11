@@ -395,8 +395,16 @@ body html{
 	margin-left: 3px;
 }
 
-.modal-admin{
+.modal-large{
 	max-width: 70%;
+	left: 15%;
+	margin-top: 20px;
+	margin-right: auto;
+	margin-left: auto; 
+}
+
+.modal-medium{
+	max-width: 50%;
 	left: 15%;
 	margin-top: 20px;
 	margin-right: auto;
@@ -412,4 +420,13 @@ body html{
 .has-error{
 	color : red !important;
 	border-color: red !important; 
+}
+
+textarea { 
+   min-width: 100%;
+   resize: none;
+}
+
+.form-group.control-label{
+	font-size: 12px !important;
 }

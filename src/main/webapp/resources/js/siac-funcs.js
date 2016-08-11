@@ -14,6 +14,8 @@ function ajaxCall(_url, params, funcSucc, funcErr, method){
 	var ajax = $.ajax({
 		method : method,
 		url: _url,
+		encoding:"UTF-8",
+		contentType: "application/x-www-form-urlencoded;charset=utf-8",
 		dataType: "json",
 		data: params
 	});
@@ -35,6 +37,8 @@ function ajaxCall(_url, params, funcSucc, funcErr, method){
 function ajaxCallNoJSON(_url, params, func, fail){
 	$.ajax({
 			method: "GET",
+			encoding:"UTF-8",	
+			contentType: "application/x-www-form-urlencoded;charset=utf-8",
 			url: _url,
 			data: params
 		}

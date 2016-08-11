@@ -1,10 +1,11 @@
 package br.ufc.petsi.controller;
 
-import java.util.List;
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,6 +96,11 @@ public class ConsultationController {
 		return consultationService.registerConsultation(cons, consDAO);
 	}
 	
-	
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping(value="/rescheduleConsultation", method=RequestMethod.POST)
+	@ResponseBody
+	public String rescheduleConsultation(long idConsultation, Date dateInit, Date dateEnd, String email){
+		return consultationService.rescheduleConsultation(idConsultation, dateInit, dateEnd, email ,consDAO);
+	}
 	
 }

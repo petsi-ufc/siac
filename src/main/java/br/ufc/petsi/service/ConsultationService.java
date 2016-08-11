@@ -10,6 +10,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.enums.ConsultationState;
@@ -207,7 +210,7 @@ public class ConsultationService {
 		
 		Consultation c = consDAO.getConsultationById(id);		
 	
-			Event event = new Event(patient, c);
+		Event event = new Event(patient, c);
 
 		json = gson.toJson(event);
 		return json;
@@ -216,6 +219,27 @@ public class ConsultationService {
 	public Consultation getConsultationsById(long id, ConsultationDAO consDAO){
 		Consultation c = consDAO.getConsultationById(id);		
 		return c;
+	}
+	
+	public String rescheduleConsultation(long idConsultation, Date dateInit, Date dateEnd, String email, ConsultationDAO consDAO){
+		Gson gson = new Gson();
+		Response response = new Response();
+		try{
+			Consultation consultation = consDAO.getConsultationById(idConsultation);
+			consultation.setDateInit(dateInit);
+			consultation.setDateEnd(dateEnd);
+			if(consultation.getPatient() != null && consultation.getPatient().getEmail() != null){
+				emailService.sendEmail(consultation, email);
+			}
+			consDAO.update(consultation);
+			response.setMessage("Consulta reagendada com sucesso!");
+			response.setCode(Response.SUCCESS);
+		}catch(Exception e){
+			e.printStackTrace();
+			response.setMessage("Não foi possível reagendar essa consulta!");
+			response.setCode(Response.ERROR);
+		}
+		return gson.toJson(response);
 	}
 	
 	public void updateConsultation(Consultation consultation, ConsultationDAO consDAO){
@@ -245,7 +269,7 @@ public class ConsultationService {
 					response.setMessage("Consulta cancelada com sucesso!");
 					
 					if(oldCons.getPatient() != null){
-						emailService.sendConsultationCancelEmail(oldCons, message);
+						emailService.sendEmail(oldCons, message);
 					}
 				}
 				return gson.toJson(response);

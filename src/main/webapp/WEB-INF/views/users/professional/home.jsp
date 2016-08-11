@@ -9,9 +9,9 @@
 <div id="home-content">
 	<div id="left-bar">
 
-		<div id="modal-schedules-description" class="modal fade" tabindex="-1"
+		<div id="modal-schedules-description" class="modal fade" 
 			role="dialog">
-			<div class="modal-admin">
+			<div class="modal-large">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
@@ -49,6 +49,81 @@
 			<!-- /.modal-dialog -->
 		</div>
 		<!-- /.modal -->
+		
+		<div id="modal-reschedule" class="modal fade" role="dialog">
+			<div class="modal-medium">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">
+							<strong>Reagendar Consulta</strong>
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<div class="col-md-4">
+  								<label class="control-label" for="rsch-atualdate">Data Atual</label>
+  								<input class="form-control" id="rsch-atualdate" type="text" placeholder="Disabled input here..." disabled="">
+  							</div>
+  							<div class="col-md-4">
+  								<label class="control-label" for="rsch-atual-timeinit">Hora de Início</label>
+  								<input class="form-control" id="rsch-atual-timeinit" type="text" disabled="">
+  							</div>
+  							<div class="col-md-4">
+  								<label class="control-label" for="rsch-atual-timeend">Hora de Fim</label>
+  								<input class="form-control" id="rsch-atual-timeend" type="text" disabled="">
+  							</div>
+						</div>
+						
+						<form class="form-inline" role="form">
+							<div class="form-group">
+								
+								<div class="input-group col-md-4">
+									<label class="control-label" for="input-dtpckr-reschedule">Nova Data</label>
+									<input type='text' class="form-control" id="input-dtpckr-reschedule"/>
+								</div>	                   			
+									
+           						<div class="input-group col-md-1">
+ 									<label class="control-label" for="rch-timeinit">Hora de Início</label>
+ 									<div class="bootstrap-timepicker timepicker">
+										<input id="rch-timeinit" type="text" class="input-schedule-info form-control input-small">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-time"></i>
+										</span>
+									</div>
+								</div>  	
+															
+								<div class="input-group col-md-1">
+ 									<label class="control-label" for="rch-timeend">Hora de Fim</label>
+ 									<div class="bootstrap-timepicker timepicker">
+										<input id="rch-timeend" type="text" class="input-schedule-info form-control input-small">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-time"></i>
+										</span>
+									</div>
+								</div>
+								
+								<div class="input-group col-md-12" id="div-email">
+									 <label for="textArea" class="col-lg-2 control-label">E-mail:</label>
+      								 <div class="col-lg-10">
+        								 <textarea class="form-control" rows="3" id="textArea-email-rsch"></textarea>
+        								 <span class="help-block">Explique o motivo do reagendamento da consulta.</span>
+      								</div>
+								</div>
+								
+							</div>
+						</form>
+						<div class="modal-footer">
+							<button id="btn-confirm-resch" type="button" class="btn btn-primary">Confirmar</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 
 
 		<img id="avatar-img" class="img-responsive"
@@ -200,7 +275,7 @@
 				</div>
 			</div>
 		</div>
-
+		
 		<div class="panel panel-primary margin-right hidden"
 			id="panel-my-consultations">
 			<div class="panel-heading">
@@ -311,14 +386,10 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="input-count-time-init"
-										class="col-md-4 control-label">Hora de Início:</label>
-									<div
-										class="col-md-5 col-sm-offset-4 input-group bootstrap-timepicker timepicker">
-										<input id="tmp-init-0" type="text"
-											class="input-schedule-info form-control input-small">
-										<span class="input-group-addon"><i
-											class="glyphicon glyphicon-time"></i></span>
+									<label for="input-count-time-init" class="col-md-4 control-label">Hora de Início:</label>
+									<div class="col-md-5 col-sm-offset-4 input-group bootstrap-timepicker timepicker">
+										<input id="tmp-init-0" type="text" class="input-schedule-info form-control input-small">
+										<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 									</div>
 								</div>
 							</form>

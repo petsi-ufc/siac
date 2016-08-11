@@ -106,6 +106,9 @@ $("document").ready(function(){
 	
 	onButtonGoToDateClick();
 	
+	//Função de submissão do formulário de reagendamento de consulta.
+	onBtnConfirmReschedule();
+	
 });
 
 function onButtonGoToDateClick(){
@@ -278,9 +281,113 @@ function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 	});
 	
 	$(".action-reschedule-consultation").off("click").click(function(){
+		var scheduleId = $(this).attr("value");
+		var schedule = scheduleManager.getScheduleTimeById(scheduleId);
+		
+		fillReScheduleModal(schedule);
+		
+		//Conferindo se existe algum paciente vinculado a consulta
+		var $divEmail = $("#div-email");
+		$divEmail.addClass("hidden");
+		
+		if(schedule.getPatient()){
+			var $textEmail = $("#textArea-email-rsch");
+			$divEmail.removeClass("hidden");
+		}
+		
+		var $modalReSch = $("#modal-reschedule");
+		$modalReSch.modal('show');
 		
 	});
 	
+	
+}
+
+function onBtnConfirmReschedule(){
+	$("#btn-confirm-resch").click(function(event){
+		
+		var newDateInit = $("#input-dtpckr-reschedule").data('datepicker').date;
+		var timeInit = $('#rch-timeinit').data('timepicker');
+		
+		//Clonando o objeto newDateInit...
+		var newDateEnd= new Date(newDateInit.getTime());
+		var timeEnd = $('#rch-timeend').data('timepicker');
+		
+		//Setando o horário nas datas...
+		newDateInit.setHours(timeInit.hour);
+		newDateInit.setMinutes(timeInit.minute);
+		
+		newDateEnd.setHours(timeEnd.hour);
+		newDateEnd.setMinutes(timeEnd.minute);
+		
+		$("#input-dtpckr-reschedule").removeClass("has-error");
+		$('#rch-timeinit').removeClass("has-error");
+		$('#rch-timeend').removeClass("has-error");
+		
+		//Conferindo se a hora dos timepickers estão válidas.
+		if(!isValidTimePickers(timeInit, timeEnd)){
+			$('#rch-timeinit').addClass("has-error");
+			$('#rch-timeend').addClass("has-error");
+			event.preventDefault();
+			return;
+		}
+		var now = new Date();
+		
+		if(newDateInit.getTime() < now.getTime()){
+			$("#input-dtpckr-reschedule").addClass("has-error");
+			event.preventDefault();
+			return;
+		}
+		
+		var idConsultation = $(".action-reschedule-consultation").attr("value");
+		
+		var $textEmail = $("#textArea-email-rsch");
+		
+		var email = $textEmail.val() ? $textEmail.val() : "";
+		
+		var params = {"idConsultation": idConsultation, "dateInit": newDateInit, "dateEnd": newDateEnd, "email": email};
+		
+		ajaxCall("/siac/rescheduleConsultation", params, function(response){
+			console.log("RES: "+JSON.stringify(response));
+			if(response.code == RESPONSE_SUCCESS){
+				alertMessage(response.message, null, ALERT_SUCCESS);
+			}else{
+				alertMessage(response.message, null, ALERT_ERROR);
+			}
+		}, function(){
+			alertMessage("Ops, não foi possível reagendar a consulta!", null, ALERT_ERROR);
+		}, "POST");
+		
+		var $modalReSch = $("#modal-reschedule");
+		$modalReSch.modal('hide');
+		
+		$("#modal-schedules-description").modal('hide');
+		getProfessionalConsultations(fillProfessionalCalendar);
+			
+		
+	});
+}
+
+function fillReScheduleModal(schedule){
+	var $atualDate = $("#rsch-atualdate");
+	var $atualTimeInit = $("#rsch-atual-timeinit");
+	var $atualTimeEnd = $("#rsch-atual-timeend");
+	
+	//Preenchendo os campos de data e hora atual da consulta 
+	$atualDate.val(schedule.getDateInit());
+	$atualTimeInit.val(schedule.getTimeInit());
+	$atualTimeEnd.val(schedule.getTimeEnd());
+	
+	//Iniciando o date picker para pegar a nova data do reagendamento
+	var datePickerNewDate = $("#input-dtpckr-reschedule");
+	datePickerNewDate.datepicker({
+		 format: 'dd/mm/yyyy',                
+		 language: 'pt-BR'
+	});
+	
+	//Iniciando os timepickers para pegar o novo horário.
+	initTimepicker("rch-timeinit", null);
+	initTimepicker("rch-timeend", null);
 	
 }
 
@@ -493,6 +600,8 @@ function isValidTimePickers(objTimeInit, objTimeEnd){
 	dateEnd.setHours(objTimeEnd.hour);
 	dateEnd.setMinutes(objTimeEnd.minute);
 	
+	console.log("INI: "+dateInit+" - End: "+dateEnd)
+	
 	if( dateInit.getTime() >= dateEnd.getTime() )
 		return false;
 	return true;
@@ -512,7 +621,27 @@ function initTimepicker(idPicker, time){
 // Função que inicializa a ação de click no botão de adicionar horário 
 function onButtonAddScheduleClick(){
 	$(".add-schedule").click(function(){
-		addSchedules({"timeInit":null, "timeEnd":null, "idSchedule":null});
+		
+		//Pegando o último timepicker para obter o último horário.
+		var listTimers = $(".timepicker-end input");
+		var idLastTimePicker = listTimers[listTimers.length - 1];
+		
+		hour = $("#"+idLastTimePicker.id).data("timepicker").hour;
+		minute = $("#"+idLastTimePicker.id).data("timepicker").minute;
+		
+		momentTime = moment();
+		momentTime.hours(hour);
+		
+		var timePerconsult = $("#input-count-time").val() ? $("#input-count-time").val() : 15;
+		
+		momentTime.minutes(minute);
+		momentTime.add('m', timePerconsult);
+		tempInit = momentTime.format("HH:mm");
+		
+		momentTime.add('m', timePerconsult);
+		tempEnd = momentTime.format("HH:mm")
+		
+		addSchedules({"timeInit":tempInit, "timeEnd":tempEnd, "idSchedule":null});
 	});
 }
 
