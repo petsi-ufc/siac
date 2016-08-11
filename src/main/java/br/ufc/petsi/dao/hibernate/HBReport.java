@@ -24,7 +24,7 @@ public class HBReport implements ReportDAO{
 	@PersistenceContext
 	private EntityManager manager;
 
-	public RatingReport getRatingReport(long professionalId, Date dateBegin,
+	public RatingReport getRatingReport(Long professionalId, Date dateBegin,
 			Date dateEnd) {
 		
 		RatingReport ratingReport = new RatingReport();

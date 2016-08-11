@@ -12,11 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ReportDAO;
 import br.ufc.petsi.model.GeneralReport;
 import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.RatingReport;
 import br.ufc.petsi.model.ServiceReport;
+import br.ufc.petsi.model.User;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 
 @Controller
@@ -51,17 +53,15 @@ public class ReportController {
 	 }	
 	
 	@RequestMapping("/relatorio/avaliacao")
-	 public String gerarRelatorioAvaliacao(Model model, HttpSession session){ 
+	 public String gerarRelatorioAvaliacao(Model model, 
+			 HttpSession session, 
+			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateBegin, 
+			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateEnd){ 
 		
 		List<Rating> ratings = new ArrayList<Rating>();
 		
-		// ****** modificar o recebimento das variáveis *****************
-		@SuppressWarnings("deprecation")
-		Date dateBegin = new Date(2015, 8, 8);
-		@SuppressWarnings("deprecation")
-		Date dateEnd = new Date(2015, 10, 10);
-		int profissionalId = 1;
-		//*******************
+		Long profissionalId = ((User)session.getAttribute(Constants.USER_SESSION)).getId();
+		System.out.println(profissionalId);
 		
 		RatingReport ratingReport = reportDAO.getRatingReport(profissionalId, dateBegin, dateEnd);
 		ratings = ratingReport.getRatings();

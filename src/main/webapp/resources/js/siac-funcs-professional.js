@@ -10,6 +10,7 @@ var EDIT_ACTION = "Editar";
 var MY_CALENDAR = 0;
 var REGISTER_SCHEDULE = 1;
 var MY_CONSULTATIONS = 2;
+var GENERATE_REPORT = 3;
 
 var CALENDAR_ID = "#calendar_professional";
 var SELECT_REPEAT_SCHEDULE_ID = "#select-repeat-schedule";
@@ -106,6 +107,16 @@ $("document").ready(function(){
 	
 	onButtonGoToDateClick();
 	
+	$("#input-dtpckr-start-report").datepicker({
+		 format: 'dd/mm/yyyy',                
+		 language: 'pt-BR'
+	});
+	
+	$("#input-dtpckr-end-report").datepicker({
+		 format: 'dd/mm/yyyy',                
+		 language: 'pt-BR'
+	});
+	
 });
 
 function onButtonGoToDateClick(){
@@ -130,17 +141,25 @@ function onLiItemServiceClick(){
 			getProfessionalConsultations();
 			$("#calendar-container").addClass("hidden");
 			$("#panel-register-schedules").removeClass("hidden");
+			$("#panel-generate-report").addClass("hidden");
 			$("#panel-my-consultations").addClass("hidden");
 		}else if(id == MY_CALENDAR){
 			getProfessionalConsultations(fillProfessionalCalendar);
 			$("#calendar-container").removeClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
 			$("#panel-my-consultations").addClass("hidden");
+			$("#panel-generate-report").addClass("hidden");
 		}else if(id == MY_CONSULTATIONS){
 			getProfessionalConsultations(fillMyConsultationsCollapses);
 			$("#my-calendar").addClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
 			$("#panel-my-consultations").removeClass("hidden");
+			$("#panel-generate-report").addClass("hidden");
+		}else if(id == GENERATE_REPORT){
+			$("#my-calendar").addClass("hidden");
+			$("#panel-register-schedules").addClass("hidden");
+			$("#panel-my-consultations").addClass("hidden");
+			$("#panel-generate-report").removeClass("hidden");
 		}
 	});
 }
