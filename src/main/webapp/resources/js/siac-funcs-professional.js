@@ -156,7 +156,7 @@ function onLiItemServiceClick(){
 			$("#panel-my-consultations").removeClass("hidden");
 			$("#panel-generate-report").addClass("hidden");
 		}else if(id == GENERATE_REPORT){
-			$("#my-calendar").addClass("hidden");
+			$("#calendar-container").addClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
 			$("#panel-my-consultations").addClass("hidden");
 			$("#panel-generate-report").removeClass("hidden");
