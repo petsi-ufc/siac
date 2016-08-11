@@ -64,5 +64,5 @@ http://www.springframework.org/schema/jee http://www.springframework.org/schema/
 		<property name="location" value="WEB-INF/spring/jasper-views.xml" />
 		<property name="order" value="0" />
 	</bean>
-
+	
 </beans>
