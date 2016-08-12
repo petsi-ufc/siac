@@ -29,7 +29,7 @@
 				<li class="action"><a class="link-action" id="0">Gerar
 						Relatórios</a></li>
 				<li class="nav-divider"></li>
-				<li class="action"><a class="link-action" id="1">Gerenciar
+				<li class="action"><a class="link-action manage-professional" id="1">Gerenciar
 						Profissionais</a></li> 
 				<li class="nav-divider"></li>
 				<li class="action"><a class="link-action" id="2">Gerenciar
@@ -37,13 +37,14 @@
 			</ul>
 		</div>
 
-		
 	</div>
 
 
 	<div id="right-bar">
 	
-		<div class="alert alert-danger" id="alert-schedules">Não há nenhum horário cadastrado!</div>
+		<div class="alert alert-danger alert-message hidden" role="alert">
+			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
+		</div>
 
 		<div id="generate-report">
 			<h2>Gerar Relatórios</h2>
@@ -74,8 +75,8 @@
 			<br /> <br /> <br />
 			
 			<ul class="nav nav-tabs" role="tablist">
-			    <li role="presentation" class="active"><a href="#professional-registered" aria-controls="professional-registered" role="tab" data-toggle="tab">Profissionais cadastrados</a></li>
-			    <li role="presentation"><a href="#add-professional" aria-controls="add-professional" role="tab" data-toggle="tab">Adicionar profissional</a></li>
+			    <li role="presentation" class="active link-professional-registered"><a href="#professional-registered" aria-controls="professional-registered" role="tab" data-toggle="tab">Profissionais cadastrados</a></li>
+			    <li role="presentation" class="link-add-professional"><a href="#add-professional" aria-controls="add-professional" role="tab" data-toggle="tab">Adicionar profissional</a></li>
 			 </ul>
 			
 			<div class="tab-content">
@@ -86,7 +87,6 @@
 							<tr>
 								<th>Nome</th>
 								<th>Email</th>
-								<th>Ativar / Desativar</th>
 							</tr>
 						</thead>
 					</table>
@@ -103,11 +103,20 @@
 						  		<button type="submit" class="btn btn-primary pull-left" id="button-search-professional">Pesquisar</button>
 						  	</div>
 						</div>
-						
-						<br>
-						<div class="alert alert-danger" id="alert-search-professional">
-  							Digite, no mínimo, <strong>três caracteres</strong> para pesquisar!
-						</div>
+						<br />
+						<table id="table-add-professional" class="table table-hover table-bordered">
+						<thead>
+							<tr>
+								<th>Nome</th>
+								<th>Email</th>
+								<th>Serviço	</th>
+								<th>Cadastrar</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
 						
 					</div>
 		    	</div>
@@ -188,7 +197,7 @@
 			</div><!-- Fim da dvi #modal-edit-service -->
 			
 			<!-- Modal -->
-			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 			  <div class="modal-dialog" role="document">
 			    <div class="modal-content">
 			      <div class="modal-header">

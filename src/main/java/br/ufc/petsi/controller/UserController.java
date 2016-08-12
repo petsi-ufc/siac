@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.model.User;
+import br.ufc.petsi.service.UserService;
 
 @Controller
 @Transactional
@@ -19,10 +20,13 @@ public class UserController {
 	@Inject
 	private LdapUser userDAO;
 	
+	@Inject
+	private UserService userService;
+	
 	@RequestMapping("/getUserByName")
 	@ResponseBody
 	public String getUserByName(String name){
-		return "";
+		return this.userService.getUserByName(name, userDAO);
 	}
 	
 	public User getUserLogged(HttpSession session)

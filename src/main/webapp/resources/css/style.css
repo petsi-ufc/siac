@@ -408,3 +408,7 @@ body html{
 	color : red !important;
 	border-color: red !important; 
 }
+
+#select-service-add-professional{
+	display: none;
+}
