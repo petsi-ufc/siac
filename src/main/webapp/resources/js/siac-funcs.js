@@ -91,3 +91,14 @@ function hideElement(element, time){
 			}, time
 	);
 }
+
+function stringToDate(string){
+	var d = string.split("/");
+    return new Date(d[2], d[1]-1, d[0]);
+}
+
+//returns 0 if the dates are equals, a negative number 
+//if the first date is less than second, and a positive number otherwise
+function compareDate(date1, date2){
+	return (date1.getTime()-date2.getTime()); 
+}
