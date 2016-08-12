@@ -85,8 +85,11 @@ body html{
 	text-align: center;
 }
 
-#box-services h3{
+
+#box-services .box-header{
 	padding-top: 5px;
+	font-size: 22px !important;
+	font-weight: bold;
 }
 
 #box-services a{
@@ -427,6 +430,12 @@ textarea {
    resize: none;
 }
 
-.form-group.control-label{
-	font-size: 12px !important;
+.form-font-md .control-label{
+	font-size: 17px !important
 }
+
+.modal-description{
+	font-size: 22px !important;
+	
+}
+

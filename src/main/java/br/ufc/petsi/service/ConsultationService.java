@@ -228,7 +228,7 @@ public class ConsultationService {
 			Consultation consultation = consDAO.getConsultationById(idConsultation);
 			consultation.setDateInit(dateInit);
 			consultation.setDateEnd(dateEnd);
-			if(consultation.getPatient() != null && consultation.getPatient().getEmail() != null){
+			if(consultation.getPatient() != null && consultation.getPatient().getEmail() != null && !email.equals("")){
 				emailService.sendEmail(consultation, email);
 			}
 			consDAO.update(consultation);
@@ -251,10 +251,6 @@ public class ConsultationService {
 		Gson gson = new Gson();
 		Response response = new Response();
 		
-		if( message == "" || message == null){
-			message = "Informanmos que sua consulta foi cancelada!";
-		}
-		
 		try{
 			Consultation oldCons = getConsultationsById(id, consDAO);
 			if(oldCons != null){
@@ -269,7 +265,8 @@ public class ConsultationService {
 					response.setMessage("Consulta cancelada com sucesso!");
 					
 					if(oldCons.getPatient() != null){
-						emailService.sendEmail(oldCons, message);
+						if(!message.equals(""))
+							emailService.sendEmail(oldCons, message);
 					}
 				}
 				return gson.toJson(response);

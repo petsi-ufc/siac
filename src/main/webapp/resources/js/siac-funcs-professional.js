@@ -328,6 +328,8 @@ function onBtnConfirmReschedule(){
 		if(!isValidTimePickers(timeInit, timeEnd)){
 			$('#rch-timeinit').addClass("has-error");
 			$('#rch-timeend').addClass("has-error");
+			
+			alertMessage("O horário de início não pode ser maior ou igual que o de fim!", null, ALERT_SUCCESS, "alert-reschedule");
 			event.preventDefault();
 			return;
 		}
@@ -335,6 +337,7 @@ function onBtnConfirmReschedule(){
 		
 		if(newDateInit.getTime() < now.getTime()){
 			$("#input-dtpckr-reschedule").addClass("has-error");
+			alertMessage("A nova data não pode ser anterior ao dia de hoje!", null, ALERT_SUCCESS, "alert-reschedule");
 			event.preventDefault();
 			return;
 		}
@@ -348,8 +351,9 @@ function onBtnConfirmReschedule(){
 		var params = {"idConsultation": idConsultation, "dateInit": newDateInit, "dateEnd": newDateEnd, "email": email};
 		
 		ajaxCall("/siac/rescheduleConsultation", params, function(response){
-			console.log("RES: "+JSON.stringify(response));
 			if(response.code == RESPONSE_SUCCESS){
+				//Carregando todas as consultas cadastradas no calendário do profissional.
+				getProfessionalConsultations(fillProfessionalCalendar);
 				alertMessage(response.message, null, ALERT_SUCCESS);
 			}else{
 				alertMessage(response.message, null, ALERT_ERROR);
@@ -362,8 +366,6 @@ function onBtnConfirmReschedule(){
 		$modalReSch.modal('hide');
 		
 		$("#modal-schedules-description").modal('hide');
-		getProfessionalConsultations(fillProfessionalCalendar);
-			
 		
 	});
 }
@@ -1126,6 +1128,8 @@ function renderCalendarEvents(events, calendar){
 		calendar.fullCalendar('renderEvent', value, true);
 	});
 }
+
+
 
 
 /*

@@ -62,7 +62,12 @@
 						</h4>
 					</div>
 					<div class="modal-body">
-						<div class="form-group">
+					
+						<div id="alert-reschedule" class="alert alert-danger hidden">
+  							<div id="alert-text"></div>
+						</div>
+						
+						<div class="form-group form-font-md">
 							<div class="col-md-4">
   								<label class="control-label" for="rsch-atualdate">Data Atual</label>
   								<input class="form-control" id="rsch-atualdate" type="text" placeholder="Disabled input here..." disabled="">
@@ -77,44 +82,38 @@
   							</div>
 						</div>
 						
-						<form class="form-inline" role="form">
-							<div class="form-group">
+						<div class="form-group form-font-md">
+							
+							<div class="col-md-4">
+								<label class="control-label" for="input-dtpckr-reschedule">Nova Data</label>
+								<input type='text' class="form-control" id="input-dtpckr-reschedule"/>
+							</div>	                   			
 								
-								<div class="input-group col-md-4">
-									<label class="control-label" for="input-dtpckr-reschedule">Nova Data</label>
-									<input type='text' class="form-control" id="input-dtpckr-reschedule"/>
-								</div>	                   			
+          						<div class="col-md-4">
+									<label class="control-label" for="rch-timeinit">Hora de Início</label>
+									<div class="bootstrap-timepicker timepicker">
+									<input id="rch-timeinit" type="text" class="input-schedule-info form-control input-small">
 									
-           						<div class="input-group col-md-1">
- 									<label class="control-label" for="rch-timeinit">Hora de Início</label>
- 									<div class="bootstrap-timepicker timepicker">
-										<input id="rch-timeinit" type="text" class="input-schedule-info form-control input-small">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-time"></i>
-										</span>
-									</div>
-								</div>  	
-															
-								<div class="input-group col-md-1">
- 									<label class="control-label" for="rch-timeend">Hora de Fim</label>
- 									<div class="bootstrap-timepicker timepicker">
-										<input id="rch-timeend" type="text" class="input-schedule-info form-control input-small">
-										<span class="input-group-addon">
-											<i class="glyphicon glyphicon-time"></i>
-										</span>
-									</div>
 								</div>
-								
-								<div class="input-group col-md-12" id="div-email">
-									 <label for="textArea" class="col-lg-2 control-label">E-mail:</label>
-      								 <div class="col-lg-10">
-        								 <textarea class="form-control" rows="3" id="textArea-email-rsch"></textarea>
-        								 <span class="help-block">Explique o motivo do reagendamento da consulta.</span>
-      								</div>
+							</div>  	
+														
+							<div class="col-md-4">
+									<label class="control-label" for="rch-timeend">Hora de Fim</label>
+									<div class="bootstrap-timepicker timepicker">
+									<input id="rch-timeend" type="text" class="input-schedule-info form-control input-small">
 								</div>
-								
 							</div>
-						</form>
+							
+							<div class="input-group col-md-12" id="div-email">
+								 <label for="textArea" class="col-lg-2 control-label">E-mail:</label>
+     								 <div class="col-lg-10">
+       								 <textarea class="form-control" rows="3" id="textArea-email-rsch"></textarea>
+       								 <span class="help-block">Explique o motivo do reagendamento da consulta.</span>
+     								</div>
+							</div>
+							
+						</div>
+						
 						<div class="modal-footer">
 							<button id="btn-confirm-resch" type="button" class="btn btn-primary">Confirmar</button>
 							<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
@@ -130,8 +129,9 @@
 			src="<c:url value='/resources/images/user_avatar.png'/>">
 
 		<div id="box-services">
-			<h3>Serviços disponí­veis</h3>
-
+			<div class="box-header">
+				<label>Serviços disponí­veis</label>
+			</div>
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
 				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
@@ -358,7 +358,7 @@
 						Horário</h3>
 				</div>
 				<div class="modal-body">
-					<h4 id="modal-description-body"></h4>
+					<h4 class="modal-description" id="modal-description-body"></h4>
 					<label id="label-date-clicked" class="hidden"></label>
 
 					<div class="panel panel-primary">
