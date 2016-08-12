@@ -43,6 +43,10 @@
 
 
 	<div id="right-bar">
+	
+		<div class="alert alert-message hidden" role="alert">
+			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
+		</div>
 
 		<div class="alert alert-danger" id="alert-schedules">Não há
 			nenhum horário cadastrado!</div>
@@ -51,7 +55,7 @@
 			<h2>Gerar Relatórios</h2>
 			<br /> <br /> <br />
 
-			<form action="relatorio/geral" method="post" target="_blank">
+			<form action="relatorio/geral" method="post" target="_blank" id="form-report">
 				<div class="form-group">
 					<label>Escolha o tipo de relatório</label> 
 					<select class="form-control type-report" id="select-report-type" >
@@ -62,14 +66,14 @@
 				</div>
 				<div class="form-group" id="select-servico">
 					<label>Escolha o serviço</label> 
-					<select class="form-control select-service" id="select-service-type">
-						<option>Escolha o serviço</option>
+					<select class="form-control select-service" id="select-service-type" name="serviceId">
+						<option value="option-deafult">Escolha o serviço</option>
 					</select>
 				</div>
 				<div class="form-group" id="select-professional">
 					<label>Escolha o profissional</label> 
-					<select class="form-control select-professional" id="select-professional">
-						<option>Escolha o profissional</option>
+					<select class="form-control select-professional" id="select-professional-id" name="professionalId">
+						<option value="option-default">Escolha o profissional</option>
 					</select>
 				</div>
 				<div id="date-report" class="form-group">
@@ -83,7 +87,7 @@
 					</div>
 				</div>
 			<br><br><br><br>
-			<button type="submit" class="btn btn-primary" id="button-generate-report" data-dismiss="modal">Gerar</button>
+			<button type="submit" class="btn btn-primary" id="button-generate-report" data-dismiss="modal" onclick="return onGenerateReportButtonClicked();">Gerar</button>
 			</form>
 		</div>
 

@@ -8,8 +8,12 @@ $("document").ready(function(){
 	onServiceEditSaveButtonClick();
 	onServiceAddButtonClick();
 	onFieldSearchProfessionalChange();
-	onGenerateReportButtonClicked();
+	initComponentsReport();
 	
+
+});
+
+function initComponentsReport(){
 	$("#input-dtpckr-start-report").datepicker({
 		 format: 'dd/mm/yyyy',                
 		 language: 'pt-BR'
@@ -25,30 +29,56 @@ $("document").ready(function(){
 	$("#select-report-type").change(function(){
 		onSelectReportChaged()
 	});
-
-});
+	
+	$("#select-service-type").change(function(){
+		onSelectReportServiceTypeChanged();
+	});
+	
+	ajaxCall("/siac/getActiveServices", null, function(json){
+		var selectServico = $("#select-servico").find('select');
+		$.each(json, function() {
+	        selectServico.append('<option value="'+this.id+'">'+this.name+'</option>');
+	    });
+	});
+}
 
 function onSelectReportChaged(){
 	var value = $("#select-report-type").val();
 	if(value === "by-type"){
+		$("#form-report").attr('action','relatorio/servico');
 		$("#select-servico").show().find('select').prop('disabled', false);
-		$("#select-professional").show().find('select').prop('disabled', false);
-		
-		ajaxCall("/getActiveServices", null, function(json){
-			
-		});
-		
+		$("#select-professional").show();
 	} else {
 		if(value === "general") {
+			$("#form-report").attr('action','relatorio/geral');
 			$("#select-servico").hide().find('select').prop('disabled', true);
-			$("#select-professional").hide().find('select').prop('disabled', true);
+			$("#select-professional").hide();
 		} else {
 			$("#select-servico").show().find('select').prop('disabled', true);
-			$("#select-professional").show().find('select').prop('disabled', true);
+			$("#select-professional").show();
 		}
 	}
 }
 
+function onSelectReportServiceTypeChanged(){
+	var selectServico = $("#select-servico").find('select'); 
+	var selectProfessional = $("#select-professional").find('select');
+	if(selectServico.val()==="option-deafult"){
+		selectProfessional.prop('disabled',true);
+	} else {
+		
+		ajaxCall("/siac/getProfessionalsByService", {"serviceId":selectServico.val()}, function(json){
+			selectProfessional.prop('disabled',false);
+			selectProfessional.find('option').remove();
+			selectProfessional.append('<option value="option-default">Escolha o profissional</option>');
+			$.each(json, function() {
+		        selectProfessional.append('<option value="'+this.id+'">'+this.name+'</option>');
+		    });
+		});
+		
+		
+	}
+}
 
 
 function onActionClick(){
@@ -277,11 +307,33 @@ function onFieldSearchProfessionalChange(){
 }
 
 function onGenerateReportButtonClicked(){
-	$("#button-generate-report").click(function (){
-		var reportType = $("#select-report-type").val();
-		var serviceType = $("#select-service-type").val();
-		var dataInicio = $("#input-dtpckr-start-report").val();
-		var dataFim = $("#input-dtpckr-end-report").val();
-		
-	});
+	var reportType = $("#select-report-type").val();
+	var serviceType = $("#select-service-type").val();
+	var idProfissional = $("#select-professional-id").val();
+	var dataInicio = $("#input-dtpckr-start-report").val();
+	var dataFim = $("#input-dtpckr-end-report").val();
+	if(dataInicio=="" || dataFim=="") {
+		alertMessage("Selecione as datas de início e fim corretamente", 3000, ALERT_ERROR);
+		return false;
+	} else if (compareDate(stringToDate(dataInicio), stringToDate(dataFim))>0){
+		alertMessage("A data de início não pode ser depois da data final", 3000, ALERT_ERROR);
+		return false;
+	} 
+	if(reportType==="general"){
+		return true;
+	} else if(reportType==="by-type"){
+		if(serviceType==="option-deafult"){
+			alertMessage("Selecione o serviço", 3000, ALERT_ERROR);
+			return false;
+		} else {
+			if(idProfissional==="option-default"){
+				alertMessage("Selecione o profissional", 3000, ALERT_ERROR);
+				return false;	
+			}
+		}
+	} else {
+		alertMessage("Selecione o tipo de relatório", 3000, ALERT_ERROR);
+		return false;
+	}
+	return true;
 }
