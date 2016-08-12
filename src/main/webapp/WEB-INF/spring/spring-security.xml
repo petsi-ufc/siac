@@ -33,6 +33,10 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 		<security:logout logout-success-url="/" invalidate-session="true"/>
 		
 		<security:custom-filter position="FORM_LOGIN_FILTER" ref="ldapAuthenticationFilter" />
+		
+		<security:session-management>
+			<security:concurrency-control max-sessions="1" expired-url="/"/>
+		</security:session-management>
 	</security:http>
 	
 	<bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
@@ -60,5 +64,4 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 		<security:authentication-provider ref="ldapAuthenticationProvider" />
 	</security:authentication-manager>
 	
-
 </beans>

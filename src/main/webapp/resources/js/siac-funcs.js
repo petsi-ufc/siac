@@ -6,13 +6,14 @@
 var RESPONSE_ERROR = 500;
 var RESPONSE_SUCCESS = 200;
 
-//Função que fax uma chamada ajax contendo a url e os parametros devidos.
 //O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
+//Função que fax uma chamada ajax contendo a url e os parametros devidos.
 
 function ajaxCall(_url, params, funcSucc, funcErr, method){
 	method : method ? method : "GET";
 	var ajax = $.ajax({
 		method : method,
+		contentType: "application/json; charset=ISO-8859-1",
 		url: _url,
 		dataType: "json",
 		data: params
@@ -35,6 +36,7 @@ function ajaxCall(_url, params, funcSucc, funcErr, method){
 function ajaxCallNoJSON(_url, params, func, fail){
 	$.ajax({
 			method: "GET",
+			contentType: "application/json; charset=ISO-8859-1",
 			url: _url,
 			data: params
 		}
