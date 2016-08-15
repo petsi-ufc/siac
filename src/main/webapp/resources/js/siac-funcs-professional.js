@@ -1087,10 +1087,11 @@ function updateScheduleManagerList(json){
 		for(var i = 0; i < length; i++){
 			var obj = json[i]; 
 			
-			date = moment(new Date(obj.dateInit)).format("DD/MM/YYYY");
-			console.log(date);
+			date = new Date(obj.dateInit);
+			
 			var timeInit = moment(obj.dateInit);
 			var timeEnd = moment(obj.dateEnd);
+			console.log(timeInit);
 			
 			var rating = null;
 			var comment = null;
