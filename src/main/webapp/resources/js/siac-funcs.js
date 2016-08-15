@@ -11,11 +11,13 @@ var RESPONSE_SUCCESS = 200;
 
 function ajaxCall(_url, params, funcSucc, funcErr, method){
 	method : method ? method : "GET";
+	console.log(params)
 	var ajax = $.ajax({
 		method : method,
 		contentType: "application/x-www-form-urlencoded; charset=ISO-8859-1",
-		url: _url,
 		dataType: "json",
+		url: _url,
+		encoding:"UTF-8",
 		data: params
 	});
 	
@@ -27,7 +29,7 @@ function ajaxCall(_url, params, funcSucc, funcErr, method){
 	else{
 		ajax.error(function(textStatus, error){
 			alertMessage("Ops! Aconteceu algo de errado.");
-			console.log(textStatus+" - "+error);
+			console.log(JSON.stringify(textStatus)+" - "+error);
 		});
 	}
 
@@ -36,6 +38,7 @@ function ajaxCall(_url, params, funcSucc, funcErr, method){
 function ajaxCallNoJSON(_url, params, func, fail){
 	$.ajax({
 			method: "GET",
+			encoding:"UTF-8",	
 			contentType: "application/json; charset=ISO-8859-1",
 			url: _url,
 			data: params
@@ -57,11 +60,11 @@ const ALERT_ERROR = "alert-warning";
 //Função que mostra a mensagem de alerta em cima do calendário.
 //Type: SUCCESS ou ERROR
 //Time: tempo para que a mensagem desapareça
-function alertMessage(message, time, type){
+function alertMessage(message, time, type, idAlert){
 	//Se o tempo para esconder a mensagem não for passado por paramentro
 	//o valor do tempo será 5 segundos.
 	time = !time ? 5000 : time;
-	var alertMessage = $(".alert-message");
+	var alertMessage = idAlert ? $("#"+idAlert) : $(".alert-message");
 	
 	alertMessage.removeClass(ALERT_SUCCESS);
 	alertMessage.removeClass(ALERT_ERROR);
@@ -89,7 +92,7 @@ function alertMessage(message, time, type){
 function hideElement(element, time){
 	setTimeout(
 			function(){
-				$(element).hide(1500);
+				$(element).slideUp(1500);
 			}, time
 	);
 }

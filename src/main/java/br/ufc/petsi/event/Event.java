@@ -20,7 +20,7 @@ public class Event {
 	private boolean isRatingNull;
 	private long idReserve;
 
-	public Event(Patient patient,Consultation consultation) {
+	public Event(Patient patient, Consultation consultation) {
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
 		SimpleDateFormat simpleHourFormat = new SimpleDateFormat("HH:mm:ss");

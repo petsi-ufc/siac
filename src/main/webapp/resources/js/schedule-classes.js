@@ -77,6 +77,14 @@ var ScheduleTime = function(){
 		return this.timeEnd.format("HH:mm");
 	}
 	
+	self.getDateInit = function(){
+		return this.timeInit.format("DD/MM/YYYY");
+	}
+	
+	self.getDateEnd = function(){
+		return this.timeEnd.format("DD/MM/YYYY");
+	}
+	
 	self.toEmail = function(){
 		return this.timeInit.format("DD/MM/YYYY")+" "+this.timeInit.format('HH:mm')+" às "+this.timeEnd.format('HH:mm');
 	}

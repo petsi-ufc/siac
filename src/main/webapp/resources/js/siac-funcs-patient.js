@@ -55,8 +55,10 @@ function initCalendarPatient(json){
 
 function chargeScheduleDay(id){
 	$(".tr-horary").remove();
-
-	ajaxCall("/siac/getConsultationById?id="+id, function(json){
+	
+	var params = {"id" : id }
+	
+	ajaxCall("/siac/getConsultationById", params, function(json){
 
 		var hour;
 		var state;
@@ -137,7 +139,7 @@ function chargeScheduleDay(id){
 
 function chargeEvents(){
 
-	ajaxCall("/siac/getMyConsultations", function(json){
+	ajaxCall("/siac/getMyConsultations", null ,function(json){
 		initCalendarPatient(json);
 	})
 }
@@ -145,7 +147,7 @@ function chargeEvents(){
 
 function chargeServices(){
 
-	ajaxCall("/siac/getServices", function(json){
+	ajaxCall("/siac/getActiveServices", null, function(json){
 
 		var serviceName;
 		var serviceActive;
@@ -186,7 +188,7 @@ function myConsultations(){
 
 		$(".tr-my-consultations").remove();
 
-		ajaxCall("/siac/getMyConsultations", function(json){
+		ajaxCall("/siac/getMyConsultations", null ,function(json){
 
 			var service;
 			var date;
@@ -313,7 +315,7 @@ function onServiceClick(){
 			var idSocialService = $(this).attr("id");
 			$("#my-calendar-title").html("Calendário " + $(this).attr("data-name"));
 
-			ajaxCall("/siac/getConsultationBySocialService?id="+idSocialService, function(json){
+			ajaxCall("/siac/getConsultationBySocialService",{'id': idSocialService}, function(json){
 				$(".content-calendar").css("display", "block");
 				$(".calendar").remove();
 				$(".content-calendar").append($("<div class='calendar' id='calendar-patient'></div>"));
@@ -364,8 +366,10 @@ function showRating(){
 
 		var comment;
 		var rating;
-
-		ajaxCall("/siac/showRating?id="+id_consultation, function(json) {
+		
+		var params = {"id" : id_consultation}
+		
+		ajaxCall("/siac/showRating", params, function(json) {
 
 			$.each(json, function(name, value){
 
