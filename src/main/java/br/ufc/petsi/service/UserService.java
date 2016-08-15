@@ -61,7 +61,7 @@ public class UserService {
 	public String getProfessionals(UserDAO userDAO){
 		
 		List<User> users = userDAO.getUsersByRole(Constants.ROLE_PROFESSIONAL);
-		
+		System.out.println("LIST: "+users.size());
 		Gson gson = new Gson();
 		
 		return gson.toJson(users);
