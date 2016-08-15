@@ -13,7 +13,7 @@ function ajaxCall(_url, params, funcSucc, funcErr, method){
 	method : method ? method : "GET";
 	var ajax = $.ajax({
 		method : method,
-		contentType: "application/json; charset=ISO-8859-1",
+		contentType: "application/x-www-form-urlencoded; charset=ISO-8859-1",
 		url: _url,
 		dataType: "json",
 		data: params

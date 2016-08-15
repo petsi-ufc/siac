@@ -165,13 +165,18 @@ function onServiceActiveButtonClick(){
 
 	$(document).on("click", ".service-active", function(){
 
-		var params = new Object();
-		params["serviceId"] = $(this).attr("id");
+		var id = $(this).attr("id");
 
-		ajaxCall("/siac/setInactiveService?id="+params["serviceId"],function(json){
+		ajaxCall("/siac/setInactiveService", {"id": id}, function(json){
 
 			fillTableServices(json);
+			
+			alertMessage("Serviço desativado com sucesso", null, ALERT_SUCCESS);
 
+		}, function(){
+			
+			alertMessage("Não foi possível realizar a operação", null, ALERT_ERROR);
+		
 		});
 	});
 }
@@ -180,13 +185,18 @@ function onServiceInactiveButtonClick(){
 
 	$(document).on("click", ".service-inactive", function(){
 
-		var params = new Object();
-		params["serviceId"] = $(this).attr("id");
+		var id = $(this).attr("id");
 
-		ajaxCall("/siac/setActiveService?id="+params["serviceId"],function(json){
+		ajaxCall("/siac/setActiveService", {"id": id}, function(json){
 
 			fillTableServices(json);
+			
+			alertMessage("Serviço ativado com sucesso", null, ALERT_SUCCESS);
 
+		}, function(){
+			
+			alertMessage("Não foi possível realizar a operação", null, ALERT_ERROR);
+			
 		});
 	});
 }
@@ -203,11 +213,19 @@ function onServiceEditButtonClick(){
 function onServiceEditSaveButtonClick(){
 	$(".save-edit-service").on("click", function(){
 		var params = new Object();
-		params["serviceName"] = $("#name-edit-service").val();
-		params["serviceId"] = $(this).attr("data-id");
+		var name = $("#name-edit-service").val();
+		var id = $(this).attr("data-id");
 
-		ajaxCall("/siac/editService?id="+params["serviceId"]+"&name="+params["serviceName"], function(json){
+		ajaxCall("/siac/editService", {"id": id, "name": name}, function(json){
+			
 			fillTableServices(json);
+		
+			alertMessage("Serviço editado com sucesso", null, ALERT_SUCCESS);
+			
+		},function(){
+			
+			alertMessage("Não foi possível editar o serviço", null, ALERT_ERROR);
+			
 		});
 
 		$('#modal-edit-service').modal('hide');
@@ -218,13 +236,19 @@ function onServiceAddButtonClick(){
 
 	$(".save-register-service").on("click", function(){
 
-		var params = new Object();
-		params["serviceName"] = $("#name-register-service").val();
+		var name = $("#name-register-service").val();
 
 		$("#name-register-service").val("");
 
-		ajaxCall("/siac/registerService?name="+params["serviceName"], function(json){
+		ajaxCall("/siac/registerService", {"name": name}, function(json){
 			fillTableServices(json);
+			
+			alertMessage("Serviço cadastrado com sucesso", null, ALERT_SUCCESS);
+			
+		}, function(){
+			
+			alertMessage("Não foi possível cadastrar o serviço", null, ALERT_ERROR);
+			
 		});
 
 		$('#modal-add-service').modal('hide');
@@ -289,11 +313,10 @@ function onFieldSearchProfessionalChange(){
 
 		var value = $("#field-search-professional").val();
 
-		var params = new Object();
 		var name = $("#field-search-professional").val();
 		var param = {name: name};
 
-		ajaxCall("/siac/getUserByName?name="+params["userName"], function(json){
+		ajaxCall("/siac/getUserByName?name", param, function(json){
 			fillTableAddProfessional(json);
 		});
 
@@ -302,9 +325,7 @@ function onFieldSearchProfessionalChange(){
 	$("#field-search-professional").keydown(function(){
 
 		var value = $("#field-search-professional").val();
-
-
-		var params = new Object();
+		
 		var name = $("#field-search-professional").val();
 		var param = {name: name};
 
@@ -324,7 +345,7 @@ function fillTableAddProfessional(jsonUsers){
 
 	var jsonServices;
 
-	ajaxCall("/siac/getServices", function(json){
+	ajaxCall("/siac/getServices", null, function(json){
 
 		var serviceName;
 		var serviceActive;
@@ -380,9 +401,11 @@ function fillTableAddProfessional(jsonUsers){
 			
 			newRow.append("<td>"+emailProfessional+"</td>").append(select);
 			newRow.append("<td><button class='btn btn-sm btn-primary tr-professional btn-add-professional' data-cpf='"+cpfProfessional+"' role='button'>Cadastrar profissional</button></td>");
-
+			
 			$("#table-add-professional").append(newRow);
 		});
+	}, function(){
+		alertMessage("Não foi possível buscar os serviços", null, ALERT_ERROR);
 	});	
 }
 
@@ -418,6 +441,8 @@ function getProfessionals(){
 	$(document).on("click", ".manage-professional", function(){
 		var nameProfessional;
 		var emailProfessional;
+		var socialService;
+		var serviceJson;
 		
 		$(".tr-professional-added").remove();
 		
@@ -436,24 +461,32 @@ function getProfessionals(){
 					if(name=="email"){
 						emailProfessional = value;
 					}
+					if(name=="socialService"){
+						serviceJson = value;
+						$.each(serviceJson, function(name2, value2){
+							if(name2=="name"){
+								socialService = value2;
+							}
+						});
+					}
 				});
-				
-				console.log(nameProfessional);
 				
 				var newRow = $("<tr class='tr-professional-added'></tr>");
 				newRow.append("<td>"+nameProfessional+"</td>");
 				newRow.append("<td>"+emailProfessional+"</td>");
+				newRow.append("<td>"+socialService+"</td>");
 				
 				$("#table-professional").append(newRow);
 				
 			});
-			
 		});
 	});
 	
 	$(document).on("click", ".link-professional-registered", function(){
 		var nameProfessional;
 		var emailProfessional;
+		var socialService;
+		var serviceJson;
 		
 		$(".tr-professional-added").remove();
 		
@@ -472,18 +505,23 @@ function getProfessionals(){
 					if(name=="email"){
 						emailProfessional = value;
 					}
+					if(name=="socialService"){
+						serviceJson = value;
+						$.each(serviceJson, function(name2, value2){
+							if(name2=="name"){
+								socialService = value2;
+							}
+						});
+					}
 				});
-				
-				console.log(nameProfessional);
 				
 				var newRow = $("<tr class='tr-professional-added'></tr>");
 				newRow.append("<td>"+nameProfessional+"</td>");
 				newRow.append("<td>"+emailProfessional+"</td>");
+				newRow.append("<td>"+socialService+"</td>");
 				
-				$("#table-professional").append(newRow);
-				
+				$("#table-professional").append(newRow);				
 			});
-			
 		});
 	});
 }
