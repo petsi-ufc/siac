@@ -11,7 +11,7 @@ import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
 
 public interface EmailService {
-	public void sendConsultationCancelEmail(Consultation cons, String message);
+	public void sendEmail(Consultation cons, String message);
 	public void sendEmail(Email email) throws MessagingException;
 	public void setMailSender(JavaMailSenderImpl mailSender);
 	public JavaMailSender getMailSender();

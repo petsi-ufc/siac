@@ -1,6 +1,7 @@
 package br.ufc.petsi.service;
 
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,12 +135,14 @@ public class ConsultationService {
 		List<Reserve> reserves = reserveDAO.getActiveReservesByPatient(patient);
 
 		List<Event> events = new ArrayList<Event>();
-
-		for(Consultation c : consultations){
-
-			Event event = new Event(patient, c);
-			events.add(event);
-
+		
+		if(consultations != null){
+			if(consultations.size() > 0){
+				for(Consultation c : consultations){
+					Event event = new Event(patient, c);
+					events.add(event);
+				}
+			}
 		}
 
 		for(Reserve reserve: reserves){
@@ -218,12 +221,38 @@ public class ConsultationService {
 		return c;
 	}
 
+	public String rescheduleConsultation(long idConsultation, Date dateInit, Date dateEnd, String email, ConsultationDAO consDAO){
+		Gson gson = new Gson();
+		Response response = new Response();
+		try{
+			Consultation consultation = consDAO.getConsultationById(idConsultation);
+			consultation.setDateInit(dateInit);
+			consultation.setDateEnd(dateEnd);
+			if(consultation.getPatient() != null && consultation.getPatient().getEmail() != null && !email.equals("")){
+				emailService.sendEmail(consultation, email);
+			}
+			consDAO.update(consultation);
+			response.setMessage("Consulta reagendada com sucesso!");
+			response.setCode(Response.SUCCESS);
+		}catch(Exception e){
+			e.printStackTrace();
+			response.setMessage("Não foi possível reagendar essa consulta!");
+			response.setCode(Response.ERROR);
+		}
+		return gson.toJson(response);
+	}
+
+	public void updateConsultation(Consultation consultation, ConsultationDAO consDAO){
+		consDAO.update(consultation);
+	}
+
 	public String updateConsultation(Consultation consultation, ConsultationDAO consDAO, Patient patient){
-		
+
+
 		Gson gson = new Gson();
 		Response response = new Response();
 		Date date = new Date();
-		
+
 		try{
 			if(consultation.getState().equals(ConsultationState.FR) && consultation.getDateInit().after(date)){
 				consultation.setState(ConsultationState.SC);
@@ -235,35 +264,37 @@ public class ConsultationService {
 			else{
 				response.setCode(Response.ERROR);
 				response.setMessage("A consulta não está mais disponível");
-				
+
 			}
-			
+
 			return gson.toJson(response);
-			
+
 		}catch(Exception e){
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível agendar a consulta");
 			System.out.println("Error at registerConsultation by id: "+e);
 			return gson.toJson(response);
 		}
-		
-		
-	}
 
+
+	}
 	public String cancelConsultationById(long id, String message, ConsultationDAO consDAO){
 
 		Gson gson = new Gson();
 		Response response = new Response();
 
-		if( message == "" || message == null){
-			message = "Informanmos que sua consulta foi cancelada!";
-		}
-
 		try{
 			Consultation oldCons = getConsultationsById(id, consDAO);
+			
 			if(oldCons != null){
 				Date today = new Date();
-
+				
+				DateFormat formatDate = new SimpleDateFormat("dd/MM/YYYY HH:mm");
+				DateFormat formatHours = new SimpleDateFormat("HH:mm");
+				if( message == "" || message == null){
+					message = "Informamos que sua consulta do dia "+formatDate.format(oldCons.getDateInit())+" de "+formatHours.format(oldCons.getDateInit())+" às "+ formatHours.format(oldCons.getDateEnd()) +" foi cancelada!";
+				}
+				
 				if(oldCons.getDateEnd().before(today)){
 					response.setCode(Response.ERROR);
 					response.setMessage("Ops, não é possível cancelar consultas anteriores a data de hoje");
@@ -273,7 +304,8 @@ public class ConsultationService {
 					response.setMessage("Consulta cancelada com sucesso!");
 
 					if(oldCons.getPatient() != null){
-						emailService.sendConsultationCancelEmail(oldCons, message);
+						if(!message.equals(""))
+							emailService.sendEmail(oldCons, message);
 					}
 				}
 				return gson.toJson(response);
@@ -284,11 +316,11 @@ public class ConsultationService {
 		}catch(Exception e){
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível cancelar a consulta");
-			
+
 			e.printStackTrace();
-			
+
 			System.out.println("Error at cancelConsultation by id: "+e);
-			
+
 			return gson.toJson(response);
 		}
 	}
@@ -340,34 +372,34 @@ public class ConsultationService {
 		reserveDAO.update(reserve);
 		return "{'msg': Reserva cancelada com sucesso}";
 	}
-	
+
 	public String updateRating(Consultation consultation, ConsultationDAO consultationDAO, Patient patient){
-				
-			Gson gson = new Gson();
-			Response response = new Response();
+
+		Gson gson = new Gson();
+		Response response = new Response();
 		System.out.println("Estado da consulta :    " + consultation.getState());
 		System.out.println("CPF paciente da sessão:    "+ patient.getCpf());
-			try{
-				if(consultation.getState().equals(ConsultationState.RD) && consultation.getPatient().getCpf().equals(patient.getCpf())){
-					response.setCode(Response.SUCCESS);
-					response.setMessage("Consulta avaliada com sucesso");
-					consultationDAO.update(consultation);
-				} 
-				else{
-					response.setCode(Response.ERROR);
-					response.setMessage("A consulta não pode ser avaliada");
-					
-				}
-				return gson.toJson(response);
-				
-				
-			}catch(Exception e){
+		try{
+			if(consultation.getState().equals(ConsultationState.RD) && consultation.getPatient().getCpf().equals(patient.getCpf())){
+				response.setCode(Response.SUCCESS);
+				response.setMessage("Consulta avaliada com sucesso");
+				consultationDAO.update(consultation);
+			} 
+			else{
 				response.setCode(Response.ERROR);
-				response.setMessage("Ops, não foi possível avaliar a consulta");
-				System.out.println("Error at ratingConsultation by id: "+e);
-				return gson.toJson(response);
+				response.setMessage("A consulta não pode ser avaliada");
+
 			}
-			
+			return gson.toJson(response);
+
+
+		}catch(Exception e){
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível avaliar a consulta");
+			System.out.println("Error at ratingConsultation by id: "+e);
+			return gson.toJson(response);
 		}
+
+	}
 
 }

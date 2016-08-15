@@ -30,7 +30,7 @@ public class EmailServiceImpl implements EmailService
 	private JavaMailSender mailSender;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public void sendConsultationCancelEmail(Consultation cons, String message) {
+	public void sendEmail(Consultation cons, String message) {
 		final Email email = new Email();
 		email.setFrom("siac@quixada.ufc.br");
 		

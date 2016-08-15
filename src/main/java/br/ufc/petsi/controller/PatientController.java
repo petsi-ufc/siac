@@ -47,7 +47,6 @@ public class PatientController {
 	public String getConsultationsByPatient(HttpSession session){
 
 		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
-
 		return consService.getConsultationsByPatient(patient, consDAO, reserveDAO);
 	}
 
@@ -57,8 +56,8 @@ public class PatientController {
 	public String getConsultationById(long id, HttpSession session){
 
 		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
-
 		return consService.getConsultationsById(patient, id, consDAO);
+		
 	}
 
 	@Secured("ROLE_PATIENT")

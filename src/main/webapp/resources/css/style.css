@@ -85,8 +85,11 @@ body html{
 	text-align: center;
 }
 
-#box-services h3{
+
+#box-services .box-header{
 	padding-top: 5px;
+	font-size: 22px !important;
+	font-weight: bold;
 }
 
 #box-services a{
@@ -390,8 +393,16 @@ body html{
 	overflow-y: scroll;
 }
 
-.modal-admin{
+.modal-large{
 	max-width: 70%;
+	left: 15%;
+	margin-top: 20px;
+	margin-right: auto;
+	margin-left: auto; 
+}
+
+.modal-medium{
+	max-width: 50%;
 	left: 15%;
 	margin-top: 20px;
 	margin-right: auto;
@@ -427,3 +438,18 @@ body html{
 	margin-right: 10%;
 	float: right;
 }
+
+textarea { 
+   min-width: 100%;
+   resize: none;
+}
+
+.form-font-md .control-label{
+	font-size: 17px !important
+}
+
+.modal-description{
+	font-size: 22px !important;
+	
+}
+

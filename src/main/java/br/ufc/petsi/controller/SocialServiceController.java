@@ -24,7 +24,6 @@ public class SocialServiceController {
 	@RequestMapping("/registerService")
 	@ResponseBody
 	public String registerService(SocialService service){
-		System.out.println("SERVIÇO: "+service.getName());
 		serviceService.registerService(service, this.serviceDao);
 		return this.getServices();
 	}

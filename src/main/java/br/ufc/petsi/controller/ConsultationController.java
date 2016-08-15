@@ -1,6 +1,7 @@
 package br.ufc.petsi.controller;
 
-import java.util.List;
+
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.model.Consultation;
@@ -96,6 +98,11 @@ public class ConsultationController {
 		return consultationService.registerConsultation(cons, consDAO);
 	}
 	
-	
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping(value="/rescheduleConsultation", method=RequestMethod.POST)
+	@ResponseBody
+	public String rescheduleConsultation(long idConsultation, Date dateInit, Date dateEnd, String email){
+		return consultationService.rescheduleConsultation(idConsultation, dateInit, dateEnd, email ,consDAO);
+	}
 	
 }

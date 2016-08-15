@@ -32,7 +32,11 @@ public class HBReport implements ReportDAO{
 		Query query = (Query) manager.createQuery("SELECT avg(r.rating) FROM Rating r, Consultation c WHERE r.id = c.rating.id and c.professional.id = :professionalId");
 		query.setParameter("professionalId", professionalId);
 		
-		double rating = (double)query.getSingleResult();
+		Object result = query.getSingleResult();
+		double rating = 0;
+		
+		if(result != null)
+			rating = (double) result;
 		
 		ratingReport.setAverage(rating);
 		
