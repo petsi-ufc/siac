@@ -14,9 +14,11 @@ var ScheduleTime = function(){
 	var comment;
 	var patient;
 		
-	self.__construct = function(hourInit, minuteInit, hourEnd, minuteEnd){
-		self.setTimeInit(hourInit, minuteInit);
-		self.setTimeEnd(hourEnd, minuteEnd);
+	self.__construct = function(date, hourInit, minuteInit, hourEnd, minuteEnd){
+		this.timeInit = moment(date.getTime());
+		this.timeEnd = moment(date.getTime());
+		self.setTimeInit(date, hourInit, minuteInit);
+		self.setTimeEnd(date, hourEnd, minuteEnd);
 	}
 	
 	self.setPatient = function(patient){
@@ -59,7 +61,7 @@ var ScheduleTime = function(){
 		return self.id;
 	}
 	
-	self.setTimeInit = function(hourInit, minuteInit){
+	self.setTimeInit = function(date, hourInit, minuteInit){
 		this.timeInit.hours(hourInit);
 		this.timeInit.minutes(minuteInit);
 	}
@@ -68,7 +70,7 @@ var ScheduleTime = function(){
 		return this.timeInit.format("HH:mm");
 	}
 	
-	self.setTimeEnd = function(hourEnd, minuteEnd){
+	self.setTimeEnd = function(date, hourEnd, minuteEnd){
 		this.timeEnd.hours(hourEnd);
 		this.timeEnd.minutes(minuteEnd);
 	}
@@ -109,7 +111,7 @@ var ScheduleDay = function(){
 		return self.date;
 	}
 	
-	self.addSchedule = function(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient){
+	self.addSchedule = function(date, hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient){
 		var sch = new ScheduleTime();
 		
 		state = state ? state : "Sem Estado"; 
@@ -126,7 +128,7 @@ var ScheduleDay = function(){
 		sch.setId(id);
 		sch.setPatient(patient);
 		
-		sch.__construct(hourInit, minuteInit, hourEnd, minuteEnd);
+		sch.__construct(date, hourInit, minuteInit, hourEnd, minuteEnd);
 		this.listSchedules.push(sch);
 	}
 	
@@ -192,15 +194,15 @@ var ScheduleManager = function(){
 	 * Se a data não estive no mapa um novo ScheduleDay é criado.
 	 */ 
 	self.addNewScheduleTime = function(date, hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient){
-		
-		var scheduleDay = mapScheduleDay.get(date);
+		var	dateFormatted = moment(date).format("DD/MM/YYYY");
+		var scheduleDay = mapScheduleDay.get(dateFormatted);
 		if(scheduleDay){
-			scheduleDay.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient);
+			scheduleDay.addSchedule(date, hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient);
 		}else{
 			var sch = new ScheduleDay();
-			sch.setDate(date);
-			sch.addSchedule(hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient);
-			self.addScheduleDay(date, sch);
+			sch.setDate(dateFormatted);
+			sch.addSchedule(date, hourInit, minuteInit, hourEnd, minuteEnd, state, rating, comment, id, patient);
+			self.addScheduleDay(dateFormatted, sch);
 		}
 	}
 	
