@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Named;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.SocialServiceDAO;
@@ -15,6 +16,7 @@ import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.util.Response;
+import br.ufc.petsi.util.UserExclusionStrategy;
 
 @Named
 public class UserService {
@@ -62,7 +64,9 @@ public class UserService {
 		
 		List<User> users = userDAO.getUsersByRole(Constants.ROLE_PROFESSIONAL);
 		
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder()
+		        .setExclusionStrategies(new UserExclusionStrategy())
+		        .create();
 		
 		return gson.toJson(users);
 		
