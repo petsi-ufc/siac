@@ -14,6 +14,7 @@ import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.RatingDAO;
 import br.ufc.petsi.dao.ReserveDAO;
+import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Rating;
@@ -40,6 +41,9 @@ public class PatientController {
 
 	@Inject
 	private ReserveDAO reserveDAO;
+	
+	@Inject
+	private UserDAO userDAO;
 
 	@Secured("ROLE_PATIENT")
 	@RequestMapping("/getMyConsultations")
@@ -86,7 +90,8 @@ public class PatientController {
 
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
 		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
-		return this.consService.updateConsultation(consultation2, this.consDAO, patient);
+		Patient patient2 = (Patient) userDAO.getByCpf(patient.getCpf(), Constants.ROLE_PATIENT);
+		return this.consService.updateConsultation(consultation2, this.consDAO, patient2);
 
 	}
 
