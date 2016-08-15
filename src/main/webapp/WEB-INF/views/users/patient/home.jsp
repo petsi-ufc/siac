@@ -26,7 +26,7 @@
 
 		<div class="content-calendar">
 			<h2 id="my-calendar-title">Meu Calendário</h2>
-			<div class="alert alert-danger alert-message hidden" role="alert">
+			<div class="alert alert-message hidden" role="alert">
 				<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 			</div>
 			
