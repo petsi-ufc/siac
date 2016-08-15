@@ -23,8 +23,8 @@ public class SocialServiceController {
 	
 	@RequestMapping("/registerService")
 	@ResponseBody
-	public String registerService(SocialService service){
-		serviceService.registerService(service, this.serviceDao);
+	public String registerService(SocialService name){
+		serviceService.registerService(name, this.serviceDao);
 		return this.getServices();
 	}
 	

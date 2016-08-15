@@ -20,7 +20,7 @@ public class SocialService {
 	
 	private boolean active;
 
-	public SocialService() {}
+	public SocialService(){}
 	
 	public SocialService(Long id, String name, boolean active) {
 		this.id = id;
