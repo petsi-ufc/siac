@@ -70,8 +70,11 @@ public class Rating {
 	public void setConsultation(Consultation consultation) {
 		this.consultation = consultation;
 	}
-	
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "Rating [id=" + id + ", comment=" + comment + ", rating="
+				+ rating + ", consultation=" + consultation + "]";
+	}
+
 }

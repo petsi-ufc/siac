@@ -10,14 +10,33 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 	<security:global-method-security secured-annotations="enabled"/>
 
 	<security:http auto-config="false" use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
- 		<!-- 
- 		<security:intercept-url pattern="/" access="permitAll" />
+ 		<security:access-denied-handler error-page="/403" />
+ 		
+ 		<!-- <security:intercept-url pattern="/" access="permitAll" /> -->
  		<security:intercept-url pattern="/resources/**" access="permitAll" />
- 		<security:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER, ROLE_PROF')" />
- 		-->
+ 		<security:intercept-url pattern="/getActiveServices" access="hasAnyRole('ROLE_PATIENT', 'ROLE_PROFESSIONAL', 'ROLE_ADMIN')" />
+ 		
+ 		<!-- ADMIN -->
+ 		<security:intercept-url pattern="/registerService" access="hasRole('ROLE_ADMIN')" />
+ 		<security:intercept-url pattern="/getServices" access="hasRole('ROLE_ADMIN')" />
+ 		<security:intercept-url pattern="/setInactiveService" access="hasRole('ROLE_ADMIN')" />
+ 		<security:intercept-url pattern="/setActiveService" access="hasRole('ROLE_ADMIN')" />
+ 		<security:intercept-url pattern="/editService" access="hasRole('ROLE_ADMIN')" />
+ 		<security:intercept-url pattern="/manager" access="hasRole('ROLE_ADMIN')" />
+ 		
+ 		<!-- PATIENT -->
+ 		<security:intercept-url pattern="/patient" access="hasRole('ROLE_PATIENT')" />
+ 		
+ 		<!-- PROFESSIONAL -->
+ 		<security:intercept-url pattern="/professional" access="hasRole('ROLE_PROFESSIONAL')" />
+ 		
 		<security:logout logout-success-url="/" invalidate-session="true"/>
 		
 		<security:custom-filter position="FORM_LOGIN_FILTER" ref="ldapAuthenticationFilter" />
+		
+		<security:session-management>
+			<security:concurrency-control max-sessions="1" expired-url="/"/>
+		</security:session-management>
 	</security:http>
 	
 	<bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
@@ -45,5 +64,4 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 		<security:authentication-provider ref="ldapAuthenticationProvider" />
 	</security:authentication-manager>
 	
-
 </beans>

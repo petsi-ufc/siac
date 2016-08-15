@@ -1,6 +1,7 @@
 package br.ufc.petsi.controller;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;

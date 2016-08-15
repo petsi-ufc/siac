@@ -6,18 +6,37 @@
 var RESPONSE_ERROR = 500;
 var RESPONSE_SUCCESS = 200;
 
-//Função que fax uma chamada ajax contendo a url e os parametros devidos.
 //O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
-function ajaxCall(_url, params, func){
-	$.getJSON(_url, params).done(func).error(function(textStatus, error){
-		alertMessage("Ops! Aconteceu algo de errado.");
-		console.log(textStatus+" - "+error);
+//Função que fax uma chamada ajax contendo a url e os parametros devidos.
+
+function ajaxCall(_url, params, funcSucc, funcErr, method){
+	method : method ? method : "GET";
+	var ajax = $.ajax({
+		method : method,
+		contentType: "application/json; charset=ISO-8859-1",
+		url: _url,
+		dataType: "json",
+		data: params
 	});
+	
+
+	ajax.done(funcSucc);
+	
+	if(funcErr)
+		ajax.error(funcErr);
+	else{
+		ajax.error(function(textStatus, error){
+			alertMessage("Ops! Aconteceu algo de errado.");
+			console.log(textStatus+" - "+error);
+		});
+	}
+
 }
 
 function ajaxCallNoJSON(_url, params, func, fail){
 	$.ajax({
 			method: "GET",
+			contentType: "application/json; charset=ISO-8859-1",
 			url: _url,
 			data: params
 		}
@@ -34,7 +53,7 @@ function getFormatedDate(stringDate){
 
 
 const ALERT_SUCCESS = "alert-success";
-const ALERT_ERROR = "alert-danger";
+const ALERT_ERROR = "alert-warning";
 //Função que mostra a mensagem de alerta em cima do calendário.
 //Type: SUCCESS ou ERROR
 //Time: tempo para que a mensagem desapareça
@@ -44,8 +63,8 @@ function alertMessage(message, time, type){
 	time = !time ? 5000 : time;
 	var alertMessage = $(".alert-message");
 	
-	alertMessage.removeClass("alert-success");
-	alertMessage.removeClass("alert-danger");
+	alertMessage.removeClass(ALERT_SUCCESS);
+	alertMessage.removeClass(ALERT_ERROR);
 	
 	var icon = "glyphicon glyphicon-exclamation-sign";
 
@@ -73,4 +92,15 @@ function hideElement(element, time){
 				$(element).hide(1500);
 			}, time
 	);
+}
+
+function stringToDate(string){
+	var d = string.split("/");
+    return new Date(d[2], d[1]-1, d[0]);
+}
+
+//returns 0 if the dates are equals, a negative number 
+//if the first date is less than second, and a positive number otherwise
+function compareDate(date1, date2){
+	return (date1.getTime()-date2.getTime()); 
 }

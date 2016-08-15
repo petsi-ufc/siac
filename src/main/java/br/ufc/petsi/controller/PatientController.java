@@ -3,16 +3,17 @@ package br.ufc.petsi.controller;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.RatingDAO;
 import br.ufc.petsi.dao.ReserveDAO;
-import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Rating;
@@ -40,24 +41,27 @@ public class PatientController {
 	@Inject
 	private ReserveDAO reserveDAO;
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/getMyConsultations")
 	@ResponseBody
 	public String getConsultationsByPatient(HttpSession session){
 
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.getConsultationsByPatient(patient, consDAO, reserveDAO);
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/getConsultationById")
 	@ResponseBody
 	public String getConsultationById(long id, HttpSession session){
 
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.getConsultationsById(patient, id, consDAO);
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/saveRating")
 	@ResponseBody
 	public void saveRating(Rating rating){
@@ -65,39 +69,36 @@ public class PatientController {
 
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/getConsultationBySocialService")
 	@ResponseBody
 	public String getConsultationsBySocialService(SocialService socialService, HttpSession session){
 
-		Patient patient = (Patient) session.getAttribute("userLogged");
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return this.consService.getConsultationsBySocialService(patient, socialService, consDAO);
 
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/scheduleConsultation")
 	@ResponseBody
-	public void scheduleConsultation(Consultation consultation, HttpSession session){
+	public String scheduleConsultation(Consultation consultation, HttpSession session){
+
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
+		return this.consService.updateConsultation(consultation2, this.consDAO, patient);
 
-		Patient patient = (Patient) session.getAttribute("userLogged");
-
-		consultation2.setPatient(patient);
-		
-		if(consultation2.getState() == ConsultationState.FR){
-			consultation2.setState(ConsultationState.SC);
-			this.consService.updateConsultation(consultation2, this.consDAO);
-			
-		}
-		
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/showRating")
 	@ResponseBody
 	public String getRatingByConsultation(Consultation consultation){
 		return consService.getRatingByConsultation(consultation, consDAO);
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/cancelConsultationPatient")
 	@ResponseBody
 	public String cancelConsultation(Consultation consultation){
@@ -107,22 +108,24 @@ public class PatientController {
 		return consService.cancelConsultation(consultation2, consDAO, reserveDAO);
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/reserveConsultation")
 	@ResponseBody
 	public String reserveConsultation(Consultation consultation, HttpSession session){
 
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
-		
-		Patient patient = (Patient) session.getAttribute("userLogged");
+
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 
 		return consService.reserveConsultation(patient, consultation2, reserveDAO);
 
 	}
 
+	@Secured("ROLE_PATIENT")
 	@RequestMapping("/cancelReserve")
 	@ResponseBody
 	public String cancelReserve(@RequestParam("id") long id){
-		
+
 		Reserve reserve = new Reserve();
 		reserve.setId(id);
 		Reserve reserve2 = this.reserveDAO.getReserveById(reserve);

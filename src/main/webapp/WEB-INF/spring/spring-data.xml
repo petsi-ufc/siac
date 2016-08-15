@@ -13,14 +13,27 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	
 	
+<<<<<<< HEAD
+=======
+
+	 
+>>>>>>> refs/heads/master
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="username" value="postgres"/>
 		<property name="password" value="postgres"/>
 		<property name="driverClassName" value="org.postgresql.Driver"/>
 		<property name="url" value="jdbc:postgresql://localhost:5432/siac"/>
+<<<<<<< HEAD
 	</bean>
+=======
+	</bean> 
+>>>>>>> refs/heads/master
 	
 	
+<<<<<<< HEAD
+=======
+	
+>>>>>>> refs/heads/master
 	<!-- <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="java:comp/env/siac" />
 	</bean> -->
@@ -66,5 +79,15 @@
     <bean id="base" class="java.lang.String">
         <constructor-arg ref="ldapOu" />
     </bean>
+    <!-- 
+    <bean id="ldapUser" class="br.ufc.petsi.dao.ldap.LdapUser">
+    	<property name="ldapTemplate" ref="ldapTemplate" />
+    	<property name="base" ref="base" />
+    </bean>
+    -->
+    <bean class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="location" value="WEB-INF/spring/jasper-views.xml" />
+		<property name="order" value="0" />
+	</bean>
 
 </beans>

@@ -1,5 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:useBean id="user" class="br.ufc.petsi.model.Professional"
 	scope="session" />
 <jsp:setProperty property="*" name="user" />
@@ -18,7 +20,7 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 						<h4 class="modal-title">
-							<strong>Descri��o do(s) Hor�rio(s)</strong>
+							<strong>Descrição do(s) Horário(s)</strong>
 						</h4>
 					</div>
 					<div class="modal-body">
@@ -26,11 +28,11 @@
 							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
-										<th>Hora In�cio</th>
+										<th>Hora Início</th>
 										<th>Hora Fim</th>
 										<th>Estado</th>
 										<th>Paciente</th>
-										<th>Hor�rio</th>
+										<th>Horário</th>
 									</tr>
 								</thead>
 								<tbody id="tbody-schedules-description">
@@ -54,12 +56,14 @@
 			src="<c:url value='/resources/images/user_avatar.png'/>">
 
 		<div id="box-services">
-			<h3>Servi�os dispon��veis</h3>
+			<h3>Serviços disponí­veis</h3>
+
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
-				<li class="service-item active" id="0"><a>Meu Calend�rio</a></li>
+				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
 				<li class="nav-divider"></li>
 				<li class="service-item" id="1"><a>Cadastrar Agenda</a></li>
+				<li class="service-item" id="3"><a>Gerar Relatório</a></li>
 				<!--<li class="nav-divider"></li>
 				<li class="service-item" id="2"><a>Minhas Consultas</a></li> -->
 			</ul>
@@ -68,12 +72,12 @@
 
 	<div id="right-bar">
 
-		<div class="alert alert-danger alert-message hidden" role="alert">
+		<div class="alert alert-message hidden" role="alert">
 			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 		</div>
 
 		<div id="calendar-container">
-			<h2 id="my-calendar">Meu calend�rio</h2>
+			<h2 id="my-calendar">Meu calendário</h2>
 			<div id="container-goto-date">
 				<div class="input-group">
 					<input id="input-goto-date" type="date" class="form-control"
@@ -94,42 +98,42 @@
 								<div class='legend-color color-black'></div>
 							</td>
 							<td>
-								<h4>Grupo de Consultas</h4>
+								<h5>Grupo de Consultas</h5>
 							</td>
 
 							<td>
 								<div class='legend-color color-green'></div>
 							</td>
 							<td>
-								<h4>Dispon�vel</h4>
+								<h4>Disponível</h4>
 							</td>
 
 							<td>
 								<div class='legend-color color-blue'></div>
 							</td>
 							<td>
-								<h4>Agendada</h4>
+								<h5>Agendada</h5>
 							</td>
 
 							<td>
 								<div class='legend-color color-grey'></div>
 							</td>
 							<td>
-								<h4>Realizada</h4>
+								<h5>Realizada</h5>
 							</td>
 
 							<td>
 								<div class='legend-color color-yellow'></div>
 							</td>
 							<td>
-								<h4>Reservada</h4>
+								<h5>Reservada</h5>
 							</td>
 
 							<td>
 								<div class='legend-color color-red'></div>
 							</td>
 							<td>
-								<h4>Cancelada</h4>
+								<h5>Cancelada</h5>
 							</td>
 						</tr>
 					</tbody>
@@ -145,7 +149,7 @@
 			<div class="panel-body">
 				<form class="form-inline">
 					<div class="form-group">
-						<h4>Frequ�ncia:</h4>
+						<h5>Frequência:</h5>
 					</div>
 					<div class="form-group">
 						<select class="form-control" id="select-repeat-schedule">
@@ -155,7 +159,8 @@
 					</div>
 
 					<div class="form-group">
-						<input id="input-frequenci" type="number" min="0" class="form-control" placeholder="Quantidade de Semanas">
+						<input id="input-frequenci" type="number" min="0"
+							class="form-control" placeholder="Quantidade de Semanas">
 					</div>
 				</form>
 				<div id="div-days-week" class="margin-top">
@@ -164,7 +169,7 @@
 							<button type="button" class="btn btn-default btn-day"
 								value="Monday">Segunda</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Tuesday">Ter�a</button>
+								value="Tuesday">Terça</button>
 							<button type="button" class="btn btn-default btn-day"
 								value="Wednesday">Quarta</button>
 							<button type="button" class="btn btn-default btn-day"
@@ -172,7 +177,7 @@
 							<button type="button" class="btn btn-default btn-day"
 								value="Friday">Sexta</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Saturday">S�bado</button>
+								value="Saturday">Sábado</button>
 							<button type="button" class="btn btn-default btn-day"
 								value="Sunday">Domingo</button>
 						</div>
@@ -184,7 +189,7 @@
 									<tr>
 										<th>Dia</th>
 										<th>Data</th>
-										<th>Hor�rios</th>
+										<th>Horários</th>
 										<th>Remover</th>
 									</tr>
 								</thead>
@@ -195,6 +200,31 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		
+		
+		<div class="panel panel-primary margin-right hidden" 
+		id="panel-generate-report">
+			<div class="panel-heading">
+				<h1 class="panel-title">Gerar Relatórios</h1>
+			</div>
+			
+			<div class="panel-body">
+				<form action="relatorio/avaliacao" method="post" target="_blank">
+					<div id="date-report" class="form-group">
+						<div class="input-group col-md-4" id="date-left">
+							<label class="control-label" for="input-dtpckr-start-report">Início</label>
+							<input type='text' name="dateBegin" class="form-control" id="input-dtpckr-start-report"/>
+						</div>
+						<div class="input-group col-md-4" id="date-right">
+							<label class="control-label" for="input-dtpckr-end-report">Fim</label>
+							<input type='text' name="dateEnd" class="form-control" id="input-dtpckr-end-report"/>
+						</div>
+					</div>
+					<br><br><br><br>
+					<button type="submit" class="btn btn-primary" id="button-generate-report" data-dismiss="modal">Gerar</button>
+				</form>
 			</div>
 		</div>
 
@@ -222,11 +252,11 @@
 								<table class="table table-bordered table-hover">
 									<thead>
 										<tr>
-											<th>Hora In�cio</th>
+											<th>Hora Início</th>
 											<th>Hora Fim</th>
 											<th>Estado</th>
 											<th>Detalhes</th>
-											<th>A��es</th>
+											<th>Ações</th>
 										</tr>
 									</thead>
 									<tbody class="collapse-tbody">
@@ -248,13 +278,16 @@
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4>Cancelar Hor�rio</h4>
+						<h4>Cancelar Horário</h4>
 					</div>
-					<div class="modal-title"><h4>Deseja realmente cancelar esse
-						hor�rio?</h4></div>
+					<div class="modal-title">
+						<h4>Deseja realmente cancelar este horário?</h4>
+					</div>
 					<div class="modal-body">
-						<div>
-							<textarea placeholder="Escrever email..." id="text-area-email" class="no-resize form-control" rows="3"></textarea>
+						<div id="div-send-email">
+							<label>Enviar email para o paciente:</label>
+							<textarea placeholder="Escrever email..." id="text-area-email"
+								class="no-resize form-control" rows="3"></textarea>
 						</div>
 						<div class="margin-top">
 							<button id="btn-cancel-consultation" class="btn btn-danger"
@@ -274,7 +307,7 @@
 				<div id="title-header" class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">X</button>
 					<h3 id="modal-schedule-title" class="modal-title">Cadastrar
-						Hor�rio</h3>
+						Horário</h3>
 				</div>
 				<div class="modal-body">
 					<h4 id="modal-description-body"></h4>
@@ -282,7 +315,7 @@
 
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Gerador de Hor�rios</h3>
+							<h3 class="panel-title">Gerador de Horários</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -306,7 +339,7 @@
 								</div>
 								<div class="form-group">
 									<label for="input-count-time-init"
-										class="col-md-4 control-label">Hora de In�cio:</label>
+										class="col-md-4 control-label">Hora de Início:</label>
 									<div
 										class="col-md-5 col-sm-offset-4 input-group bootstrap-timepicker timepicker">
 										<input id="tmp-init-0" type="text"
@@ -319,7 +352,7 @@
 							<div class="col-md-offset-5">
 								<button type="button" class="btn btn-primary"
 									id="btn-generate-schedules">
-									Gerar Hor�rios <i class="glyphicon glyphicon-time"></i>
+									Gerar Horários <i class="glyphicon glyphicon-time"></i>
 								</button>
 							</div>
 						</div>
@@ -327,49 +360,46 @@
 
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Hor�rios</h3>
+							<h3 class="panel-title">Horários</h3>
 						</div>
 						<div class="panel-body" id="panel-schedules">
-							<div id="row-add-schedules">
-								<div class="row row-schedule-id">
-
-									<div class="col-md-1">
-										<h4>In�cio:</h4>
-									</div>
-									<div class="col-md-4">
-										<div
-											class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
-											<input id="tmp-init-1" type="text"
-												class="form-control input-small"> <span
-												class="input-group-addon"><i
-												class="glyphicon glyphicon-time"></i></span>
+							<form class="form-horizontal">
+								<div id="row-add-schedules">
+									<div class="row row-schedule-id">
+										<label class="col-lg-1 control-label">Início</label>
+										<div class="col-md-4">
+											<div
+												class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
+												<input id="tmp-init-1" type="text"  
+													class="form-control input-small"> <span
+													class="input-group-addon"><i
+													class="glyphicon glyphicon-time"></i></span>
+											</div>
 										</div>
-									</div>
-
-									<div class="col-md-1">
-										<h4>Fim:</h4>
-									</div>
-									<div class="col-md-4">
-										<div
-											class="timepicker-end input-group bootstrap-timepicker timepicker">
-											<input id="tmp-end-1" type="text"
-												class="form-control input-small"> <span
-												class="input-group-addon"><i
-												class="glyphicon glyphicon-time"></i></span>
+	
+										<label class="col-lg-1 control-label">Fim</label>
+										<div class="col-md-4">
+											<div
+												class="timepicker-end input-group bootstrap-timepicker timepicker">
+												<input id="tmp-end-1" type="text" class="form-control input-small"> 
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-time"></i>
+												</span>
+											</div>
 										</div>
-									</div>
-									<div class="col-md-2">
-										<button type="button" class="btn btn-primary add-schedule">
-											<span class="glyphicon glyphicon glyphicon-plus"></span>
-										</button>
+										<div class="col-md-2">
+											<button type="button" class="btn btn-primary add-schedule">
+												<span class="glyphicon glyphicon glyphicon-plus"></span>
+											</button>
+										</div>
 									</div>
 								</div>
-							</div>
+							</form>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
+					<button type="submit" class="btn btn-primary"
 						id="btn-confirm-schedules">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
