@@ -10,4 +10,6 @@ public interface UserDAO {
 	public List<User> getByCpfList(String cpf);
 	public List<User> getByNameLike(String name);
 	public void save(User u);
+	public boolean isExistent(String cpf, String role);
+	public List<User> getUsersByRole(String role);
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.ufc.petsi.dao.UserDAO;
+import br.ufc.petsi.enums.Role;
+import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.model.UserPrimaryKey;
 
@@ -19,7 +21,7 @@ public class HBUserDAO implements UserDAO{
 
 	@PersistenceContext
 	protected EntityManager manager;
-	
+
 	@Override
 	public List<User> getAll() {
 		List<User> listUsers = null;
@@ -29,6 +31,25 @@ public class HBUserDAO implements UserDAO{
 			System.out.println("Erro HBDAO getALL: "+e);
 		}
 		return listUsers;
+	}
+
+	@Override
+	public boolean isExistent(String cpf, String role){
+
+		try {
+			Query query = manager.createQuery("SELECT count(u) from users u WHERE u.cpf = :cpf and u.role = :role");
+			query.setParameter("cpf", cpf);
+			query.setParameter("role", role);
+
+			long n = (long) query.getSingleResult();
+
+			if(n > 0) return true;
+
+		} catch (NoResultException e) {
+			System.out.println("Erro HBDAO getALL: "+e);
+		}
+
+		return false;
 	}
 
 	@Override
@@ -76,5 +97,24 @@ public class HBUserDAO implements UserDAO{
 	@Transactional
 	public void save(User u) {
 		this.manager.persist(u);
+	}
+
+	@Override
+	public List<User> getUsersByRole(String role) {
+
+		List<User> listUsers = null;
+
+		try{
+			
+			Query query = manager.createQuery("from users WHERE role = :role");
+			query.setParameter("role", role);
+			
+			listUsers = (List<User>) query.getResultList();
+			
+		}catch(NoResultException e){
+			System.out.println("Erro HBDAO getALL: "+e);
+		}
+		
+		return listUsers;
 	}
 }

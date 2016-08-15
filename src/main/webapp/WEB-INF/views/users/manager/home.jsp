@@ -30,7 +30,7 @@
 				<li class="action"><a class="link-action" id="0">Gerar
 						Relatórios</a></li>
 				<li class="nav-divider"></li>
-				<li class="action"><a class="link-action" id="1">Gerenciar
+				<li class="action"><a class="link-action manage-professional" id="1">Gerenciar
 						Profissionais</a></li>
 				<li class="nav-divider"></li>
 				<li class="action"><a class="link-action" id="2">Gerenciar
@@ -39,17 +39,15 @@
 		</div>
 
 
+
 	</div>
 
 
 	<div id="right-bar">
 	
-		<div class="alert alert-message hidden" role="alert">
+		<div class="alert alert-danger alert-message hidden" role="alert">
 			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 		</div>
-
-		<div class="alert alert-danger" id="alert-schedules">Não há
-			nenhum horário cadastrado!</div>
 
 		<div id="generate-report">
 			<h2>Gerar Relatórios</h2>
@@ -95,12 +93,12 @@
 			<h2>Gerenciar Profissionais</h2>
 			<br /> <br /> <br />
 
-			<ul class="nav nav-tabs" role="tablist">
-				<li role="presentation" class="active"><a
+			<ul class="nav nav-tabs" role="tablist">			
+				<li role="presentation" class="active link-professional-registered"><a
 					href="#professional-registered"
 					aria-controls="professional-registered" role="tab"
 					data-toggle="tab">Profissionais cadastrados</a></li>
-				<li role="presentation"><a href="#add-professional"
+				<li role="presentation" class="link-add-professional"><a href="#add-professional"
 					aria-controls="add-professional" role="tab" data-toggle="tab">Adicionar
 						profissional</a></li>
 			</ul>
@@ -115,7 +113,6 @@
 							<tr>
 								<th>Nome</th>
 								<th>Email</th>
-								<th>Ativar / Desativar</th>
 							</tr>
 						</thead>
 					</table>
@@ -134,12 +131,20 @@
 									id="button-search-professional">Pesquisar</button>
 							</div>
 						</div>
-
-						<br>
-						<div class="alert alert-danger" id="alert-search-professional">
-							Digite, no mínimo, <strong>três caracteres</strong> para
-							pesquisar!
-						</div>
+						<br />
+						<table id="table-add-professional" class="table table-hover table-bordered">
+						<thead>
+							<tr>
+								<th>Nome</th>
+								<th>Email</th>
+								<th>Serviço	</th>
+								<th>Cadastrar</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
 
 					</div>
 				</div>

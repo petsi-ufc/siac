@@ -393,11 +393,6 @@ body html{
 	overflow-y: scroll;
 }
 
-#container-details-consultation button{
-	margin-right: 3px;
-	margin-left: 3px;
-}
-
 .modal-large{
 	max-width: 70%;
 	left: 15%;
@@ -423,6 +418,10 @@ body html{
 .has-error{
 	color : red !important;
 	border-color: red !important; 
+}
+
+#select-service-add-professional{
+	display: none;
 }
 
 #rating-grade{

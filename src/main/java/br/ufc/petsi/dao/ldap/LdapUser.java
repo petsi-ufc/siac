@@ -82,6 +82,4 @@ public class LdapUser implements UserLdapDAO {
 	public void setBase(String base) {
 		this.base = base;
 	}
-	
-	
 }
