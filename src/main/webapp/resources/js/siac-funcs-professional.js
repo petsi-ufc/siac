@@ -395,9 +395,7 @@ function fillReScheduleModal(schedule){
 	var $atualDate = $("#rsch-atualdate");
 	var $atualTimeInit = $("#rsch-atual-timeinit");
 	var $atualTimeEnd = $("#rsch-atual-timeend");
-	
-	console.log(schedule);
-	
+		
 	//Preenchendo os campos de data e hora atual da consulta 
 	$atualDate.val(schedule.getDateInit());
 	$atualTimeInit.val(schedule.getTimeInit());

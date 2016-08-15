@@ -65,6 +65,8 @@ public class ConsultationService {
 
 					if(!timeSchedules.get(j).getAsJsonObject().get("id").isJsonNull()){
 						consultationId = timeSchedules.get(j).getAsJsonObject().get("id").getAsLong();
+						Consultation consultationTemp = consDAO.getConsultationById(consultationId);
+						consultation = consultationTemp != null ? consultationTemp : consultation;
 					}
 
 					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
@@ -86,14 +88,14 @@ public class ConsultationService {
 					consultation.setDateInit(dateInit);
 					consultation.setDateEnd(dateEnd);
 
-					consultation.setId(consultationId);
-
+					
 					consDAO.save(consultation);
 				}
 
 			}
 		}catch(Exception e){
 			System.out.println("Erro ao transformar o JSON: "+e);
+			e.printStackTrace();
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível cadastrar a(s) consulta(s)");
 			return gson.toJson(response);
@@ -135,7 +137,7 @@ public class ConsultationService {
 		List<Reserve> reserves = reserveDAO.getActiveReservesByPatient(patient);
 
 		List<Event> events = new ArrayList<Event>();
-		
+
 		if(consultations != null){
 			if(consultations.size() > 0){
 				for(Consultation c : consultations){
@@ -285,16 +287,16 @@ public class ConsultationService {
 
 		try{
 			Consultation oldCons = getConsultationsById(id, consDAO);
-			
+
 			if(oldCons != null){
 				Date today = new Date();
-				
+
 				DateFormat formatDate = new SimpleDateFormat("dd/MM/YYYY HH:mm");
 				DateFormat formatHours = new SimpleDateFormat("HH:mm");
 				if( message == "" || message == null){
 					message = "Informamos que sua consulta do dia "+formatDate.format(oldCons.getDateInit())+" de "+formatHours.format(oldCons.getDateInit())+" às "+ formatHours.format(oldCons.getDateEnd()) +" foi cancelada!";
 				}
-				
+
 				if(oldCons.getDateEnd().before(today)){
 					response.setCode(Response.ERROR);
 					response.setMessage("Ops, não é possível cancelar consultas anteriores a data de hoje");

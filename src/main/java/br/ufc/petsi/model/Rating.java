@@ -27,7 +27,7 @@ public class Rating {
 	@Column(nullable = false)
 	private int rating;
 
-	
+	@Expose
 	@OneToOne(mappedBy="rating")
 	private Consultation consultation;
 	
