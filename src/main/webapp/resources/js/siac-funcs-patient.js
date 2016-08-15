@@ -17,8 +17,6 @@ $("document").ready(function(){
 });
 
 function initCalendarPatient(json){
-
-	
 	$("#calendar-patient").fullCalendar({
 
 		header: {
@@ -44,6 +42,11 @@ function initCalendarPatient(json){
 			chargeScheduleDay(event.id);
 			$("#my-calendar-title").html("Meu Calendário");
 			$("#modal-event").modal('show');
+		},
+
+		eventMouseover: function (event, jsEvent, view){
+
+			$("#aaaa").tooltip();	
 		}
 
 	});
@@ -53,8 +56,10 @@ function initCalendarPatient(json){
 function chargeScheduleDay(id){
 	$(".tr-horary").remove();
 	
-	ajaxCall("/siac/getConsultationById?id="+id, function(json){
-		
+	var params = {"id" : id }
+	
+	ajaxCall("/siac/getConsultationById", params, function(json){
+
 		var hour;
 		var state;
 		var  is_rating_null;
@@ -84,7 +89,7 @@ function chargeScheduleDay(id){
 			newRow.append($("<td>" +state+ "</td>"));
 			newRow.append($("<td><button type='button' class='btn btn-danger btn-sm' data-id='"+id+"' id='cancel-consultation'>Cancelar</button></td>"));
 			$("#body-table-event").append(newRow);
-			
+
 		}else if(state == "Cancelado"){
 
 			var newRow = $("<tr class='tr-horary danger'> </tr>");
@@ -103,7 +108,7 @@ function chargeScheduleDay(id){
 			}else{
 				newRow.append($("<td><button type='button' class='btn btn-success show-rating' data-id='"+id+"'>Ver avaliação</button></td>"));
 			}
-			
+
 			$("#body-table-event").append(newRow);
 
 		}else if(state == "Reservado"){
@@ -111,7 +116,7 @@ function chargeScheduleDay(id){
 			newRow.append("<td>" +hour+ " </td> <td>" +state+ "</td>");
 			newRow.append($("<td><button type='button' class='btn btn-danger btn-sm cancel-reserve' data-id-reserve='"+idReserve+"' id='cancel-reserve'>Cancelar</button></td>"));
 			$("#body-table-event").append(newRow);
-		
+
 		}else if(state == "Disponivel"){
 			var newRow = $("<tr class='tr-horary success'></tr>");
 			newRow.append($("<td>" +hour+ " </td>"));
@@ -134,7 +139,7 @@ function chargeScheduleDay(id){
 
 function chargeEvents(){
 
-	ajaxCall("/siac/getMyConsultations", function(json){
+	ajaxCall("/siac/getMyConsultations", null ,function(json){
 		initCalendarPatient(json);
 	})
 }
@@ -142,7 +147,7 @@ function chargeEvents(){
 
 function chargeServices(){
 
-	ajaxCall("/siac/getServices", function(json){
+	ajaxCall("/siac/getActiveServices", null, function(json){
 
 		var serviceName;
 		var serviceActive;
@@ -171,22 +176,19 @@ function chargeServices(){
 			$("#ul-services").append("<li class='service'><a class='link-service social-service service-item' id='"+serviceId+"' data-name='"+serviceName+"'>"+serviceName+"</a></li>");
 
 		});
-
-
 	});
 
 }
 
-
 function myConsultations(){
 	$("#my-consults").click(function() {
-		
+
 		$(".content-calendar").css("display", "none");
 		$("#my-consultations").css("display", "block");
 
 		$(".tr-my-consultations").remove();
-		
-		ajaxCall("/siac/getMyConsultations", function(json){
+
+		ajaxCall("/siac/getMyConsultations", null ,function(json){
 
 			var service;
 			var date;
@@ -267,28 +269,36 @@ function myCalendar(){
 
 function addRating(){
 
+	$('#rating-grade').barrating({
+		theme: 'bootstrap-stars'
+	});
+
 	$(document).on("click", ".rating-button",function(){
 		$("#input-rating-id").val($(this).attr("id"));
 	});
 
 	$("#save-rating").click(function(){		
 		var params = new Object();
-		params["rating.rating"] = $("#rating-grade").val();
+		params["rating.rating"] = $("#rating-grade option:selected").val();
 		params["rating.comment"] = $("#rating-comment").val();
 		params["id"] =  $("#input-rating-id").val();
-		
-		ajaxCallNoJSON("/siac/updateConsultationRating", params, function name() {
-			alertMessage("Avaliação registrada com sucesso", null, ALERT_SUCCESS);
-		}, function () {
 
-			alertMessage("Desculpe, a operação falhou", null, ALERT_ERROR);
+		console.log(JSON.stringify(params));
+
+		ajaxCall("/siac/updateConsultationRating", params, function (response) {
+
+			if(response.code == RESPONSE_SUCCESS)
+				alertMessage(response.message, null, ALERT_SUCCESS);
+			else
+				alertMessage(response.message, null, ALERT_ERROR);
+
+		}, function () {
+			alertMessage("ERRO", null, ALERT_ERROR);
 		});
-			
+
 		$("#modal-rating").modal('hide');
 		$("#modal-event").modal('hide');
-		window.setTimeout(function(){
-			location.reload();
-		}, 2000);
+
 
 	});
 }
@@ -296,18 +306,16 @@ function addRating(){
 function onServiceClick(){
 
 	$(document).on("click", ".link-service", function(){
-		
+
 		$(".service").removeClass("active");
 		$(this).parent().addClass("active");
-		
-		
 
 		if($(this).hasClass("social-service")){
 			$("#my-consultations").css("display", "none");
 			var idSocialService = $(this).attr("id");
 			$("#my-calendar-title").html("Calendário " + $(this).attr("data-name"));
 
-			ajaxCall("/siac/getConsultationBySocialService?id="+idSocialService, function(json){
+			ajaxCall("/siac/getConsultationBySocialService",{'id': idSocialService}, function(json){
 				$(".content-calendar").css("display", "block");
 				$(".calendar").remove();
 				$(".content-calendar").append($("<div class='calendar' id='calendar-patient'></div>"));
@@ -325,30 +333,24 @@ function scheduleConsultation(){
 	$(document).on("click", "#schedule-consultation", function(){
 
 		var id = $(this).attr("data-id");
-
-		ajaxCall("/siac/scheduleConsultation?id="+id, function(json){			
-//			$.each(json, function(name, value){
-//				if(name=="id"){
-//					hour = value;
-//				}
-//				$("#id-service-temp").val(value);
-//			
-//			});
-	
-			
-		});
 		
-		ajaxCallNoJSON("/siac/scheduleConsultation", {"id":id }, function name() {
-			alertMessage("Consulta agendada com sucesso", null, ALERT_SUCCESS);
+		ajaxCall("/siac/scheduleConsultation", {"id": id }, function(response){		
+
+			if(response.code == RESPONSE_SUCCESS){				
+				changeEvent(id, "#4682B4");
+				alertMessage(response.message, null, ALERT_SUCCESS);
+			}	
+			else
+				alertMessage(response.message, null, ALERT_ERROR);
 
 		}, function () {
-			alertMessage("Erro", null, ALERT_ERROR);
-		})
+			alertMessage("ERRO", null, ALERT_ERROR);
+		});
 
 		$("#modal-event").modal('hide');
-		window.setTimeout(function(){
-			location.reload();
-		}, 2000);
+		chargeEvents();
+		
+		
 	});
 }
 
@@ -356,16 +358,18 @@ function scheduleConsultation(){
 function showRating(){
 
 	$(document).on("click",".show-rating", function(){
-		
+
 		$("#content-rating").remove();
 		$(".modal-body-rating").append($("<div id='content-rating'></div>"));
-		
+
 		var id_consultation = $(this).attr("data-id");
 
 		var comment;
 		var rating;
-
-		ajaxCall("/siac/showRating?id="+id_consultation, function(json) {
+		
+		var params = {"id" : id_consultation}
+		
+		ajaxCall("/siac/showRating", params, function(json) {
 
 			$.each(json, function(name, value){
 
@@ -392,65 +396,74 @@ function cancelConsultation(){
 
 	$(document).on("click","#cancel-consultation", function(){
 		var id = $(this).attr("data-id");
-		
+
 		ajaxCallNoJSON("/siac/cancelConsultationPatient", {"id":id }, function() {
 			alertMessage("Consulta cancelada com sucesso", null, ALERT_SUCCESS);
+			if($("#my-calendar-title").text() === "Meu Calendário"){
+				$("#calendar-patient").fullCalendar('removeEvents', id);
+			} else
+				changeEvent(id, "#32CD32");
+				
 		}, function() {
 			alertMessage("Desculpe, a operação falhou", 5000, ALERT_ERROR);
-			
+
 		});
 		
 		$("#modal-event").modal('hide');
-		window.setTimeout(function(){
-			location.reload();
-		}, 2000);
-		
+
 	});
 }
 
 function reserveConsultation(){
-	
+
 	$(document).on("click", ".reserve-button", function(){
 		var id = $(this).attr("data-id");
-		
+
 		ajaxCallNoJSON("/siac/reserveConsultation", {"id":id }, function() {
+			changeEvent(id, "#D9D919");
 			alertMessage("Consulta reservada com sucesso", 5000, ALERT_SUCCESS);
 		}, function() {
 			alertMessage("Desculpe, a operação falhou", 5000, ALERT_ERROR);
 		});
-		
+
 		$("#modal-event").modal('hide');
-		window.setTimeout(function(){
-			location.reload();
-		}, 2000);
-		
+
 	});
-	
+
 }
 
 function cancelReserve(){
 	$(document).on("click", ".cancel-reserve", function(){
 		var idReserve = $(this).attr("data-id-reserve");
 		ajaxCallNoJSON("/siac/cancelReserve", {"id":idReserve}, function() {
+			if($("#my-calendar-title").text() === "Meu Calendário"){
+				$("#calendar-patient").fullCalendar('removeEvents', id);
+			} else
+				changeEvent(id, "#FF7F00");
 			alertMessage("Reserva cancelada com sucesso", 5000, ALERT_SUCCESS);
-			
-			
 		}, function() {
 			alertMessage("Desculpe, a operação falhou", 5000, ALERT_ERROR);
-			
-		});
-		
-		
-		$("#modal-event").modal('hide');
-		window.setTimeout(function(){
-			location.reload();
-		}, 2000);
-	});
-	
-	
 
-	
+		});
+
+		$("#modal-event").modal('hide');
+
+	});
+
 }
+
+
+function changeEvent(idEvent, color){
+	var evento = $("#calendar-patient").fullCalendar('clientEvents', idEvent)[0];
+	console.log(evento);
+	evento.color = color;
+	$("#calendar-patient").fullCalendar('updateEvent', evento);
+}
+
+
+
+
+
 
 
 

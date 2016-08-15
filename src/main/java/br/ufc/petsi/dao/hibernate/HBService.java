@@ -3,13 +3,10 @@ package br.ufc.petsi.dao.hibernate;
 
 import java.util.List;
 
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.hibernate.Session;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import br.ufc.petsi.dao.SocialServiceDAO;

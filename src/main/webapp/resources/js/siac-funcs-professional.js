@@ -10,6 +10,7 @@ var EDIT_ACTION = "Editar";
 var MY_CALENDAR = 0;
 var REGISTER_SCHEDULE = 1;
 var MY_CONSULTATIONS = 2;
+var GENERATE_REPORT = 3;
 
 var CALENDAR_ID = "#calendar_professional";
 var SELECT_REPEAT_SCHEDULE_ID = "#select-repeat-schedule";
@@ -109,6 +110,16 @@ $("document").ready(function(){
 	//Função de submissão do formulário de reagendamento de consulta.
 	onBtnConfirmReschedule();
 	
+	$("#input-dtpckr-start-report").datepicker({
+		 format: 'dd/mm/yyyy',                
+		 language: 'pt-BR'
+	});
+	
+	$("#input-dtpckr-end-report").datepicker({
+		 format: 'dd/mm/yyyy',                
+		 language: 'pt-BR'
+	});
+	
 });
 
 function onButtonGoToDateClick(){
@@ -133,17 +144,25 @@ function onLiItemServiceClick(){
 			getProfessionalConsultations();
 			$("#calendar-container").addClass("hidden");
 			$("#panel-register-schedules").removeClass("hidden");
+			$("#panel-generate-report").addClass("hidden");
 			$("#panel-my-consultations").addClass("hidden");
 		}else if(id == MY_CALENDAR){
 			getProfessionalConsultations(fillProfessionalCalendar);
 			$("#calendar-container").removeClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
 			$("#panel-my-consultations").addClass("hidden");
+			$("#panel-generate-report").addClass("hidden");
 		}else if(id == MY_CONSULTATIONS){
 			getProfessionalConsultations(fillMyConsultationsCollapses);
 			$("#my-calendar").addClass("hidden");
 			$("#panel-register-schedules").addClass("hidden");
 			$("#panel-my-consultations").removeClass("hidden");
+			$("#panel-generate-report").addClass("hidden");
+		}else if(id == GENERATE_REPORT){
+			$("#calendar-container").addClass("hidden");
+			$("#panel-register-schedules").addClass("hidden");
+			$("#panel-my-consultations").addClass("hidden");
+			$("#panel-generate-report").removeClass("hidden");
 		}
 	});
 }
@@ -375,6 +394,8 @@ function fillReScheduleModal(schedule){
 	var $atualTimeInit = $("#rsch-atual-timeinit");
 	var $atualTimeEnd = $("#rsch-atual-timeend");
 	
+	console.log(schedule);
+	
 	//Preenchendo os campos de data e hora atual da consulta 
 	$atualDate.val(schedule.getDateInit());
 	$atualTimeInit.val(schedule.getTimeInit());
@@ -519,9 +540,9 @@ function onButtonConfirmSchedulesClick(){
 			
 		}
 		
-		var params = {json: JSON.stringify(scheduleManager.getScheduleDayAsJSON(date))};
+		var params = JSON.stringify(scheduleManager.getScheduleDayAsJSON(date));
 		
-		ajaxCall("/siac/saveConsultation", params, function(response){
+		ajaxCall("/siac/saveConsultation", {"json": params}, function(response){
 			var type = ALERT_SUCCESS;
 			if(response.code == RESPONSE_ERROR)
 				type = ALERT_ERROR;
@@ -1056,6 +1077,7 @@ function getProfessionalConsultations(func){
 }
 
 function updateScheduleManagerList(json){
+	console.log(json);
 	var length = Object.keys(json).length;
 	if(length == 0){
 		alertMessage("Ops, você ainda não possui nenhum horário de consulta cadastrado!");
@@ -1066,6 +1088,7 @@ function updateScheduleManagerList(json){
 			var obj = json[i]; 
 			
 			date = moment(new Date(obj.dateInit)).format("DD/MM/YYYY");
+			console.log(date);
 			var timeInit = moment(obj.dateInit);
 			var timeEnd = moment(obj.dateEnd);
 			

@@ -6,17 +6,18 @@
 var RESPONSE_ERROR = 500;
 var RESPONSE_SUCCESS = 200;
 
-//Função que fax uma chamada ajax contendo a url e os parametros devidos.
 //O terceiro parâmetro é uma função de callback, ela é chamada quando a requisição é retornada.
+//Função que fax uma chamada ajax contendo a url e os parametros devidos.
 
 function ajaxCall(_url, params, funcSucc, funcErr, method){
 	method : method ? method : "GET";
+	console.log(params)
 	var ajax = $.ajax({
 		method : method,
+		contentType: "application/x-www-form-urlencoded; charset=ISO-8859-1",
+		dataType: "json",
 		url: _url,
 		encoding:"UTF-8",
-		contentType: "application/x-www-form-urlencoded;charset=utf-8",
-		dataType: "json",
 		data: params
 	});
 	
@@ -28,7 +29,7 @@ function ajaxCall(_url, params, funcSucc, funcErr, method){
 	else{
 		ajax.error(function(textStatus, error){
 			alertMessage("Ops! Aconteceu algo de errado.");
-			console.log(textStatus+" - "+error);
+			console.log(JSON.stringify(textStatus)+" - "+error);
 		});
 	}
 
@@ -38,7 +39,7 @@ function ajaxCallNoJSON(_url, params, func, fail){
 	$.ajax({
 			method: "GET",
 			encoding:"UTF-8",	
-			contentType: "application/x-www-form-urlencoded;charset=utf-8",
+			contentType: "application/json; charset=ISO-8859-1",
 			url: _url,
 			data: params
 		}
@@ -94,4 +95,15 @@ function hideElement(element, time){
 				$(element).slideUp(1500);
 			}, time
 	);
+}
+
+function stringToDate(string){
+	var d = string.split("/");
+    return new Date(d[2], d[1]-1, d[0]);
+}
+
+//returns 0 if the dates are equals, a negative number 
+//if the first date is less than second, and a positive number otherwise
+function compareDate(date1, date2){
+	return (date1.getTime()-date2.getTime()); 
 }

@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:useBean id="user" class="br.ufc.petsi.model.Professional"
@@ -137,6 +138,7 @@
 				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
 				<li class="nav-divider"></li>
 				<li class="service-item" id="1"><a>Cadastrar Agenda</a></li>
+				<li class="service-item" id="3"><a>Gerar Relatório</a></li>
 				<!--<li class="nav-divider"></li>
 				<li class="service-item" id="2"><a>Minhas Consultas</a></li> -->
 			</ul>
@@ -276,6 +278,30 @@
 			</div>
 		</div>
 		
+		<div class="panel panel-primary margin-right hidden" 
+		id="panel-generate-report">
+			<div class="panel-heading">
+				<h1 class="panel-title">Gerar Relatórios</h1>
+			</div>
+			
+			<div class="panel-body">
+				<form action="relatorio/avaliacao" method="post" target="_blank">
+					<div id="date-report" class="form-group">
+						<div class="input-group col-md-4" id="date-left">
+							<label class="control-label" for="input-dtpckr-start-report">Início</label>
+							<input type='text' name="dateBegin" class="form-control" id="input-dtpckr-start-report"/>
+						</div>
+						<div class="input-group col-md-4" id="date-right">
+							<label class="control-label" for="input-dtpckr-end-report">Fim</label>
+							<input type='text' name="dateEnd" class="form-control" id="input-dtpckr-end-report"/>
+						</div>
+					</div>
+					<br><br><br><br>
+					<button type="submit" class="btn btn-primary" id="button-generate-report" data-dismiss="modal">Gerar</button>
+				</form>
+			</div>
+		</div>
+
 		<div class="panel panel-primary margin-right hidden"
 			id="panel-my-consultations">
 			<div class="panel-heading">
