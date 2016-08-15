@@ -1,5 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <div id="home-content">
 	<div id="left-bar">
@@ -30,22 +30,19 @@
 				<li class="action"><a class="link-action" id="0">Gerar
 						Relatórios</a></li>
 				<li class="nav-divider"></li>
-				<li class="action"><a class="link-action manage-professional" id="1">Gerenciar
-						Profissionais</a></li>
+				<li class="action"><a class="link-action manage-professional"
+					id="1">Gerenciar Profissionais</a></li>
 				<li class="nav-divider"></li>
 				<li class="action"><a class="link-action" id="2">Gerenciar
 						Serviços</a></li>
 			</ul>
 		</div>
-
-
-
 	</div>
 
 
 	<div id="right-bar">
-	
-		<div class="alert alert-danger alert-message hidden" role="alert">
+
+		<div class="alert alert-message hidden" role="alert">
 			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 		</div>
 
@@ -53,39 +50,49 @@
 			<h2>Gerar Relatórios</h2>
 			<br /> <br /> <br />
 
-			<form action="relatorio/geral" method="post" target="_blank" id="form-report">
+			<form action="relatorio/geral" method="post" target="_blank"
+				id="form-report">
 				<div class="form-group">
-					<label>Escolha o tipo de relatório</label> 
-					<select class="form-control type-report" id="select-report-type" >
+					<label>Escolha o tipo de relatório</label> <select
+						class="form-control type-report" id="select-report-type">
 						<option>Escolha o tipo</option>
 						<option id="general-report" value="general">Geral</option>
 						<option value="by-type">Por serviço</option>
 					</select>
 				</div>
 				<div class="form-group" id="select-servico">
-					<label>Escolha o serviço</label> 
-					<select class="form-control select-service" id="select-service-type" name="serviceId">
+					<label>Escolha o serviço</label> <select
+						class="form-control select-service" id="select-service-type"
+						name="serviceId">
 						<option value="option-deafult">Escolha o serviço</option>
 					</select>
 				</div>
 				<div class="form-group" id="select-professional">
-					<label>Escolha o profissional</label> 
-					<select class="form-control select-professional" id="select-professional-id" name="professionalId">
+					<label>Escolha o profissional</label> <select
+						class="form-control select-professional"
+						id="select-professional-id" name="professionalId">
 						<option value="option-default">Escolha o profissional</option>
 					</select>
 				</div>
 				<div id="date-report" class="form-group">
 					<div class="input-group col-md-4" id="date-left">
 						<label class="control-label" for="input-dtpckr-start-report">Início</label>
-						<input type='text' name="dateBegin" class="form-control" id="input-dtpckr-start-report"/>
+						<input type='text' name="dateBegin" class="form-control"
+							id="input-dtpckr-start-report" />
 					</div>
 					<div class="input-group col-md-4" id="date-right">
 						<label class="control-label" for="input-dtpckr-end-report">Fim</label>
-						<input type='text' name="dateEnd" class="form-control" id="input-dtpckr-end-report"/>
+						<input type='text' name="dateEnd" class="form-control"
+							id="input-dtpckr-end-report" />
 					</div>
 				</div>
-			<br><br><br><br>
-			<button type="submit" class="btn btn-primary" id="button-generate-report" data-dismiss="modal" onclick="return onGenerateReportButtonClicked();">Gerar</button>
+				<br>
+				<br>
+				<br>
+				<br>
+				<button type="submit" class="btn btn-primary"
+					id="button-generate-report" data-dismiss="modal"
+					onclick="return onGenerateReportButtonClicked();">Gerar</button>
 			</form>
 		</div>
 
@@ -93,14 +100,14 @@
 			<h2>Gerenciar Profissionais</h2>
 			<br /> <br /> <br />
 
-			<ul class="nav nav-tabs" role="tablist">			
+			<ul class="nav nav-tabs" role="tablist">
 				<li role="presentation" class="active link-professional-registered"><a
 					href="#professional-registered"
 					aria-controls="professional-registered" role="tab"
 					data-toggle="tab">Profissionais cadastrados</a></li>
-				<li role="presentation" class="link-add-professional"><a href="#add-professional"
-					aria-controls="add-professional" role="tab" data-toggle="tab">Adicionar
-						profissional</a></li>
+				<li role="presentation" class="link-add-professional"><a
+					href="#add-professional" aria-controls="add-professional"
+					role="tab" data-toggle="tab">Adicionar profissional</a></li>
 			</ul>
 
 			<div class="tab-content">
@@ -113,6 +120,7 @@
 							<tr>
 								<th>Nome</th>
 								<th>Email</th>
+								<th>Serviço</th>
 							</tr>
 						</thead>
 					</table>
@@ -132,25 +140,22 @@
 							</div>
 						</div>
 						<br />
-						<table id="table-add-professional" class="table table-hover table-bordered">
-						<thead>
-							<tr>
-								<th>Nome</th>
-								<th>Email</th>
-								<th>Serviço	</th>
-								<th>Cadastrar</th>
-							</tr>
-						</thead>
-						<tbody>
-							
-						</tbody>
-					</table>
-
+						<table id="table-add-professional"
+							class="table table-hover table-bordered">
+							<thead>
+								<tr>
+									<th>Nome</th>
+									<th>Email</th>
+									<th>Serviço</th>
+									<th>Cadastrar</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
-
-
 		</div>
 
 		<div id="add-service">
