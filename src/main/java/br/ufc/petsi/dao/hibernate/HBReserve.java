@@ -1,8 +1,10 @@
 package br.ufc.petsi.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -32,12 +34,16 @@ public class HBReserve implements ReserveDAO{
 		
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public List<Reserve> getActiveReservesByPatient(Patient patient) {
-		Query query = this.manager.createQuery("SELECT re FROM Reserve re WHERE re.patient.cpf = :id AND re.active = true");
-		query.setParameter("id", patient.getCpf());
-		return (List<Reserve>) query.getResultList();
+		try{
+			Query query = this.manager.createQuery("SELECT re FROM Reserve re WHERE re.patient.cpf = :id AND re.active = true");
+			query.setParameter("id", patient.getCpf());
+			return (List<Reserve>) query.getResultList();
+		}catch(NoResultException ex){
+			return new ArrayList<Reserve>();
+		}
 	}
 
 	@Override

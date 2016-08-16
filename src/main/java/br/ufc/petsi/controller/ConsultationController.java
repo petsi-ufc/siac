@@ -78,6 +78,7 @@ public class ConsultationController {
 	@ResponseBody
 	public String getConsultationsByProfessionalJSON(HttpSession session){
 		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
+		System.out.println("USER SESSION: "+proTemp);
 		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	

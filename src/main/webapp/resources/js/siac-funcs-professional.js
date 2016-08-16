@@ -258,7 +258,7 @@ function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 		tdata += '<td>'+
 		'<button type="button" value='+sday.getId()+' class="btn btn btn-success action-register-consultation">Registrar <span class="glyphicon glyphicon-ok"></span></button>'+
 			'<button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar <span class="glyphicon glyphicon-remove-circle"></span></button>'+
-			'<button type="button" value='+sday.getId()+' class="btn btn btn-warning action-reschedule-consultation" '+disabled+' ">Reagendar <span class="glyphicon glyphicon-time"></span></button>'
+			'<button type="button" value='+sday.getId()+' class="btn btn btn-warning action-reschedule-consultation margin-left" '+disabled+' ">Reagendar <span class="glyphicon glyphicon-time"></span></button>'
 			+'</td>';
 			
 		row.append(tdata);

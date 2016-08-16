@@ -1,5 +1,6 @@
 package br.ufc.petsi.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,7 +16,7 @@ import br.ufc.petsi.constants.Constants;
 @Entity
 @Table(name="patient")
 @DiscriminatorValue(Constants.ROLE_PATIENT)
-public class Patient extends User {
+public class Patient extends User implements Serializable {
 	
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="patient", cascade=CascadeType.ALL)
 	private List<Consultation> listConsultations;

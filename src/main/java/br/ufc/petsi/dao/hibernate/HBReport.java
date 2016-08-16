@@ -40,7 +40,7 @@ public class HBReport implements ReportDAO{
 		
 		ratingReport.setAverage(rating);
 		
-		Query query2 = (Query) manager.createQuery("SELECT r FROM Rating r, Consultation c WHERE r.id = c.rating.id and c.professional.id = :professionalId and c.dateInit BETWEEN :dateBegin and :dateEnd");
+		Query query2 = (Query) manager.createQuery("SELECT r FROM Rating r, Consultation c WHERE r.id = c.rating.id and c.professional.id = :professionalId and c.dateInit >= :dateBegin and c.dateInit <= :dateEnd");
 		query2.setParameter("professionalId", professionalId);
 		query2.setParameter("dateBegin", dateBegin);
 		query2.setParameter("dateEnd", dateEnd);

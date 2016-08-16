@@ -371,16 +371,8 @@ function showRating(){
 		
 		ajaxCall("/siac/showRating", params, function(json) {
 
-			$.each(json, function(name, value){
-
-				if(name=="comment"){
-					comment = value;
-				}
-
-				if(name="rating"){
-					rating = value;
-				}
-			});
+			comment = json.comment;
+			rating = json.rating;
 
 			$("#content-rating").append("<h4><strong>Comentário:</strong></h4>");
 			$("#content-rating").append(comment);

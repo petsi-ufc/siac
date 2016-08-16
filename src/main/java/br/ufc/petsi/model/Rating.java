@@ -1,5 +1,7 @@
 package br.ufc.petsi.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +14,7 @@ import com.google.gson.annotations.Expose;
 
 @Entity
 @Table( name = "rating")
-public class Rating {
+public class Rating implements Serializable{
 	
 	@Expose
 	@Id
