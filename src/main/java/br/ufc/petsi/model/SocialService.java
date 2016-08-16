@@ -1,5 +1,7 @@
 package br.ufc.petsi.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,7 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table( name = "social_service" )
-public class SocialService {
+public class SocialService implements Serializable{
 	@Id
 	@GeneratedValue
 	private Long id;

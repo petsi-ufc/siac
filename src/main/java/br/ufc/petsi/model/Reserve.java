@@ -1,5 +1,6 @@
 package br.ufc.petsi.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -14,7 +15,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "reserve")
-public class Reserve implements Comparable<Reserve>{
+public class Reserve implements Comparable<Reserve>, Serializable{
 
 	@Id
 	@GeneratedValue

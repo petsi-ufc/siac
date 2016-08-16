@@ -27,7 +27,6 @@ public class AuthenticationController {
 			mv.addObject("error", "Login e/ou senha inválidos");
 		try{
 			User user = (User)this.getUserLogged(session);
-			
 			if(user.getRole().equals(Constants.ROLE_PROFESSIONAL))
 				mv.setViewName("redirect:/professional");
 			else if(user.getRole().equals(Constants.ROLE_ADMIN))
@@ -43,9 +42,10 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping("/failureLogin")
-	public ModelAndView failure()
+	public ModelAndView failure(HttpSession session)
 	{
 		ModelAndView mv = new ModelAndView("login");
+		session.invalidate();
 		mv.addObject("error", "Login e/ou senha inválidos");
 		return mv;
 	}

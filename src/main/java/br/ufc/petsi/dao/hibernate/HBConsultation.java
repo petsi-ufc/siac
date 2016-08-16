@@ -39,9 +39,14 @@ public class HBConsultation implements ConsultationDAO{
 	
 	@Override
 	public Consultation getConsultationById(long id) {
-		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.id = :idConsultation");
-		query.setParameter("idConsultation", id);
-		return (Consultation) query.getSingleResult();
+		try{
+			Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.id = :idConsultation");
+			query.setParameter("idConsultation", id);
+			
+			return (Consultation) query.getSingleResult();
+		}catch(NoResultException ex){
+			return null;
+		}
 	}
 
 	@Override

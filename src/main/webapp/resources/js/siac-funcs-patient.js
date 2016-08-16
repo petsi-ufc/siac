@@ -344,7 +344,7 @@ function scheduleConsultation(){
 				alertMessage(response.message, null, ALERT_ERROR);
 
 		}, function () {
-			alertMessage("ERRO", null, ALERT_ERROR);
+			alertMessage("Ops, Não foi possível agendar essa consulta!", null, ALERT_ERROR);
 		});
 
 		$("#modal-event").modal('hide');
@@ -371,16 +371,8 @@ function showRating(){
 		
 		ajaxCall("/siac/showRating", params, function(json) {
 
-			$.each(json, function(name, value){
-
-				if(name=="comment"){
-					comment = value;
-				}
-
-				if(name="rating"){
-					rating = value;
-				}
-			});
+			comment = json.comment;
+			rating = json.rating;
 
 			$("#content-rating").append("<h4><strong>Comentário:</strong></h4>");
 			$("#content-rating").append(comment);

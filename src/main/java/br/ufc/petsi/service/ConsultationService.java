@@ -11,13 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.enums.ConsultationState;
@@ -25,10 +18,18 @@ import br.ufc.petsi.event.Event;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
+import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.Reserve;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.util.ConsultationExclusionStrategy;
 import br.ufc.petsi.util.Response;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
 @Named
@@ -65,6 +66,8 @@ public class ConsultationService {
 
 					if(!timeSchedules.get(j).getAsJsonObject().get("id").isJsonNull()){
 						consultationId = timeSchedules.get(j).getAsJsonObject().get("id").getAsLong();
+						Consultation consultationTemp = consDAO.getConsultationById(consultationId);
+						consultation = consultationTemp != null ? consultationTemp : consultation;
 					}
 
 					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
@@ -86,14 +89,14 @@ public class ConsultationService {
 					consultation.setDateInit(dateInit);
 					consultation.setDateEnd(dateEnd);
 
-					consultation.setId(consultationId);
-
+					
 					consDAO.save(consultation);
 				}
 
 			}
 		}catch(Exception e){
 			System.out.println("Erro ao transformar o JSON: "+e);
+			e.printStackTrace();
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível cadastrar a(s) consulta(s)");
 			return gson.toJson(response);
@@ -135,7 +138,7 @@ public class ConsultationService {
 		List<Reserve> reserves = reserveDAO.getActiveReservesByPatient(patient);
 
 		List<Event> events = new ArrayList<Event>();
-		
+
 		if(consultations != null){
 			if(consultations.size() > 0){
 				for(Consultation c : consultations){
@@ -209,7 +212,7 @@ public class ConsultationService {
 		Gson gson = new Gson();
 
 		Consultation c = consDAO.getConsultationById(id);		
-
+		
 		Event event = new Event(patient, c);
 
 		json = gson.toJson(event);
@@ -285,16 +288,16 @@ public class ConsultationService {
 
 		try{
 			Consultation oldCons = getConsultationsById(id, consDAO);
-			
+
 			if(oldCons != null){
 				Date today = new Date();
-				
+
 				DateFormat formatDate = new SimpleDateFormat("dd/MM/YYYY HH:mm");
 				DateFormat formatHours = new SimpleDateFormat("HH:mm");
 				if( message == "" || message == null){
 					message = "Informamos que sua consulta do dia "+formatDate.format(oldCons.getDateInit())+" de "+formatHours.format(oldCons.getDateInit())+" às "+ formatHours.format(oldCons.getDateEnd()) +" foi cancelada!";
 				}
-				
+
 				if(oldCons.getDateEnd().before(today)){
 					response.setCode(Response.ERROR);
 					response.setMessage("Ops, não é possível cancelar consultas anteriores a data de hoje");
@@ -328,7 +331,8 @@ public class ConsultationService {
 	public String getRatingByConsultation(Consultation consultation, ConsultationDAO consultationDAO){
 		String json = "";
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-		json = gson.toJson(consultationDAO.getRatingByIdConsultation(consultation.getId()));
+		Rating rating = consultationDAO.getRatingByIdConsultation(consultation.getId());
+		json = gson.toJson(rating);
 		return json;
 
 	}
@@ -377,8 +381,7 @@ public class ConsultationService {
 
 		Gson gson = new Gson();
 		Response response = new Response();
-		System.out.println("Estado da consulta :    " + consultation.getState());
-		System.out.println("CPF paciente da sessão:    "+ patient.getCpf());
+		
 		try{
 			if(consultation.getState().equals(ConsultationState.RD) && consultation.getPatient().getCpf().equals(patient.getCpf())){
 				response.setCode(Response.SUCCESS);

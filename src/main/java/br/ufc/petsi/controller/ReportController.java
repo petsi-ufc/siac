@@ -1,11 +1,14 @@
 package br.ufc.petsi.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
+import net.sf.jasperreports.engine.JREmptyDataSource;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -15,11 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ReportDAO;
 import br.ufc.petsi.model.GeneralReport;
+import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.RatingReport;
 import br.ufc.petsi.model.ServiceReport;
-import br.ufc.petsi.model.User;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 
 @Controller
 public class ReportController {
@@ -58,16 +60,21 @@ public class ReportController {
 			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateBegin, 
 			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateEnd){ 
 		
+		dateBegin.setHours(0);
+		dateEnd.setHours(23);
+		
 		List<Rating> ratings = new ArrayList<Rating>();
 		
-		Long profissionalId = ((User)session.getAttribute(Constants.USER_SESSION)).getId();
-		System.out.println(profissionalId);
+		Professional professional = ((Professional)session.getAttribute(Constants.USER_SESSION));
 		
-		RatingReport ratingReport = reportDAO.getRatingReport(profissionalId, dateBegin, dateEnd);
+		Long professionalId = professional.getId();
+		
+		RatingReport ratingReport = reportDAO.getRatingReport(professionalId, dateBegin, dateEnd);
 		ratings = ratingReport.getRatings();
 		
 		model.addAttribute("format", "pdf");
 		model.addAttribute("dateBegin", dateBegin);
+		model.addAttribute("professional", professional);
 		model.addAttribute("dateEnd", dateEnd);
 		model.addAttribute("average", ratingReport.getAverage());
 		model.addAttribute("ratings", ratings);

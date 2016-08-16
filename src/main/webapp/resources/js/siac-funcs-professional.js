@@ -256,9 +256,9 @@ function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 		
 		tdata += '<td>'+patient.name+'</td>';
 		tdata += '<td>'+
-		'<button type="button" value='+sday.getId()+' class="btn btn btn-success action-register-consultation" '+disabled+' ">Registrar <span class="glyphicon glyphicon-ok"></span></button>'+
+		'<button type="button" value='+sday.getId()+' class="btn btn btn-success action-register-consultation">Registrar <span class="glyphicon glyphicon-ok"></span></button>'+
 			'<button type="button" value='+sday.getId()+' class="btn btn btn-danger action-cancel-consultation" '+disabled+' ">Cancelar <span class="glyphicon glyphicon-remove-circle"></span></button>'+
-			'<button type="button" value='+sday.getId()+' class="btn btn btn-warning action-reschedule-consultation" '+disabled+' ">Reagendar <span class="glyphicon glyphicon-time"></span></button>'
+			'<button type="button" value='+sday.getId()+' class="btn btn btn-warning action-reschedule-consultation margin-left" '+disabled+' ">Reagendar <span class="glyphicon glyphicon-time"></span></button>'
 			+'</td>';
 			
 		row.append(tdata);
@@ -289,8 +289,10 @@ function fillDetailsConsultationTable(tbodyId, date, scheduleList){
 		var scheduleId = $(this).attr("value"); 
 		
 		ajaxCall("/siac/registerConsultation", {"id": scheduleId}, function(response){
-			if(response.code == RESPONSE_SUCCESS)
+			if(response.code == RESPONSE_SUCCESS){
 				alertMessage(response.message, null, ALERT_SUCCESS);
+				getProfessionalConsultations(fillProfessionalCalendar);
+			}
 			else
 				alertMessage(response.message, null, ALERT_ERROR);
 			
@@ -393,9 +395,7 @@ function fillReScheduleModal(schedule){
 	var $atualDate = $("#rsch-atualdate");
 	var $atualTimeInit = $("#rsch-atual-timeinit");
 	var $atualTimeEnd = $("#rsch-atual-timeend");
-	
-	console.log(schedule);
-	
+		
 	//Preenchendo os campos de data e hora atual da consulta 
 	$atualDate.val(schedule.getDateInit());
 	$atualTimeInit.val(schedule.getTimeInit());
@@ -605,7 +605,7 @@ function saveSchedules(timepickersId, date){
 			return false;
 		}
 		
-		scheduleDay.addSchedule(timeInit["hour"], timeInit["minute"], timeEnd["hour"], timeEnd["minute"], null, null, null, scheduleId, null);
+		scheduleDay.addSchedule(getFormatedDate(date), timeInit["hour"], timeInit["minute"], timeEnd["hour"], timeEnd["minute"], null, null, null, scheduleId, null);
 		
 	}
 	scheduleManager.addScheduleDay(date, scheduleDay);

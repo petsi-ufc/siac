@@ -20,7 +20,7 @@
    			</c:if>
    			<input type="submit" class="btn btn-primary" value="Entrar" id="bt-enter"><br>
    			<a target="_blank" href="http://cadastroaluno.intranet/"><input type="button" class="btn btn-success" value="Cadastre-se"></a><br>
-			<a href="#" data-toggle="modal" data-target="#modal-forgot-pass">Esqueceu a senha?</a>
+			<!-- <a href="#" data-toggle="modal" data-target="#modal-forgot-pass">Esqueceu a senha?</a>  -->
 		</form>
 
 	</div>

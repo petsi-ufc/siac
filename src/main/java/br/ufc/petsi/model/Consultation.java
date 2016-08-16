@@ -1,8 +1,11 @@
 package br.ufc.petsi.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import br.ufc.petsi.model.Professional;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +28,7 @@ import br.ufc.petsi.enums.ConsultationState;
 
 @Entity
 @Table( name = "consultation" )
-public class Consultation {
+public class Consultation implements Serializable{
 	@Id
 	@GeneratedValue
 	private Long id;
