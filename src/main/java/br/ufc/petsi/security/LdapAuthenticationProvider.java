@@ -14,6 +14,7 @@ import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.dao.UserLdapDAO;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.session.CurrentSession;
+import br.ufc.petsi.util.LogGenerator;
 
 @Named
 public class LdapAuthenticationProvider implements AuthenticationProvider {
@@ -43,8 +44,9 @@ public class LdapAuthenticationProvider implements AuthenticationProvider {
 				userDAO.save(u); 
 				user = u;
 			}
-			else
+			else{
 				throw new BadCredentialsException("Usuário inexistente");
+			}
 		}
 		if(!ldapDAO.authenticate(name, password)) 
 			throw new BadCredentialsException("Login e/ou senha inválidos");
