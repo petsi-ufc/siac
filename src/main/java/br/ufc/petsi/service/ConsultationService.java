@@ -20,10 +20,12 @@ import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.Reserve;
+import br.ufc.petsi.model.Scheduler;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.util.ConsultationExclusionStrategy;
 import br.ufc.petsi.util.Response;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -41,59 +43,30 @@ public class ConsultationService {
 
 	public String saveConsultation(Professional proTemp, String json, ConsultationDAO consDAO){
 		Gson gson = new Gson();
-		System.out.println("JSON: "+json);
+		System.err.println("JSON: "+json);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
 		Response response = new Response();
 		try{
-			JsonParser parser = new JsonParser();
-			JsonObject jObject = parser.parse(json).getAsJsonObject(); 
-			JsonArray data = jObject.getAsJsonArray("data");
-
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-
-			for(int i = 0; i < data.size(); i++){
-				JsonObject timeSchedule = data.get(i).getAsJsonObject();
-
-				String date = timeSchedule.get("date").getAsString();
-				JsonArray timeSchedules = timeSchedule.getAsJsonArray("schedules");
-
-				for(int j = 0; j < timeSchedules.size(); j++){
-					Consultation consultation = new Consultation();
-					consultation.setProfessional(proTemp);
-					consultation.setService(proTemp.getSocialService());
-					consultation.setState(ConsultationState.FR);
-
-					long consultationId = 0;
-
-					if(!timeSchedules.get(j).getAsJsonObject().get("id").isJsonNull()){
-						consultationId = timeSchedules.get(j).getAsJsonObject().get("id").getAsLong();
-						Consultation consultationTemp = consDAO.getConsultationById(consultationId);
-						consultation = consultationTemp != null ? consultationTemp : consultation;
-					}
-
-					JsonElement timeInit = timeSchedules.get(j).getAsJsonObject().get("timeInit");
-					JsonElement timeEnd = timeSchedules.get(j).getAsJsonObject().get("timeEnd");
-
-					String sDateInit = date+" "+timeInit.getAsString();
-					String sDateEnd = date+" "+timeEnd.getAsString();
-
-
-					Date dateInit = format.parse(sDateInit);
-					Date dateEnd = format.parse(sDateEnd);
-
-					if(dateInit.after(dateEnd)){
-						response.setCode(Response.ERROR);
-						response.setMessage("Ops, existe uma consulta com horário de inicio superior ao de fim");
-						return gson.toJson(response);
-					}
-
-					consultation.setDateInit(dateInit);
-					consultation.setDateEnd(dateEnd);
-
-					
-					consDAO.save(consultation);
+			
+			Scheduler scheduler = mapper.readValue(json, Scheduler.class);
+			
+			for (Consultation consultation : scheduler.getSchedule()) {
+				consultation.setProfessional(proTemp);
+				consultation.setService(proTemp.getSocialService());
+				consultation.setState(ConsultationState.FR);
+				
+				
+				if(consultation.getDateInit().after(consultation.getDateEnd())){
+					response.setCode(Response.ERROR);
+					response.setMessage("Ops, existe uma consulta com horário de inicio superior ao de fim");
+					return gson.toJson(response);
 				}
-
+				
+				consDAO.save(consultation);
 			}
+			
 		}catch(Exception e){
 			System.out.println("Erro ao transformar o JSON: "+e);
 			e.printStackTrace();
