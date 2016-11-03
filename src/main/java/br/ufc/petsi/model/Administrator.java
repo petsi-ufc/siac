@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import br.ufc.petsi.constants.Constants;
 
 @Entity
-@Table(name="administrator")
+//@Table(name="administrator")
 @DiscriminatorValue(Constants.ROLE_ADMIN)
 public class Administrator extends User{
 	

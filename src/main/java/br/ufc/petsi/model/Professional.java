@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import br.ufc.petsi.constants.Constants;
 
 @Entity
-@Table( name = "professional" )
+//@Table( name = "professional" )
 @DiscriminatorValue(Constants.ROLE_PROFESSIONAL)
 public class Professional extends User implements Serializable {
 	

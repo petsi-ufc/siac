@@ -162,7 +162,8 @@
 					</span>
 				</div>
 			</div>
-			<div id="calendar_professional" class="calendar"></div>
+			
+			<div  ui-calendar="uiConfig.calendar" ng-model="eventSource" class="calendar" ></div>
 
 			<div id="calendar-legend">
 				<h3>Legenda de Consultas</h3>

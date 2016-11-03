@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import br.ufc.petsi.constants.Constants;
 
 @Entity
-@Table(name="patient")
+//@Table(name="patient")
 @DiscriminatorValue(Constants.ROLE_PATIENT)
 public class Patient extends User implements Serializable {
 	
