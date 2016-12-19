@@ -6,8 +6,8 @@
 	scope="session" />
 <jsp:setProperty property="*" name="user" />
 
+<div id="home-content" ng-app="siacApp" ng-controller="professionalController">
 
-<div id="home-content">
 	<div id="left-bar">
 
 		<div id="modal-schedules-description" class="modal fade" 
@@ -153,7 +153,7 @@
 
 		<div id="calendar-container">
 			<h2 id="my-calendar">Meu calendário</h2>
-			<div id="container-goto-date">
+			<!--<div id="container-goto-date">
 				<div class="input-group">
 					<input id="input-goto-date" type="date" class="form-control"
 						placeholder="Ir para data..."> <span
@@ -161,9 +161,9 @@
 						<button class="btn btn-default" id="btn-goto-date" type="button">Ir!</button>
 					</span>
 				</div>
-			</div>
+			</div> -->
 			
-			<div  ui-calendar="uiConfig.calendar" ng-model="eventSource" class="calendar" ></div>
+			<div  ui-calendar="uiConfig.calendar" ng-model="eventSources" class="calendar" ></div>
 
 			<div id="calendar-legend">
 				<h3>Legenda de Consultas</h3>

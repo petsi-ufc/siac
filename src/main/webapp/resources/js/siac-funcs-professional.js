@@ -1,24 +1,43 @@
 (function(){
 	
-	angular.module("siacApp").controller("professionalController", function($scope){
+	angular.module("siacApp").controller("professionalController", function($scope, uiCalendarConfig, professionalService){
 		
+		//Variables
+		$scope.events = [];
+		$scope.eventSources = [$scope.events];
 		
-		$scope.eventSource = {
-			currentTimezone : 'America/Brazil'	
-		};
+		professionalService.getProfessionalConsultations(function(data){
+			console.log(data);
+		});
 		
-//		Configuração do calendário.
+		//Functions
+		$scope.eventClick = _eventClick;
+		$scope.addEvent = _addEvent; 
+		
+		//Configuração do calendário.
 		$scope.uiConfig = {
-				calendar : {
-					lang:'pt-br'
-				},
-				eventClick: $scope.eventClick
+			calendar : {
+				editable : true,
+				displayEventTime : true,
+				eventClick : function(event){
+					alert(event);
+				}
+			}
 		};
 		
-		
-		$scope.eventClick = function(){
+		function _eventClick(){
 			alert("clicked");
 		}
+		
+		function _addEvent(){
+			$scope.events.push({
+				title : 'Power',
+				start : new Date(),
+				end : new Date()
+			});
+		}
+		
+		
 		
 	});
 	
