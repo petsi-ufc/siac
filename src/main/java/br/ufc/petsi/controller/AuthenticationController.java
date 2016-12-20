@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.model.User;
+import br.ufc.petsi.util.LogGenerator;
 
 @Controller
 public class AuthenticationController {
@@ -36,6 +37,7 @@ public class AuthenticationController {
 		}
 		catch(NullPointerException e)
 		{
+			LogGenerator.getInstance().log(e, "Erro na autenticação");
 			System.out.println("Error: " + e);
 		} 
 		return mv;

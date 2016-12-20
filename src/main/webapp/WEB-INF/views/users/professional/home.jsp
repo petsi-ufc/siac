@@ -135,10 +135,10 @@
 			</div>
 			<ul id="ul-services" class="nav nav-pills nav-stacked" role="tablist">
 				<li class="nav-divider"></li>
-				<li class="service-item active" id="0"><a>Meu Calendário</a></li>
+				<li class="service-item" ng-class="{'active':canShow(0)}" ng-click="setMenuIndex(0)"><a>Meu Calendário</a></li>
 				<li class="nav-divider"></li>
-				<li class="service-item" id="1"><a>Cadastrar Agenda</a></li>
-				<li class="service-item" id="3"><a>Gerar Relatório</a></li>
+				<li class="service-item" ng-class="{'active':canShow(1)}" ng-click="setMenuIndex(1)"><a>Cadastrar Agenda</a></li>
+				<li class="service-item" ng-class="{'active':canShow(2)}" ng-click="setMenuIndex(2)"><a>Gerar Relatório</a></li>
 				<!--<li class="nav-divider"></li>
 				<li class="service-item" id="2"><a>Minhas Consultas</a></li> -->
 			</ul>
@@ -151,7 +151,7 @@
 			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 		</div>
 
-		<div id="calendar-container">
+		<div id="calendar-container" ng-show="canShow(0)">
 			<h2 id="my-calendar">Meu calendário</h2>
 			<!--<div id="container-goto-date">
 				<div class="input-group">
@@ -217,7 +217,7 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary margin-right hidden"
+		<div class="panel panel-primary margin-right" ng-show="canShow(1)" 
 			id="panel-register-schedules">
 			<div class="panel-heading">
 				<h1 class="panel-title">Cadastrar Agenda</h1>
@@ -279,8 +279,8 @@
 			</div>
 		</div>
 		
-		<div class="panel panel-primary margin-right hidden" 
-		id="panel-generate-report">
+		<div class="panel panel-primary margin-right" 
+		id="panel-generate-report" ng-show="canShow(2)">
 			<div class="panel-heading">
 				<h1 class="panel-title">Gerar Relatórios</h1>
 			</div>
@@ -398,7 +398,7 @@
 									<label for="input-count-vacancy" class="col-md-4 control-label">Quantidade
 										de Vagas:</label>
 									<div class="col-md-5">
-										<input type="number" min="1"
+										<input type="number" min="1" ng-model="vacancyAmount"  
 											class="form-control input-schedule-info"
 											id="input-count-vacancy">
 									</div>
@@ -407,7 +407,7 @@
 									<label for="input-count-time" class="col-md-4 control-label">Tempo
 										por Consulta:</label>
 									<div class="col-md-5">
-										<input type="number" min="1"
+										<input type="number" min="1" ng-model="timePerConsult" 
 											class="form-control input-schedule-info"
 											id="input-count-time" placeholder="Minutos">
 									</div>
@@ -415,14 +415,14 @@
 								<div class="form-group">
 									<label for="input-count-time-init" class="col-md-4 control-label">Hora de Início:</label>
 									<div class="col-md-5 col-sm-offset-4 input-group bootstrap-timepicker timepicker">
-										<input id="tmp-init-0" type="text" class="input-schedule-info form-control input-small">
+										<input id="tmp-init-0" type="text" class="input-schedule-info form-control input-small" ng-model="timeInit">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 									</div>
 								</div>
 							</form>
 							<div class="col-md-offset-5">
-								<button type="button" class="btn btn-primary"
-									id="btn-generate-schedules">
+								<button type="button" class="btn btn-primary" ng-disabled="!vacancyAmount || !timePerConsult || !timeInit"
+									id="btn-generate-schedules" ng-click="generateSchedules(vacancyAmount, timePerConsult, timeInit)">
 									Gerar Horários <i class="glyphicon glyphicon-time"></i>
 								</button>
 							</div>
@@ -436,12 +436,12 @@
 						<div class="panel-body" id="panel-schedules">
 							<form class="form-horizontal">
 								<div id="row-add-schedules">
-									<div class="row row-schedule-id">
+									<div class="row row-schedule-id" ng-repeat="sch in generetedSchedules">
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
 											<div
 												class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
-												<input id="tmp-init-1" type="text"  
+												<input id="tmp-init-1" type="text" value="{{sch.initTime}}" 
 													class="form-control input-small"> <span
 													class="input-group-addon"><i
 													class="glyphicon glyphicon-time"></i></span>
@@ -452,7 +452,7 @@
 										<div class="col-md-4">
 											<div
 												class="timepicker-end input-group bootstrap-timepicker timepicker">
-												<input id="tmp-end-1" type="text" class="form-control input-small"> 
+												<input id="tmp-end-1" type="text" class="form-control input-small" value="{{sch.endTime}}"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>

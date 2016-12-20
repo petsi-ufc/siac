@@ -15,6 +15,7 @@ import br.ufc.petsi.enums.Role;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.model.UserPrimaryKey;
+import br.ufc.petsi.util.LogGenerator;
 
 @Repository
 public class HBUserDAO implements UserDAO{
@@ -28,6 +29,7 @@ public class HBUserDAO implements UserDAO{
 		try {
 			listUsers = manager.createQuery("from User").getResultList();
 		} catch (NoResultException e) {
+			LogGenerator.getInstance().log(e, "Erro ao buscar todos os usuários");
 			System.out.println("Erro HBDAO getALL: "+e);
 		}
 		return listUsers;
@@ -46,6 +48,7 @@ public class HBUserDAO implements UserDAO{
 			if(n > 0) return true;
 
 		} catch (NoResultException e) {
+			LogGenerator.getInstance().log(e, "Erro ao conferir se um usuário já existe");
 			System.out.println("Erro HBDAO getALL: "+e);
 		}
 
@@ -75,6 +78,7 @@ public class HBUserDAO implements UserDAO{
 			query.setParameter("paramCpf", cpf);
 			listUsers = query.getResultList();
 		} catch (NoResultException e) {
+			LogGenerator.getInstance().log(e, "Erro ao pegar um usuário pelo CPF");
 			System.out.println("Erro HBDAO getALL: "+e);
 		}
 		return listUsers;
@@ -88,6 +92,7 @@ public class HBUserDAO implements UserDAO{
 			query.setParameter("paramName", name);
 			listUsers = query.getResultList();
 		}catch(NoResultException e){
+			LogGenerator.getInstance().log(e, "Erro ao pegar um usuário pelo nome");
 			System.out.println("Erro HBDAO getALL: "+e);	
 		}
 		return listUsers;
@@ -113,6 +118,7 @@ public class HBUserDAO implements UserDAO{
 			
 		}catch(NoResultException e){
 			System.out.println("Erro HBDAO getALL: "+e);
+			LogGenerator.getInstance().log(e, "Erro ao pegar um usuário pelo Papel");
 		}
 		
 		return listUsers;

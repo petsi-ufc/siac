@@ -13,6 +13,13 @@
 			});
 		}
 		
+		function _saveConsultation(params, callback){
+			$http.post("/siac/saveConsultation", {"json":params}).then(callback, function(err){
+				console.log("Error at save professional consultations");
+				console.log(err);
+			});
+		}
+		
 		return {
 			getProfessionalConsultations : _getProfessionalConsultations
 		}
