@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
+import br.ufc.petsi.dao.UserDAO;
+import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
@@ -37,6 +39,9 @@ public class ConsultationController {
 	
 	@Inject
 	private ReserveDAO reserveDAO;
+	
+	@Inject
+	private UserDAO userDAO;
 	
 	@Secured({"ROLE_PATIENT", "ROLE_PROFESSIONAL"})
 	@RequestMapping("/getConsultationsBySocialService")
@@ -70,8 +75,17 @@ public class ConsultationController {
 	@ResponseBody
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
 		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
-		return consultationService.saveConsultation(proTemp, json, consDAO);
+		return consultationService.saveConsultation(proTemp, json, consDAO, ConsultationState.FR);
 	}
+	
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping("/saveConsultationNow")
+	@ResponseBody
+	public String saveConsultationNow(@RequestParam("json") String json, HttpSession session){
+		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
+		return consultationService.saveConsultationNow(proTemp, json, consDAO, userDAO);
+	}
+	
 	
 	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/getConsutationsByProfessionalJSON")
