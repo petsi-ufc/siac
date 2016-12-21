@@ -63,21 +63,18 @@ public class ReportController {
 		dateBegin.setHours(0);
 		dateEnd.setHours(23);
 		
-		List<Rating> ratings = new ArrayList<Rating>();
-		
 		Professional professional = ((Professional)session.getAttribute(Constants.USER_SESSION));
 		
 		Long professionalId = professional.getId();
 		
 		RatingReport ratingReport = reportDAO.getRatingReport(professionalId, dateBegin, dateEnd);
-		ratings = ratingReport.getRatings();
 		
 		model.addAttribute("format", "pdf");
 		model.addAttribute("dateBegin", dateBegin);
-		model.addAttribute("professional", professional);
+		model.addAttribute("name", professional.getName());
 		model.addAttribute("dateEnd", dateEnd);
 		model.addAttribute("average", ratingReport.getAverage());
-		model.addAttribute("ratings", ratings);
+		model.addAttribute("ratings", ratingReport.getRatings());
 		model.addAttribute("RatingSubReportLocation", "./Rating_subreport.jasper");
 		model.addAttribute("datasource", new JREmptyDataSource());
 

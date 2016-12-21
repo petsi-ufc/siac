@@ -5,9 +5,9 @@
 	<property name="ireport.y" value="0"/>
 	<field name="comment" class="java.lang.String"/>
 	<detail>
-		<band height="35" splitType="Stretch">
+		<band height="67" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="34cd4f13-92cf-4fed-bd9f-3b302b02cc3d" x="73" y="0" width="452" height="35" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="34cd4f13-92cf-4fed-bd9f-3b302b02cc3d" x="30" y="0" width="495" height="66" isRemoveLineWhenBlank="true"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -20,21 +20,6 @@
 					<paragraph firstLineIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement uuid="f9ea0ca1-d04b-4915-ab8f-966a28ba357a" x="30" y="0" width="43" height="35" isRemoveLineWhenBlank="true"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Justified" verticalAlignment="Middle">
-					<font size="12"/>
-					<paragraph firstLineIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
