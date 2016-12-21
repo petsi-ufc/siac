@@ -21,7 +21,8 @@
 		}
 		
 		return {
-			getProfessionalConsultations : _getProfessionalConsultations
+			getProfessionalConsultations : _getProfessionalConsultations,
+			saveConsultation : _saveConsultation
 		}
 	});
 })();

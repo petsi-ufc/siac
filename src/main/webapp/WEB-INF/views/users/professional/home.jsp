@@ -386,10 +386,9 @@
 						Horário</h3>
 				</div>
 				<div class="modal-body">
-					<h4 class="modal-description" id="modal-description-body"></h4>
-					<label id="label-date-clicked" class="hidden"></label>
-
-					<div class="panel panel-primary">
+					<h4 class="modal-description" id="modal-description-body">Horários para o dia {{selectedDay.format("DD/MM/YYYY")}}</h4>
+					
+					<!-- <div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Gerador de Horários</h3>
 						</div>
@@ -428,6 +427,45 @@
 								</button>
 							</div>
 						</div>
+					</div> -->
+					
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Cadastrar Horários</h3>
+						</div>
+						<div class="panel-body" id="panel-schedules">
+							<form class="form-horizontal">
+								<div id="row-add-schedules">
+									<div class="row row-schedule-id">
+										<label class="col-lg-1 control-label">Início</label>
+										<div class="col-md-4">
+											<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
+												<input id="tmp-init-1" type="text" ng-model="initSchTemp" class="form-control input-small"> 
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-time"></i>
+												</span>
+											</div>
+										</div>
+	
+										<label class="col-lg-1 control-label">Fim</label>
+										<div class="col-md-4">
+											<div
+												class="timepicker-end input-group bootstrap-timepicker timepicker">
+												<input id="tmp-end-1" type="text" class="form-control input-small" ng-model="endSchTemp"> 
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-time"></i>
+												</span>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<button ng-click="addTempSchedule(initSchTemp, endSchTemp)" type="button" class="btn btn-primary add-schedule" ng-disabled="!initSchTemp || !endSchTemp">
+												<span class="glyphicon glyphicon glyphicon-plus"></span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
 					</div>
 
 					<div class="panel panel-primary">
@@ -437,12 +475,15 @@
 						<div class="panel-body" id="panel-schedules">
 							<form class="form-horizontal">
 								<div id="row-add-schedules">
+									
+									<h5 ng-show="generetedSchedules.length == 0">Nenhum horário cadastrado</h5>
+									
 									<div class="row row-schedule-id" ng-repeat="sch in generetedSchedules">
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
 											<div
 												class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
-												<input id="tmp-init-1" type="text" value="{{sch.initTime}}" 
+												<input type="text" value="{{sch.initTime}}" 
 													class="form-control input-small"> <span
 													class="input-group-addon"><i
 													class="glyphicon glyphicon-time"></i></span>
@@ -453,15 +494,15 @@
 										<div class="col-md-4">
 											<div
 												class="timepicker-end input-group bootstrap-timepicker timepicker">
-												<input id="tmp-end-1" type="text" class="form-control input-small" value="{{sch.endTime}}"> 
+												<input type="text" class="form-control input-small" value="{{sch.endTime}}"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
 											</div>
 										</div>
 										<div class="col-md-2">
-											<button type="button" class="btn btn-primary add-schedule">
-												<span class="glyphicon glyphicon glyphicon-plus"></span>
+											<button type="button" class="btn btn-danger add-schedule" ng-click="removeSchedule($index)">
+												<span class="glyphicon glyphicon glyphicon-minus"></span>
 											</button>
 										</div>
 									</div>
@@ -471,8 +512,8 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary"
-						id="btn-confirm-schedules">
+					<button type="submit" class="btn btn-primary" ng-disabled="generetedSchedules.length == 0" 
+						id="btn-confirm-schedules" ng-click="saveConsultations(generetedSchedules)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
