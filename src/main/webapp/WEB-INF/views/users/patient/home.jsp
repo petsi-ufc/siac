@@ -20,19 +20,7 @@
 
 
 	<div id="right-bar">
-
-		<div class="alert alert-danger" id="alert-schedules">Não há
-			nenhum horário cadastrado para este serviço!</div>
-
-		<div class="content-calendar">
-			<h2 id="my-calendar-title">Meu Calendário</h2>
-			<div class="alert alert-message hidden" role="alert">
-				<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
-			</div>
-			
-			<div class="calendar" id="calendar-patient"></div>
-			
-			<div id="calendar-legend" style="margin-left: 60px">
+<div id="calendar-legend" style="margin-left: 135px">
 				<table style="margin-left: 0px; margin-bottom: 10px">
 					<thead>
 						<tr>
@@ -106,6 +94,18 @@
 				</table>
 
 			</div>
+		<div class="alert alert-danger" id="alert-schedules">Não há
+			nenhum horário cadastrado para este serviço!</div>
+		
+
+
+		<div class="content-calendar">
+			<h2 id="my-calendar-title">Meu Calendário</h2>
+			<div class="alert alert-message hidden" role="alert">
+				<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
+			</div>
+			
+			<div class="calendar" id="calendar-patient"></div>
 			
 			
 		</div>

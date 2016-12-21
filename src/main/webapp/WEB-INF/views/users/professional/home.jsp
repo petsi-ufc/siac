@@ -152,20 +152,7 @@
 		</div>
 
 		<div id="calendar-container" ng-show="canShow(0)">
-			<h2 id="my-calendar">Meu calendário</h2>
-			<!--<div id="container-goto-date">
-				<div class="input-group">
-					<input id="input-goto-date" type="date" class="form-control"
-						placeholder="Ir para data..."> <span
-						class="input-group-btn">
-						<button class="btn btn-default" id="btn-goto-date" type="button">Ir!</button>
-					</span>
-				</div>
-			</div> -->
-			
-			<div  ui-calendar="uiConfig.calendar" ng-model="eventSources" class="calendar" ></div>
-
-			<div id="calendar-legend">
+		<div id="calendar-legend">
 				<h3>Legenda de Consultas</h3>
 				<table id="table-legend">
 					<tbody id="tbody-legend">
@@ -181,7 +168,7 @@
 								<div class='legend-color color-green'></div>
 							</td>
 							<td>
-								<h4>Disponível</h4>
+								<h5>Disponível</h5>
 							</td>
 
 							<td>
@@ -215,6 +202,20 @@
 					</tbody>
 				</table>
 			</div>
+			<h2 id="my-calendar">Meu calendário</h2>
+			<!--<div id="container-goto-date">
+				<div class="input-group">
+					<input id="input-goto-date" type="date" class="form-control"
+						placeholder="Ir para data..."> <span
+						class="input-group-btn">
+						<button class="btn btn-default" id="btn-goto-date" type="button">Ir!</button>
+					</span>
+				</div>
+			</div> -->
+			
+			<div  ui-calendar="uiConfig.calendar" ng-model="eventSources" class="calendar" ></div>
+
+			
 		</div>
 
 		<div class="panel panel-primary margin-right" ng-show="canShow(1)" 
