@@ -1,9 +1,6 @@
 package br.ufc.petsi.controller;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -19,7 +16,6 @@ import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ReportDAO;
 import br.ufc.petsi.model.GeneralReport;
 import br.ufc.petsi.model.Professional;
-import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.RatingReport;
 import br.ufc.petsi.model.ServiceReport;
 
@@ -34,7 +30,6 @@ public class ReportController {
 			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateBegin, 
 			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateEnd, 
 			 int serviceId, int professionalId){ 
-		
 		
 		ServiceReport serviceReport = reportDAO.getServiceReport(serviceId, professionalId, dateBegin, dateEnd);
 

@@ -124,7 +124,7 @@ function onOptionReportClick(){
 
 			$(".service-option").remove();
 
-			ajaxCall("/siac/getServices", function(json){
+			ajaxCall("/siac/getServices", null, function(json){
 
 				var serviceName;
 				var serviceActive;

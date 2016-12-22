@@ -93,7 +93,7 @@ public class HBReport implements ReportDAO{
 		
 		Query query2 = (Query) manager.createQuery("SELECT to_char(c.dateInit, 'MM/YYYY'), "
 				+ "sum(case when c.state = 'RD' then 1 else 0 end), "
-				+ "sum(case when c.state = 'UD' then 1 else 0 end), "
+				+ "sum(case when c.state = 'NO' then 1 else 0 end), "
 				+ "sum(case when c.state = 'CD' then 1 else 0 end), "
 				+ "count(*) FROM Consultation c "
 				+ "WHERE c.professional.id = :professionalId and c.dateInit BETWEEN :dateBegin and :dateEnd "
@@ -148,7 +148,7 @@ public class HBReport implements ReportDAO{
 		
 		Query query = (Query) manager.createQuery("SELECT to_char(c.dateInit, 'MM/YYYY'), "
 				+ "sum(case when c.state = 'RD' then 1 else 0 end), "
-				+ "sum(case when c.state = 'UD' then 1 else 0 end), "
+				+ "sum(case when c.state = 'NO' then 1 else 0 end), "
 				+ "sum(case when c.state = 'CD' then 1 else 0 end), "
 				+ "count(*) FROM Consultation c "
 				+ "WHERE c.dateInit BETWEEN :dateBegin and :dateEnd "
