@@ -1,5 +1,6 @@
 package br.ufc.petsi.dao.hibernate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,6 +107,20 @@ public class HBConsultation implements ConsultationDAO{
 		}
 		return cons;
 	}
+	
+	@Override
+	public List<Consultation> getConsultationByPeriod(Professional professional, Date dateInit, Date dateEnd) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Query query = (Query) manager.createNativeQuery("SELECT * FROM consultation WHERE date_init >= '"+formatter.format(dateInit)+"' AND date_end <= '"+formatter.format(dateEnd)+"' AND professional_id = "+professional.getId()+"",Consultation.class);
+		
+		List<Consultation> cons = new ArrayList<Consultation>();
+		try{
+			cons = query.getResultList();
+		}catch(NoResultException e){
+			System.out.println("No result at getConsultationByProfessional: "+e);
+		}
+		return cons;
+	}
 
 	@Override
 	public void cancelConsultation(Consultation con) {
@@ -134,7 +149,5 @@ public class HBConsultation implements ConsultationDAO{
 		oldCons.setState(ConsultationState.RD);
 		update(oldCons);
 	}
-
-
-		
+	
 }

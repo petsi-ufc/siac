@@ -419,5 +419,48 @@ public class ConsultationService {
 		}
 
 	}
+	
+	public String checkSchedules(Professional proTemp, String json, ConsultationDAO consDAO){
+		Gson gson = new Gson();
+		Response response = new Response();
+		JsonObject schedules = (JsonObject) new JsonParser().parse(json);
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+		
+		Date dateInit = new Date(Long.parseLong(schedules.get("dateInit").toString()));
+		Date dateEnd = new Date(Long.parseLong(schedules.get("dateEnd").toString()));
+		try{
+			List<Consultation> cons = consDAO.getConsultationByPeriod(proTemp, dateInit, dateEnd);
+			for(Consultation c: cons){
+				Date di = new Date();
+				String si = schedules.get("hourInit").toString().replaceAll("\"", "");
+				di.setHours(Integer.parseInt(si.split(":")[0]));
+				di.setMinutes(Integer.parseInt(si.split(":")[1]));
+				di.setSeconds(Integer.parseInt(si.split(":")[2]));
+				
+				Date de = new Date();
+				String se = schedules.get("hourEnd").toString().replaceAll("\"", "");
+				de.setHours(Integer.parseInt(se.split(":")[0]));
+				de.setMinutes(Integer.parseInt(se.split(":")[1]));
+				de.setSeconds(Integer.parseInt(se.split(":")[2]));
+				
+				if(c.getDateInit().getHours() >= di.getHours() && c.getDateInit().getMinutes() >= di.getMinutes() && c.getDateEnd().getHours() <= de.getHours() && c.getDateEnd().getMinutes() <= de.getMinutes() ){
+					System.out.println("Entrou!!");
+					response.setCode(Response.ERROR);
+					response.setMessage("Ops, outra(s) consulta(s) está(ão) agendada(s) neste período");
+					return gson.toJson(response);
+				}
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível verificar os horários");
+			return gson.toJson(response);
+		}
+		
+		response.setCode(Response.SUCCESS);
+		response.setMessage("Todos os horários estão vagos!");
+		return gson.toJson(response);
+		
+	}
 
 }

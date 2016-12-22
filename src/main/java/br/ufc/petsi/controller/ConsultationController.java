@@ -86,6 +86,13 @@ public class ConsultationController {
 		return consultationService.saveConsultationNow(proTemp, json, consDAO, userDAO);
 	}
 	
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping("/checkSchedules")
+	@ResponseBody
+	public String checkSchedules(@RequestParam("json") String json, HttpSession session){
+		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
+		return consultationService.checkSchedules(proTemp, json, consDAO);
+	}
 	
 	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/getConsutationsByProfessionalJSON")
