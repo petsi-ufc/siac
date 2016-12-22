@@ -10,9 +10,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.swing.JOptionPane;
 
+import org.eclipse.jdt.internal.compiler.impl.Constant;
+
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
+import br.ufc.petsi.dao.UserDAO;
+import br.ufc.petsi.dao.hibernate.HBUserDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.event.Event;
 import br.ufc.petsi.model.Consultation;
@@ -41,13 +47,11 @@ public class ConsultationService {
 	private EmailService emailService;
 
 
-	public String saveConsultation(Professional proTemp, String json, ConsultationDAO consDAO){
+	public String saveConsultation(Professional proTemp, String json, ConsultationDAO consDAO, ConsultationState state){
 		Gson gson = new Gson();
-		System.err.println("JSON: "+json);
-		
 		ObjectMapper mapper = new ObjectMapper();
-		
 		Response response = new Response();
+		
 		try{
 			
 			Scheduler scheduler = mapper.readValue(json, Scheduler.class);
@@ -55,8 +59,7 @@ public class ConsultationService {
 			for (Consultation consultation : scheduler.getSchedule()) {
 				consultation.setProfessional(proTemp);
 				consultation.setService(proTemp.getSocialService());
-				consultation.setState(ConsultationState.FR);
-				
+				consultation.setState(state);
 				
 				if(consultation.getDateInit().after(consultation.getDateEnd())){
 					response.setCode(Response.ERROR);
@@ -68,7 +71,6 @@ public class ConsultationService {
 			}
 			
 		}catch(Exception e){
-			System.out.println("Erro ao transformar o JSON: "+e);
 			e.printStackTrace();
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível cadastrar a(s) consulta(s)");
@@ -80,7 +82,46 @@ public class ConsultationService {
 		return gson.toJson(response);
 
 	}
-
+	
+	public String saveConsultationNow(Professional proTemp, String json, ConsultationDAO consDAO, UserDAO userDAO){
+		Gson gson = new Gson();
+		Response response = new Response();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		
+		Consultation con = gson.fromJson(json, Consultation.class);
+		con.setProfessional(proTemp);
+		con.setService(proTemp.getSocialService());
+		con.setState(ConsultationState.NO);
+		
+		if(con.getDateInit().after(con.getDateEnd())){
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, existe uma consulta com horário de inicio superior ao de fim");
+			return gson.toJson(response);
+		}
+		
+		try{
+			List<Consultation> cons = consDAO.getConsultationByProfessional(proTemp);
+			for(Consultation c: cons){
+				
+				if(formatter.format(c.getDateInit()).equals(formatter.format(con.getDateInit())) && formatter.format(c.getDateEnd()).equals(formatter.format(con.getDateEnd())) && (c.getState().equals(ConsultationState.SC) || c.getState().equals(ConsultationState.RV))){
+					response.setCode(Response.ERROR);
+					response.setMessage("Ops, não foi possível agendar a consulta, pois a mesma já está reservada/agendada");
+					return gson.toJson(response);
+				}
+			}
+			consDAO.save(con);
+		}catch (Exception e) {
+			e.printStackTrace();
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível cadastrar a(s) consulta(s)");
+			return gson.toJson(response);
+		}
+		
+		response.setCode(Response.SUCCESS);
+		response.setMessage("Consulta(s) cadastrada(s) com sucesso");
+		return gson.toJson(response);
+	}
+	
 	public String registerConsultation(Consultation con, ConsultationDAO consDAO){
 		Consultation oldConsultation = consDAO.getConsultationById(con.getId());
 		Gson gson = new Gson();
@@ -101,7 +142,7 @@ public class ConsultationService {
 		res.setMessage("Consulta registrada com sucesso!");
 		return gson.toJson(res);
 	}
-
+	
 	public String getConsultationsByPatient(Patient patient, ConsultationDAO consDAO, ReserveDAO reserveDAO){
 		String json;
 		Gson gson = new Gson();
@@ -254,6 +295,7 @@ public class ConsultationService {
 
 
 	}
+	
 	public String cancelConsultationById(long id, String message, ConsultationDAO consDAO){
 
 		Gson gson = new Gson();
@@ -376,6 +418,49 @@ public class ConsultationService {
 			return gson.toJson(response);
 		}
 
+	}
+	
+	public String checkSchedules(Professional proTemp, String json, ConsultationDAO consDAO){
+		Gson gson = new Gson();
+		Response response = new Response();
+		JsonObject schedules = (JsonObject) new JsonParser().parse(json);
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+		
+		Date dateInit = new Date(Long.parseLong(schedules.get("dateInit").toString()));
+		Date dateEnd = new Date(Long.parseLong(schedules.get("dateEnd").toString()));
+		try{
+			List<Consultation> cons = consDAO.getConsultationByPeriod(proTemp, dateInit, dateEnd);
+			for(Consultation c: cons){
+				Date di = new Date();
+				String si = schedules.get("hourInit").toString().replaceAll("\"", "");
+				di.setHours(Integer.parseInt(si.split(":")[0]));
+				di.setMinutes(Integer.parseInt(si.split(":")[1]));
+				di.setSeconds(Integer.parseInt(si.split(":")[2]));
+				
+				Date de = new Date();
+				String se = schedules.get("hourEnd").toString().replaceAll("\"", "");
+				de.setHours(Integer.parseInt(se.split(":")[0]));
+				de.setMinutes(Integer.parseInt(se.split(":")[1]));
+				de.setSeconds(Integer.parseInt(se.split(":")[2]));
+				
+				if(c.getDateInit().getHours() >= di.getHours() && c.getDateInit().getMinutes() >= di.getMinutes() && c.getDateEnd().getHours() <= de.getHours() && c.getDateEnd().getMinutes() <= de.getMinutes() ){
+					System.out.println("Entrou!!");
+					response.setCode(Response.ERROR);
+					response.setMessage("Ops, outra(s) consulta(s) está(ão) agendada(s) neste período");
+					return gson.toJson(response);
+				}
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível verificar os horários");
+			return gson.toJson(response);
+		}
+		
+		response.setCode(Response.SUCCESS);
+		response.setMessage("Todos os horários estão vagos!");
+		return gson.toJson(response);
+		
 	}
 
 }
