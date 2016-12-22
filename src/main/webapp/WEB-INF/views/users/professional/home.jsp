@@ -381,11 +381,26 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div id="title-header" class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">X</button>
-					<h3 id="modal-schedule-title" class="modal-title">Cadastrar
+					<button type="button" class="close" data-dismiss="modal">x</button>
+					<h3 id="modal-schedule-title" class="modal-title text-center">Cadastrar
 						Horário</h3>
 				</div>
 				<div class="modal-body">
+					<div class="row">
+						<div class="col-xs-6">
+							<button class="btn btn-primary text-center btn-block" style="height:200px">
+								<span class="glyphicon glyphicon-user" aria-hidden="true" style="font-size:20px"></span>
+								<p style="font-size:20px">Cadastrar consulta <br>com paciente.</p>
+							</button>
+						</div>
+						
+						<div class="col-xs-6">
+							<button class="btn btn-primary btn-block" style="height:200px">
+								<span class="glyphicon glyphicon-time" aria-hidden="true" style="font-size:20px"></span>
+								<p style="font-size:20px">Cadastrar <br>consulta livre.</p>
+							</button>
+						</div>
+					</div>
 					<h4 class="modal-description" id="modal-description-body">Horários para o dia {{selectedDay.format("DD/MM/YYYY")}}</h4>
 					
 					<!-- <div class="panel panel-primary">
@@ -429,6 +444,68 @@
 						</div>
 					</div> -->
 					
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Cadastrar com paciente</h3>
+						</div>	
+						<div class="panel-body" >
+							<form class="form-horizontal center-block">
+									<div id="row-add-schedules">
+										<div class="row row-schedule-id">
+											<label class="col-lg-1 control-label">Início</label>
+											<div class="col-md-5">
+												<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
+													<input id="tmp-init-1" type="text" ng-model="initSchTemp" class="form-control input-small"> 
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-time"></i>
+													</span>
+												</div>
+											</div>
+		
+											<label class="col-lg-1 control-label">Fim</label>
+											<div class="col-md-5">
+												<div
+													class="timepicker-end input-group bootstrap-timepicker timepicker">
+													<input id="tmp-end-1" type="text" class="form-control input-small" ng-model="endSchTemp"> 
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-time"></i>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								<br>
+								<form class="form-horizontal">
+									<div id="row-and-schedules">
+										<div id="row-add-schedules">
+											<div class="row">
+												<div class="col-xs-12">
+													<input type="text" class="form-control" placeholder="Nome do Paciente">
+												</div>
+											</div>
+										</div>
+									</div>
+									<br>
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Nome</th>
+												<th>CPF</th>
+												<th>Selecionar</th>
+											</tr>
+										</thead>
+										<tbody id="tbody-schedules-description">
+											<!-- Preenchida dinamicamente -->
+										</tbody>
+									</table>
+								</form>
+								<br>
+							
+						</div>
+					</div>
+					
+				
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Cadastrar Horários</h3>
@@ -502,7 +579,9 @@
 										</div>
 										<div class="col-md-2">
 											<button type="button" class="btn btn-danger add-schedule" ng-click="removeSchedule($index)">
-												<span class="glyphicon glyphicon glyphicon-minus"></span>
+												<span class="glyphicon glyphicon glyphicon-minus">
+													
+												</span>
 											</button>
 										</div>
 									</div>
