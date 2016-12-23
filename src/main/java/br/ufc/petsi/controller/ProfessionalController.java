@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.dao.ProfessionalDAO;
@@ -58,6 +59,13 @@ public class ProfessionalController {
 	@ResponseBody
 	public String getProfessionalsByService(long serviceId){
 		return professionalService.getProfessionalsByService(professionalDao, serviceId);
+	}
+
+	@RequestMapping("/getPatientsByName")
+	@ResponseBody
+	public String getPatientsByName(@RequestParam String name){
+		
+		return userService.getUserByName(name, ldapUser);
 	}
 
 }
