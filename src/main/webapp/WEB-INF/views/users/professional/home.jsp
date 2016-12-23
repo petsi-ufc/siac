@@ -439,7 +439,7 @@
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
 											<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
-												<input id="tmp-init-1" type="text" ng-model="initSchTemp" class="form-control input-small"> 
+												<input id="tmp-init-1" type="text" class="form-control input-small"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
@@ -450,14 +450,14 @@
 										<div class="col-md-4">
 											<div
 												class="timepicker-end input-group bootstrap-timepicker timepicker">
-												<input id="tmp-end-1" type="text" class="form-control input-small" ng-model="endSchTemp"> 
+												<input id="tmp-end-1" type="text" class="form-control input-small" > 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
 											</div>
 										</div>
 										<div class="col-md-2">
-											<button ng-click="addTempSchedule(initSchTemp, endSchTemp)" type="button" class="btn btn-primary add-schedule" ng-disabled="!initSchTemp || !endSchTemp">
+											<button ng-click="addTempSchedule()" type="button" class="btn btn-primary add-schedule">
 												<span class="glyphicon glyphicon glyphicon-plus"></span>
 											</button>
 										</div>
@@ -482,7 +482,7 @@
 										<div class="col-md-4">
 											<div
 												class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
-												<input type="text" value="{{sch.initTime}}" 
+												<input type="text" value="{{sch.initTime.format('HH:mm')}}" 
 													class="form-control input-small"> <span
 													class="input-group-addon"><i
 													class="glyphicon glyphicon-time"></i></span>
@@ -493,7 +493,7 @@
 										<div class="col-md-4">
 											<div
 												class="timepicker-end input-group bootstrap-timepicker timepicker">
-												<input type="text" class="form-control input-small" value="{{sch.endTime}}"> 
+												<input type="text" class="form-control input-small" value="{{sch.endTime.format('HH:mm')}}"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>

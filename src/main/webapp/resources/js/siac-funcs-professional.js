@@ -7,8 +7,6 @@
 		$scope.generetedSchedules = [];
 		$scope.events = [];
 		$scope.eventSources = [$scope.events];
-		$scope.initSchTemp = "8:00";
-		$scope.endSchTemp = "8:15";
 		
 		var selectedDay = {};
 		
@@ -70,35 +68,23 @@
 			
 		}
 		
-		function _addTempSchedule(initSchTemp, endSchTemp){
-			console.log($("#tmp-init-1").data("timepicker").hour)
-			console.log($("#tmp-init-1").data("timepicker").minute);
+		function _addTempSchedule(){
 			
 			var dateInit = angular.copy($scope.selectedDay);
 			var dateEnd = angular.copy($scope.selectedDay);
 			
-			dateInit.minutes($("#tmp-init-1").data("timepicker").hour);
-			dateInit.minutes($("#tmp-init-1").data("timepicker").minute);
+			dateInit.set("hours",$("#tmp-init-1").data("timepicker").hour);
+			dateInit.set("minute", $("#tmp-init-1").data("timepicker").minute);
 			
-			dateEnd.minutes($("#tmp-end-1").data("timepicker").hour);
-			dateEnd.minutes($("#tmp-end-1").data("timepicker").minute);
+			dateEnd.set("hours", $("#tmp-end-1").data("timepicker").hour);
+			dateEnd.set("minute", $("#tmp-end-1").data("timepicker").minute);
 			
-			
-//			console.log(dateInit.format("x"));
-//			console.log(dateEnd.format("x"));
-//			
-			$scope.generetedSchedules.push({initTime: initSchTemp, endTime : endSchTemp});
-			
-			dateInit.add(15, "minutes");
-			dateEnd.add(15, "minutes");
-			
-			$scope.initSchTemp = dateInit.format("hh:mm");
-			$scope.endSchTemp = dateEnd.format("hh:mm");
-			
+			$scope.generetedSchedules.push({initTime: dateInit, endTime : dateEnd});
 		}
 		
 		function initTimePickers(){
-			$("#tmp-init-1, #tmp-end-1").timepicker({showMeridian: false});
+			$("#tmp-init-1").timepicker({showMeridian: false, defaultTime:"8:00"});
+			$("#tmp-end-1").timepicker({showMeridian: false, defaultTime:"8:15"});
 		}
 		
 		function _removeSchedule(index){
