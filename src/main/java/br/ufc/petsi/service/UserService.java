@@ -63,7 +63,6 @@ public class UserService {
 	public String getProfessionals(UserDAO userDAO){
 		
 		List<User> users = userDAO.getUsersByRole(Constants.ROLE_PROFESSIONAL);
-		
 		Gson gson = new GsonBuilder()
 		        .setExclusionStrategies(new UserExclusionStrategy())
 		        .create();

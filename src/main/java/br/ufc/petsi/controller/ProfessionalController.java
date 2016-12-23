@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.ufc.petsi.dao.ProfessionalDAO;
 import br.ufc.petsi.dao.SocialServiceDAO;
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.model.User;
+import br.ufc.petsi.service.ProfessionalService;
 import br.ufc.petsi.service.UserService;
 
 @Controller
@@ -26,6 +28,12 @@ public class ProfessionalController {
 	
 	@Inject
 	SocialServiceDAO socialServiceDAO;
+	
+	@Inject
+	private ProfessionalService professionalService;
+	
+	@Inject
+	private ProfessionalDAO professionalDao;
 	
 	@Inject
 	LdapUser ldapUser;
@@ -47,12 +55,17 @@ public class ProfessionalController {
 		
 	}
 	
+	@RequestMapping("/getProfessionalsByService")
+	@ResponseBody
+	public String getProfessionalsByService(long serviceId){
+		return professionalService.getProfessionalsByService(professionalDao, serviceId);
+	}
+
 	@RequestMapping("/getPatientsByName")
 	@ResponseBody
 	public String getPatientsByName(@RequestParam String name){
 		
 		return userService.getUserByName(name, ldapUser);
 	}
-	
 
 }

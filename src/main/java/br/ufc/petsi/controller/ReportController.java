@@ -1,9 +1,6 @@
 package br.ufc.petsi.controller;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -19,7 +16,6 @@ import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ReportDAO;
 import br.ufc.petsi.model.GeneralReport;
 import br.ufc.petsi.model.Professional;
-import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.RatingReport;
 import br.ufc.petsi.model.ServiceReport;
 
@@ -34,7 +30,6 @@ public class ReportController {
 			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateBegin, 
 			 @DateTimeFormat(pattern="dd/MM/yyyy") Date dateEnd, 
 			 int serviceId, int professionalId){ 
-		
 		
 		ServiceReport serviceReport = reportDAO.getServiceReport(serviceId, professionalId, dateBegin, dateEnd);
 
@@ -63,21 +58,18 @@ public class ReportController {
 		dateBegin.setHours(0);
 		dateEnd.setHours(23);
 		
-		List<Rating> ratings = new ArrayList<Rating>();
-		
 		Professional professional = ((Professional)session.getAttribute(Constants.USER_SESSION));
 		
 		Long professionalId = professional.getId();
 		
 		RatingReport ratingReport = reportDAO.getRatingReport(professionalId, dateBegin, dateEnd);
-		ratings = ratingReport.getRatings();
 		
 		model.addAttribute("format", "pdf");
 		model.addAttribute("dateBegin", dateBegin);
-		model.addAttribute("professional", professional);
+		model.addAttribute("name", professional.getName());
 		model.addAttribute("dateEnd", dateEnd);
 		model.addAttribute("average", ratingReport.getAverage());
-		model.addAttribute("ratings", ratings);
+		model.addAttribute("ratings", ratingReport.getRatings());
 		model.addAttribute("RatingSubReportLocation", "./Rating_subreport.jasper");
 		model.addAttribute("datasource", new JREmptyDataSource());
 
