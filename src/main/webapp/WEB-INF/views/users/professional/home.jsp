@@ -386,23 +386,24 @@
 						Horário</h3>
 				</div>
 				<div class="modal-body">
-					<div class="row">
-						<div class="col-xs-6">
-							<button class="btn btn-primary text-center btn-block" style="height:200px">
-								<span class="glyphicon glyphicon-user" aria-hidden="true" style="font-size:20px"></span>
-								<p style="font-size:20px">Cadastrar consulta <br>com paciente.</p>
-							</button>
-						</div>
-						
-						<div class="col-xs-6">
-							<button class="btn btn-primary btn-block" style="height:200px">
-								<span class="glyphicon glyphicon-time" aria-hidden="true" style="font-size:20px"></span>
-								<p style="font-size:20px">Cadastrar <br>consulta livre.</p>
-							</button>
+					<h4 class="modal-description" id="modal-description-body">Horários para o dia {{selectedDay.format("DD/MM/YYYY")}}</h4>
+					<div ng-show="showConsultationButtons">
+						<div class="row">
+							<div class="col-xs-6">
+								<button class="btn btn-primary text-center btn-block" style="height:200px" ng-click="setPacientConsultation()">
+									<span class="glyphicon glyphicon-user" aria-hidden="true" style="font-size:20px"></span>
+									<p style="font-size:20px">Cadastrar consulta <br>com paciente.</p>
+								</button>
+							</div>
+							
+							<div class="col-xs-6">
+								<button class="btn btn-primary btn-block" style="height:200px" ng-click="setFreeConsultation()">
+									<span class="glyphicon glyphicon-time" aria-hidden="true" style="font-size:20px"></span>
+									<p style="font-size:20px">Cadastrar <br>consulta livre.</p>
+								</button>
+							</div>
 						</div>
 					</div>
-					<h4 class="modal-description" id="modal-description-body">Horários para o dia {{selectedDay.format("DD/MM/YYYY")}}</h4>
-					
 					<!-- <div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Gerador de Horários</h3>
@@ -444,7 +445,7 @@
 						</div>
 					</div> -->
 					
-					<div class="panel panel-primary">
+					<div class="panel panel-primary" ng-show="isPacientConsultation == true">
 						<div class="panel-heading">
 							<h3 class="panel-title">Cadastrar com paciente</h3>
 						</div>	
@@ -506,7 +507,7 @@
 					</div>
 					
 				
-					<div class="panel panel-primary">
+					<div class="panel panel-primary" ng-show="isFreeConsultation == true">
 						<div class="panel-heading">
 							<h3 class="panel-title">Cadastrar Horários</h3>
 						</div>
@@ -545,7 +546,7 @@
 						</div>
 					</div>
 
-					<div class="panel panel-primary">
+					<div class="panel panel-primary" ng-show="isFreeConsultation == true">
 						<div class="panel-heading">
 							<h3 class="panel-title">Horários</h3>
 						</div>
@@ -591,8 +592,11 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary" ng-disabled="generetedSchedules.length == 0" 
-						id="btn-confirm-schedules" ng-click="saveConsultations(generetedSchedules)">
+					<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-click="saveConsultations(generetedSchedules)">
+						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
+					</button>
+					<button type="submit" class="btn btn-primary" ng-if="isFreeConsultation == true" ng-disabled="generetedSchedules.length == 0" 
+						id="btn-confirm-schedules" ng-click="saveFreeConsultations(generetedSchedules)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
