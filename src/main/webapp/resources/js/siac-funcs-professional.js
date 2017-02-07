@@ -14,10 +14,6 @@
 		$scope.isFreeConsultation = false;
 		$scope.showConsultationButtons = true;
 		
-		professionalService.getProfessionalConsultations(function(data){
-			console.log("TODO - Get professional consultations");
-		});
-		
 		//Functions
 		$scope.eventClick = _eventClick;
 		$scope.addEvent = _addEvent;
@@ -26,12 +22,17 @@
 		$scope.generateSchedules = _generateSchedules;
 		$scope.addTempSchedule = _addTempSchedule;
 		$scope.removeSchedule = _removeSchedule;
-		$scope.saveConsultations = _saveConsultations;
+		$scope.saveFreeConsultations = _saveFreeConsultations;
 		$scope.setPacientConsultation = _setPacientConsultation;
 		$scope.setFreeConsultation = _setFreeConsultation;
 		
+		
 		initTimePickers();
 		configureModal();
+		
+		professionalService.getProfessionalConsultations(function(data){
+			console.log("TODO - Get professional consultations");
+		});
 		
 		//Configuração do calendário.
 		$scope.uiConfig = {
@@ -85,7 +86,7 @@
 			dateEnd.set("hours", $("#tmp-end-1").data("timepicker").hour);
 			dateEnd.set("minute", $("#tmp-end-1").data("timepicker").minute);
 			
-			$scope.generetedSchedules.push({initTime: dateInit, endTime : dateEnd});
+			$scope.generetedSchedules.push({schedule:{dateInit: dateInit, dateEnd : dateEnd}});
 		}
 		
 		function initTimePickers(){
@@ -97,8 +98,9 @@
 			$scope.generetedSchedules.splice(index, 1);
 		}
 		
-		function _saveConsultations(arraySchedules){
-			console.log(arraySchedules);
+		function _saveFreeConsultations(arraySchedules){
+			var json = {json:JSON.stringify(arraySchedules)};
+			console.log(json);
 		}
 		
 		function _setPacientConsultation(){

@@ -456,7 +456,7 @@
 											<label class="col-lg-1 control-label">Início</label>
 											<div class="col-md-5">
 												<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
-													<input id="tmp-init-1" type="text" ng-model="initSchTemp" class="form-control input-small"> 
+													<input type="text" ng-model="initSchTemp" class="form-control input-small"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -467,7 +467,7 @@
 											<div class="col-md-5">
 												<div
 													class="timepicker-end input-group bootstrap-timepicker timepicker">
-													<input id="tmp-end-1" type="text" class="form-control input-small" ng-model="endSchTemp"> 
+													<input type="text" class="form-control input-small" ng-model="endSchTemp"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -560,8 +560,8 @@
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
 											<div
-												class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
-												<input type="text" value="{{sch.initTime.format('HH:mm')}}" 
+												class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
+												<input type="text" value="{{sch.schedule.dateInit.format('HH:mm')}}" 
 													class="form-control input-small"> <span
 													class="input-group-addon"><i
 													class="glyphicon glyphicon-time"></i></span>
@@ -572,7 +572,7 @@
 										<div class="col-md-4">
 											<div
 												class="timepicker-end input-group bootstrap-timepicker timepicker">
-												<input type="text" class="form-control input-small" value="{{sch.endTime.format('HH:mm')}}"> 
+												<input type="text" class="form-control input-small" value="{{sch.schedule.dateEnd.format('HH:mm')}}"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>

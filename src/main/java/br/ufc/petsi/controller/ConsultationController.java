@@ -100,6 +100,7 @@ public class ConsultationController {
 	public String getConsultationsByProfessionalJSON(HttpSession session){
 		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
 		System.out.println("USER SESSION: "+proTemp);
+		System.out.println(consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO));
 		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
