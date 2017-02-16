@@ -12,7 +12,9 @@
 		
 		$scope.isPacientConsultation = false;
 		$scope.isFreeConsultation = false;
+		$scope.isGroupConsultation = false;
 		$scope.showConsultationButtons = true;
+		
 		
 		//Functions
 		$scope.eventClick = _eventClick;
@@ -25,6 +27,7 @@
 		$scope.saveFreeConsultations = _saveFreeConsultations;
 		$scope.setPacientConsultation = _setPacientConsultation;
 		$scope.setFreeConsultation = _setFreeConsultation;
+		$scope.setGroupConsultation = _setGroupConsultation;
 	
 		
 		initTimePickers();
@@ -35,8 +38,6 @@
 		professionalService.getProfessionalConsultations(function(data){
 			console.log("TODO - Get professional consultations");
 		});
-		
-		
 		
 		//Configuração do calendário.
 		$scope.uiConfig = {
@@ -50,9 +51,7 @@
 				dayClick : _dayClick
 			}
 		};
-		
-		$scope.uiConfig.calendar.fullCalendar();
-		
+				
 		function _dayClick(date){
 			$("#modal-day").modal("show");
 			$scope.selectedDay = date;
@@ -113,18 +112,28 @@
 		function _setPacientConsultation(){
 			$scope.isPacientConsultation = true;
 			$scope.isFreeConsultation = false;
+			$scope.isGroupConsultation = false;
+			$scope.showConsultationButtons = false;
+		}
+		
+		function _setGroupConsultation(){
+			$scope.isPacientConsultation = false;
+			$scope.isGroupConsultation = true;
+			$scope.isFreeConsultation = false;
 			$scope.showConsultationButtons = false;
 		}
 		
 		function _setFreeConsultation(){
 			$scope.isPacientConsultation = false;
 			$scope.isFreeConsultation = true;
+			$scope.isGroupConsultation = false;
 			$scope.showConsultationButtons = false;
 		}
 		
 		function resetConsultationConfiguration(){
 			$scope.isPacientConsultation = false;
 			$scope.isFreeConsultation = false;
+			$scope.isGroupConsultation = false;
 			$scope.showConsultationButtons = true;
 		}
 		

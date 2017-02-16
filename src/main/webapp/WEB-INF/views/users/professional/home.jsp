@@ -183,7 +183,7 @@
 														<h5 style="text-align:left; margin-left:15px;">Tipo de Grupo:</h5>
 														<div class="form-check form-check-inline col-xs-1">
 														  <label class="form-check-label">
-														    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Aberto
+														    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked="checked"> Aberto
 														  </label>
 														</div>
 														
@@ -609,6 +609,14 @@
 									<p style="font-size:20px">Cadastrar <br>consulta livre.</p>
 								</button>
 							</div>
+							<br>
+							<div class="col-xs-6">
+							<br>
+								<button class="btn btn-primary btn-block" style="height: 200px" ng-click="setGroupConsultation()">
+									<span class="glyphicon glyphicon-group" aria-hidden="true" style="font-size:20px"></span>
+									<p style="font-size:20px">Cadastrar <br> consulta com grupo</p>
+								</button>
+							</div>
 						</div>
 					</div>
 					<!-- <div class="panel panel-primary">
@@ -651,6 +659,78 @@
 							</div>
 						</div>
 					</div> -->
+					
+					<div class="panel panel-primary" ng-show="isGroupConsultation == true">
+						<div class="panel-heading">
+							<h3 class="panel-title">Cadastrar com grupo</h3>
+						</div>
+						<div class="panel-body">
+							<form class="form-horizontal center-block">
+								<div id="row-add-schedules">
+										<div class="row row-schedule-id">
+											<label class="col-lg-1 control-label">Início</label>
+											<div class="col-md-5">
+												<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
+													<input type="text" ng-model="initSchTemp" class="form-control input-small"> 
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-time"></i>
+													</span>
+												</div>
+											</div>
+		
+											<label class="col-lg-1 control-label">Fim</label>
+											<div class="col-md-5">
+												<div
+													class="timepicker-end input-group bootstrap-timepicker timepicker">
+													<input type="text" class="form-control input-small" ng-model="endSchTemp"> 
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-time"></i>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+							</form>
+							<form class="form-horizontal">
+									<br>
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Título</th>
+												<th>Remover</th>
+											</tr>
+										</thead>
+										<tbody id="tbody-schedules-description">
+											<!-- Preenchida dinamicamente -->
+										</tbody>
+									</table>
+							
+									<div id="row-and-schedules">
+										<div id="row-add-schedules">
+											<div class="row">
+											<br>
+												<div class="col-xs-12">
+													<input type="text" class="form-control" placeholder="Pesquisar Grupo">
+												</div>
+											</div>
+										</div>
+									</div>
+									<br>
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Título</th>
+												<th>Selecionar</th>
+											</tr>
+										</thead>
+										<tbody id="tbody-schedules-description">
+											<!-- Preenchida dinamicamente -->
+										</tbody>
+									</table>
+								</form>
+								<br>
+						</div>
+					</div>
 					
 					<div class="panel panel-primary" ng-show="isPacientConsultation == true">
 						<div class="panel-heading">
@@ -806,6 +886,7 @@
 						id="btn-confirm-schedules" ng-click="saveFreeConsultations(generetedSchedules)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
+					<button ng-if="isGroupConsultation">Criar Novo Grupo</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
 				</div>
 			</div>
