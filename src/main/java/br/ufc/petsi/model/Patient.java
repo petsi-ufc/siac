@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import br.ufc.petsi.constants.Constants;
 
 @Entity
-@Table(name="patient")
+//@Table(name="patient")
 @DiscriminatorValue(Constants.ROLE_PATIENT)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")

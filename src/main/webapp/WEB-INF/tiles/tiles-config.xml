@@ -21,8 +21,8 @@
 	<definition name="home_professional" extends="main">
 		<put-attribute name="body" value="/WEB-INF/views/users/professional/home.jsp"/>
 		<put-list-attribute name="javascriptsrc">
-			<add-attribute value="/resources/js/schedule-classes.js"/>
-			<add-attribute value="/resources/js/siac-funcs-professional.js"/>	
+			<add-attribute value="/resources/js/professional_service.js"/>
+			<add-attribute value="/resources/js/siac-funcs-professional.js"/>
 		</put-list-attribute>
 	</definition>
 	

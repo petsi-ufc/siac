@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import br.ufc.petsi.constants.Constants;
 
 @Entity
-@Table(name="administrator")
+//@Table(name="administrator")
 @DiscriminatorValue(Constants.ROLE_ADMIN)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
