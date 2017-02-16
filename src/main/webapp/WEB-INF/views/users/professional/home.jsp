@@ -138,6 +138,7 @@
 				<li class="service-item" ng-class="{'active':canShow(0)}" ng-click="setMenuIndex(0)"><a>Meu Calendário</a></li>
 				<li class="nav-divider"></li>
 				<li class="service-item" ng-class="{'active':canShow(1)}" ng-click="setMenuIndex(1)"><a>Cadastrar Agenda</a></li>
+				<li class="service-item" ng-class="{'active':canShow(3)}" ng-click="setMenuIndex(3); group=true;"><a>Grupos</a></li>
 				<li class="service-item" ng-class="{'active':canShow(2)}" ng-click="setMenuIndex(2)"><a>Gerar Relatório</a></li>
 				<!--<li class="nav-divider"></li>
 				<li class="service-item" id="2"><a>Minhas Consultas</a></li> -->
@@ -149,6 +150,213 @@
 
 		<div class="alert alert-message hidden" role="alert">
 			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
+		</div>
+
+		<div ng-show="canShow(3)">
+			<div>
+				<div class="" >
+					<div class="">
+						<div id="title-header" class="">
+							<h3 id="modal-schedule-title" class="modal-title text-center">Cadastrar
+								Grupo</h3>
+						</div>
+						<div class="modal-body">
+							
+							<div class="panel panel-primary" >
+								<div class="panel-heading">
+									<h3 class="panel-title">Informações do Grupo</h3>
+								</div>	
+								<div class="panel-body" >
+									
+										<br>
+										<form class="form-horizontal" ng-show="group">
+											<div id="row-and-schedules">
+												<div id="row-add-schedules">
+													<div class="row">
+														<div class="col-xs-12">
+															<input type="text" class="form-control" placeholder="Título do Grupo">
+														</div>
+													</div>
+													
+													<div class="row">
+														<br>
+														<h5 style="text-align:left; margin-left:15px;">Tipo de Grupo:</h5>
+														<div class="form-check form-check-inline col-xs-1">
+														  <label class="form-check-label">
+														    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Aberto
+														  </label>
+														</div>
+														
+														<div class="form-check form-check-inline col-xs-1">
+														  <label class="form-check-label">
+														    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Fechado
+														  </label>
+														</div>
+														<br>
+													</div>
+													
+													<div class="row">
+														<div class="col-xs-12">
+															<input type="text" class="form-control" placeholder="Número de Participantes">
+														</div>
+													</div>
+													<h5>Participantes</h5>
+													<table class="table table-bordered table-hover">
+														<thead>
+															<tr>
+																<th>Nome</th>
+																<th>CPF</th>
+																<th>Remover</th>
+															</tr>
+														</thead>
+														<tbody id="tbody-schedules-description">
+															<!-- Preenchida dinamicamente -->
+														</tbody>
+													</table>
+													<div class="row">
+														<br>
+														<br>
+														<h5>Seleção de Participantes</h5>
+														<div class="col-xs-12">
+															<input type="text" class="form-control" placeholder="Nome do Paciente">
+														</div>
+													</div>
+												</div>
+											</div>
+											<br>
+											<table class="table table-bordered table-hover">
+												<thead>
+													<tr>
+														<th>Nome</th>
+														<th>CPF</th>
+														<th>Adicionar</th>
+													</tr>
+												</thead>
+												<tbody id="tbody-schedules-description">
+													<!-- Preenchida dinamicamente -->
+												</tbody>
+											</table>
+										</form>
+										<br>
+										<div ng-if="!group">
+											<div class="panel-heading">
+												<h1 class="panel-title">Cadastrar Agenda</h1>
+											</div>
+											<div class="panel-body">
+												<form class="form-inline">
+													<div class="form-group">
+														<h5>Frequência:</h5>
+													</div>
+													<div class="form-group">
+														<select class="form-control" id="select-repeat-schedule">
+															<option value="weekly">Semanalmente</option>
+															<option value="monthly">Mensalmente</option>
+														</select>
+													</div>
+								
+													<div class="form-group">
+														<input id="input-frequenci" type="number" min="0"
+															class="form-control" placeholder="Quantidade de Semanas">
+													</div>
+												</form>
+												<div id="div-days-week" class="margin-top">
+													<div class="row">
+														<div id="days-buttons">
+															<button type="button" class="btn btn-default btn-day"
+																value="Monday">Segunda</button>
+															<button type="button" class="btn btn-default btn-day"
+																value="Tuesday">Terça</button>
+															<button type="button" class="btn btn-default btn-day"
+																value="Wednesday">Quarta</button>
+															<button type="button" class="btn btn-default btn-day"
+																value="Thursday">Quinta</button>
+															<button type="button" class="btn btn-default btn-day"
+																value="Friday">Sexta</button>
+															<button type="button" class="btn btn-default btn-day"
+																value="Saturday">Sábado</button>
+															<button type="button" class="btn btn-default btn-day"
+																value="Sunday">Domingo</button>
+														</div>
+													</div>
+													<div class="row margin-top" id="div-table-days">
+														<div class="col-md-10 col-md-offset-1">
+															<table class="table table-bordered table-hover">
+																<thead>
+																	<tr>
+																		<th>Dia</th>
+																		<th>Data</th>
+																		<th>Horários</th>
+																		<th>Remover</th>
+																	</tr>
+																</thead>
+																<tbody id="tbody-table-days">
+																	<!-- Preenchida dinamicamente -->
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="group = !group">Cadastrar</button>
+									
+								</div>
+							</div>
+							
+						
+							<div class="panel panel-primary" ng-show="isFreeConsultation == true">
+								<div class="panel-heading">
+									<h3 class="panel-title">Cadastrar Horários</h3>
+								</div>
+								<div class="panel-body" id="panel-schedules">
+									<form class="form-horizontal">
+										<div id="row-add-schedules">
+											<div class="row row-schedule-id">
+												<label class="col-lg-1 control-label">Início</label>
+												<div class="col-md-4">
+													<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
+														<input id="tmp-init-1" type="text" class="form-control input-small"> 
+														<span class="input-group-addon">
+															<i class="glyphicon glyphicon-time"></i>
+														</span>
+													</div>
+												</div>
+			
+												<label class="col-lg-1 control-label">Fim</label>
+												<div class="col-md-4">
+													<div
+														class="timepicker-end input-group bootstrap-timepicker timepicker">
+														<input id="tmp-end-1" type="text" class="form-control input-small" > 
+														<span class="input-group-addon">
+															<i class="glyphicon glyphicon-time"></i>
+														</span>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<button ng-click="addTempSchedule()" type="button" class="btn btn-primary add-schedule">
+														<span class="glyphicon glyphicon glyphicon-plus"></span>
+													</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+		
+							
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-click="saveConsultations(generetedSchedules)">
+								Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
+							</button>
+							<button type="submit" class="btn btn-primary" ng-if="isFreeConsultation == true" ng-disabled="generetedSchedules.length == 0" 
+								id="btn-confirm-schedules" ng-click="saveFreeConsultations(generetedSchedules)">
+								Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<div id="calendar-container" ng-show="canShow(0)">
@@ -212,7 +420,6 @@
 					</span>
 				</div>
 			</div> -->
-			
 			<div  ui-calendar="uiConfig.calendar" ng-model="eventSources" class="calendar" ></div>
 
 			

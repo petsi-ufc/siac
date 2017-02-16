@@ -25,14 +25,18 @@
 		$scope.saveFreeConsultations = _saveFreeConsultations;
 		$scope.setPacientConsultation = _setPacientConsultation;
 		$scope.setFreeConsultation = _setFreeConsultation;
-		
+	
 		
 		initTimePickers();
 		configureModal();
 		
+		
+		
 		professionalService.getProfessionalConsultations(function(data){
 			console.log("TODO - Get professional consultations");
 		});
+		
+		
 		
 		//Configuração do calendário.
 		$scope.uiConfig = {
@@ -42,9 +46,12 @@
 				eventClick : function(event){
 					alert(event);
 				},
+				
 				dayClick : _dayClick
 			}
 		};
+		
+		$scope.uiConfig.calendar.fullCalendar();
 		
 		function _dayClick(date){
 			$("#modal-day").modal("show");
