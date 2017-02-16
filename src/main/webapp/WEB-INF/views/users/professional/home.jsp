@@ -886,7 +886,7 @@
 						id="btn-confirm-schedules" ng-click="saveFreeConsultations(generetedSchedules)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
-					<button ng-if="isGroupConsultation">Criar Novo Grupo</button>
+					<button type="button" ng-if="isGroupConsultation" class="btn btn-primary">Criar Novo Grupo</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
 				</div>
 			</div>
