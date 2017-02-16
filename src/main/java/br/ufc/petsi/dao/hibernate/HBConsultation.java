@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
+import br.ufc.petsi.model.Frequency;
+import br.ufc.petsi.model.Group;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.Rating;
@@ -148,6 +150,12 @@ public class HBConsultation implements ConsultationDAO{
 		Consultation oldCons = manager.find(Consultation.class, cons.getId());
 		oldCons.setState(ConsultationState.RD);
 		update(oldCons);
+	}
+
+	@Override
+	public void saveFrequency(List<Frequency> frequencies, Group group) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

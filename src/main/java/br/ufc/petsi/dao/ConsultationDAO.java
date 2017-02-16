@@ -5,6 +5,8 @@ import java.util.List;
 
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
+import br.ufc.petsi.model.Frequency;
+import br.ufc.petsi.model.Group;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.Rating;
@@ -24,5 +26,6 @@ public interface ConsultationDAO {
 	public List<Consultation> getConsultationByPeriod(Professional professional, Date dateInit, Date dateEnd);
 	public boolean isRatingNull(Consultation consultation);
 	public Rating getRatingByIdConsultation(long idConsultation);
+	public void saveFrequency(List<Frequency> frequencies, Group group);
 	
 }

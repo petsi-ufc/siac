@@ -37,6 +37,10 @@ public class Professional extends User implements Serializable {
 	@JsonProperty("listConsultations")
 	private List<Consultation> listConsultations;
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="facilitator", cascade=CascadeType.MERGE)
+	@JsonProperty("listGroups")
+	private List<Group> listGroups;
+	
 	public Professional(String cpf, String name, String email, String role, SocialService socialService, List<Consultation> listConsultations) {
 		super(cpf, name, email, role);
 		this.socialService = socialService;
@@ -66,6 +70,18 @@ public class Professional extends User implements Serializable {
 	public void setListConsultations(List<Consultation> listConsultations) {
 		this.listConsultations = listConsultations;
 	}
+
+	@JsonProperty("listGroups")
+	public List<Group> getListGroups() {
+		return listGroups;
+	}
+	
+	@JsonProperty("listGroups")
+	public void setListGroups(List<Group> listGroup) {
+		this.listGroups = listGroup;
+	}
+	
+	
 	
 	
 }

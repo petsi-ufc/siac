@@ -128,4 +128,11 @@ public class ConsultationController {
 		return consultationService.rescheduleConsultation(idConsultation, dateInit, dateEnd, email ,consDAO);
 	}
 	
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping("/registerFrequency")
+	@ResponseBody
+	public String registerFrequency(@RequestParam("json") String json){
+		return consultationService.saveFrequency(json, consDAO);
+	}
+	
 }

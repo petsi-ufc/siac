@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import br.ufc.petsi.model.Professional;
-
 import javax.annotation.Generated;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,8 +13,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -27,10 +28,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.ufc.petsi.enums.ConsultationState;
+import br.ufc.petsi.enums.TypeConsultation;
 
 //Adicionar id ou cpf do profissional e o cpf ou id do pacientes
 
 @Entity
+//@MappedSuperclass
 @Table( name = "consultation" )
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
@@ -68,6 +71,16 @@ public class Consultation implements Serializable{
 	@JsonProperty("dateEnd")
 	private Date dateEnd;
 	
+	//Comentário após a realização da consulta
+	@Column(name="comment")
+	@JsonProperty("comment")
+	private String comment;
+	
+	//Motivo pelo qual o paciente solicita a consulta
+	@Column(name="reason")
+	@JsonProperty("reason")
+	private String reason;
+	
 	@Enumerated( EnumType.STRING )
 	@JsonProperty("state")
 	private ConsultationState state;
@@ -82,13 +95,17 @@ public class Consultation implements Serializable{
 	@JsonProperty("reserves")
 	private List<Reserve> reserves;
 	
-	public Consultation(Long id, SocialService socialService, Professional profesisonal, Patient patient, 
+	@Enumerated( EnumType.STRING )
+	@Column(name="type_consultation")
+	@JsonProperty("typeConsultation")
+	private TypeConsultation typeConsultation;
+	
+	public Consultation(Long id, SocialService socialService, Professional profesisonal,
 			ConsultationState state, Date dateInit, Date dateEnd) {
 		this.id = id;
 		this.socialService = socialService;
 		this.state = state;
 		this.professional = profesisonal;
-		this.patient = patient;
 		this.dateEnd = dateEnd;
 		this.dateInit = dateInit;
 	}
@@ -108,16 +125,6 @@ public class Consultation implements Serializable{
 	@JsonProperty("professional")
 	public Professional getProfessional() {
 		return professional;
-	}
-	
-	@JsonProperty("patient")
-	public Patient getPatient() {
-		return patient;
-	}
-	
-	@JsonProperty("patient")
-	public void setPatient(Patient patient) {
-		this.patient = patient;
 	}
 
 	@JsonProperty("dateInit")
@@ -185,6 +192,46 @@ public class Consultation implements Serializable{
 		this.reserves = reserves;
 	}
 	
+	@JsonProperty("typeConsultation")
+	public TypeConsultation getTypeConsultation() {
+		return typeConsultation;
+	}
+
+	@JsonProperty("typeConsultation")
+	public void setTypeConsultation(TypeConsultation typeConsultation) {
+		this.typeConsultation = typeConsultation;
+	}
+
+	@JsonProperty("comment")
+	public String getComment() {
+		return comment;
+	}
+
+	@JsonProperty("comment")
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	@JsonProperty("reason")
+	public String getReason() {
+		return reason;
+	}
+
+	@JsonProperty("reason")
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	
+	@JsonProperty("patient")
+	public Patient getPatient() {
+		return patient;
+	}
+
+	@JsonProperty("patient")
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
 	@Override
 	public String toString() {
 		return "Consultation: [ id:"+id+"; socialService: "+socialService.getName()+"; dataInit: "+dateInit.toString()+"; dataEnd: "+dateEnd.toString()+"]";

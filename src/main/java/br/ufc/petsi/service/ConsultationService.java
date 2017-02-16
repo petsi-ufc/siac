@@ -20,6 +20,7 @@ import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.dao.hibernate.HBUserDAO;
 import br.ufc.petsi.enums.ConsultationState;
+//import br.ufc.petsi.enums.QueryTemplate;
 import br.ufc.petsi.event.Event;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
@@ -126,11 +127,13 @@ public class ConsultationService {
 		Consultation oldConsultation = consDAO.getConsultationById(con.getId());
 		Gson gson = new Gson();
 		Response res = new Response();
+		
 		if(oldConsultation.getPatient() == null){
 			res.setCode(Response.ERROR);
 			res.setMessage("Ops, não é possível registrar uma consulta quando a mesma não possui nenhum paciente!");
 			return gson.toJson(res);
 		}
+		
 		Date today = new Date();
 		if(today.before(oldConsultation.getDateEnd())){
 			res.setCode(Response.ERROR);
@@ -462,5 +465,9 @@ public class ConsultationService {
 		return gson.toJson(response);
 		
 	}
-
+	
+	public String saveFrequency(String json, ConsultationDAO consDAO){
+		return null;
+	}
+	
 }

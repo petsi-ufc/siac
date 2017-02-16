@@ -36,7 +36,7 @@ public class Event {
 		boolean isReserved = false;
 		
 		if(this.state == ConsultationState.SC.name()){
-			if(!patient.getCpf().equals(consultation.getPatient().getCpf())){
+			//if(!patient.getCpf().equals(consultation.getPatient().getCpf())){
 				for(Reserve reserve:consultation.getReserves()){
 					if(patient.getCpf().equals(reserve.getPatient().getCpf()) && reserve.isActive()){
 						isReserved = true;
@@ -59,19 +59,19 @@ public class Event {
 				this.state = "Agendado";
 			}
 			
-		}else if(this.state == ConsultationState.FR.name()){
+		//}else if(this.state == ConsultationState.FR.name()){
 			this.color = "#32CD32";
 			this.textColor = "white";
 			this.state = "Disponivel";
-		}else if(this.state == ConsultationState.CD.name()){
+		//}else if(this.state == ConsultationState.CD.name()){
 			this.color = "#FF0000";
 			this.textColor = "white";
 			this.state = "Cancelado";
-		}else if(this.state == ConsultationState.RD.name()){
+		//}else if(this.state == ConsultationState.RD.name()){
 			this.color = "grey";
 			this.textColor = "white";
 			this.state = "Realizado";
-		}
+		//}
 
 		this.id = consultation.getId();
 	}
