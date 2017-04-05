@@ -13,16 +13,17 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Any;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,13 +34,10 @@ import br.ufc.petsi.enums.TypeConsultation;
 //Adicionar id ou cpf do profissional e o cpf ou id do pacientes
 
 @Entity
-//@MappedSuperclass
 @Table( name = "consultation" )
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 public class Consultation implements Serializable{
-	
-	//private static final long serialVersionUID = 852069081696127745L;
 
 	@Id
 	@GeneratedValue
@@ -58,8 +56,16 @@ public class Consultation implements Serializable{
 	private Professional professional;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
+	@JoinColumn(name="id_patient")
+	@Fetch(FetchMode.JOIN)
 	@JsonProperty("patient")
 	private Patient patient;
+	
+	@ManyToOne(cascade=CascadeType.MERGE)
+	@JoinColumn(name="id_group")
+	@Fetch(FetchMode.JOIN)
+	@JsonProperty("group")
+	private Group group;
 	
 	@Column(name="date_init")
 	@Temporal(value = TemporalType.TIMESTAMP)
@@ -76,7 +82,7 @@ public class Consultation implements Serializable{
 	@JsonProperty("comment")
 	private String comment;
 	
-	//Motivo pelo qual o paciente solicita a consulta
+	//Motivo pelo qual o paciente solicitou a consulta
 	@Column(name="reason")
 	@JsonProperty("reason")
 	private String reason;
@@ -230,6 +236,16 @@ public class Consultation implements Serializable{
 	@JsonProperty("patient")
 	public void setPatient(Patient patient) {
 		this.patient = patient;
+	}
+
+	@JsonProperty("group")
+	public Group getGroup() {
+		return group;
+	}
+
+	@JsonProperty("group")
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	@Override

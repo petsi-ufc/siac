@@ -128,11 +128,11 @@ public class ConsultationService {
 		Gson gson = new Gson();
 		Response res = new Response();
 		
-		if(oldConsultation.getPatient() == null){
+		/*if(oldConsultation.getPatient() == null){
 			res.setCode(Response.ERROR);
 			res.setMessage("Ops, não é possível registrar uma consulta quando a mesma não possui nenhum paciente!");
 			return gson.toJson(res);
-		}
+		}*/
 		
 		Date today = new Date();
 		if(today.before(oldConsultation.getDateEnd())){
@@ -168,12 +168,12 @@ public class ConsultationService {
 		for(Reserve reserve: reserves){
 
 			Consultation consultation = reserve.getConsultation();
-			Event event = new Event(consultation.getPatient(), consultation);
+			/*Event event = new Event(consultation.getPatient(), consultation);
 			event.setState("Reservado");
 			event.setColor("#D9D919");
 			event.setTextColor("white");
 			event.setIdReserve(reserve.getId());
-			events.add(event);
+			events.add(event);*/
 		}
 
 		json = gson.toJson(events);
@@ -191,10 +191,10 @@ public class ConsultationService {
 
 		for(Consultation c : consultations){
 			if(c.getState().name() == ConsultationState.RD.name()){
-				if(c.getPatient().getCpf().equals(patient.getCpf())){
+				/*if(c.getPatient().getCpf().equals(patient.getCpf())){
 					Event event = new Event(patient, c);
 					events.add(event);
-				}				
+				}*/				
 
 			}else{
 				Event event = new Event(patient, c);
@@ -248,9 +248,9 @@ public class ConsultationService {
 			Consultation consultation = consDAO.getConsultationById(idConsultation);
 			consultation.setDateInit(dateInit);
 			consultation.setDateEnd(dateEnd);
-			if(consultation.getPatient() != null && consultation.getPatient().getEmail() != null && !email.equals("")){
+			/*if(consultation.getPatient() != null && consultation.getPatient().getEmail() != null && !email.equals("")){
 				emailService.sendEmail(consultation, email);
-			}
+			}*/
 			consDAO.update(consultation);
 			response.setMessage("Consulta reagendada com sucesso!");
 			response.setCode(Response.SUCCESS);
@@ -276,7 +276,7 @@ public class ConsultationService {
 		try{
 			if(consultation.getState().equals(ConsultationState.FR) && consultation.getDateInit().after(date)){
 				consultation.setState(ConsultationState.SC);
-				consultation.setPatient(patient);
+				//consultation.setPatient(patient);
 				response.setCode(Response.SUCCESS);
 				response.setMessage("Consulta agendada com sucesso");
 				consDAO.update(consultation);
@@ -324,10 +324,10 @@ public class ConsultationService {
 					response.setCode(Response.SUCCESS);
 					response.setMessage("Consulta cancelada com sucesso!");
 
-					if(oldCons.getPatient() != null){
+					/*if(oldCons.getPatient() != null){
 						if(!message.equals(""))
 							emailService.sendEmail(oldCons, message);
-					}
+					}*/
 				}
 				return gson.toJson(response);
 			}
@@ -361,7 +361,7 @@ public class ConsultationService {
 
 		if(reserves.isEmpty()){
 			consultation.setState(ConsultationState.FR);
-			consultation.setPatient(null);
+			//consultation.setPatient(null);
 			consultationDAO.update(consultation);
 
 		}else{
@@ -369,7 +369,7 @@ public class ConsultationService {
 			Reserve reserve = reserves.get(0);
 			reserve.setActive(false);
 			reserveDAO.update(reserve);
-			consultation.setPatient(reserve.getPatient());
+			//consultation.setPatient(reserve.getPatient());
 			consultationDAO.update(consultation);
 		}
 
@@ -401,7 +401,7 @@ public class ConsultationService {
 		Response response = new Response();
 		
 		try{
-			if(consultation.getState().equals(ConsultationState.RD) && consultation.getPatient().getCpf().equals(patient.getCpf())){
+			/*if(consultation.getState().equals(ConsultationState.RD) && consultation.getPatient().getCpf().equals(patient.getCpf())){
 				response.setCode(Response.SUCCESS);
 				response.setMessage("Consulta avaliada com sucesso");
 				consultationDAO.update(consultation);
@@ -410,7 +410,7 @@ public class ConsultationService {
 				response.setCode(Response.ERROR);
 				response.setMessage("A consulta não pode ser avaliada");
 
-			}
+			}*/
 			return gson.toJson(response);
 
 
@@ -468,6 +468,26 @@ public class ConsultationService {
 	
 	public String saveFrequency(String json, ConsultationDAO consDAO){
 		return null;
+	}
+	
+	public String registerComment(String json, ConsultationDAO consDAO){
+		Gson gson = new Gson();
+		Response response = new Response();
+		
+		try{
+			
+			Consultation consultation = gson.fromJson(json, Consultation.class);
+			consDAO.update(consultation);
+			
+			response.setCode(Response.SUCCESS);
+			response.setMessage("Comentário registrado!");
+			return gson.toJson(response);
+			
+		}catch (Exception e) {
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível registrar o comentário!");
+			return gson.toJson(response);
+		}
 	}
 	
 }

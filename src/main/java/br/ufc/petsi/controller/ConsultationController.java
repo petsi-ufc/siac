@@ -130,10 +130,10 @@ public class ConsultationController {
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")
-	@RequestMapping("/registerFrequency")
+	@RequestMapping("/registerComment")
 	@ResponseBody
-	public String registerFrequency(@RequestParam("json") String json){
-		return consultationService.saveFrequency(json, consDAO);
+	public String registerComment(@RequestParam("json") String json){
+		return consultationService.registerComment(json, consDAO);
 	}
 	
 }

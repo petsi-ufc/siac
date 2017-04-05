@@ -34,8 +34,17 @@ public class EmailServiceImpl implements EmailService
 		final Email email = new Email();
 		email.setFrom("siac@quixada.ufc.br");
 		
-		Patient patient = cons.getPatient();
-		email.setTo(patient.getEmail());
+		
+		if(cons.getPatient() != null){
+			Patient patient = cons.getPatient();
+			email.setTo(patient.getEmail());
+		}else{
+			String [] emails = new String[cons.getGroup().getPatients().size()];
+			for (int i = 0; i < cons.getGroup().getPatients().size(); i++) {
+				emails[i] = cons.getGroup().getPatients().get(i).getEmail();	
+			}
+			email.setTo(emails);
+		}
 		
 		Professional prof = cons.getProfessional();
 		

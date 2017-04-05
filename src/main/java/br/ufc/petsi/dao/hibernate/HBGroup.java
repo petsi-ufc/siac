@@ -1,5 +1,6 @@
 package br.ufc.petsi.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -33,16 +34,24 @@ public class HBGroup implements GroupDAO {
 	
 	@Override
 	public void addPatient(Group group, Patient patient) {
-		group.getPatients().add(patient);
-		update(group);
+		
+		Group g = manager.find(Group.class, group.getId());
+		Patient p = manager.find(Patient.class, patient.getId());
+		g.getPatients().add(p);
+		p.getGroups().add(g);
+		
+		manager.flush();
 	}
 
 	@Override
 	public void removePatient(Group group, Patient patient) {
-		for(Patient p: group.getPatients())
-			if(p.getId() == patient.getId())
-				group.getPatients().remove(p);
-		update(group);
+		
+		Group g = manager.find(Group.class, group.getId());
+		Patient p = manager.find(Patient.class, patient.getId());
+		g.getPatients().remove(findPatient(g.getPatients(), patient));
+		p.getGroups().remove(findGroup(p.getGroups(), group));
+		
+		manager.flush();
 		
 	}
 
@@ -70,5 +79,21 @@ public class HBGroup implements GroupDAO {
 	}
 	
 	
+	/* AUXILIARES */
+	private Patient findPatient(List<Patient> patients, Patient patient){
+		for (Patient p : patients) {
+			if(p.getId() == patient.getId())
+				return p;
+		}
+		return null;
+	}
+	
+	private Group findGroup(List<Group> groups, Group group){
+		for (Group g : groups) {
+			if(g.getId() == group.getId())
+				return g;
+		}
+		return null;
+	}
 	
 }

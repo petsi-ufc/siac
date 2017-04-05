@@ -19,13 +19,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.ufc.petsi.enums.ConsultationState;
 
 @Entity
 @Table( name = "service_group" )
-//@PrimaryKeyJoinColumn(name="id")
 @Generated("org.jsonschema2pojo")
 public class Group implements Serializable{
 	
@@ -38,16 +40,18 @@ public class Group implements Serializable{
 	@JsonProperty("title")
 	private String title;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.REMOVE, CascadeType.PERSIST})
 	@JoinTable(name="group_patient",
 		joinColumns= @JoinColumn(name="id_group"),
 		inverseJoinColumns=@JoinColumn(name="id_patient")
 	)
 	@JsonProperty("patients")
+	@JsonManagedReference
 	private List<Patient> patients;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
-	@JsonProperty("professional")
+	@JsonProperty("facilitator")
+	@JsonBackReference
 	private Professional facilitator;
 	
 	@Column(name="openGroup")
@@ -58,20 +62,18 @@ public class Group implements Serializable{
 	@JsonProperty("patientLimit")
 	private int patientLimit;
 	
+	@OneToMany(mappedBy="group", fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
+	@JsonProperty("listConsultations")
+	private List<Consultation> listConsultations;
+	
 	public Group(){}
 
-	public Group(String title, List<Patient> patients, boolean openGroup) {
+	public Group(String title, List<Patient> patients, boolean openGroup, Professional facilitator) {
 		super();
 		this.title = title;
 		this.patients = patients;
 		this.openGroup = openGroup;
-	}
-	
-	public Group(String title, boolean openGroup, SocialService socialService, Professional facilitator, ConsultationState state, Date dateInit, Date dateEnd){
-		//super(null, socialService, facilitator, state, dateInit, dateEnd);
 		this.facilitator = facilitator;
-		this.title = title;
-		this.openGroup = openGroup;
 	}
 
 	@JsonProperty("id")
@@ -104,12 +106,12 @@ public class Group implements Serializable{
 		this.title = title;
 	}
 
-	@JsonProperty("group")
+	@JsonProperty("openGroup")
 	public boolean isOpenGroup() {
 		return openGroup;
 	}
 
-	@JsonProperty("group")
+	@JsonProperty("openGroup")
 	public void setOpenGroup(boolean openGroup) {
 		this.openGroup = openGroup;
 	}
@@ -134,6 +136,15 @@ public class Group implements Serializable{
 		this.facilitator = facilitator;
 	}
 	
+	@JsonProperty("listConsultations")
+	public List<Consultation> getListConsultations() {
+		return listConsultations;
+	}
+
+	@JsonProperty("listConsultations")
+	public void setListConsultations(List<Consultation> listConsultations) {
+		this.listConsultations = listConsultations;
+	}
 	
 	
 }

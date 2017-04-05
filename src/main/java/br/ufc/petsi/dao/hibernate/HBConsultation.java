@@ -151,11 +151,5 @@ public class HBConsultation implements ConsultationDAO{
 		oldCons.setState(ConsultationState.RD);
 		update(oldCons);
 	}
-
-	@Override
-	public void saveFrequency(List<Frequency> frequencies, Group group) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 }

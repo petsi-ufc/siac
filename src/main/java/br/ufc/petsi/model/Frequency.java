@@ -19,11 +19,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Frequency implements Serializable{
 	
 	@Id
+	@GeneratedValue
 	@JsonProperty("id")
 	private Long id;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
-	@JsonProperty("consultation")
+	@JsonProperty("group")
 	private Group group;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
@@ -34,6 +35,10 @@ public class Frequency implements Serializable{
 	@JsonProperty("presence")
 	private boolean presence;
 	
+	@Column(name="consultation", nullable=false)
+	@JsonProperty("consultation")
+	private Consultation consultation;
+	
 	public Frequency(){}
 	
 	public Frequency(Group group, Patient patient, boolean presence) {
@@ -43,12 +48,22 @@ public class Frequency implements Serializable{
 		this.presence = presence;
 	}
 	
-	@JsonProperty("consultation")
+	@JsonProperty("id")
+	public Long getId() {
+		return id;
+	}
+
+	@JsonProperty("id")
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@JsonProperty("group")
 	public Group getGroup() {
 		return group;
 	}
 
-	@JsonProperty("consultation")
+	@JsonProperty("group")
 	public void setGroup(Group group) {
 		this.group = group;
 	}
@@ -71,6 +86,16 @@ public class Frequency implements Serializable{
 	@JsonProperty("presence")
 	public void setPresence(boolean presence) {
 		this.presence = presence;
+	}
+
+	@JsonProperty("consultation")
+	public Consultation getConsultation() {
+		return consultation;
+	}
+
+	@JsonProperty("consultation")
+	public void setConsultation(Consultation consultation) {
+		this.consultation = consultation;
 	}
 
 }

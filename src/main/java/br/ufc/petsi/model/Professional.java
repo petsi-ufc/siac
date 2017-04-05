@@ -14,7 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.ufc.petsi.constants.Constants;
@@ -33,8 +35,9 @@ public class Professional extends User implements Serializable {
 	@JsonProperty("socialService")
 	private SocialService socialService;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="professional", cascade=CascadeType.MERGE)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="professional", cascade=CascadeType.MERGE)
 	@JsonProperty("listConsultations")
+	@JsonManagedReference
 	private List<Consultation> listConsultations;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="facilitator", cascade=CascadeType.MERGE)

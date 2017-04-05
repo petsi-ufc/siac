@@ -9,11 +9,14 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,32 +27,31 @@ import br.ufc.petsi.constants.Constants;
 @DiscriminatorValue(Constants.ROLE_PATIENT)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-public class Patient extends User implements Serializable {
+public class Patient extends User implements Serializable{
 	
-	/*@OneToMany(fetch=FetchType.EAGER, mappedBy="patient", cascade=CascadeType.ALL)
+	
+	@OneToMany(mappedBy="patient", fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
 	@JsonProperty("listConsultations")
-	private List<Individual> listConsultations;
+	private List<Consultation> listConsultations;
 	
-	@ManyToMany(mappedBy="patients", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@ManyToMany(mappedBy="patients", fetch=FetchType.LAZY)
 	@JsonProperty("groups")
-	private List<Group> groups;*/
+	@JsonBackReference
+	private List<Group> groups;
 
-	public Patient() {
-		//DEFAULT
-	}
+	public Patient() {}
 	
-	public Patient(String cpf, String name, String email, String role, List<Individual> listConsultations) {
+	public Patient(String cpf, String name, String email, String role) {
 		super(cpf, name, email, role);
-		//this.listConsultations = listConsultations;
 	}
 
-	/*@JsonProperty("listConsultations")
-	public List<Individual> getListConsultations() {
+	@JsonProperty("listConsultations")
+	public List<Consultation> getListConsultations() {
 		return listConsultations;
 	}
 
 	@JsonProperty("listConsultations")
-	public void setListConsultations(List<Individual> listConsultations) {
+	public void setListConsultations(List<Consultation> listConsultations) {
 		this.listConsultations = listConsultations;
 	}
 
@@ -62,9 +64,5 @@ public class Patient extends User implements Serializable {
 	public void setGroups(List<Group> groups) {
 		this.groups = groups;
 	}
-	*/
-	
-	
-	
-	
+
 }

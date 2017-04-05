@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.GroupDAO;
-import br.ufc.petsi.model.Patient;
-import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.service.GroupService;
 
 @Controller
@@ -30,8 +27,14 @@ public class GroupController {
 	@RequestMapping("/createGroup")
 	@ResponseBody
 	public String createGroup(@RequestParam("json") String json, HttpSession session){
-		Professional professional = (Professional) session.getAttribute(Constants.USER_SESSION);
-		return groupService.saveGroup(json, professional, groupDAO);
+		return groupService.saveGroup(json, groupDAO);
+	}
+	
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping("/updateGroup")
+	@ResponseBody
+	public String updateGroup(@RequestParam("json") String json, HttpSession session){
+		return groupService.updateGroup(json, groupDAO);
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")
@@ -79,17 +82,15 @@ public class GroupController {
 	@Secured("ROLE_PATIENT")
 	@RequestMapping("/joinGroup")
 	@ResponseBody
-	public String joinGroup(@RequestParam("json") String json, HttpSession session){
-		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION); 
-		return groupService.joinGroup(json, patient, groupDAO);
+	public String joinGroup(@RequestParam("json") String json, HttpSession session){ 
+		return groupService.joinGroup(json, groupDAO);
 	}
 	
 	@Secured("ROLE_PATIENT")
 	@RequestMapping("/leaveGroup")
 	@ResponseBody
 	public String leaveGroup(@RequestParam("json") String json, HttpSession session){
-		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
-		return groupService.leaveGroup(json, patient, groupDAO);
+		return groupService.leaveGroup(json, groupDAO);
 	}
 
 }
