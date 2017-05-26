@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class FrequencyList {
 	
 	@JsonProperty("frequencyList")
-	private List<Frequency> frequencyList;
+	List<Frequency> frequencyList;
 
 	@JsonProperty("frequencyList")
 	public List<Frequency> getFrequencyList() {

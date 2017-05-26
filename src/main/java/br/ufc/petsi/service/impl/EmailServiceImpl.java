@@ -41,7 +41,9 @@ public class EmailServiceImpl implements EmailService
 		}else{
 			String [] emails = new String[cons.getGroup().getPatients().size()];
 			for (int i = 0; i < cons.getGroup().getPatients().size(); i++) {
-				emails[i] = cons.getGroup().getPatients().get(i).getEmail();	
+				if(cons.getGroup().getPatients().get(i).getEmail() != null){
+					emails[i] = cons.getGroup().getPatients().get(i).getEmail(); 	
+				}
 			}
 			email.setTo(emails);
 		}

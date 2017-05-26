@@ -37,7 +37,7 @@ public class Professional extends User implements Serializable {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="professional", cascade=CascadeType.MERGE)
 	@JsonProperty("listConsultations")
-	@JsonManagedReference
+	//@JsonManagedReference
 	private List<Consultation> listConsultations;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="facilitator", cascade=CascadeType.MERGE)

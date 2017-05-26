@@ -14,4 +14,5 @@ public interface GroupDAO {
 	public Group find(long id);
 	public List<Patient> getPatients (Group group);
 	public List<Group> getAllGroups (Professional professional);
+	public List<Group> getGroupsByPatient(Patient patient);
 }

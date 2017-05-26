@@ -46,7 +46,7 @@ public class Group implements Serializable{
 		inverseJoinColumns=@JoinColumn(name="id_patient")
 	)
 	@JsonProperty("patients")
-	@JsonManagedReference
+	//@JsonManagedReference
 	private List<Patient> patients;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)

@@ -20,6 +20,7 @@ import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.enums.ConsultationState;
+import br.ufc.petsi.enums.Role;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
@@ -58,8 +59,7 @@ public class ConsultationController {
 	@RequestMapping("/getConsultationsByPatient")
 	@ResponseBody
 	public String getConsultationsByPatient(String cpf){
-		Patient p = new Patient();
-		p.setCpf(cpf);
+		Patient p = (Patient) userDAO.getByCpf(cpf, Constants.ROLE_PATIENT);
 		return consultationService.getConsultationsByPatient(p, consDAO, reserveDAO);
 	}
 	

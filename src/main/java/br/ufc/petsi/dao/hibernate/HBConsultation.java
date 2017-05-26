@@ -123,6 +123,19 @@ public class HBConsultation implements ConsultationDAO{
 		}
 		return cons;
 	}
+	
+	@Override
+	public List<Consultation> getConsultationByGroup(Group group) {
+		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.group = :group");
+		query.setParameter("group", group);
+		
+		try{
+			List<Consultation> cons = query.getResultList();
+			return cons;
+		}catch(NoResultException e){
+			return null;
+		}
+	}
 
 	@Override
 	public void cancelConsultation(Consultation con) {

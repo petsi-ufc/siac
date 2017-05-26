@@ -25,6 +25,7 @@ import org.hibernate.annotations.Any;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -53,6 +54,7 @@ public class Consultation implements Serializable{
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
 	@JsonProperty("professional")
+	@JsonBackReference
 	private Professional professional;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
@@ -105,6 +107,10 @@ public class Consultation implements Serializable{
 	@Column(name="type_consultation")
 	@JsonProperty("typeConsultation")
 	private TypeConsultation typeConsultation;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="consultation")
+	@JsonProperty("frequencyList")
+	private List<Frequency> frequencyList;
 	
 	public Consultation(Long id, SocialService socialService, Professional profesisonal,
 			ConsultationState state, Date dateInit, Date dateEnd) {
@@ -246,6 +252,16 @@ public class Consultation implements Serializable{
 	@JsonProperty("group")
 	public void setGroup(Group group) {
 		this.group = group;
+	}
+	
+	@JsonProperty("frequencyList")
+	public List<Frequency> getFrequencyList() {
+		return frequencyList;
+	}
+
+	@JsonProperty("frequencyList")
+	public void setFrequencyList(List<Frequency> frequencyList) {
+		this.frequencyList = frequencyList;
 	}
 
 	@Override

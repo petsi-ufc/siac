@@ -35,7 +35,7 @@ public class Frequency implements Serializable{
 	@JsonProperty("presence")
 	private boolean presence;
 	
-	@Column(name="consultation", nullable=false)
+	@ManyToOne
 	@JsonProperty("consultation")
 	private Consultation consultation;
 	
