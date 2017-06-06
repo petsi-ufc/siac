@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.enums.Role;
+import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.model.UserPrimaryKey;
@@ -97,6 +98,7 @@ public class HBUserDAO implements UserDAO{
 		}
 		return listUsers;
 	}
+	
 
 	@Override
 	@Transactional

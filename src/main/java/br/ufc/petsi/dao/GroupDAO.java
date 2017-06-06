@@ -15,4 +15,5 @@ public interface GroupDAO {
 	public List<Patient> getPatients (Group group);
 	public List<Group> getAllGroups (Professional professional);
 	public List<Group> getGroupsByPatient(Patient patient);
+	public List<Group> getGroupsFree();
 }

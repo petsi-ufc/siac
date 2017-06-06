@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.ufc.petsi.constants.Constants;
@@ -32,6 +33,7 @@ public class Patient extends User implements Serializable{
 	
 	@OneToMany(mappedBy="patient", fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
 	@JsonProperty("listConsultations")
+	@JsonManagedReference(value="patient1")
 	private List<Consultation> listConsultations;
 	
 	@ManyToMany(mappedBy="patients", fetch=FetchType.LAZY)

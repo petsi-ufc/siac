@@ -91,6 +91,13 @@ public class HBGroup implements GroupDAO {
 		return groups;
 	}
 	
+	@Override
+	public List<Group> getGroupsFree() {
+		Query query = (Query) manager.createQuery("SELECT grp FROM Group grp WHERE grp.opengroup = true");
+		List<Group> groups = query.getResultList();
+		return groups;
+	}
+	
 	/* AUXILIARES */
 	private Patient findPatient(List<Patient> patients, Patient patient){
 		for (Patient p : patients) {

@@ -1,6 +1,7 @@
 package br.ufc.petsi.service;
 
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,8 +33,11 @@ import br.ufc.petsi.model.Reserve;
 import br.ufc.petsi.model.Scheduler;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.util.ConsultationExclusionStrategy;
+import br.ufc.petsi.util.DateDeserializer;
 import br.ufc.petsi.util.Response;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -51,21 +55,34 @@ public class ConsultationService {
 	
 	@Inject
 	private GroupDAO gpDAO;
+	
+	@Inject 
+	private UserDAO udao;
 
 
 	public String saveConsultation(Professional proTemp, String json, ConsultationDAO consDAO, ConsultationState state){
-		Gson gson = new Gson();
+		GsonBuilder gsonb = new GsonBuilder();
+		DateDeserializer ds = new DateDeserializer();
+		gsonb.registerTypeAdapter(Date.class, ds);
+		Gson gson = gsonb.create();
+		
 		ObjectMapper mapper = new ObjectMapper();
 		Response response = new Response();
 		
 		try{
 			
-			Scheduler scheduler = mapper.readValue(json, Scheduler.class);
+			//Scheduler scheduler = mapper.readValue(json, Scheduler.class);
+			Json scheduler = gson.fromJson(json, Json.class);
 			
-			for (Consultation consultation : scheduler.getSchedule()) {
+			for (Consultation consultation : scheduler.json.getSchedule()) {
+				if(!consultation.getState().equals(ConsultationState.FR)){
+					if(consultation.getPatient() != null){
+						consultation.setPatient((Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT));
+					}
+				}
 				consultation.setProfessional(proTemp);
 				consultation.setService(proTemp.getSocialService());
-				consultation.setState(state);
+				//consultation.setState(state);
 				
 				if(consultation.getDateInit().after(consultation.getDateEnd())){
 					response.setCode(Response.ERROR);
@@ -90,11 +107,18 @@ public class ConsultationService {
 	}
 	
 	public String saveConsultationNow(Professional proTemp, String json, ConsultationDAO consDAO, UserDAO userDAO){
-		Gson gson = new Gson();
+		GsonBuilder gsonb = new GsonBuilder();
+		DateDeserializer ds = new DateDeserializer();
+		gsonb.registerTypeAdapter(Date.class, ds);
+		Gson gson = gsonb.create();
 		Response response = new Response();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		
 		Consultation con = gson.fromJson(json, Consultation.class);
+		
+		if(con.getPatient() != null){
+			con.setPatient((Patient)udao.getByCpf(con.getPatient().getCpf(), Constants.ROLE_PATIENT));
+		}
 		con.setProfessional(proTemp);
 		con.setService(proTemp.getSocialService());
 		con.setState(ConsultationState.NO);
@@ -499,6 +523,9 @@ public class ConsultationService {
 		try{
 			
 			Consultation consultation = gson.fromJson(json, Consultation.class);
+			String message = consultation.getComment();
+			consultation = consDAO.getConsultationById(consultation.getId());
+			consultation.setComment(message);
 			consDAO.update(consultation);
 			
 			response.setCode(Response.SUCCESS);
@@ -520,6 +547,10 @@ public class ConsultationService {
 				return true;
 		}
 		return false;
+	}
+	
+	private class Json{
+		public Scheduler json;
 	}
 	
 }

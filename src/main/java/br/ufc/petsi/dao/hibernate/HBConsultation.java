@@ -31,7 +31,7 @@ public class HBConsultation implements ConsultationDAO{
 	
 	@Override
 	public void save(Consultation cons) {
-		manager.merge(cons);
+		manager.persist(cons);
 	}
 
 	@Override

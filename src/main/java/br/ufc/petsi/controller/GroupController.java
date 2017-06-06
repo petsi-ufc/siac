@@ -3,6 +3,7 @@ package br.ufc.petsi.controller;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.ss.formula.udf.UDFFinder;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.GroupDAO;
+import br.ufc.petsi.dao.UserDAO;
+import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.service.GroupService;
 
 @Controller
@@ -23,17 +27,22 @@ public class GroupController {
 	@Inject
 	private GroupDAO groupDAO;
 	
+	@Inject
+	private UserDAO userDAO;
+	
 	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/createGroup")
 	@ResponseBody
 	public String createGroup(@RequestParam("json") String json, HttpSession session){
-		return groupService.saveGroup(json, groupDAO);
+		System.out.println(json);
+		Professional professional = (Professional) session.getAttribute(Constants.USER_SESSION);
+		return groupService.saveGroup(json, professional, groupDAO);
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/updateGroup")
 	@ResponseBody
-	public String updateGroup(@RequestParam("json") String json, HttpSession session){
+	public String updateGroup(@RequestParam("json") String json){
 		return groupService.updateGroup(json, groupDAO);
 	}
 	
@@ -41,14 +50,14 @@ public class GroupController {
 	@RequestMapping("/addPatient")
 	@ResponseBody
 	public String addPatient(@RequestParam("json") String json){
-		return groupService.addPatient(json, groupDAO);
+		return groupService.addPatient(json, groupDAO,userDAO);
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/removePatient")
 	@ResponseBody
 	public String removePatient(@RequestParam("json") String json){
-		return groupService.removePatient(json, groupDAO);
+		return groupService.removePatient(json, groupDAO, userDAO);
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")
@@ -61,8 +70,9 @@ public class GroupController {
 	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/getAllGroups")
 	@ResponseBody
-	public String getAllGroups(@RequestParam("json") String json){
-		return groupService.getAllGroups(json, groupDAO);
+	public String getAllGroups(HttpSession session){
+		Professional professional = (Professional) session.getAttribute(Constants.USER_SESSION);
+		return groupService.getAllGroups(professional, groupDAO);
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")

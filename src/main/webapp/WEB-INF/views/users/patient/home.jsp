@@ -14,6 +14,8 @@
 					class="link-service" id="0">Meu calendário</a></li>
 				<li class="service service-item"><a class="link-service"
 					id="my-consults">Minhas consultas </a></li>
+				<li class="service service-item"><a class="link-service"
+					id="my-groups">Grupos</a></li>
 			</ul>
 		</div>
 	</div>
@@ -133,6 +135,41 @@
 					</thead>
 					<tbody>
 
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div class="panel panel-primary margin-right" id="div-my-groups" style="display:none;" ng-show="true">
+			<div class="panel-heading">
+				<h1 class="panel-title">Gerenciador de Grupos</h1>
+			</div>
+			
+			<div class="panel-body">
+				<h3>Meus Grupos</h3>
+				<table id="table-my-groups" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Nome</th>
+							<th>Ações</th>
+						</tr>
+					</thead>
+					<tbody id="tbody-schedules-description">
+						<!-- Preenchido dinâmicamente -->
+					</tbody>
+				</table>
+				<br>
+				<h3>Grupos disponíveis</h3>
+				<br>
+				<table id="table-groups" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Nome</th>
+							<th>Ações</th>
+						</tr>
+					</thead>
+					<tbody id="tbody-schedules-description">
+						<!-- Preenchido dinâmicamente -->
 					</tbody>
 				</table>
 			</div>

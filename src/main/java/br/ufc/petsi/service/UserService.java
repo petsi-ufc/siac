@@ -21,6 +21,25 @@ import br.ufc.petsi.util.UserExclusionStrategy;
 @Named
 public class UserService {
 	
+	public String getAllUsers(LdapUser userDAO){
+		
+		List<User> users = userDAO.getAll();
+		Response response = new Response();
+		Gson gson = new Gson();
+		
+		try{
+			response.setCode(Response.SUCCESS);
+			response.setMessage(gson.toJson(users));
+			return gson.toJson(response);
+		}catch (Exception e) {
+			System.out.println(e);
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, Não foi possível carregar os pacientes!");
+		}
+		
+		return gson.toJson(response);
+	}
+	
 	public String getUserByName(String name, LdapUser userDAO){
 		
 		List<User> users = userDAO.getByNameLike(name);

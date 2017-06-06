@@ -75,6 +75,7 @@ public class ConsultationController {
 	@ResponseBody
 	public String saveConsultation(@RequestParam("json") String json, HttpSession session){
 		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
+		System.out.println("[CONTROLLER SAVE CONSULTATION]:"+json);
 		return consultationService.saveConsultation(proTemp, json, consDAO, ConsultationState.FR);
 	}
 	
