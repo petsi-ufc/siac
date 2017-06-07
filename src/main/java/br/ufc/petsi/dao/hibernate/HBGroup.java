@@ -78,6 +78,25 @@ public class HBGroup implements GroupDAO {
 		return manager.find(Group.class, id);
 	}
 	
+	@Override
+	public List<Group> getGroupsByPatient(Patient patient) {
+		Query query = (Query) manager.createQuery("SELECT grp FROM Group grp JOIN grp.patients ptn WHERE ptn.id = :id");
+		query.setParameter("id",patient.getId());
+		List<Group> groups = new ArrayList<Group>();
+		try{
+			groups = query.getResultList();
+		}catch(NoResultException e){
+			System.out.println("No result at getConsultationByProfessional: "+e);
+		}
+		return groups;
+	}
+	
+	@Override
+	public List<Group> getGroupsFree() {
+		Query query = (Query) manager.createQuery("SELECT grp FROM Group grp WHERE grp.opengroup = true");
+		List<Group> groups = query.getResultList();
+		return groups;
+	}
 	
 	/* AUXILIARES */
 	private Patient findPatient(List<Patient> patients, Patient patient){

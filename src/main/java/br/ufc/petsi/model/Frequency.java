@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -35,8 +37,9 @@ public class Frequency implements Serializable{
 	@JsonProperty("presence")
 	private boolean presence;
 	
-	@Column(name="consultation", nullable=false)
+	@ManyToOne
 	@JsonProperty("consultation")
+	@JsonManagedReference(value="frequencyList1")
 	private Consultation consultation;
 	
 	public Frequency(){}

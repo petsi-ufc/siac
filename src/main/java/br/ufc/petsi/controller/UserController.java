@@ -24,6 +24,12 @@ public class UserController {
 	@Inject
 	private UserService userService;
 	
+	@RequestMapping("/getAllUsers")
+	@ResponseBody
+	public String getAllUsers(){
+		return this.userService.getAllUsers(userDAO);
+	}
+	
 	@RequestMapping("/getUserByName")
 	@ResponseBody
 	public String getUserByName(String name){

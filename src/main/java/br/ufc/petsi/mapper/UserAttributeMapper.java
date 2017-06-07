@@ -25,7 +25,8 @@ public class UserAttributeMapper implements AttributesMapper<User>, Serializable
 	public User mapFromAttributes(Attributes attrs) throws NamingException {
 		
 		HttpSession session = CurrentSession.getSession();
-		String role = (String)session.getAttribute("loginRole");
+		String role = (String) session.getAttribute("loginRole");
+		
 		
 		User user = null;
 		

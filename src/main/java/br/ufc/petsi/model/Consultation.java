@@ -25,7 +25,9 @@ import org.hibernate.annotations.Any;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.ufc.petsi.enums.ConsultationState;
@@ -53,18 +55,21 @@ public class Consultation implements Serializable{
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
 	@JsonProperty("professional")
+	@JsonBackReference(value="professional1")
 	private Professional professional;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="id_patient")
 	@Fetch(FetchMode.JOIN)
 	@JsonProperty("patient")
+	@JsonBackReference(value="patient1")
 	private Patient patient;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="id_group")
 	@Fetch(FetchMode.JOIN)
 	@JsonProperty("group")
+	@JsonBackReference(value="group1")
 	private Group group;
 	
 	@Column(name="date_init")
@@ -95,6 +100,7 @@ public class Consultation implements Serializable{
 			fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="id_rating")
 	@JsonProperty("rating")
+	@JsonBackReference(value="rating1")
 	private Rating rating;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="consultation")
@@ -105,6 +111,11 @@ public class Consultation implements Serializable{
 	@Column(name="type_consultation")
 	@JsonProperty("typeConsultation")
 	private TypeConsultation typeConsultation;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="consultation")
+	@JsonProperty("frequencyList")
+	@JsonBackReference(value="frequencyList1")
+	private List<Frequency> frequencyList;
 	
 	public Consultation(Long id, SocialService socialService, Professional profesisonal,
 			ConsultationState state, Date dateInit, Date dateEnd) {
@@ -246,6 +257,16 @@ public class Consultation implements Serializable{
 	@JsonProperty("group")
 	public void setGroup(Group group) {
 		this.group = group;
+	}
+	
+	@JsonProperty("frequencyList")
+	public List<Frequency> getFrequencyList() {
+		return frequencyList;
+	}
+
+	@JsonProperty("frequencyList")
+	public void setFrequencyList(List<Frequency> frequencyList) {
+		this.frequencyList = frequencyList;
 	}
 
 	@Override

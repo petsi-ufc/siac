@@ -2,6 +2,7 @@ package br.ufc.petsi.dao;
 
 import java.util.List;
 
+import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.User;
 
 public interface UserDAO {

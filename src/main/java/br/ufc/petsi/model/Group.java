@@ -46,7 +46,7 @@ public class Group implements Serializable{
 		inverseJoinColumns=@JoinColumn(name="id_patient")
 	)
 	@JsonProperty("patients")
-	@JsonManagedReference
+	@JsonManagedReference(value="group1")
 	private List<Patient> patients;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
@@ -64,6 +64,7 @@ public class Group implements Serializable{
 	
 	@OneToMany(mappedBy="group", fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
 	@JsonProperty("listConsultations")
+	@JsonManagedReference
 	private List<Consultation> listConsultations;
 	
 	public Group(){}

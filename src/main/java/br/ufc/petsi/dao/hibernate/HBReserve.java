@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.model.Consultation;
+import br.ufc.petsi.model.Group;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Reserve;
 
@@ -58,6 +59,13 @@ public class HBReserve implements ReserveDAO{
 	public List<Reserve> getActiveReservesByConsultation(Consultation consultation) {
 		Query query = this.manager.createQuery("SELECT re FROM Reserve re WHERE re.consultation.id = :id AND re.active = true");
 		query.setParameter("id", consultation.getId());
+		return (List<Reserve>) query.getResultList();
+	}
+	
+	@Override
+	public List<Reserve> getActiveReservesByGroup(Group group) {
+		Query query = this.manager.createQuery("SELECT re FROM Reserve re WHERE re.group.id = :id AND re.active = true");
+		query.setParameter("id", group.getId());
 		return (List<Reserve>) query.getResultList();
 	}
 
