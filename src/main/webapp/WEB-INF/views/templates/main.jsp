@@ -60,4 +60,12 @@
 		<tiles:insertAttribute name="footer"/>
 	</footer>
 </body>
+<script type="text/javascript">
+	$('#pacienteInicio').timepicker();
+	$('#pacienteFim').timepicker();
+	$('#livreInicio').timepicker();
+	$('#livreFim').timepicker();
+	$('#grupoInicio').timepicker();
+	$('#grupoFim').timepicker();
+</script>
 </html>

@@ -792,7 +792,7 @@
 							</div>
 						</div>
 					</div> -->
-					
+			
 					<div class="panel panel-primary" ng-show="isGroupConsultation == true">
 						<div class="panel-heading">
 							<h3 class="panel-title">Cadastrar com grupo</h3>
@@ -804,18 +804,27 @@
 											<label class="col-lg-1 control-label">Início</label>
 											<div class="col-md-5">
 												<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
+<<<<<<< HEAD
+													<input id="grupoInicio" type="text" ng-model="initSchTemp" class="form-control input-small"> 
+=======
 													<input type="text" ng-model="initGrpSchTemp" class="form-control input-small"> 
+>>>>>>> 279f65b26bf256b8b4fd4aef2fc42aed23f74ccf
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
 												</div>
 											</div>
-		
+								
 											<label class="col-lg-1 control-label">Fim</label>
 											<div class="col-md-5">
+<<<<<<< HEAD
+												<div class="timepicker-end input-group bootstrap-timepicker timepicker">
+													<input id="grupoFim" type="text" class="form-control input-small" ng-model="endSchTemp"> 
+=======
 												<div
 													class="timepicker-end input-group bootstrap-timepicker timepicker">
 													<input type="text" class="form-control input-small" ng-model="endGrpSchTemp"> 
+>>>>>>> 279f65b26bf256b8b4fd4aef2fc42aed23f74ccf
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -881,7 +890,7 @@
 								<br>
 						</div>
 					</div>
-					
+
 					<div class="panel panel-primary" ng-show="isPacientConsultation == true">
 						<div class="panel-heading">
 							<h3 class="panel-title">Cadastrar com paciente</h3>
@@ -893,7 +902,7 @@
 											<label class="col-lg-1 control-label">Início</label>
 											<div class="col-md-5">
 												<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
-													<input type="text" ng-model="initSchTemp" class="form-control input-small"> 
+													<input id="pacienteInicio" type="text" ng-model="initSchTemp" class="form-control input-small"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -902,9 +911,8 @@
 		
 											<label class="col-lg-1 control-label">Fim</label>
 											<div class="col-md-5">
-												<div
-													class="timepicker-end input-group bootstrap-timepicker timepicker">
-													<input type="text" class="form-control input-small" ng-model="endSchTemp"> 
+												<div class="timepicker-end input-group bootstrap-timepicker timepicker">
+													<input id="pacienteFim" type="text" class="form-control input-small" ng-model="endSchTemp"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -986,7 +994,7 @@
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
 											<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
-												<input id="tmp-init-1" type="text" class="form-control input-small"> 
+												<input id="livreInicio" type="text" class="form-control input-small"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
@@ -995,9 +1003,8 @@
 	
 										<label class="col-lg-1 control-label">Fim</label>
 										<div class="col-md-4">
-											<div
-												class="timepicker-end input-group bootstrap-timepicker timepicker">
-												<input id="tmp-end-1" type="text" class="form-control input-small" > 
+											<div class="timepicker-end input-group bootstrap-timepicker timepicker">
+												<input id="livreFim" type="text" class="form-control input-small" > 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
