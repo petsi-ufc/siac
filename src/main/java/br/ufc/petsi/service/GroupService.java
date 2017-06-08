@@ -204,6 +204,7 @@ public class GroupService {
 		try{
 			response.setCode(Response.SUCCESS);
 			response.setMessage(mapper.writeValueAsString(gdao.getGroupsFree()));
+			System.out.println(gson.toJson(response));
 			return gson.toJson(response);
 		}catch (Exception e) {
 			System.out.println(e);

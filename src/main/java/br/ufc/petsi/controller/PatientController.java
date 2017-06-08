@@ -151,6 +151,7 @@ public class PatientController {
 	@ResponseBody
 	public String getMyGroups(HttpSession session){
 		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
+		System.out.println("Groups - Patient: " + patient.getName());
 		return groupService.getGroupsOfPatient(patient, groupDAO);
 	}
 	

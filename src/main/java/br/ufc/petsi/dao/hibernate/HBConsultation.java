@@ -45,7 +45,7 @@ public class HBConsultation implements ConsultationDAO{
 		try{
 			Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.id = :idConsultation");
 			query.setParameter("idConsultation", id);
-			
+			System.out.println("ID do Consultation: "+id);
 			return (Consultation) query.getSingleResult();
 		}catch(NoResultException ex){
 			return null;

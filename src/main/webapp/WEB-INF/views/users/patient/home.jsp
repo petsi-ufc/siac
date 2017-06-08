@@ -154,7 +154,7 @@
 							<th>Ações</th>
 						</tr>
 					</thead>
-					<tbody id="tbody-schedules-description">
+					<tbody id="corpo-mygrupo">
 						<!-- Preenchido dinâmicamente -->
 					</tbody>
 				</table>
@@ -168,7 +168,7 @@
 							<th>Ações</th>
 						</tr>
 					</thead>
-					<tbody id="tbody-schedules-description">
+					<tbody id="corpo-grupo-disponivel">
 						<!-- Preenchido dinâmicamente -->
 					</tbody>
 				</table>
@@ -286,6 +286,18 @@
 		<!-- /.modal-dialog -->
 	</div>
 	<!-- /.modal -->
+		<script>
+		// Check browser support
+		if (typeof(Storage) !== "undefined") {
+		    // Store
+		  var cpf = window.localStorage['userCPF'];
+		    console.log(window.localStorage['userCPF']);
+		    // Retrieve
 
+		} else {
+		    console.log( "Sorry, your browser does not support Web Storage...");
+		}
+			
+		</script>
 
 </div>

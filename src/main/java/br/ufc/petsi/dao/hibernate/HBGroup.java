@@ -93,7 +93,7 @@ public class HBGroup implements GroupDAO {
 	
 	@Override
 	public List<Group> getGroupsFree() {
-		Query query = (Query) manager.createQuery("SELECT grp FROM Group grp WHERE grp.opengroup = true");
+		Query query = (Query) manager.createQuery("SELECT grp FROM Group grp WHERE grp.openGroup = true");
 		List<Group> groups = query.getResultList();
 		return groups;
 	}

@@ -241,30 +241,72 @@ function changeEvent(a,b){
     $("#calendar-patient").fullCalendar("updateEvent",c)
 }
 
+
+
 function myGroups(){
     $("#my-groups").click(function(){
         $(".content-calendar").css("display","none");
         $("#my-consultations").css("display","none");
         $("#div-my-groups").css("display","block");
         
-        ajaxCall("/siac/getMyGroups", null,function(json){
-            console.log(json);
-            $.each(json, function(key, group){
-                $("#table-my-groups > tbody").append("<tr><td>"+group[i].title+"</td><td><button class='btn btn-danger'>Sair</button></td></tr>");
-            });
+       
+        ajaxCall("/siac/getMyGroups",null,function(json){
+        	var linha = "";
+        	var m = JSON.parse(json.message);
+            var count = Object.keys(json.message).length;
+            
+           for (var i = 0; i < count; i++){
+        	 if(typeof m[i] !== 'undefined'){
+        		 var msg = m[i].title;
+        		
+        		  linha += "<tr><td>"+msg+"</td><td><button class='btn btn-danger sairGrupo ' onClick = 'leaveMyGroups("+ m[i].id +")'>Sair</button></td></tr>";
+        		  
+        		   
+        	   }
+           }
+           $('#corpo-mygrupo').html(linha);
+          
+
         });
         
         ajaxCall("/siac/getGroupsFree",null,function(json){
-            console.log(json);
-            $.each(json, function(key, group){
-                $("#table-groups > tbody").append("<tr><td>"+group[i].title+"</td><td><button class='btn btn-success'>Participar</button></td></tr>");
-            });
+        	var linha_free = "";
+        	var mj = JSON.parse(json.message);
+            var count = Object.keys(json.message).length;
+            var countNumber = mj[1].patients.length;
+           // console.log(mj[0]);
+            
+            
+           for (var i = 0; i < count; i++){
+        	 if(typeof mj[i] !== 'undefined'){
+        		 var msg_f = mj[i].title;
+        		
+        		 linha_free += "<tr><td>"+msg_f+"</td><td><button class='btn btn-danger sairGrupo ' >Sair</button></td></tr>";
+        		  	   
+        	   }
+           }
+           $('#corpo-grupo-disponivel').html(linha_free);
+
         });
+        
+        
     });
 }
 
+function leaveMyGroups(id_group){
+	
+	var cpf = window.localStorage['userCPF'];
+    
+	console.log("ID_GROUP; "+ id_group+" cpf "+cpf);
+	
+	
+	var id_patient="";
+	var json = '{"id":'+id_group+',"patients":[{"id":'+id_patient+'}]}';
+	console.log(json);
+}
+
 $("document").ready(function(){
-    chargeEvents(),
+	chargeEvents(),
     chargeServices(),
     myConsultations(),
     myCalendar(),
@@ -275,6 +317,8 @@ $("document").ready(function(){
     cancelConsultation(),
     reserveConsultation(),
     cancelReserve(),
-    myGroups()
+    myGroups(),
+    leaveMyGroups()
+    
 });
 
