@@ -51,7 +51,9 @@ public class Teste {
 			System.out.println(string);, \"consultation\":{\"id\":67}, \"consultation\":{\"id\":67}
 		}*/
 		
-		String teste = "{[{\"group\":{\"id\":71, \"facilitator\":{\"id\":1}}, \"patient\":{\"id\":60}, \"presence\":true},{\"group\":{\"id\":71, \"facilitator\":{\"id\":1}}, \"patient\":{\"id\":57}, \"presence\":true}]}";
+		String teste = "{\"frequencyList\":[{\"group\":{\"id\":71,},\"patient\":{\"id\":60},\"presence\":true,\"consultation\":{\"id\":67}},{\"group\":{\"id\":71},\"patient\":{\"id\":57},\"presence\":false,\"consultation\":{\"id\":67}}]}";
+		String teste2 = "{\"frequencyList\":[{\"id\":null,\"group\":{\"id\":71,\"title\":null,\"patients\":null,\"openGroup\":true,\"patientLimit\":0,\"listConsultations\":null},\"patient\":{\"id\":60},\"presence\":true,\"consultation\":{\"id\":67}},{\"id\":null,\"group\":{\"id\":71,\"title\":null,\"patients\":null,\"openGroup\":true,\"patientLimit\":0,\"listConsultations\":null},\"patient\":{\"id\":57},\"presence\":false,\"consultation\":{\"id\":67}}]}";
+		
 		
 		List<Frequency> freq = new ArrayList<Frequency>();
 		Frequency f1 = new Frequency();
@@ -83,15 +85,17 @@ public class Teste {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		try{
-			FrequencyList frequencyList = mapper.readValue(teste, FrequencyList.class);
+			FrequencyList frequencyList = mapper.readValue(teste2, FrequencyList.class);
+			System.out.println(frequencyList);
 			for(Frequency f: frequencyList.getFrequencyList()){
-				System.out.println(f.getConsultation().getId());
-				System.out.println(f.getGroup());
-				System.out.println(f.isPresence());
+				System.out.println("[CONSULTATION]: "+f.getConsultation().getId());
+				System.out.println("[PATIENT]: "+f.getPatient().getId());
+				System.out.println("[GROUP]: "+f.getGroup().getId());
+				System.out.println("[PRESENCE]: "+f.isPresence());
 			}
 			//System.out.println(mapper.writeValueAsString(freq));
 		}catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println(e.toString());
 		}
 		
 	}

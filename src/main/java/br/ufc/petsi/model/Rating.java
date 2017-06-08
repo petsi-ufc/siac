@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
 
@@ -40,6 +41,7 @@ public class Rating implements Serializable{
 	@Expose
 	@OneToOne(mappedBy="rating")
 	@JsonProperty("consultation")
+	@JsonManagedReference(value="rating1")
 	private Consultation consultation;
 	
 	public Rating() {}

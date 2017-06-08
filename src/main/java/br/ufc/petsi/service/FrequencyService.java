@@ -23,14 +23,14 @@ public class FrequencyService {
 		
 			FrequencyList frequencyList = mapper.readValue(json, FrequencyList.class);
 			
-			if(frequencyList.getFrequencyList() == null){
+			if(frequencyList.getFrequencyList().size() == 0){
 				response.setCode(Response.ERROR);
 				response.setMessage("Sua lista de frequência está vazia!");
 				return gson.toJson(response);
-			}
-			
-			for(Frequency frequency: frequencyList.getFrequencyList()){
-				freqDAO.register(frequency);
+			}else{
+				for(Frequency frequency: frequencyList.getFrequencyList()){
+					freqDAO.register(frequency);
+				}
 			}
 			
 		}catch (Exception e) {

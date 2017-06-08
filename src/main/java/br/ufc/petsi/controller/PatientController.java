@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
+import br.ufc.petsi.dao.GroupDAO;
 import br.ufc.petsi.dao.RatingDAO;
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.dao.UserDAO;
@@ -21,6 +22,7 @@ import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.Reserve;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ConsultationService;
+import br.ufc.petsi.service.GroupService;
 import br.ufc.petsi.service.RatingService;
 
 @Controller
@@ -44,6 +46,12 @@ public class PatientController {
 	
 	@Inject
 	private UserDAO userDAO;
+	
+	@Inject
+	private GroupService groupService;
+	
+	@Inject
+	private GroupDAO groupDAO;
 
 	@Secured("ROLE_PATIENT")
 	@RequestMapping("/getMyConsultations")
@@ -137,5 +145,20 @@ public class PatientController {
 		return consService.cancelReserve(reserve2, reserveDAO);
 
 	}
+	
+	@Secured("ROLE_PATIENT")
+	@RequestMapping("/getMyGroups")
+	@ResponseBody
+	public String getMyGroups(HttpSession session){
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
+		return groupService.getGroupsOfPatient(patient, groupDAO);
+	}
+	
+	@Secured("ROLE_PATIENT")
+	@RequestMapping("/getGroupsFree")
+	@ResponseBody
+	public String getGroupsFree(){
+		return groupService.getGroupsFree(groupDAO);
+	}	
 
 }	

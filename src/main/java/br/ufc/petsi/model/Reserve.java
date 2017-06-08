@@ -33,13 +33,17 @@ public class Reserve implements Comparable<Reserve>, Serializable{
 	@JsonProperty("date")
 	private Date date;
 	
-	@ManyToOne
+	@ManyToOne(optional=false)
 	@JsonProperty("consultation")
 	private Consultation consultation;
 	
 	@ManyToOne
 	@JsonProperty("patient")
 	private Patient patient;
+	
+	@ManyToOne
+	@JsonProperty("group")
+	private Group group;
 	
 	@JsonProperty("active")
 	private boolean active;
@@ -55,6 +59,14 @@ public class Reserve implements Comparable<Reserve>, Serializable{
 		this.patient = patient;
 		this.active = active;
 	}
+	
+	public Reserve(Long id, Date date, Consultation consultation, Group group, boolean active) {
+		this.id = id;
+		this.date = date;
+		this.consultation = consultation;
+		this.group = group;
+		this.active = active;
+	} 
 
 	@JsonProperty("id")
 	public Long getId() {
@@ -104,6 +116,16 @@ public class Reserve implements Comparable<Reserve>, Serializable{
 	@JsonProperty("active")
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	@JsonProperty("group")
+	public Group getGroup() {
+		return group;
+	}
+
+	@JsonProperty("group")
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	@Override

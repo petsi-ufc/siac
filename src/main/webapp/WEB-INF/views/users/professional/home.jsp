@@ -24,19 +24,34 @@
 						</h4>
 					</div>
 					<div class="modal-body">
-						<div id="container-details-consultation">
+						<div id="container-details-consultation" style="padding: 20px;">
 							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
 										<th>Hora Início</th>
 										<th>Hora Fim</th>
 										<th>Estado</th>
-										<th>Paciente</th>
+										<th>Paciente/Grupo</th>
 										<th>Horário</th>
+										<th>Consulta</th>
 									</tr>
 								</thead>
 								<tbody id="tbody-schedules-description">
-									<!-- Preenchida dinamicamente -->
+									<tr ng-repeat="e in eventsForDay">
+										<td>{{e.start}}</td>
+										<td>{{e.end}}</td>
+										<td>{{e.color}}</td>
+										<td>{{e.title}}</td>
+										<td>
+											<button type="button" value="{{e.id}}" class="btn btn btn-success action-register-consultation" ng-disabled="e.state == 'CD' || e.state == 'RD'" ng-click="registerConsultation(e.id)">Registrar<span class="glyphicon glyphicon-ok"></span></button>
+											<button type="button" value="{{e.id}}" class="btn btn btn-danger action-cancel-consultation" ng-disabled="e.state == 'CD' || e.state == 'RD'" ng-click="cancelConsultation(e.id)">Cancelar<span class="glyphicon glyphicon-remove-circle"></span></button>
+											<button type="button" value="{{e.id}}" class="btn btn btn-warning action-reschedule-consultation margin-left" ng-disabled="e.state == 'CD' || e.state == 'RD'" ng-click="reschedulingConsultation(e)">Reagendar<span class="glyphicon glyphicon-time"></span></button>
+										</td>
+										<td>
+											<button type="button" value="{{e.id}}" class="btn btn btn-primary" ng-show="e.isGroup" ng-disabled="e.state != 'RD'" ng-click="showFrequencyList(e.group.id, e.date)" title="Frequência" ><span class="glyphicon glyphicon-list"></span></button>
+											<button type="button" value="{{e.id}}" class="btn btn btn-info" ng-disabled="e.state != 'RD'" ng-click="showComment(e.id)" title="Comentário"><span class="glyphicon glyphicon-list-alt"></span></button>
+										</td>
+									</tr>	
 								</tbody>
 							</table>
 						</div>
@@ -50,6 +65,79 @@
 			<!-- /.modal-dialog -->
 		</div>
 		<!-- /.modal -->
+		
+		<div id="modal-comment" class="modal fade" 
+			role="dialog">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<center>
+							<h4 class="modal-title">
+								<strong>Comentário da Consulta</strong>
+							</h4>
+						</center>
+						<div>
+							<textarea ng-model="comentario" placeholder="Comentário..."
+								class="no-resize form-control" rows="3"></textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" ng-click="registerComment(comentario)" data-dismiss="modal">Comentar</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div id="modal-frequency-list" class="modal fade" 
+			role="dialog">
+			<div class="modal-large">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">
+							<strong>Lista de Frequência</strong>
+						</h4>
+						<h5>
+							Grupo <strong> {{tempConsultation.group.title}}</strong>
+							<br><br>
+							Consulta Realizada em <strong>{{tempConsultation.date}}</strong>
+						</h5>
+					</div>
+					<div class="modal-body">
+						<div id="container-details-consultation">
+							<center><h4>Participantes</h4></center>
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>Presença</th>
+										<th>Nome</th>
+									</tr>
+								</thead>
+								<tbody id="tbody-frequency-list">
+									<tr ng-repeat="patient in tempConsultation.group.patients">
+										<td><input type="checkbox" ng-click="addFrequencyList($index);"></td>
+										<td>{{patient.name}}</td>
+									</tr>	
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" ng-click="registerFrequencyList()" data-dismiss="modal">Registrar Frequência</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		
 		<div id="modal-reschedule" class="modal fade" role="dialog">
 			<div class="modal-medium">
@@ -71,15 +159,15 @@
 						<div class="form-group form-font-md">
 							<div class="col-md-4">
   								<label class="control-label" for="rsch-atualdate">Data Atual</label>
-  								<input class="form-control" id="rsch-atualdate" type="text" placeholder="Disabled input here..." disabled="">
+ 								<input class="form-control" ng-model="consultation.date"  id="rsch-atualdate" type="text" placeholder="Disabled input here..." disabled="">
   							</div>
   							<div class="col-md-4">
   								<label class="control-label" for="rsch-atual-timeinit">Hora de Início</label>
-  								<input class="form-control" id="rsch-atual-timeinit" type="text" disabled="">
+  								<input class="form-control" ng-model="consultation.start" id="rsch-atual-timeinit" type="text" disabled="">
   							</div>
   							<div class="col-md-4">
   								<label class="control-label" for="rsch-atual-timeend">Hora de Fim</label>
-  								<input class="form-control" id="rsch-atual-timeend" type="text" disabled="">
+  								<input class="form-control" ng-model="consultation.end" id="rsch-atual-timeend" type="text" disabled="">
   							</div>
 						</div>
 						
@@ -87,13 +175,13 @@
 							
 							<div class="col-md-4">
 								<label class="control-label" for="input-dtpckr-reschedule">Nova Data</label>
-								<input type='text' class="form-control" id="input-dtpckr-reschedule"/>
+								<input type='text' ng-model="newDate" class="form-control" id="input-dtpckr-reschedule"/>
 							</div>	                   			
 								
           						<div class="col-md-4">
 									<label class="control-label" for="rch-timeinit">Hora de Início</label>
 									<div class="bootstrap-timepicker timepicker">
-									<input id="rch-timeinit" type="text" class="input-schedule-info form-control input-small">
+									<input id="rch-timeinit" ng-model="newStarHour" type="text" class="input-schedule-info form-control input-small">
 									
 								</div>
 							</div>  	
@@ -101,14 +189,14 @@
 							<div class="col-md-4">
 									<label class="control-label" for="rch-timeend">Hora de Fim</label>
 									<div class="bootstrap-timepicker timepicker">
-									<input id="rch-timeend" type="text" class="input-schedule-info form-control input-small">
+									<input id="rch-timeend" ng-model="newEndHour" type="text" class="input-schedule-info form-control input-small">
 								</div>
 							</div>
 							
 							<div class="input-group col-md-12" id="div-email">
 								 <label for="textArea" class="col-lg-2 control-label">E-mail:</label>
      								 <div class="col-lg-10">
-       								 <textarea class="form-control" rows="3" id="textArea-email-rsch"></textarea>
+       								 <textarea ng-model="reason" class="form-control" rows="3" id="textArea-email-rsch"></textarea>
        								 <span class="help-block">Explique o motivo do reagendamento da consulta.</span>
      								</div>
 							</div>
@@ -116,7 +204,7 @@
 						</div>
 						
 						<div class="modal-footer">
-							<button id="btn-confirm-resch" type="button" class="btn btn-primary">Confirmar</button>
+							<button id="btn-confirm-resch" ng-click="registerReschedulingConsultation(consultation.id, newDate, newStarHour, newEndHour, reason)" ng-disabled="reason == null || newEndHour == null || newStarHour == null || newDate == null" type="button" class="btn btn-primary">Confirmar</button>
 							<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
 						</div>
 					</div>
@@ -138,7 +226,7 @@
 				<li class="service-item" ng-class="{'active':canShow(0)}" ng-click="setMenuIndex(0)"><a>Meu Calendário</a></li>
 				<li class="nav-divider"></li>
 				<li class="service-item" ng-class="{'active':canShow(1)}" ng-click="setMenuIndex(1)"><a>Cadastrar Agenda</a></li>
-				<li class="service-item" ng-class="{'active':canShow(3)}" ng-click="setMenuIndex(3); group=true;"><a>Grupos</a></li>
+				<li class="service-item" ng-class="{'active':canShow(3)}" ng-click="setMenuIndex(3); group=0; update=false;"><a>Grupos</a></li>
 				<li class="service-item" ng-class="{'active':canShow(2)}" ng-click="setMenuIndex(2)"><a>Gerar Relatório</a></li>
 				<!--<li class="nav-divider"></li>
 				<li class="service-item" id="2"><a>Minhas Consultas</a></li> -->
@@ -157,8 +245,7 @@
 				<div class="" >
 					<div class="">
 						<div id="title-header" class="">
-							<h3 id="modal-schedule-title" class="modal-title text-center">Cadastrar
-								Grupo</h3>
+							<h3 id="modal-schedule-title" class="modal-title text-center">Gerenciador de Grupos</h3>
 						</div>
 						<div class="modal-body">
 							
@@ -167,29 +254,53 @@
 									<h3 class="panel-title">Informações do Grupo</h3>
 								</div>	
 								<div class="panel-body" >
-									
-										<br>
-										<form class="form-horizontal" ng-show="group">
+										<div ng-show="group == 0">
+											<h3>Meus Grupos</h3>
+											<table class="table table-bordered table-hover">
+												<thead>
+													<tr>
+														<th>Nome</th>
+														<th>Tipo de Grupo</th>
+														<th>Ações</th>
+													</tr>
+												</thead>
+												<tbody id="tbody-schedules-description">
+													<tr ng-repeat="group in groups">
+														<td>{{group.title}}</td>
+														<td><span class="label label-success" ng-if="group.openGroup == true">Aberto</span><span class="label label-danger" ng-if="group.openGroup == false">Fechado</span></td>
+														<td>
+															<button class="btn btn-danger" ng-if="group.openGroup == true" ng-click="closeGroup(group)">Fechar</button>
+															<button class="btn btn-success" ng-if="group.openGroup == false" ng-click="openGroup(group)">Abrir</button>
+															<button class="btn btn-primary" ng-click="updateGroup(group)">Editar</button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<button class="btn btn-primary" ng-show="group == 0" ng-click="group = 1">Cadastrar Grupo</button>
+											
+										</div>
+										
+										<form class="form-horizontal" ng-show="group == 1">
 											<div id="row-and-schedules">
 												<div id="row-add-schedules">
 													<div class="row">
 														<div class="col-xs-12">
-															<input type="text" class="form-control" placeholder="Título do Grupo">
+															<input type="text" ng-required="true" ng-model="grupo.title" class="form-control" placeholder="Título do Grupo">
 														</div>
 													</div>
 													
-													<div class="row">
+													<div ng-init="grupo.openGroup = true" class="row">
 														<br>
 														<h5 style="text-align:left; margin-left:15px;">Tipo de Grupo:</h5>
 														<div class="form-check form-check-inline col-xs-1">
 														  <label class="form-check-label">
-														    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked="checked"> Aberto
+														    <input class="form-check-input" ng-model="tipo" type="radio" ng-click="grupo.openGroup = true" ng-required="!tipo" name="inlineRadioOptions" id="inlineRadio1" value="option1" > Aberto
 														  </label>
 														</div>
 														
 														<div class="form-check form-check-inline col-xs-1">
 														  <label class="form-check-label">
-														    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Fechado
+														    <input class="form-check-input" ng-model="tipo" type="radio" ng-click="grupo.openGroup = false" ng-required="!tipo" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Fechado
 														  </label>
 														</div>
 														<br>
@@ -197,7 +308,7 @@
 													
 													<div class="row">
 														<div class="col-xs-12">
-															<input type="text" class="form-control" placeholder="Número de Participantes">
+															<input type="text" ng-required="true" ng-model="grupo.patientLimit" class="form-control" placeholder="Número de Participantes">
 														</div>
 													</div>
 													<h5>Participantes</h5>
@@ -210,7 +321,12 @@
 															</tr>
 														</thead>
 														<tbody id="tbody-schedules-description">
-															<!-- Preenchida dinamicamente -->
+															<tr ng-repeat="patient in grupo.patients">
+																<td>{{patient.name}}</td>
+																<td>{{patient.cpf}}</td>
+																<td><button class="btn btn-danger" ng-click="removePatient($index)">
+																	<span class="glyphicon glyphicon-minus-sign" aria-hidden="true" style="font-size:20px"></span></button></td>
+															</tr>
 														</tbody>
 													</table>
 													<div class="row">
@@ -218,7 +334,7 @@
 														<br>
 														<h5>Seleção de Participantes</h5>
 														<div class="col-xs-12">
-															<input type="text" class="form-control" placeholder="Nome do Paciente">
+															<input type="text" ng-model="buscarPaciente" class="form-control" placeholder="Nome do Paciente">
 														</div>
 													</div>
 												</div>
@@ -232,13 +348,18 @@
 														<th>Adicionar</th>
 													</tr>
 												</thead>
-												<tbody id="tbody-schedules-description">
-													<!-- Preenchida dinamicamente -->
+												<tbody id="tbody-schedules-description" ng-if="buscarPaciente != ''">
+													<tr ng-repeat="patient in patients | filter: {name: buscarPaciente}" >
+														<td>{{patient.name}}</td>
+														<td>{{patient.cpf}}</td>
+														<td><button class="btn btn-primary" ng-click="addPatient(patient)">
+															<span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="font-size:20px"></span></button></td>
+													</tr>
 												</tbody>
 											</table>
 										</form>
 										<br>
-										<div ng-if="!group">
+										<div ng-if="group == 2">
 											<div class="panel-heading">
 												<h1 class="panel-title">Cadastrar Agenda</h1>
 											</div>
@@ -298,8 +419,10 @@
 												</div>
 											</div>
 										</div>
-									<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="group = !group">Cadastrar</button>
-									
+									<button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="group == 1 && update == true" ng-disabled="!grupo.title || !grupo.patientLimit" ng-click="saveUpdateGroup()">Salvar Modificações</button>
+									<button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="(group == 1 || group == 2) && update == false" ng-disabled="!grupo.title || !grupo.patientLimit || !tipo" ng-click="createGroup()">Cadastrar</button>
+									<button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="group == 1 && update == false" ng-disabled="!grupo.title || !grupo.patientLimit || !tipo" ng-click="group = 2">Incluir Horários</button>
+									<button type="button" class="btn btn-default" data-dismiss="modal" ng-show="group == 1 || group == 2" ng-click="group = 0; update=false">Voltar</button>
 								</div>
 							</div>
 							
@@ -315,7 +438,7 @@
 												<label class="col-lg-1 control-label">Início</label>
 												<div class="col-md-4">
 													<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
-														<input id="tmp-init-1" type="text" class="form-control input-small"> 
+														<input id="tmp-init-1" type="text" class="form-control input-small" data-template="modal" data-provide="timepicker" data-modal-backdrop="true"> 
 														<span class="input-group-addon">
 															<i class="glyphicon glyphicon-time"></i>
 														</span>
@@ -326,7 +449,7 @@
 												<div class="col-md-4">
 													<div
 														class="timepicker-end input-group bootstrap-timepicker timepicker">
-														<input id="tmp-end-1" type="text" class="form-control input-small" > 
+														<input id="tmp-end-1" type="text" class="form-control input-small" data-template="modal" data-modal-backdrop="true" data-provide="timepicker" > 
 														<span class="input-group-addon">
 															<i class="glyphicon glyphicon-time"></i>
 														</span>
@@ -347,6 +470,9 @@
 						</div>
 						<div class="modal-footer">
 							<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-click="saveConsultations(generetedSchedules)">
+								Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
+							</button>
+							<button type="submit" class="btn btn-primary" ng-if="isGroupConsultation == true" ng-disabled="generetedSchedules.length == 0 && grp == null" ng-click="saveConsultations(generetedSchedules)">
 								Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 							</button>
 							<button type="submit" class="btn btn-primary" ng-if="isFreeConsultation == true" ng-disabled="generetedSchedules.length == 0" 
@@ -406,6 +532,12 @@
 							<td>
 								<h5>Cancelada</h5>
 							</td>
+							<td>
+								<div class='legend-color color-black-2'></div>
+							</td>
+							<td>
+								<h5>Não Agendada</h5>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -420,7 +552,7 @@
 					</span>
 				</div>
 			</div> -->
-			<div  ui-calendar="uiConfig.calendar" ng-model="eventSources" class="calendar" ></div>
+			<div  ui-calendar="uiConfig.calendar" config="uiConfig.calendar" ng-model="eventSources" class="calendar" calendar="calendar" id="calendar" ></div>
 
 			
 		</div>
@@ -487,8 +619,7 @@
 			</div>
 		</div>
 		
-		<div class="panel panel-primary margin-right" 
-		id="panel-generate-report" ng-show="canShow(2)">
+		<div class="panel panel-primary margin-right" id="panel-generate-report" ng-show="canShow(2)">
 			<div class="panel-heading">
 				<h1 class="panel-title">Gerar Relatórios</h1>
 			</div>
@@ -498,11 +629,11 @@
 					<div id="date-report" class="form-group">
 						<div class="input-group col-md-4" id="date-left">
 							<label class="control-label" for="input-dtpckr-start-report">Início</label>
-							<input type='text' name="dateBegin" class="form-control" id="input-dtpckr-start-report"/>
+							<input ng-required="true" type='text' placeholder="Ex.: 26/05/2016" name="dateBegin" class="form-control" id="input-dtpckr-start-report"/>
 						</div>
 						<div class="input-group col-md-4" id="date-right">
 							<label class="control-label" for="input-dtpckr-end-report">Fim</label>
-							<input type='text' name="dateEnd" class="form-control" id="input-dtpckr-end-report"/>
+							<input ng-required="true" type='text' placeholder="Ex.: 28/05/2016" name="dateEnd" class="form-control" id="input-dtpckr-end-report"/>
 						</div>
 					</div>
 					<br><br><br><br>
@@ -553,6 +684,8 @@
 			</div>
 		</div>
 
+
+
 		<div class="modal fade" role="dialog" id="modal-cancel-consultation">
 			<div class="modal-dialog modal-md">
 				<div class="modal-content">
@@ -569,12 +702,12 @@
 					<div class="modal-body">
 						<div id="div-send-email">
 							<label>Enviar email para o paciente:</label>
-							<textarea placeholder="Escrever email..." id="text-area-email"
+							<textarea ng-model="message_cancel" placeholder="Escrever email..." id="text-area-email"
 								class="no-resize form-control" rows="3"></textarea>
 						</div>
 						<div class="margin-top">
 							<button id="btn-cancel-consultation" class="btn btn-danger"
-								value="" name="id">Sim, cancelar</button>
+								value="" name="id" ng-click="registerCancelConsultation(conToCancel,message_cancel)">Sim, cancelar</button>
 							<button class="btn btn-default" data-dismiss="modal">Voltar</button>
 						</div>
 					</div>
@@ -671,7 +804,11 @@
 											<label class="col-lg-1 control-label">Início</label>
 											<div class="col-md-5">
 												<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
+<<<<<<< HEAD
 													<input id="grupoInicio" type="text" ng-model="initSchTemp" class="form-control input-small"> 
+=======
+													<input type="text" ng-model="initGrpSchTemp" class="form-control input-small"> 
+>>>>>>> 279f65b26bf256b8b4fd4aef2fc42aed23f74ccf
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -680,15 +817,30 @@
 								
 											<label class="col-lg-1 control-label">Fim</label>
 											<div class="col-md-5">
+<<<<<<< HEAD
 												<div class="timepicker-end input-group bootstrap-timepicker timepicker">
 													<input id="grupoFim" type="text" class="form-control input-small" ng-model="endSchTemp"> 
+=======
+												<div
+													class="timepicker-end input-group bootstrap-timepicker timepicker">
+													<input type="text" class="form-control input-small" ng-model="endGrpSchTemp"> 
+>>>>>>> 279f65b26bf256b8b4fd4aef2fc42aed23f74ccf
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
 												</div>
 											</div>
+											<center>
+												<div ng class="checkbox">
+													<label>
+														<br>
+														<input ng-model="chGroupNowConsultation" type="checkbox" value="">Esta consulta será realizada agora!
+													</label>
+												</div>
+											</center>
 										</div>
 									</div>
+									
 							</form>
 							<form class="form-horizontal">
 									<br>
@@ -700,7 +852,11 @@
 											</tr>
 										</thead>
 										<tbody id="tbody-schedules-description">
-											<!-- Preenchida dinamicamente -->
+											<tr ng-show="grp != null">
+												<td>{{grp.title}}</td>
+												<td><button class="btn btn-danger" ng-click="removeGroup()">
+															<span class="glyphicon glyphicon-minus-sign" aria-hidden="true" style="font-size:15px"></span></button></td>
+											</tr>
 										</tbody>
 									</table>
 							
@@ -709,7 +865,7 @@
 											<div class="row">
 											<br>
 												<div class="col-xs-12">
-													<input type="text" class="form-control" placeholder="Pesquisar Grupo">
+													<input type="text" class="form-control" ng-model="buscarGrupo" placeholder="Pesquisar Grupo">
 												</div>
 											</div>
 										</div>
@@ -723,7 +879,11 @@
 											</tr>
 										</thead>
 										<tbody id="tbody-schedules-description">
-											<!-- Preenchida dinamicamente -->
+											<tr ng-repeat="group in groups | filter: {title: buscarGrupo}">
+												<td>{{group.title}}</td>
+												<td><button class="btn btn-primary" ng-click="addGroup(group)">
+															<span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="font-size:15px"></span></button></td>
+											</tr>
 										</tbody>
 									</table>
 								</form>
@@ -758,7 +918,33 @@
 													</span>
 												</div>
 											</div>
+											<center>
+												<div ng class="checkbox">
+													<label>
+														<br>
+														<input ng-model="chPatientNowConsultation" type="checkbox" value="">Esta consulta será realizada agora!
+													</label>
+												</div>
+											</center>
 										</div>
+										<br>
+										<table class="table table-bordered table-hover">
+											<thead>
+												<tr>
+													<th>Nome</th>
+													<th>CPF</th>
+													<th>Remover</th>
+												</tr>
+											</thead>
+											<tbody id="tbody-schedules-description">
+												<tr ng-show="ptt != null">
+													<td>{{ptt.name}}</td>
+													<td>{{ptt.cpf}}</td>
+													<td><button class="btn btn-danger" ng-click="removeConPatient()">
+																<span class="glyphicon glyphicon-minus-sign" aria-hidden="true" style="font-size:15px"></span></button></td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
 								</form>
 								<br>
@@ -767,7 +953,7 @@
 										<div id="row-add-schedules">
 											<div class="row">
 												<div class="col-xs-12">
-													<input type="text" class="form-control" placeholder="Nome do Paciente">
+													<input type="text" class="form-control" ng-model="buscarPacientePeloNome"  placeholder="Nome do Paciente">
 												</div>
 											</div>
 										</div>
@@ -781,8 +967,13 @@
 												<th>Selecionar</th>
 											</tr>
 										</thead>
-										<tbody id="tbody-schedules-description">
-											<!-- Preenchida dinamicamente -->
+										<tbody id="tbody-schedules-description" ng-if="buscarPacientePeloNome != ''">
+											<tr ng-repeat="p in patients | filter: {name: buscarPacientePeloNome}" >
+												<td>{{p.name}}</td>
+												<td>{{p.cpf}}</td>
+												<td><button class="btn btn-primary" ng-click="addConPatient(p)">
+													<span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="font-size:20px"></span></button></td>
+											</tr>
 										</tbody>
 									</table>
 								</form>
@@ -874,20 +1065,25 @@
 							</form>
 						</div>
 					</div>
-				</div>
+				
+				
+				</div> 
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-click="saveConsultations(generetedSchedules)">
+					<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-disabled="(initSchTemp == null || endSchTemp == null)" ng-click="saveConsultations(ptt,selectedDay,initSchTemp,endSchTemp)">
+						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
+					</button>
+					<button type="submit" class="btn btn-primary" ng-if="isGroupConsultation == true" ng-disabled="(initGrpSchTemp == null || endGrpSchTemp == null) || grp == null" ng-click="saveGroupConsultation(grp,selectedDay,initGrpSchTemp,endGrpSchTemp)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
 					<button type="submit" class="btn btn-primary" ng-if="isFreeConsultation == true" ng-disabled="generetedSchedules.length == 0" 
 						id="btn-confirm-schedules" ng-click="saveFreeConsultations(generetedSchedules)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
-					<button type="button" ng-if="isGroupConsultation" class="btn btn-primary">Criar Novo Grupo</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="isPacientConsultation = false; isFreeConsultation = false;">Voltar</button>
 				</div>
 			</div>
 		</div>
 	</div>
-
 </div>
+
+<div id="snackbar"></div>

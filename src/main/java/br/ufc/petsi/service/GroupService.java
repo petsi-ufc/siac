@@ -2,12 +2,16 @@ package br.ufc.petsi.service;
 
 import javax.inject.Named;
 
+import org.eclipse.jdt.internal.compiler.impl.Constant;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.GroupDAO;
+import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.model.Group;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
@@ -16,12 +20,13 @@ import br.ufc.petsi.util.Response;
 @Named
 public class GroupService {
 	
-	public String saveGroup(String json, GroupDAO gdao){
+	public String saveGroup(String json, Professional professional, GroupDAO gdao){
 		Gson gson = new Gson();
 		Response response = new Response();
 		
 		try{
 			Group group = gson.fromJson(json, Group.class);
+			group.setFacilitator(professional);
 			gdao.save(group);
 		}catch (Exception e) {
 			response.setCode(Response.ERROR);
@@ -45,6 +50,8 @@ public class GroupService {
 			old.setTitle(group.getTitle());
 			old.setOpenGroup(group.isOpenGroup());
 			old.setPatientLimit(group.getPatientLimit());
+			
+			System.out.println("[UPDATE at UPDATE GROUP]: "+old.getTitle());
 			gdao.update(old);
 			
 		}catch (Exception e) {
@@ -63,19 +70,24 @@ public class GroupService {
 		Response response = new Response();
 		
 		try{
+			System.out.println(json);
 			Group group = gson.fromJson(json, Group.class);
 			group = gdao.find(group.getId());
+			System.out.println("[CLOSE GROUP]: "+(group == null));
 			group.setOpenGroup(false);
 			gdao.update(group);
+			
+			response.setCode(Response.SUCCESS);
+			response.setMessage("O grupo foi fechado!");
+			return gson.toJson(response);
 		}catch (Exception e) {
+			System.out.println(e);
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível fechar o grupo");
 			return gson.toJson(response);
 		}
 		
-		response.setCode(Response.SUCCESS);
-		response.setMessage("O grupo foi fechado!");
-		return gson.toJson(response);
+		
 	}
 	
 	public String openGroup(String json, GroupDAO gdao){
@@ -87,25 +99,30 @@ public class GroupService {
 			group = gdao.find(group.getId());
 			group.setOpenGroup(true);
 			gdao.update(group);
+			
+			
+			response.setCode(Response.SUCCESS);
+			response.setMessage("O grupo foi aberto!");
+			return gson.toJson(response);
 		}catch (Exception e) {
+			System.out.println(e);
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível abrir o grupo");
 			return gson.toJson(response);
 		}
-		
-		response.setCode(Response.SUCCESS);
-		response.setMessage("O grupo foi aberto!");
-		return gson.toJson(response);
 	}
 	
-	public String addPatient(String json, GroupDAO gdao){
+	public String addPatient(String json, GroupDAO gdao, UserDAO udao){
 		Gson gson = new Gson();
 		Response response = new Response();
 		
 		try{
 			Group group = gson.fromJson(json, Group.class);
 			for (Patient patient : group.getPatients()) {
-				gdao.addPatient(group, patient);
+				if(udao.getByCpf(patient.getCpf(), Constants.ROLE_PATIENT)  == null){
+					udao.save(patient);
+				}
+				gdao.addPatient(group, (Patient)udao.getByCpf(patient.getCpf(), Constants.ROLE_PATIENT));
 			}
 			
 			response.setCode(Response.SUCCESS);
@@ -121,7 +138,7 @@ public class GroupService {
 		
 	}
 	
-	public String removePatient(String json, GroupDAO gdao){
+	public String removePatient(String json, GroupDAO gdao, UserDAO udao){
 		Gson gson = new Gson();
 		Response response = new Response();
 		
@@ -129,7 +146,7 @@ public class GroupService {
 			
 			Group group = gson.fromJson(json, Group.class);
 			for (Patient patient : group.getPatients()) {
-				gdao.removePatient(group, patient);
+				gdao.removePatient(group, (Patient)udao.getByCpf(patient.getCpf(), Constants.ROLE_PATIENT));
 			}
 			
 			response.setCode(Response.SUCCESS);
@@ -162,20 +179,53 @@ public class GroupService {
 		}
 	}
 	
-	public String getAllGroups(String json, GroupDAO gdao){
+	public String getAllGroups(Professional professional, GroupDAO gdao){
 		Gson gson = new Gson();
 		ObjectMapper mapper = new ObjectMapper();
 		Response response = new Response();
 		try{
+			//professional.setListGroups(gdao.getAllGroups(professional));
+			response.setCode(Response.SUCCESS);
+			response.setMessage(mapper.writeValueAsString(gdao.getAllGroups(professional)));
+			return gson.toJson(response);
 			
-			Professional professional = gson.fromJson(json, Professional.class);
-			professional.setListGroups(gdao.getAllGroups(professional));
-			return mapper.writeValueAsString(professional);
-			
+		}catch (Exception e) {
+			System.out.println("[ERRO at getAllGroups]: "+e);
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível listar os grupos deste profissional!");
+			return gson.toJson(response);
+		}
+	}
+	
+	public String getGroupsFree(GroupDAO gdao){
+		Gson gson = new Gson();
+		ObjectMapper mapper = new ObjectMapper();
+		Response response = new Response();
+		try{
+			response.setCode(Response.SUCCESS);
+			response.setMessage(mapper.writeValueAsString(gdao.getGroupsFree()));
+			return gson.toJson(response);
+		}catch (Exception e) {
+			System.out.println(e);
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível listar os grupos!");
+			return gson.toJson(response);
+		}
+	}
+	
+	public String getGroupsOfPatient(Patient patient, GroupDAO gdao){
+		Gson gson = new Gson();
+		ObjectMapper mapper = new ObjectMapper();
+		Response response = new Response();
+		
+		try{
+			response.setCode(Response.SUCCESS);
+			response.setMessage(mapper.writeValueAsString(gdao.getGroupsByPatient(patient)));
+			return gson.toJson(response);
 		}catch (Exception e) {
 			e.printStackTrace();
 			response.setCode(Response.ERROR);
-			response.setMessage("Ops, não foi possível listar os grupos deste profissional!");
+			response.setMessage("Ops, não foi possível retornar seus grupos!");
 			return gson.toJson(response);
 		}
 	}
