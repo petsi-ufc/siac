@@ -27,7 +27,7 @@ public class HBFrequency implements FrequencyDAO{
 		FrequencyList frequency = new FrequencyList();
 		
 		Query query = (Query) manager.createQuery("SELECT freq FROM Frequency freq WHERE freq.consultation = :idConsultation");
-		query.setParameter("idConsultation", consultation.getId());
+		query.setParameter("idConsultation", consultation);
 		
 		frequency.setFrequencyList(query.getResultList());
 		
