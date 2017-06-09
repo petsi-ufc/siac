@@ -94,6 +94,13 @@
 			});
 		}
 		
+		function _getFrequencyList(params, callback){
+			$http.post('/siac/getFrequency?json='+JSON.stringify(params), {"json":params}).then(callback, function(err){
+				console.log("Error at get frequency list");
+				console.log(err);
+			});
+		}
+		
 		function _registerComment(params, callback){
 			$http.post('/siac/registerComment?json='+JSON.stringify(params), {"json":params}).then(callback, function(err){
 				console.log("Error at register comment");
@@ -112,7 +119,8 @@
 			modifyTypeGroup : _modifyTypeGroup,
 			addAndRemovePatient : _addAndRemovePatient,
 			registerFrequency: _registerFrequency,
-			registerComment: _registerComment
+			registerComment: _registerComment,
+			getFrequencyList: _getFrequencyList
 		}
 	});
 })();

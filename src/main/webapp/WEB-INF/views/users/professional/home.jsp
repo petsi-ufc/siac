@@ -48,7 +48,7 @@
 											<button type="button" value="{{e.id}}" class="btn btn btn-warning action-reschedule-consultation margin-left" ng-disabled="e.state == 'CD' || e.state == 'RD'" ng-click="reschedulingConsultation(e)">Reagendar<span class="glyphicon glyphicon-time"></span></button>
 										</td>
 										<td>
-											<button type="button" value="{{e.id}}" class="btn btn btn-primary" ng-show="e.isGroup" ng-disabled="e.state != 'RD'" ng-click="showFrequencyList(e.group.id, e.date)" title="Frequência" ><span class="glyphicon glyphicon-list"></span></button>
+											<button type="button" value="{{e.id}}" class="btn btn btn-primary" ng-show="e.isGroup" ng-disabled="e.state != 'RD'" ng-click="showFrequencyList(e.group.id, e.date, e.id)" title="Frequência" ><span class="glyphicon glyphicon-list"></span></button>
 											<button type="button" value="{{e.id}}" class="btn btn btn-info" ng-disabled="e.state != 'RD'" ng-click="showComment(e.id)" title="Comentário"><span class="glyphicon glyphicon-list-alt"></span></button>
 										</td>
 									</tr>	
@@ -138,6 +138,85 @@
 				</div>
 			</div>
 		</div>
+		
+		
+		<div id="modal-consultation-group" class="modal fade" 
+			role="dialog">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">
+							<strong>Consultas do {{groupVisibleConsultation.title}}</strong>
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div id="container-details-consultation">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>Data da Consulta</th>
+										<th>Visualizar Frequência</th>
+									</tr>
+								</thead>
+								<tbody id="tbody-frequency-list">
+									<tr ng-repeat="consultation in groupVisibleConsultation.listConsultations">
+										<td>{{consultation.dateInit | date:"dd/MM/yyyy 'às' h:mma"}}</td>
+										<td><button type="button" class="btn btn-primary" ng-click="getFrequencyList(consultation.id)" data-dismiss="modal">Lista de Frequência</button></td>
+									</tr>	
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div id="modal-view-frequency-group" class="modal fade" 
+			role="dialog">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">
+							<strong>Frequência do dia {{frequencyListOfGroup.frequencyList[0].consultation.dateInit | date:"dd/MM/yyyy 'às' h:mma"}}</strong>
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div id="container-details-consultation">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>Presente</th>
+										<th>Nome</th>
+									</tr>
+								</thead>
+								<tbody id="tbody-frequency-list">
+									<tr ng-repeat="frequency in frequencyListOfGroup.frequencyList">
+										<td><span class="label label-success" ng-if="frequency.presence == true">Presente</span><span class="label label-danger" ng-if="frequency.presence == false">Ausente</span></td>
+										<td>{{frequency.patient.name}}</td>
+									</tr>	
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		
 		<div id="modal-reschedule" class="modal fade" role="dialog">
 			<div class="modal-medium">
@@ -272,6 +351,7 @@
 															<button class="btn btn-danger" ng-if="group.openGroup == true" ng-click="closeGroup(group)">Fechar</button>
 															<button class="btn btn-success" ng-if="group.openGroup == false" ng-click="openGroup(group)">Abrir</button>
 															<button class="btn btn-primary" ng-click="updateGroup(group)">Editar</button>
+															<button class="btn btn-default" ng-click="showConsultationOfGroup(group)">Ver Frequências</button>
 														</td>
 													</tr>
 												</tbody>
@@ -421,7 +501,7 @@
 										</div>
 									<button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="group == 1 && update == true" ng-disabled="!grupo.title || !grupo.patientLimit" ng-click="saveUpdateGroup()">Salvar Modificações</button>
 									<button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="(group == 1 || group == 2) && update == false" ng-disabled="!grupo.title || !grupo.patientLimit || !tipo" ng-click="createGroup()">Cadastrar</button>
-									<button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="group == 1 && update == false" ng-disabled="!grupo.title || !grupo.patientLimit || !tipo" ng-click="group = 2">Incluir Horários</button>
+									<!-- <button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="group == 1 && update == false" ng-disabled="!grupo.title || !grupo.patientLimit || !tipo" ng-click="group = 2">Incluir Horários</button>-->
 									<button type="button" class="btn btn-default" data-dismiss="modal" ng-show="group == 1 || group == 2" ng-click="group = 0; update=false">Voltar</button>
 								</div>
 							</div>
@@ -752,6 +832,7 @@
 							</div>
 						</div>
 					</div>
+					<!-- INÍCIO - TESTE  -->
 					<!-- <div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Gerador de Horários</h3>
@@ -791,8 +872,8 @@
 								</button>
 							</div>
 						</div>
-					</div> -->
-					
+					</div>--> 
+					<!-- FIM - TESTE  -->
 					<div class="panel panel-primary" ng-show="isGroupConsultation == true">
 						<div class="panel-heading">
 							<h3 class="panel-title">Cadastrar com grupo</h3>
@@ -1077,6 +1158,109 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- VERIFICAR AS FUNCIONALIDADES DESTA MODAL COM BASE NA MASTER DO GIT (da versão anteior)  -->
+	<div id="modal-day-scheduler" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div id="title-header" class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">x</button>
+					<h3 id="modal-schedule-title" class="modal-title text-center">Cadastrar
+						Horário</h3>
+				</div>
+				<div class="modal-body">
+					<h4 class="modal-description" id="modal-description-body"></h4>
+					<label id="label-date-clicked" class="hidden"></label>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Gerador de Horários</h3>
+						</div>
+						<div class="panel-body">
+							<form class="form-horizontal">
+								<div class="form-group">
+									<label for="input-count-vacancy" class="col-md-4 control-label">Quantidade
+										de Vagas:</label>
+									<div class="col-md-5">
+										<input type="number" min="1" ng-model="vacancyAmount"  
+											class="form-control input-schedule-info"
+											id="input-count-vacancy">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="input-count-time" class="col-md-4 control-label">Tempo
+										por Consulta:</label>
+									<div class="col-md-5">
+										<input type="number" min="1" ng-model="timePerConsult" 
+											class="form-control input-schedule-info"
+											id="input-count-time" placeholder="Minutos">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="input-count-time-init" class="col-md-4 control-label">Hora de Início:</label>
+									<div class="col-md-5 col-sm-offset-4 input-group bootstrap-timepicker timepicker">
+										<input id="tmp-init-0" type="text" class="input-schedule-info form-control input-small" ng-model="timeInit">
+										<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+									</div>
+								</div>
+							</form>
+							<div class="col-md-offset-5">
+								<button type="button" class="btn btn-primary" id="btn-generate-schedules">
+									Gerar Horários <i class="glyphicon glyphicon-time"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Horários</h3>
+						</div>
+						<div class="panel-body" id="panel-schedules-hours">
+							<form class="form-horizontal">
+								<div id="row-add-schedules-hours">
+									<div class="row row-schedule-id">
+										<label class="col-lg-1 control-label">Início</label>
+										<div class="col-md-4">
+											<div
+												class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
+												<input id="tmp-init-1" type="text"  
+													class="form-control input-small"> <span
+													class="input-group-addon"><i
+													class="glyphicon glyphicon-time"></i></span>
+											</div>
+										</div>
+	
+										<label class="col-lg-1 control-label">Fim</label>
+										<div class="col-md-4">
+											<div
+												class="timepicker-end input-group bootstrap-timepicker timepicker">
+												<input id="tmp-end-1" type="text" class="form-control input-small"> 
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-time"></i>
+												</span>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<button type="button" class="btn btn-primary add-schedule">
+												<span class="glyphicon glyphicon glyphicon-plus"></span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary"
+						id="btn-confirm-schedules-hours">
+						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
+					</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
 
 <div id="snackbar"></div>

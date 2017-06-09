@@ -21,7 +21,8 @@ public class FrequencyService {
 		
 		try{
 		
-			FrequencyList frequencyList = mapper.readValue(json, FrequencyList.class);
+			//FrequencyList frequencyList = mapper.readValue(json, FrequencyList.class);
+			FrequencyList frequencyList = gson.fromJson(json, FrequencyList.class);
 			
 			if(frequencyList.getFrequencyList().size() == 0){
 				response.setCode(Response.ERROR);
@@ -50,17 +51,22 @@ public class FrequencyService {
 		ObjectMapper mapper = new ObjectMapper();
 		Response response = new Response();
 		
+		System.out.println("[GET FREQUENCY LIST]: "+json);
 		try{
-			Consultation consultation = mapper.readValue(json, Consultation.class);
+			Consultation consultation = gson.fromJson(json, Consultation.class);
+			System.out.println("[GET FREQUENCY LIST]: "+consultation.getId());
+			
+			FrequencyList frequency = freqDAO.getFrequencyList(consultation);
+			System.out.println("[FREQUENCY]: "+(frequency == null));
 			
 			response.setCode(Response.SUCCESS);
-			response.setMessage(mapper.writeValueAsString(freqDAO.getFrequencyList(consultation)));
+			response.setMessage(mapper.writeValueAsString(frequency));
 			return gson.toJson(response);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
 			response.setCode(Response.ERROR);
-			response.setMessage("Não foi possível registrar a frequência da consulta");
+			response.setMessage("Não foi possível retornar a frequência da consulta");
 			return gson.toJson(response);
 		}	
 	}

@@ -1,4 +1,46 @@
+var scheduleManager = new ScheduleManager();
+
+var MAP_WEEK_DAYS = "map_week_days";
+var TABLE_DAYS = "table_days";
+var MAP_SELECTED_DAYS = "map_selected_days";
+var REGISTER_ACTION = "Cadastrar";
+
+
+var CALENDAR_ID = "#calendar_professional";
+var SELECT_REPEAT_SCHEDULE_ID = "#select-repeat-schedule";
+var MAP_SELECTED_DAYS = "map_selected_days";
+var INPUT_FREQUENCI = "input_frequenci";
+var TABLE_DAYS = "table_days";
+
+
+var INPUT_VACANCY = "input_vacancy";
+var INPUT_COUNT_TIME = "input_count_time";
+
+var MAP_DAYS = "map_days"; 
+var MAP_WEEK_DAYS = "map_week_days";
+
+//Constantes usadas para indentificar qual a
+//frequencia de repetição dos horários.
+var MONTHLY_FREQUENCI = "monthly";
+var WEEKLY_FREQUENCI = "weekly";
+
+//Variável usada para saber a frequencia das repetições
+//dos horários.
+var frequenci = "w";
+
+//Mapa com todas as variáveis
+var mapVars = new Map();
+
+//Adicionando elementos DOM no mapa de variaveis
+mapVars.set(CALENDAR_ID, $("#calendar_professional"));
+mapVars.set(SELECT_REPEAT_SCHEDULE_ID, $("#select-repeat-schedule"));
+mapVars.set(INPUT_FREQUENCI, $("#input-frequenci"));
+mapVars.set(TABLE_DAYS, $("#tbody-table-days"));
+mapVars.set(INPUT_VACANCY, $("#input-count-vacancy"));
+mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
+
 (function(){
+	
 	
 	initTimepicker("tmp-init-1",null);
 	initTimepicker("tmp-end-1",null);
@@ -75,7 +117,20 @@
 		$scope.registerFrequencyList = _registerFrequencyList;
 		$scope.showComment = _showComment;
 		$scope.registerComment = _registerComment;
+		$scope.showConsultationOfGroup = _showConsultationOfGroup;
+		$scope.getFrequencyList = _getFrequencyList;
+		
 
+		$("#input-frequenci").keypress(function(e){
+			setFrequenciDays();
+		});
+		
+		onButtonAddScheduleClick();
+		onSelectScheduleRepeatClick();
+		onButtonRepeatScheduleDayClick();
+		onButtonGenerateSchedules();
+
+		onButtonConfirmSchedulesClick();
 		
 		initTimePickers();
 		configureModal();
@@ -117,6 +172,7 @@
 
 		
 		function getConsultations(a,b,c){
+			
 			showSnack("Carregando as consultas...");
 			professionalService.getProfessionalConsultations(function(data){
 				
@@ -125,7 +181,6 @@
 					var title = "";
 					if(value.state == "FR")	title = "Livre";
 					else title = value.group == null? value.patient.name:value.group.title;
-					
 					var e = {
 						title: title,
 						color: colors.get(value.state).hex,
@@ -134,7 +189,8 @@
 						end: value.dateEnd,
 						date: value.date,
 						id: value.id,
-						isGroup: value.group != null
+						isGroup: value.group != null,
+						comment: value.comment
 					};
 					if(value.group != null)
 						e.group = value.group;
@@ -145,16 +201,16 @@
 			});
 		}
 		
-		function _showFrequencyList(id, date){
+		function _showFrequencyList(idGroup, date, idConsultation){
 			$("#modal-frequency-list").modal("show");
 			$scope.tempConsultation = {};
-			$scope.tempConsultation.group = findGroup(id,$scope.groups);
+			$scope.tempConsultation.group = findGroup(idGroup,$scope.groups);
 			for (var i in $scope.tempConsultation.group.patients){
 				$scope.frequencyList.push({
 					group:{id:$scope.tempConsultation.group.id},
 					patient:{id:$scope.tempConsultation.group.patients[i].id},
 					presence: false,
-					consultation: {id:$scope.tempConsultation.id}
+					consultation: {id:idConsultation}
 				});
 			}
 			$scope.tempConsultation.date = date;
@@ -173,6 +229,28 @@
 					location.reload(); 
 				}else{
 					console.log(response.data);
+					alertMessage(message,null,ALERT_ERROR);
+				}
+			});
+		}
+		
+		function _showConsultationOfGroup(group){
+			$("#modal-consultation-group").modal("show");
+			$scope.groupVisibleConsultation = group;
+		}
+		
+		function viewFrequencyListOfGroup(frequency){
+			$scope.frequencyListOfGroup = frequency;
+			console.log($scope.frequencyListOfGroup);
+			$("#modal-view-frequency-group").modal("show");
+		}
+		
+		function _getFrequencyList(idConsultation){
+			professionalService.getFrequencyList({id:idConsultation}, function(response){
+				var message = response.data.message;
+				if(response.data.code == 200){
+					viewFrequencyListOfGroup(JSON.parse(message));
+				}else{
 					alertMessage(message,null,ALERT_ERROR);
 				}
 			});
@@ -611,4 +689,586 @@ function findGroup(id, groups){
 			return groups[i];
 		}
 	}
+}
+
+//TODO: Testando a geração de horários automática
+
+//Mapa que conterá todos os dias da semana
+// que se repetirão, Mon, Tue...
+// CHAVE: dia da semana
+// VALOR: booleano, indicando se o dia foi marcado ou não
+var mapSelectedDays = new Map();
+mapSelectedDays.set("Monday", false);
+mapSelectedDays.set("Sunday", false);
+mapSelectedDays.set("Tuesday", false);
+mapSelectedDays.set("Wednesday", false);
+mapSelectedDays.set("Thursday", false);
+mapSelectedDays.set("Friday", false);
+mapSelectedDays.set("Saturday", false);
+
+mapVars.set(MAP_SELECTED_DAYS, mapSelectedDays);
+
+//Mapa usado para preencher a tabela de 
+//datas com dias da semana em português 
+var mapWeekDays = new Map();
+mapWeekDays.set("Monday", "Segunda-Feira");
+mapWeekDays.set("Tuesday", "Terça-Feira");
+mapWeekDays.set("Wednesday", "Quarta-Feira");
+mapWeekDays.set("Thursday", "Quinta-Feira");
+mapWeekDays.set("Friday", "Sexta-Feira");
+mapWeekDays.set("Saturday", "Sábado");
+mapWeekDays.set("Sunday", "Domingo");
+
+mapVars.set(MAP_WEEK_DAYS, mapWeekDays);
+
+function inicializateScheduler(){
+	$("#input-frequenci")
+}
+
+function setFrequenciDays(){
+	var inputFrequenci = $("#input-frequenci");
+	val = inputFrequenci.val() <= 48 ? inputFrequenci.val() : 48;
+	if(val == "")
+		return;
+	
+	var mapDays = mapVars.get(MAP_SELECTED_DAYS);	
+	
+	if(val != ""){
+		var resultMap = getDateByDays(mapDays, val);
+		mapVars.set(MAP_DAYS, resultMap);
+		
+		scheduleManager.updateSchedules(resultMap);
+		
+		//Preenchendo a tabela de dias;
+		fillTableDays(resultMap);
+	}
+}
+
+function onButtonRepeatScheduleDayClick(){
+	$(".btn-day").click(function(){
+		
+		var btn = $(this);
+		
+		var mapDays = mapVars.get(MAP_SELECTED_DAYS);
+		//Pegando o nome do dia do botão clicado
+		var dayName = btn.val();
+		
+		if(btn.hasClass("btn-success")){
+			btn.removeClass("btn-success");
+			
+			mapDays.set(dayName, false);
+			
+		}else{
+			//Setando o dia clicado como true na lista de dias selecionados
+			mapDays.set(dayName, true);
+			
+			btn.addClass("btn-success");
+		}
+		setFrequenciDays();
+	});
+}
+
+function onSelectScheduleRepeatClick(){
+	//var select = mapVars.get(SELECT_REPEAT_SCHEDULE_ID);
+	var select = $(SELECT_REPEAT_SCHEDULE_ID); 
+	select.change(function(){
+		var inputFrequenci = $("#input-frequenci");
+		
+		var selectVal = $(this).find(":selected").val();
+			
+		/*
+		 * Se a frequencia selecionada for semanalmente, a variável global
+		 * frequenci será "w" (Informa ao moment que o salto entre as datas será por semana)
+		 * caso contrário o valor será "M" (Informa ao moment que o salto entre as datas será por mês)
+		*/
+		if(selectVal == WEEKLY_FREQUENCI){
+			frequenci = "week";
+			inputFrequenci.attr("placeholder","Quantidade de Semanas");
+		}else{
+			frequenci = "months";
+			inputFrequenci.attr("placeholder","Quantidade de Meses");
+		}
+		setFrequenciDays();
+		
+	});
+}
+
+function fillTableDays(mapDays){
+	var table = $("#tbody-table-days");
+	
+	var mapPtBrDays = mapVars.get(MAP_WEEK_DAYS);
+	console.log(table);
+	//Removendo as linhas antigas
+	table.find("td").remove();
+	
+	
+	mapDays.forEach(function(value, key, mapDays){
+		row = $("<tr>");
+		data = '"<td class="day-name">'+mapPtBrDays.get(value)+'</td>"';
+		data += '"<td>'+key+'</td>"';
+		
+		var isScheduleRegistered = scheduleManager.isScheduleRegistered(key);
+		
+		var hiddenAddSchedule = "";
+		var hiddenEditSchedule = "hidden";
+		var disableRemoveDay = "";
+		
+		if(isScheduleRegistered){
+			hiddenAddSchedule = "hidden";
+			hiddenEditSchedule = "";
+			disableRemoveDay = "disabled"
+		}
+		
+		
+		var trashData = '<td><button value="'+key+'" class="'+disableRemoveDay+' btn btn-danger action-day remove-day"><i class="glyphicon glyphicon-trash"></button></i></td>';
+		
+		data += '<td>'+
+			'<button type="button" value="'+key+'" class="'+hiddenAddSchedule+' action-day add-schedule btn btn-primary">Cadastrar <i class="glyphicon glyphicon-time"></i></button>'
+			+'<button type="button" value="'+key+'" class="'+hiddenEditSchedule+' action-day edit-schedule btn btn-warning">Editar <i class="glyphicon glyphicon-pencil"></i></button>'
+			+'</td>';
+		data += trashData;
+		
+		row.append(data);
+		table.append(row);
+	});
+	
+	onActionTableClick();
+}
+
+function onActionTableClick(){
+	map = mapVars.get(MAP_DAYS);
+	mapButtonDays = mapVars.get(MAP_SELECTED_DAYS);
+	$(".action-day").click(function(){
+		action = $(this);
+		var key = action.attr("value");
+		
+		//Removendo a cor vermelha dos timepickers inválidos.
+		$(".row-schedule-id").removeClass("has-error");
+		
+		
+		if(action.hasClass("add-schedule")){
+			showModalSchedules(key, REGISTER_ACTION);
+		}else if(action.hasClass("remove-day") && !action.hasClass("disabled")){
+			var dayName = map.get(key);
+			
+			//Removendo a data selecionada e preenchendo a tabela novamente
+			map.delete(key);
+			fillTableDays(map);
+			
+			//Removendo todos os horários cadastrados do dia removido.
+			scheduleManager.removeScheduleDay(key);
+			
+			//Conferindo se ainda existe uma ocorrencia do dia da semana exluído
+			if(!hasValue(dayName, map)){
+				//Removendo a classe que deixa o botão verde, já que não existe mais ocorrência do dia
+				//vinculado a ele.
+				$("#days-buttons").find("button[value="+dayName+"]").removeClass("btn-success");
+				
+				//Informando que o dia não está mais selecionado
+				mapButtonDays.set(dayName, false);
+			}
+		}else if(action.hasClass("edit-schedule")){
+			var scheduleDay = scheduleManager.getSchedulesMap().get(key);
+			var listSchedules = scheduleDay.getListSchedules();
+			//setEditModalSchedule(key, listSchedules);
+		}
+	});
+}
+
+function getDateByDays(mapDays, repetition){
+	var date = moment();
+	date.locale('en');
+	
+	//Lista de dias selecionados
+	listDays = [];
+
+	//Variável usada para informar a salto entre a quantidade de semanas ou meses
+	var salt = 1;
+	
+	//Adicionando os dias selecionados na lista listDays
+	mapDays.forEach(function(value, key, mapDays){
+		if(value){
+			listDays.push(key);
+		}
+	});
+	
+	/*Variável usada para retorno da função.
+	 * Mapa contendo nome do dia da semana e sua respectiva data.
+	 * Chave -> data
+	 * Value -> dia da semana
+	*/
+	var resultMap = new Map();
+	
+	listDays.forEach(function(el, index, listDays){
+		var tempDate = moment();
+		tempDate.locale('en');
+		
+		//Procurando a primeira ocorrência do dia selecionado.
+		for(var i = 0; i < 7; i++){
+			//Pegando o nome do dia.
+			day = tempDate.format('dddd');
+			if(day == el){
+				
+				//Depois de encontrado, todas as datas com base na frequencia (mensal ou semanal) são obtidas
+				for(var j = 0; j < repetition; j++){
+					//Pegando o dia
+					newDate = tempDate.format("DD/MM/YYYY");
+					
+					//Adicionando o dia no mapa.
+					resultMap.set(newDate, day);
+					
+					//Pulando para a data especificada passando a quantidade e a frequencia(meses ou dias)
+					tempDate.add(salt, frequenci);
+					
+					if(frequenci == "months"){
+						tempDate.startOf("month");
+						
+						for(var z = 0; z < 7; z++){
+							//Pegando o nome do dia.
+							_day = tempDate.format('dddd');
+							
+							if(_day == el){
+								break;
+							}
+							tempDate.add(1, "day");
+						}
+					}
+				}	
+				break;
+			}
+			//Passando pro dia seguinte
+			tempDate.add(1, "day");
+		}
+		
+	});	
+	return resultMap;
+}
+
+
+function showModalSchedules(date, action){
+	
+	var inputVacancy = mapVars.get(INPUT_VACANCY);
+	var inputTimePerConsult = mapVars.get(INPUT_COUNT_TIME);
+	
+	inputVacancy.val("");
+	inputTimePerConsult.val("");
+	
+	var modal =	$("#modal-day-scheduler");
+	var modalDescription = $("#modal-description-body");
+	var labelDay = $("#label-date-clicked");
+	
+	//Removendo todos os timepickers clonados.
+	modal.find(".cloned-timepicker").remove();
+	
+	//Resetando os ids dos timepickers;
+	idTimepickersInit = 1;
+	idTimepickersEnd = 1;
+	
+	initTimepicker("tmp-init-0", null);
+	initTimepicker("tmp-init-1", null);
+	initTimepicker("tmp-end-1", null);
+	
+	$("#tmp-init-1").removeAttr("disabled");
+	$("#tmp-end-1").removeAttr("disabled");
+	
+	today = moment(date,"DD/MM/YYYY").format("dddd");
+	
+	//Mostrando o modal
+	$("#modal-schedule-title").text(action+" Horários");
+	modalDescription.html(action+" consultas para o dia <strong>"+date+" ("+today+")</strong>");
+	labelDay.text(date);
+	
+	modal.modal('show');
+		
+}
+
+function onButtonAddScheduleClick(){
+	$(".add-schedule").click(function(){
+		
+		
+		//Pegando o último timepicker para obter o último horário.
+		var listTimers = $(".timepicker-end input");
+		var idLastTimePicker = listTimers[listTimers.length - 1];
+		
+		hour = $("#"+idLastTimePicker.id).data("timepicker").hour;
+		minute = $("#"+idLastTimePicker.id).data("timepicker").minute;
+		
+		momentTime = moment();
+		momentTime.hours(hour);
+		
+		var timePerconsult = $("#input-count-time").val() ? $("#input-count-time").val() : 15;
+		
+		momentTime.minutes(minute);
+		momentTime.add('m', timePerconsult);
+		tempInit = momentTime.format("HH:mm");
+		
+		momentTime.add('m', timePerconsult);
+		tempEnd = momentTime.format("HH:mm")
+		
+		var time = {"timeInit":tempInit, "timeEnd":tempEnd, "idSchedule":null};
+		addSchedules(time);
+	});
+}
+
+function onButtonGenerateSchedules(){  
+	$("#btn-generate-schedules").bind("click", function(event){
+		
+		//Removendo todos os timepickers clonados 
+		$(".cloned-timepicker").remove();
+		//Removendo a classe de input inválido de todos os timepickers.
+		$(".row-schedule-id").removeClass("has-error");
+		
+		var inputVacancy = $("#input-count-vacancy");
+		var inputTimePerConsult = $("#input-count-time");
+		
+		var vacancy = parseInt(inputVacancy.val());
+		var timePerConsult = parseInt(inputTimePerConsult.val());
+		var timeInit = getTimePickerHourAndMinutes("tmp-init-0");
+		
+		hour = timeInit["hour"];
+		minutes = timeInit["minute"];
+		
+		momentTime = moment();
+		momentTime.hours(hour);
+		momentTime.minutes(minutes);
+		
+		tempInit = momentTime.format("HH:mm");
+		momentTime.add('m', timePerConsult);
+		tempEnd = momentTime.format("HH:mm");
+		
+		//Iniciando os 2 timepickers fixos do modal
+		$("#tmp-init-1").timepicker('setTime', tempInit);
+		$("#tmp-end-1").timepicker('setTime', tempEnd);
+		
+		//Esse for adiciona novos timepickers em relação a quantidade
+		//de vagas e o tempo para cada consulta. Como já existe 2 timepickers fixos
+		//a quantidade informada pelo usuário deve ser diminuida em 1
+		for(var i = 0; i < vacancy-1; i++){
+			tempInit = momentTime.format("HH:mm");
+			momentTime.add('m', timePerConsult);
+			tempEnd = momentTime.format("HH:mm");
+			
+			var time = {"timeInit":tempInit, "timeEnd":tempEnd, "idSchedule":0};
+			addSchedules(time);
+		}
+	});
+}
+
+function addSchedules(obj){
+	
+	
+	var timeInit = obj.timeInit;
+	var timeEnd = obj.timeEnd;
+	var scheduleId = obj.idSchedule;
+	
+	var newRow = $("#row-add-schedules-hours").clone();
+	
+	newRow.find(".row-schedule-id").attr("id",scheduleId);
+	
+	timeInitId = "tmp-init-"+getNewInitTimePickerId();
+	timeEndId = "tmp-end-"+getNewEndTimePickerId();
+	
+	var timepickerInit = newRow.find(".timepicker-init"); 
+	var timepickerEnd = newRow.find(".timepicker-end");
+	
+	var inputInit = timepickerInit.find("input"); 
+	var inputEnd = timepickerEnd.find("input");
+	if(!obj.disabled){
+		inputInit.removeAttr("disabled");
+		inputEnd.removeAttr("disabled");
+	}else{
+		inputInit.attr("disabled", obj.disabled);
+		inputEnd.attr("disabled", obj.disabled);
+	}
+	
+	inputInit.attr("id", timeInitId);
+	inputEnd.attr("id", timeEndId);
+	
+	//Adicionando a classe que informa que o timepicker é clonado.
+	newRow.addClass("cloned-timepicker");
+	
+	var button = newRow.find(".add-schedule");
+	button.removeClass("add-schedule");
+	button.addClass("remove-schedule");
+	button.removeClass("btn-primary");
+	button.addClass("btn-danger");
+	
+	if(obj.disabled){
+		button.attr("disabled","disabled");
+	}
+	
+	var span = button.find("span");
+	span.removeClass("glyphicon-plus");
+	span.addClass("glyphicon-minus");
+	
+	$("#panel-schedules-hours").append(newRow);
+
+	//Iniciando os timepickers
+	initTimepicker(timeInitId, timeInit);
+	initTimepicker(timeEndId, timeEnd);		
+	
+	//Iniciando o metodo de remover os horários caso o usuário clique no botar de remover horário.
+	onButtonRemoveScheduleClick();
+	
+}
+
+function onButtonRemoveScheduleClick(){
+	$(".remove-schedule").click(function(){
+		$(this).parents(".row").remove();
+	});
+}
+
+function onButtonConfirmSchedulesClick(){
+	/*
+	 * Quando o profissional clicar para confirmar 
+	 * o cadastro de horários, todos as horas dos timepickers
+	 * devem ser pegues.
+	 */
+	$("#btn-confirm-schedules-hours").click(function(event){
+		
+		var modal = $("#modal-day-scheduler");
+		var rowsSchedules = modal.find("#panel-schedules-hours").find(".row-schedule-id");
+		var timepickersObject = rowsSchedules.find(".timepicker").find("input");
+		
+
+		var timepickersIdArray = []
+		var tempArray = $.makeArray(timepickersObject);
+		
+		for(var i = 0, j=0; i < tempArray.length-1; i+=2, j++){
+			var idSchedule = rowsSchedules[j].id;
+			
+			if(tempArray[i].id && tempArray[i+1].id){
+				timepickersIdArray.push({"idSchedule":idSchedule, "timePickInit":tempArray[i].id, "timePickEnd":tempArray[i+1].id});
+			}
+		}
+		
+		
+		var labelDay = $("#label-date-clicked");
+		var date = labelDay.text();
+		
+		if(timepickersIdArray.length > 0){
+			
+			//Removendo a cor vermelha dos timepickers inválidos.
+			$(".row-schedule-id").removeClass("has-error");
+			//Salvando os horários no objeto schedule manager
+			if(!saveSchedules(timepickersIdArray, date)){
+				return;
+			}
+			 
+			//Quando o profissional cadastrar os horários
+			//o botão do de cadastrar será alterado para o de editar
+			var panel = $("#panel-register-schedules");
+			
+			var buttonAddSchedules = panel.find("button[value='"+date+"']").filter(".add-schedule");
+			var buttonEditSchedules = buttonAddSchedules.siblings(".edit-schedule");
+			var buttonRemoveDay = panel.find("button[value='"+date+"']").filter(".remove-day");
+			
+			buttonRemoveDay.addClass("disabled");
+			buttonEditSchedules.removeClass("hidden");
+			buttonAddSchedules.addClass("hidden");
+			
+		}
+		
+		//var params = JSON.stringify(scheduleManager.getScheduleDayAsJSON(date));
+		var data = scheduleManager.getScheduleDayAsJSON(date);
+		console.log(data.data[0].listSchedules[0].timeInit);
+		console.log(data.data[0].listSchedules[0].timeEnd);
+		
+		console.log(data.data[0].listSchedules[1].timeInit);
+		console.log(data.data[0].listSchedules[1].timeEnd);
+		console.log(data.data[0].listSchedules[0].timeInit);
+		
+		console.log(JSON.stringify(scheduleManager.getScheduleDayAsJSON(date)));
+		/*ajaxCall("/siac/saveConsultation", {"json": params}, function(response){
+			var type = ALERT_SUCCESS;
+			if(response.code == RESPONSE_ERROR)
+				type = ALERT_ERROR;
+			
+			alertMessage(response.message, null, type);
+			
+			
+			//Carregando todas as consultas cadastradas no calendário do profissional.
+			getProfessionalConsultations(fillProfessionalCalendar);
+			
+		}, null, "POST");*/
+		
+		modal.modal("hide");
+		
+	});
+
+}
+
+//Função que verifica se os horários informados nos timepickers são válidos.
+//Se o horário do timepicker de inicio for menor que o timepicker de fim é retornado true.
+function isValidTimePickers(objTimeInit, objTimeEnd){
+	var dateInit = new Date();
+	dateInit.setHours(objTimeInit.hour);
+	dateInit.setMinutes(objTimeInit.minute);
+	
+	var dateEnd = new Date();
+	dateEnd.setHours(objTimeEnd.hour);
+	dateEnd.setMinutes(objTimeEnd.minute);
+	
+	console.log("INI: "+dateInit+" - End: "+dateEnd)
+	
+	if( dateInit.getTime() >= dateEnd.getTime() )
+		return false;
+	return true;
+}
+
+/* Função que recebe uma data todos os timepickers referentes aos horários
+ * e salva no gerenciador de horários(scheduleManager).
+ * 
+ * Caso a data passada já esteja cadastrada no schedule manager
+ * então a operação será de edição, logo todos os horários daquela 
+ * data serão atualizados com os novos horários dos timepickers.
+*/
+function saveSchedules(timepickersId, date){
+	var scheduleDay = scheduleManager.getSchedulesMap().get(date);
+	/*Caso esse dia (date) já exista, a lista de horários antiga 
+	 *é apagada e os novos horários são cadastrados. 
+	*/
+	if(scheduleDay){
+		scheduleDay.clearListSchedules();
+	}else{
+		scheduleDay = new ScheduleDay();
+		scheduleDay.setDate(date);
+	}
+
+	var listScheduleTime = scheduleDay.getListSchedules();
+	
+	for(var i = 0; i < timepickersId.length; i++){
+		
+		var timeInit = getTimePickerHourAndMinutes(timepickersId[i].timePickInit);
+		var timeEnd = getTimePickerHourAndMinutes(timepickersId[i].timePickEnd);
+		var scheduleId = timepickersId[i].idSchedule;
+		
+		//Se o horário de inicio for maior que o de fim, os timepickers ficam vermelho.
+		if(!isValidTimePickers(timeInit, timeEnd)){
+			$("#"+timepickersId[i].timePickInit).parents(".row-schedule-id").addClass("has-error");
+			$("#"+timepickersId[i].timePickEnd).parents(".row-schedule-id").addClass("has-error");
+			return false;
+		}
+		scheduleDay.addSchedule(getFormatedDate(date), timeInit["hour"], timeInit["minute"], timeEnd["hour"], timeEnd["minute"], null, null, null, scheduleId, null);
+		
+	}
+	
+	scheduleManager.addScheduleDay(date, scheduleDay);
+	return true;
+}
+
+function getNewInitTimePickerId(){
+	idTimepickersInit = idTimepickersInit+1;
+	return idTimepickersInit;
+}
+
+function getNewEndTimePickerId(){
+	idTimepickersEnd = idTimepickersEnd+1;
+	return idTimepickersEnd;
+}
+
+function getTimePickerHourAndMinutes(timepickerId){
+	hour = $("#"+timepickerId).data("timepicker").hour;
+	minute = $("#"+timepickerId).data("timepicker").minute;
+	return {"hour":hour, "minute":minute};
 }

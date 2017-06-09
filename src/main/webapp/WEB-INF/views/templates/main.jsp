@@ -26,6 +26,7 @@
 	<script type="text/javascript" src="<c:url value='/resources/js/bootstrap-datepicker.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/bootstrap-timepicker.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/siac-funcs.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/schedule-classes.js'/>"></script>
 	
 	<script type="text/javascript" src="<c:url value='/resources/js/app.js'/>"></script>
 	
