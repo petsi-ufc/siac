@@ -43,6 +43,7 @@ public class GroupController {
 	@RequestMapping("/updateGroup")
 	@ResponseBody
 	public String updateGroup(@RequestParam("json") String json){
+		System.out.println(json);
 		return groupService.updateGroup(json, groupDAO);
 	}
 	

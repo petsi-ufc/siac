@@ -101,8 +101,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.createGroup = _createGroup;
 		$scope.updateGroup = _updateGroup;
 		$scope.saveUpdateGroup = _saveUpdateGroup;
-		$scope.openGroup = _openGroup;
-		$scope.closeGroup = _closeGroup;
 		$scope.addGroup = _addGroup;
 		$scope.removeGroup = _removeGroup;
 		$scope.addConPatient = _addConPatient;
@@ -141,6 +139,11 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		//Configuração do calendário.
 		$scope.uiConfig = {
 			calendar : {
+				header:{
+					left:'prev',
+					center:'title',
+					right:'next'
+				},
 				businessHours: true,
 				editable : false,
 				displayEventTime : true,
@@ -166,7 +169,11 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					$("#modal-schedules-description").modal("show");
 				},
 				dayClick : _dayClick,
-				events: getConsultations
+				events: getConsultations,
+				monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+			    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+			    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'],
+			    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']
 			}
 		};
 
@@ -595,30 +602,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					$scope.group = 0; 
 					$scope.update=false;
 				}else{
-					alertMessage(message,null,ALERT_ERROR);
-				}
-			});
-		}
-		
-		function _openGroup(group){
-			professionalService.modifyTypeGroup(group, true, function(response){
-				var message = response.data.message;
-				if(response.data.code == 200){
-					alertMessage(message,null,ALERT_SUCCESS);
-					getMyGroups();
-				}else{
-					alertMessage(message,null,ALERT_ERROR);
-				}
-			});
-		}
-		
-		function _closeGroup(group){
-			professionalService.modifyTypeGroup(group, false, function(response){
-				var message = response.data.message;
-				if(response.data.code == 200){
-					alertMessage(message,null,ALERT_SUCCESS);
-					getMyGroups();
-				}else{
+					console.log(response);
 					alertMessage(message,null,ALERT_ERROR);
 				}
 			});

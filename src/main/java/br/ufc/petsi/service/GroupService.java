@@ -1,5 +1,7 @@
 package br.ufc.petsi.service;
 
+import java.util.List;
+
 import javax.inject.Named;
 
 import org.eclipse.jdt.internal.compiler.impl.Constant;
@@ -55,6 +57,7 @@ public class GroupService {
 			gdao.update(old);
 			
 		}catch (Exception e) {
+			e.printStackTrace();
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível atualizar os dados do grupo");
 			return gson.toJson(response);
@@ -184,9 +187,16 @@ public class GroupService {
 		ObjectMapper mapper = new ObjectMapper();
 		Response response = new Response();
 		try{
-			//professional.setListGroups(gdao.getAllGroups(professional));
+			List<Group> groups = gdao.getAllGroups(professional);
+			//Removendo as consultas dos pacientes (hibernate trás automaticamente na consulta) para diminuir o processamento no front-end
+			for (Group group : groups) {
+				for(Patient patient: group.getPatients()){
+					patient.getListConsultations().removeAll(patient.getListConsultations());
+				}
+			}
+			
 			response.setCode(Response.SUCCESS);
-			response.setMessage(mapper.writeValueAsString(gdao.getAllGroups(professional)));
+			response.setMessage(mapper.writeValueAsString(groups));
 			return gson.toJson(response);
 			
 		}catch (Exception e) {

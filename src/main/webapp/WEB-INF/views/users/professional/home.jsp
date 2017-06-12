@@ -295,6 +295,7 @@
 
 		<img id="avatar-img" class="img-responsive"
 			src="<c:url value='/resources/images/user_avatar.png'/>">
+		<center><h5><c:out value="${userLogged.name}" /></h5><center/>
 
 		<div id="box-services">
 			<div class="box-header">
@@ -348,8 +349,6 @@
 														<td>{{group.title}}</td>
 														<td><span class="label label-success" ng-if="group.openGroup == true">Aberto</span><span class="label label-danger" ng-if="group.openGroup == false">Fechado</span></td>
 														<td>
-															<button class="btn btn-danger" ng-if="group.openGroup == true" ng-click="closeGroup(group)">Fechar</button>
-															<button class="btn btn-success" ng-if="group.openGroup == false" ng-click="openGroup(group)">Abrir</button>
 															<button class="btn btn-primary" ng-click="updateGroup(group)">Editar</button>
 															<button class="btn btn-default" ng-click="showConsultationOfGroup(group)">Ver Frequências</button>
 														</td>
@@ -826,7 +825,8 @@
 							<div class="col-xs-6">
 							<br>
 								<button class="btn btn-primary btn-block" style="height: 200px" ng-click="setGroupConsultation()">
-									<span class="glyphicon glyphicon-group" aria-hidden="true" style="font-size:20px"></span>
+									<!-- <span class="glyphicon glyphicon-group" aria-hidden="true" style="font-size:20px"></span>-->
+									<img src="<c:url value='/resources/images/icon-group.png'/>">
 									<p style="font-size:20px">Cadastrar <br> consulta com grupo</p>
 								</button>
 							</div>

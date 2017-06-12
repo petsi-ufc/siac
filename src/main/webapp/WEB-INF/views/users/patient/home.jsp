@@ -5,6 +5,7 @@
 	<div id="left-bar">
 		<img id="avatar-img" class="img-responsive"
 			src="<c:url value='/resources/images/user_avatar.png'/>">
+		<center><h5><c:out value="${userLogged.name}" /></h5><center/>
 
 		<div id="box-services">
 			<h3>Serviços <br>disponí­veis</h3>

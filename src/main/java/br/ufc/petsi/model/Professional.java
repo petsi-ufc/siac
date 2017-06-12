@@ -44,7 +44,7 @@ public class Professional extends User implements Serializable {
 	@JsonManagedReference(value="professional1")
 	private List<Consultation> listConsultations;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="facilitator", cascade=CascadeType.MERGE)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="facilitator", cascade=CascadeType.MERGE)
 	@JsonProperty("listGroups")
 	@JsonManagedReference
 	private List<Group> listGroups;
