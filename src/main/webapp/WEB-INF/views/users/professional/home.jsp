@@ -872,14 +872,9 @@
 								</button>
 							</div>
 						</div>
-<<<<<<< HEAD
-					</div> -->
-					<!-- FIM - TESTE  -->
-					
-=======
 					</div>--> 
 					<!-- FIM - TESTE  -->
->>>>>>> backend
+					
 					<div class="panel panel-primary" ng-show="isGroupConsultation == true">
 						<div class="panel-heading">
 							<h3 class="panel-title">Cadastrar com grupo</h3>
