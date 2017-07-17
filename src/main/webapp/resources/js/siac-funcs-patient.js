@@ -48,7 +48,7 @@ function chargeScheduleDay(a){
             $("#body-table-event").append(g)
         }else if("Reservado"==d){
             var g=$("<tr class='tr-horary warning'> </tr>");
-            g.append("<td>"+c+" </td> <td>"+d+"</td>"),
+            g.append("<td>"+c+" </td> <td>"+"Em Espera"+"</td>"),
             g.append($("<td><button type='button' class='btn btn-danger btn-sm cancel-reserve' data-id-reserve='"+f+"' id='cancel-reserve'>Cancelar</button></td>")),$("#body-table-event").append(g)
         }else if("Disponivel"==d){
             var g=$("<tr class='tr-horary success'></tr>");
