@@ -249,17 +249,35 @@ function myGroups(){
         $("#my-consultations").css("display","none");
         $("#div-my-groups").css("display","block");
         
+        var cpf = window.localStorage['userCPF'];
+        console.log("CPF: " + cpf);
+        
+//        ajaxCall("/siac/getUserByCpf",function(json){
+//        	console.log("Entrou aqui");
+//        });
        
         ajaxCall("/siac/getMyGroups",null,function(json){
         	var linha = "";
         	var m = JSON.parse(json.message);
             var count = Object.keys(json.message).length;
             
+            console.log("Meus pacientes" + json.message);
+            var patients = m[0].patients;
+            console.log(patients);
+            var id_paciente;
+           
+            for(var i = 0 ; i < patients.length; i++){  
+            	if(cpf == patients[i].cpf){
+            		id_paciente = patients[i].id;
+            		
+            	}
+            }	
+            
            for (var i = 0; i < count; i++){
         	 if(typeof m[i] !== 'undefined'){
         		 var msg = m[i].title;
         		
-        		  linha += "<tr><td>"+msg+"</td><td><button class='btn btn-danger sairGrupo ' onClick = 'leaveMyGroups("+ m[i].id +")'>Sair</button></td></tr>";
+        		  linha += "<tr><td>"+msg+"</td><td><button class='btn btn-danger sairGrupo ' onClick = 'leaveMyGroups("+m[i].id+","+id_paciente+")'>Sair</button></td></tr>";
         		  
         		   
         	   }
@@ -273,16 +291,22 @@ function myGroups(){
         	var linha_free = "";
         	var mj = JSON.parse(json.message);
             var count = Object.keys(json.message).length;
-            var countNumber = mj[1].patients.length;
-           // console.log(mj[0]);
+            var patients = mj[0].patients;
+            console.log(patients);
+            var id_paciente;
+           
+           
             
+            console.log("Grupos livres "+json.message);
             
+          var id_global ;
+               
            for (var i = 0; i < count; i++){
         	 if(typeof mj[i] !== 'undefined'){
         		 var msg_f = mj[i].title;
         		
-        		 linha_free += "<tr><td>"+msg_f+"</td><td><button class='btn btn-danger sairGrupo ' >Sair</button></td></tr>";
-        		  	   
+        		 linha_free += "<tr><td>"+msg_f+"</td><td><button class='btn btn-primary  'onClick = 'joinGroups("+mj[i].id+","+id_global+")' >Entrar</button></td></tr>";
+        		  	   console.log("id-Free: " + mj[i].id + " cpf: " + id_global);
         	   }
            }
            $('#corpo-grupo-disponivel').html(linha_free);
@@ -293,17 +317,45 @@ function myGroups(){
     });
 }
 
-function leaveMyGroups(id_group){
+function leaveMyGroups(id_group,id_paciente){
 	
 	var cpf = window.localStorage['userCPF'];
     
-	console.log("ID_GROUP; "+ id_group+" cpf "+cpf);
-	
 	
 	var id_patient="";
-	var json = '{"id":'+id_group+',"patients":[{"id":'+id_patient+'}]}';
-	console.log(json);
+	var json = {id: id_group, patients:[{id: id_paciente}]};
+	
+	
+	ajaxCall("/siac/leaveGroup?json=" + JSON.stringify(json),{'json':json},function(json){
+		console.log(json.message);
+		
+	});
+	
+	location.reload(true);
+	  $(".content-calendar").css("display","none");
+      $("#my-consultations").css("display","none");
+      $("#div-my-groups").css("display","block");
+	
+	
 }
+
+function joinGroups(id_group,id_paciente){
+	
+	
+	
+	var json = {id: id_group, patients:[{id: id_paciente}]};
+	console.log("Grupos livres json"+json.id);
+	
+	ajaxCall("/siac/joinGroup?json=" + JSON.stringify(json),{'json':json},function(json){
+		console.log(json.message);
+		
+	});
+	
+	
+	
+}
+
+
 
 $("document").ready(function(){
 	chargeEvents(),
@@ -317,8 +369,8 @@ $("document").ready(function(){
     cancelConsultation(),
     reserveConsultation(),
     cancelReserve(),
-    myGroups(),
-    leaveMyGroups()
+    myGroups()
+ 
     
 });
 

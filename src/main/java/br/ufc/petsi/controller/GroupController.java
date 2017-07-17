@@ -101,6 +101,7 @@ public class GroupController {
 	@RequestMapping("/leaveGroup")
 	@ResponseBody
 	public String leaveGroup(@RequestParam("json") String json, HttpSession session){
+	
 		return groupService.leaveGroup(json, groupDAO);
 	}
 

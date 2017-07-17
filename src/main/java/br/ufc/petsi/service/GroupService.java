@@ -267,8 +267,9 @@ public class GroupService {
 		Gson gson = new Gson();
 		Response response = new Response();
 		
+		
 		try{
-			
+			System.out.println("Json Chegando => " + json);
 			Group group = gson.fromJson(json, Group.class);
 			for (Patient patient : group.getPatients()) {
 				gdao.removePatient(group, patient);

@@ -1,12 +1,16 @@
 package br.ufc.petsi.controller;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.ufc.petsi.constants.Constants;
@@ -36,8 +40,13 @@ public class UserController {
 		return this.userService.getUserByName(name, userDAO);
 	}
 	
+	@Secured("ROLE_PATIENT")
+	@RequestMapping("/getUserByCpf")
+	@ResponseBody
 	public User getUserLogged(HttpSession session)
 	{
+		System.out.println("Session: " + session);
+		
 		if(session.getAttribute(Constants.USER_SESSION) == null)
 		{
 			User user = userDAO.getByCpf(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -45,5 +54,7 @@ public class UserController {
 		}
 		return (User) session.getAttribute(Constants.USER_SESSION);
 	}
+	
+	
 	
 }
