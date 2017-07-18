@@ -13,4 +13,5 @@ public interface UserDAO {
 	public void save(User u);
 	public boolean isExistent(String cpf, String role);
 	public List<User> getUsersByRole(String role);
+
 }

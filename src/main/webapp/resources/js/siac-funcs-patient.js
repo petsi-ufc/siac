@@ -241,33 +241,43 @@ function changeEvent(a,b){
     $("#calendar-patient").fullCalendar("updateEvent",c)
 }
 
-
+var idUserSession;
 
 function myGroups(){
     $("#my-groups").click(function(){
         $(".content-calendar").css("display","none");
         $("#my-consultations").css("display","none");
         $("#div-my-groups").css("display","block");
+        
+       var cpf = window.localStorage['userCPF'];
+        
+        console.log("CPF usuario Logado:" + cpf);
+        ajaxCall("/siac/getUserLogado/cpf/" + cpf,cpf,function(json){
+        	idUserSession = json;
+        	console.log("id Retornando: "+json);
+        });
 
         getMyGroup();
         
-        ajaxCall("/siac/getGroupsFree",null,function(json){
-        	var linha_free = "";
-        	var mj = JSON.parse(json.message);
-            var count = Object.keys(json.message).length;
-            var patients = mj[0].patients;
-            console.log(patients);
-            var id_paciente;
-            console.log("Grupos livres "+json.message);
-           for (var i = 0; i < count; i++){
-        	 if(typeof mj[i] !== 'undefined'){
-        		 var msg_f = mj[i].title;
-        		var id_global;
-        		 linha_free += "<tr><td>"+msg_f+"</td><td><button class='btn btn-primary  'onClick = 'joinGroups("+mj[i].id+","+id_global+")' >Entrar</button></td></tr>";
-        	   }
-           }
-           $('#corpo-grupo-disponivel').html(linha_free);
-        });
+//        ajaxCall("/siac/getGroupsFree",null,function(json){
+//        	var linha_free = "";
+//        	var mj = JSON.parse(json.message);
+//            var count = Object.keys(json.message).length;
+//            var patients = mj[0].patients;
+//            console.log(patients);
+//            var id_paciente;
+//            console.log("Grupos livres "+json.message);
+//           for (var i = 0; i < count; i++){
+//        	 if(typeof mj[i] !== 'undefined'){
+//        		 var msg_f = mj[i].title;
+//        		var id_global;
+//        		 linha_free += "<tr><td>"+msg_f+"</td><td><button class='btn btn-primary  'onClick = 'joinGroups("+mj[i].id+","+idUserSession+")' >Entrar</button></td></tr>";
+//        	   }
+//           }
+//           $('#corpo-grupo-disponivel').html(linha_free);
+//        });
+        refreshGroup();
+        
     });
 }
 
@@ -285,6 +295,8 @@ function joinGroups(id_group,id_paciente){
 	
 	ajaxCall("/siac/joinGroup?json=" + JSON.stringify(json),{'json':json},function(json){
 		console.log(json.message);
+		 getMyGroup();
+		 refreshGroup();
 		
 	});
 
@@ -322,7 +334,26 @@ function getMyGroup(){
 	     });
 		
 }
-
+function refreshGroup(){
+	ajaxCall("/siac/getGroupsFree",null,function(json){
+    	var linha_free = "";
+    	var mj = JSON.parse(json.message);
+        var count = Object.keys(json.message).length;
+        var patients = mj[0].patients;
+        console.log(patients);
+        var id_paciente;
+        console.log("Grupos livres "+json.message);
+       for (var i = 0; i < count; i++){
+    	 if(typeof mj[i] !== 'undefined'){
+    		 var msg_f = mj[i].title;
+    		var id_global;
+    		 linha_free += "<tr><td>"+msg_f+"</td><td><button class='btn btn-primary  'onClick = 'joinGroups("+mj[i].id+","+idUserSession+")' >Entrar</button></td></tr>";
+    	   }
+       }
+       $('#corpo-grupo-disponivel').html(linha_free);
+    });
+	
+}
 
 
 $("document").ready(function(){
