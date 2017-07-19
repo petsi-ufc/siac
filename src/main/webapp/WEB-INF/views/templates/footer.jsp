@@ -12,10 +12,5 @@
 				<img class="img-responsive" height=200px width=220px src="<c:url value='/resources/images/logopet-branco.png'/>">
 			</a>
 		</div>
-		<div class="img-footer">
-			<a href="https://sistemas.quixada.ufc.br/apps/sippa" target="_blank">
-				<img class="img-responsive" src="<c:url value='/resources/images/logo-sippa.png'/>">
-			</a>
-		</div>
 	</div>
 </div>

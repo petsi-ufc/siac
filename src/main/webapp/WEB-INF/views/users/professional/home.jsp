@@ -43,13 +43,12 @@
 										<td>{{e.color}}</td>
 										<td>{{e.title}}</td>
 										<td>
-											<button type="button" value="{{e.id}}" class="btn btn btn-success action-register-consultation" ng-disabled="e.state == 'CD' || e.state == 'RD'" ng-click="registerConsultation(e.id)">Registrar<span class="glyphicon glyphicon-ok"></span></button>
+											<button type="button" value="{{e.id}}" class="btn btn btn-success action-register-consultation" ng-disabled="e.state == 'CD' || e.state == 'RD'" ng-click="registerConsultation(e.id, e.date)">Registrar<span class="glyphicon glyphicon-ok"></span></button>
 											<button type="button" value="{{e.id}}" class="btn btn btn-danger action-cancel-consultation" ng-disabled="e.state == 'CD' || e.state == 'RD'" ng-click="cancelConsultation(e.id)">Cancelar<span class="glyphicon glyphicon-remove-circle"></span></button>
 											<button type="button" value="{{e.id}}" class="btn btn btn-warning action-reschedule-consultation margin-left" ng-disabled="e.state == 'CD' || e.state == 'RD'" ng-click="reschedulingConsultation(e)">Reagendar<span class="glyphicon glyphicon-time"></span></button>
 										</td>
 										<td>
-											<button type="button" value="{{e.id}}" class="btn btn btn-primary" ng-show="e.isGroup" ng-disabled="e.state != 'RD'" ng-click="showFrequencyList(e.group.id, e.date, e.id)" title="Frequência" ><span class="glyphicon glyphicon-list"></span></button>
-											<button type="button" value="{{e.id}}" class="btn btn btn-info" ng-disabled="e.state != 'RD'" ng-click="showComment(e.id)" title="Comentário"><span class="glyphicon glyphicon-list-alt"></span></button>
+											<button type="button" value="{{e.id}}" class="btn btn btn-info" ng-disabled="e.state != 'RD'" ng-click="viewComment(e.comment, e.id)" title="Comentário"><span class="glyphicon glyphicon-list-alt"></span></button>
 										</td>
 									</tr>	
 								</tbody>
@@ -86,59 +85,13 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" ng-click="registerComment(comentario)" data-dismiss="modal">Comentar</button>
+						<button type="button" class="btn btn-default" ng-click="registerComment(comentario); reload();" data-dismiss="modal">Comentar</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		
-		
-		<div id="modal-frequency-list" class="modal fade" 
-			role="dialog">
-			<div class="modal-large">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title">
-							<strong>Lista de Frequência</strong>
-						</h4>
-						<h5>
-							Grupo <strong> {{tempConsultation.group.title}}</strong>
-							<br><br>
-							Consulta Realizada em <strong>{{tempConsultation.date}}</strong>
-						</h5>
-					</div>
-					<div class="modal-body">
-						<div id="container-details-consultation">
-							<center><h4>Participantes</h4></center>
-							<table class="table table-bordered table-hover">
-								<thead>
-									<tr>
-										<th>Presença</th>
-										<th>Nome</th>
-									</tr>
-								</thead>
-								<tbody id="tbody-frequency-list">
-									<tr ng-repeat="patient in tempConsultation.group.patients">
-										<td><input type="checkbox" ng-click="addFrequencyList($index);"></td>
-										<td>{{patient.name}}</td>
-									</tr>	
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" ng-click="registerFrequencyList()" data-dismiss="modal">Registrar Frequência</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
+
 		
 		<div id="modal-consultation-group" class="modal fade" 
 			role="dialog">
@@ -636,8 +589,7 @@
 			
 		</div>
 
-		<div class="panel panel-primary margin-right" ng-show="canShow(1)" 
-			id="panel-register-schedules">
+		<div class="panel panel-primary margin-right" ng-show="canShow(1)" id="panel-register-schedules">
 			<div class="panel-heading">
 				<h1 class="panel-title">Cadastrar Agenda</h1>
 			</div>
@@ -657,6 +609,25 @@
 						<input id="input-frequenci" type="number" min="0"
 							class="form-control" placeholder="Quantidade de Semanas">
 					</div>
+					<br/>
+					<div class="form-group">
+						<h5>Padrões:</h5>
+					</div>
+					<div class="input-group bootstrap-timepicker timepicker">
+						<label for="input-count-time-init"></label>
+						<input id="tmp-init-hour" type="text"	class="input-schedule-info form-control input-small ng-pristine ng-valid ng-empty ng-touched" 
+						placeholder="Horário de início" title="Horário padrão para iniciar as consulta de um determinado dia">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+					</div>
+					<div class="form-group">
+						<input id="input-number-vacancy" type="number" min="0"
+							class="form-control" placeholder="Quantidade de vagas" title="Quantidade padrão de vagas por consulta">
+					</div>
+					<div class="form-group">
+						<input id="input-time-consultation" type="number" min="5"
+							class="form-control" placeholder="Tempo por consulta" title="Tempo padrão para cada consulta">
+					</div>
+					
 				</form>
 				<div id="div-days-week" class="margin-top">
 					<div class="row">
@@ -693,6 +664,7 @@
 								</tbody>
 							</table>
 						</div>
+						<button class="btn btn-success" >Consolidar Horários</button>
 					</div>
 				</div>
 			</div>
@@ -719,6 +691,56 @@
 					<button type="submit" class="btn btn-primary" id="button-generate-report" data-dismiss="modal">Gerar</button>
 				</form>
 			</div>
+		</div>
+
+		<div class="panel panel-primary margin-right" id="panel-frequency-comment" ng-show="canShow(4)">
+			<div class="panel-heading">
+				<h1 class="panel-title">Registrar Consulta</h1>
+			</div>
+			
+			<div class="panel-body">
+				<center>
+					<h4 class="modal-title">
+						<strong>Comentário da Consulta</strong>
+					</h4>
+				</center>
+				<div>
+					<textarea ng-model="comment" placeholder="Comentário..."
+						class="no-resize form-control" rows="3"></textarea>
+				</div>
+			
+				<div class="modal-header">
+					<h4 class="modal-title">
+						<strong>Lista de Frequência</strong>
+					</h4>
+					<h5 align="left">
+						Grupo <strong> {{tempConsultation.group.title}}</strong>
+						<br><br>
+						Consulta Realizada em <strong>{{tempConsultation.date}}</strong>
+					</h5>
+					</div>
+					<div class="modal-body">
+						<center><h4>Participantes</h4></center>
+						<div id="container-details-consultation">	
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th><input type="checkbox" ng-model="modelCheck" ng-click="addFrequencyListAll();">Presença</th>
+										<th>Nome</th>
+									</tr>
+								</thead>
+								<tbody id="tbody-frequency-list">
+									<tr ng-repeat="patient in tempConsultation.group.patients">
+										<td><input type="checkbox" ng-checked="modelCheck" ng-click="addFrequencyList($index);"/></td>
+										<td>{{patient.name}}</td>
+									</tr>	
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<button class="btn btn-primary" ng-click="saveRegister()">Salvar <i class="glyphicon glyphicon-floppy-saved"></i></button>
+					<button class="btn btn-default" data-dismiss="modal" ng-click="isPacientConsultation = false; isFreeConsultation = false;">Limpar</button>
+					
 		</div>
 
 		<div class="panel panel-primary margin-right hidden"
@@ -762,8 +784,6 @@
 				</div>
 			</div>
 		</div>
-
-
 
 		<div class="modal fade" role="dialog" id="modal-cancel-consultation">
 			<div class="modal-dialog modal-md">
