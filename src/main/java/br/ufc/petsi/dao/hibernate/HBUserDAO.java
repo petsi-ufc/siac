@@ -10,12 +10,9 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.UserDAO;
-import br.ufc.petsi.enums.Role;
-import br.ufc.petsi.model.Patient;
-import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.model.User;
-import br.ufc.petsi.model.UserPrimaryKey;
 import br.ufc.petsi.util.LogGenerator;
 
 @Repository
@@ -58,7 +55,7 @@ public class HBUserDAO implements UserDAO{
 
 	@Override
 	public User getByCpf(String cpf, String role) {
-		System.out.println("CPF: "+cpf+" - Role: "+role);
+		System.out.println("CPF: "+cpf+" - Role: "+ role);
 		User u = null;
 		try{
 			Query query = manager.createQuery("from users WHERE cpf = :paramCpf AND role = :paramRole");
@@ -85,6 +82,7 @@ public class HBUserDAO implements UserDAO{
 		return listUsers;
 	}
 
+
 	@Override
 	public List<User> getByNameLike(String name) {
 		List<User> listUsers = null;
@@ -108,9 +106,7 @@ public class HBUserDAO implements UserDAO{
 
 	@Override
 	public List<User> getUsersByRole(String role) {
-
 		List<User> listUsers = null;
-
 		try{
 			
 			Query query = manager.createQuery("from users WHERE role = :role");
@@ -125,4 +121,5 @@ public class HBUserDAO implements UserDAO{
 		
 		return listUsers;
 	}
+	
 }

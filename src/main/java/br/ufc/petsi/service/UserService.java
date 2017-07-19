@@ -2,6 +2,7 @@ package br.ufc.petsi.service;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.google.gson.Gson;
@@ -10,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.SocialServiceDAO;
 import br.ufc.petsi.dao.UserDAO;
+import br.ufc.petsi.dao.hibernate.HBUserDAO;
 import br.ufc.petsi.dao.ldap.LdapUser;
 import br.ufc.petsi.enums.Role;
 import br.ufc.petsi.model.Professional;
@@ -20,6 +22,9 @@ import br.ufc.petsi.util.UserExclusionStrategy;
 
 @Named
 public class UserService {
+	
+	@Inject
+	private UserDAO userDAO;
 	
 	public String getAllUsers(LdapUser userDAO){
 		
@@ -90,4 +95,14 @@ public class UserService {
 		return gson.toJson(users);
 		
 	}
+	
+	public User getIdUserByCpf(String cpf){
+		
+		System.out.println("CPF UserService =>" +  cpf);
+		User user =  userDAO.getByCpf(cpf, Constants.ROLE_PATIENT);
+		
+		return user;
+	}
+	
+	
 }

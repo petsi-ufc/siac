@@ -555,7 +555,7 @@
 								<div class='legend-color color-yellow'></div>
 							</td>
 							<td>
-								<h5>Reservada</h5>
+								<h5>Em Espera</h5>
 							</td>
 
 							<td>
