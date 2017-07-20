@@ -60,6 +60,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.frequencyList = [];
 		$scope.chGroupNowConsultation = false;
 		$scope.chPatientNowConsultation = false;
+		$scope.modelCheck = false;
 		
 		//Colors
 		var colors = new Map();
@@ -83,7 +84,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.showConsultationButtons = true;
 		
 		
-		
 		//Functions
 		$scope.canShow = _canShow;
 		$scope.setMenuIndex = _setMenuIndex;
@@ -105,19 +105,21 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.removeGroup = _removeGroup;
 		$scope.addConPatient = _addConPatient;
 		$scope.removeConPatient = _removeConPatient;
-		$scope.registerConsultation = _registerConsultation; 
+		$scope.registerConsultation = _registerConsultation;
+		$scope.saveRegister = _saveRegister;
 		$scope.cancelConsultation = _cancelConsultation; 
 		$scope.reschedulingConsultation = _reschedulingConsultation;
 		$scope.registerCancelConsultation = _registerCancelConsultation;
 		$scope.registerReschedulingConsultation = _registerReschedulingConsultation;
-		$scope.showFrequencyList = _showFrequencyList;
 		$scope.addFrequencyList = _addFrequencyList;
+		$scope.addFrequencyListAll = _addFrequencyListAll;
 		$scope.registerFrequencyList = _registerFrequencyList;
 		$scope.showComment = _showComment;
 		$scope.registerComment = _registerComment;
 		$scope.showConsultationOfGroup = _showConsultationOfGroup;
 		$scope.getFrequencyList = _getFrequencyList;
-		
+		$scope.reload = _reload;
+		$scope.viewComment = _viewComment;
 
 		$("#input-frequenci").keypress(function(e){
 			setFrequenciDays();
@@ -208,23 +210,16 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			});
 		}
 		
-		function _showFrequencyList(idGroup, date, idConsultation){
-			$("#modal-frequency-list").modal("show");
-			$scope.tempConsultation = {};
-			$scope.tempConsultation.group = findGroup(idGroup,$scope.groups);
-			for (var i in $scope.tempConsultation.group.patients){
-				$scope.frequencyList.push({
-					group:{id:$scope.tempConsultation.group.id},
-					patient:{id:$scope.tempConsultation.group.patients[i].id},
-					presence: false,
-					consultation: {id:idConsultation}
-				});
-			}
-			$scope.tempConsultation.date = date;
-		}
 		
 		function _addFrequencyList(index){
 			$scope.frequencyList[index].presence = !$scope.frequencyList[index].presence;
+			
+		}
+		
+		function _addFrequencyListAll(){
+			for (var i = 0; i < $scope.frequencyList.length; i++) {
+				$scope.addFrequencyList(i);
+			}
 		}
 
 		
@@ -233,7 +228,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 				var message = response.data.message;
 				if(response.data.code == 200){
 					alertMessage(message,null,ALERT_SUCCESS);
-					location.reload(); 
+					location.reload();
 				}else{
 					console.log(response.data);
 					alertMessage(message,null,ALERT_ERROR);
@@ -273,12 +268,20 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 				var message = response.data.message;
 				if(response.data.code == 200){
 					alertMessage(message,null,ALERT_SUCCESS);
-					location.reload(); 
 				}else{
-					console.log(response.data);
 					alertMessage(message,null,ALERT_ERROR);
 				}
 			});
+		}
+		
+		function _reload(){
+			location.reload();
+		}
+		
+		function _viewComment(comment, id){
+			$("#modal-comment").modal("show");
+			$scope.idConsultationToComment = id;
+			$scope.comentario = comment;
 		}
 				
 		function _dayClick(date){
@@ -316,6 +319,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		function initTimePickers(){
 			$("#tmp-init-1").timepicker({showMeridian: false, defaultTime:"8:00"});
 			$("#tmp-end-1").timepicker({showMeridian: false, defaultTime:"8:15"});
+			$("#tmp-init-hour").timepicker();
 		}
 		
 		function _removeSchedule(index){
@@ -427,7 +431,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			$scope.isPacientConsultation = false;
 			$scope.isFreeConsultation = false;
 			$scope.isGroupConsultation = false;
-			$scope.showConsultationButtons = true;;
+			$scope.showConsultationButtons = true;
 		}
 		
 		function configureModal(){
@@ -436,18 +440,64 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			});
 		}
 		
-		function _registerConsultation(index){
-			ajaxCall("/siac/registerConsultation", {"id": index}, function(response){
-				if(response.code == RESPONSE_SUCCESS){
-					alertMessage(response.message, null, ALERT_SUCCESS);
-					location.reload(); 
-				}else{
-					alertMessage(response.message, null, ALERT_ERROR);
-				}
+		function _registerConsultation(index, date){
+			
+			//Localizar o grupo
+			for(var i in $scope.events){
 				
-			}, function(a,b){
-				alertMessage("Não foi possível registar a consulta!", null, ALERT_ERROR);
-			});
+				if($scope.events[i].id == index){
+					
+					//Caso se uma consulta com um grupo
+					if($scope.events[i].isGroup){
+						$("#modal-schedules-description").modal("hide");
+						$scope.setMenuIndex(4);
+						
+						//Trazer as informações do grupo
+						$scope.tempConsultation = {};
+						$scope.tempConsultation.group = findGroup($scope.events[i].group.id,$scope.groups);
+						$scope.frequencyList = [];//reset na lista de frequencia
+						for (var i in $scope.tempConsultation.group.patients){
+							$scope.frequencyList.push({
+								group:{id:$scope.tempConsultation.group.id},
+								patient:{id:$scope.tempConsultation.group.patients[i].id},
+								presence: false,
+								consultation: {id:index}
+							});
+						}
+						$scope.tempConsultation.date = date;
+						$scope.tempConsultation.id = index;
+					
+					}else{
+						//Caso seja uma consulta com uma única pessoa
+						$scope.comentario = "";
+						$scope.showComment(index);
+					}
+				}
+			}
+			
+		}
+		
+		function _saveRegister(){
+			console.log($scope.frequencyList);
+			console.log($scope.comment);
+			if($scope.comment != '' && $scope.comment != undefined){
+				ajaxCall("/siac/registerConsultation", {"id": $scope.tempConsultation.id}, function(response){
+					if(response.code == RESPONSE_SUCCESS){
+						alertMessage(response.message, null, ALERT_SUCCESS);
+						$scope.idConsultationToComment = $scope.tempConsultation.id;
+						$scope.registerComment($scope.comment);
+						$scope.registerFrequencyList();
+					}else{
+						alertMessage(response.message, null, ALERT_ERROR);
+					}
+					
+				}, function(a,b){
+					alertMessage("Não foi possível registar a consulta!", null, ALERT_ERROR);
+				});
+			}else{
+				//alertMessage("Insira um comentário!", null, ALERT_ERROR);
+				alert("Insira um comentário!");
+			}
 		}
 		
 		function _cancelConsultation(index){
@@ -666,13 +716,12 @@ function format(date){
 }
 
 function findGroup(id, groups){
-	console.log(groups);
-	var i = 0;
 	for (var i in groups) {
 		if(groups[i].id == id){
 			return groups[i];
 		}
 	}
+	return null;
 }
 
 //TODO: Testando a geração de horários automática
@@ -711,7 +760,11 @@ function inicializateScheduler(){
 
 function setFrequenciDays(){
 	var inputFrequenci = $("#input-frequenci");
+	var inputNumberVancancy = $("#input-number-vacancy").val();
+	var inputTimeConsultation = $("#input-time-consultation").val();
+	var inputInitHour = $("#tmp-init-hour").val();
 	val = inputFrequenci.val() <= 48 ? inputFrequenci.val() : 48;
+	
 	if(val == "")
 		return;
 	
@@ -723,8 +776,12 @@ function setFrequenciDays(){
 		
 		scheduleManager.updateSchedules(resultMap);
 		
-		//Preenchendo a tabela de dias;
-		fillTableDays(resultMap);
+		try{
+			//Preenchendo a tabela de dias, a partir dos valores padrão
+			fillTableDays(resultMap, parseInt(inputNumberVancancy), parseInt(inputTimeConsultation), inputInitHour);
+		}catch(err){
+			alert("Verifique os valores especificados!");
+		}
 	}
 }
 
@@ -777,7 +834,7 @@ function onSelectScheduleRepeatClick(){
 	});
 }
 
-function fillTableDays(mapDays){
+function fillTableDays(mapDays, inputVacancy, inputTime, inputHour){
 	var table = $("#tbody-table-days");
 	
 	var mapPtBrDays = mapVars.get(MAP_WEEK_DAYS);
@@ -816,10 +873,13 @@ function fillTableDays(mapDays){
 		table.append(row);
 	});
 	
-	onActionTableClick();
+	if(inputVacancy > 0 && inputTime > 0 && inputHour != "")
+		onActionTableClick(inputVacancy, inputTime, inputHour);
+	else
+		onActionTableClick(null, null, null);
 }
 
-function onActionTableClick(){
+function onActionTableClick(inputVacancy, inputTime, inputHour){
 	map = mapVars.get(MAP_DAYS);
 	mapButtonDays = mapVars.get(MAP_SELECTED_DAYS);
 	$(".action-day").click(function(){
@@ -831,7 +891,7 @@ function onActionTableClick(){
 		
 		
 		if(action.hasClass("add-schedule")){
-			showModalSchedules(key, REGISTER_ACTION);
+			showModalSchedules(key, REGISTER_ACTION, inputVacancy, inputTime, inputHour);
 		}else if(action.hasClass("remove-day") && !action.hasClass("disabled")){
 			var dayName = map.get(key);
 			
@@ -929,7 +989,7 @@ function getDateByDays(mapDays, repetition){
 }
 
 
-function showModalSchedules(date, action){
+function showModalSchedules(date, action, inputVacancyPattern, inputTime, inputHour){
 	
 	var inputVacancy = mapVars.get(INPUT_VACANCY);
 	var inputTimePerConsult = mapVars.get(INPUT_COUNT_TIME);
@@ -956,6 +1016,49 @@ function showModalSchedules(date, action){
 	$("#tmp-end-1").removeAttr("disabled");
 	
 	today = moment(date,"DD/MM/YYYY").format("dddd");
+	
+	//Preenchendo os horários com base nos valores padrão
+	if(inputVacancyPattern != null && inputTime != null && inputHour != null){
+		var vacancy = inputVacancyPattern;
+		var timePerConsult = inputTime;
+		var timeInit = getTimePickerHourAndMinutes("tmp-init-hour");
+		
+		console.log(inputVacancy);
+		console.log(inputTime);
+		console.log(inputHour);
+		
+		hour = timeInit["hour"];
+		minutes = timeInit["minute"];
+		
+		momentTime = moment();
+		momentTime.hours(hour);
+		momentTime.minutes(minutes);
+		
+		tempInit = momentTime.format("HH:mm");
+		momentTime.add('m', timePerConsult);
+		tempEnd = momentTime.format("HH:mm");
+		
+		console.log(tempInit);
+		console.log(tempEnd);
+		
+		//Iniciando os 2 timepickers fixos do modal
+		$("#tmp-init-1").timepicker('setTime', tempInit);
+		$("#tmp-end-1").timepicker('setTime', tempEnd);
+		
+		//Esse for adiciona novos timepickers em relação a quantidade
+		//de vagas e o tempo para cada consulta. Como já existe 2 timepickers fixos
+		//a quantidade informada pelo usuário deve ser diminuida em 1
+		for(var i = 0; i < vacancy; i++){
+			tempInit = momentTime.format("HH:mm");
+			momentTime.add('m', timePerConsult);
+			tempEnd = momentTime.format("HH:mm");
+			
+			var time = {"timeInit":tempInit, "timeEnd":tempEnd, "idSchedule":0};
+			console.log(time);
+			addSchedules(time);
+		}
+	}
+	
 	
 	//Mostrando o modal
 	$("#modal-schedule-title").text(action+" Horários");
