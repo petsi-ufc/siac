@@ -244,7 +244,34 @@
 			</div>
 		</div>
 		
-
+		<div class="modal fade" role="dialog" id="modal-cancel-consultation">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4>Cancelar Horário</h4>
+					</div>
+					<div class="modal-title">
+						<h4>Deseja realmente cancelar este horário?</h4>
+					</div>
+					<div class="modal-body">
+						<div id="div-send-email">
+							<label>Enviar email para o paciente:</label>
+							<textarea ng-model="message_cancel" placeholder="Escrever email..." id="text-area-email"
+								class="no-resize form-control" rows="3"></textarea>
+						</div>
+						<div class="margin-top">
+							<button id="btn-cancel-consultation" class="btn btn-danger"
+								value="" name="id" ng-click="registerCancelConsultation(conToCancel,message_cancel)">Sim, cancelar</button>
+							<button class="btn btn-default" data-dismiss="modal">Voltar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<img id="avatar-img" class="img-responsive"
 			src="<c:url value='/resources/images/user_avatar.png'/>">
@@ -779,35 +806,6 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="modal fade" role="dialog" id="modal-cancel-consultation">
-			<div class="modal-dialog modal-md">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4>Cancelar Horário</h4>
-					</div>
-					<div class="modal-title">
-						<h4>Deseja realmente cancelar este horário?</h4>
-					</div>
-					<div class="modal-body">
-						<div id="div-send-email">
-							<label>Enviar email para o paciente:</label>
-							<textarea ng-model="message_cancel" placeholder="Escrever email..." id="text-area-email"
-								class="no-resize form-control" rows="3"></textarea>
-						</div>
-						<div class="margin-top">
-							<button id="btn-cancel-consultation" class="btn btn-danger"
-								value="" name="id" ng-click="registerCancelConsultation(conToCancel,message_cancel)">Sim, cancelar</button>
-							<button class="btn btn-default" data-dismiss="modal">Voltar</button>
 						</div>
 					</div>
 				</div>
