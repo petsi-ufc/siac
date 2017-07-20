@@ -355,6 +355,14 @@ public class ConsultationService {
 
 		try{
 			Consultation oldCons = getConsultationsById(id, consDAO);
+			
+			//Caso a consulta esteja livre
+			if(oldCons.getState().equals(ConsultationState.FR)){
+				consDAO.cancelConsultation(oldCons);
+				response.setCode(Response.SUCCESS);
+				response.setMessage("Consulta cancelada com sucesso!");
+				
+			}
 
 			if(oldCons != null){
 				Date today = new Date();

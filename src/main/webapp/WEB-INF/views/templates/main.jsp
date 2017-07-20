@@ -15,10 +15,8 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-timepicker.min.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-stars.css'/>">
-	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/jquery.datetimepicker.css'/>">
-	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/angulargithub.min.css'/>">
-	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/angular-material.min.css'/>">
-	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/material-datetimepicker.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-datetimepicker.min.css'/>">
+	
 
 	<script type="text/javascript" src="<c:url value='/resources/js/angular.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/jquery-2.1.3.min.js'/>"></script>
@@ -31,10 +29,9 @@
 	<script type="text/javascript" src="<c:url value='/resources/js/bootstrap-timepicker.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/siac-funcs.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/schedule-classes.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/bootstrap-datetimepicker.min.js'/>"></script>
 	
-						<!-- 	Configuração do Data e Time Picker -->
-	<script type="text/javascript" src="<c:url value='/resources/js/jquery.datetimepicker.full.js'/>"></script>
-	
+		
 	<script type="text/javascript" src="<c:url value='/resources/js/app.js'/>"></script>
 	
 	<%-- <script type="text/javascript" src="<c:url value='/resources/js/qrating-1.0.0.js'/>"></script>
@@ -68,16 +65,7 @@
 		<tiles:insertAttribute name="footer"/>
 	</footer>
 	
-	<script type="text/javascript" src="<c:url value='/resources/js/config-datetimepicker.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/config-datatimepicker.js'/>"></script>
 	
-	<script type="text/javascript" src="<c:url value='/resources/js/angular-animate.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/angular-aria.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/angular-material.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/moment-with-locales.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/highlight.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/angular-material-datetimepicker.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/demoangular.js'/>"></script>
-
 </body>
-
 </html>
