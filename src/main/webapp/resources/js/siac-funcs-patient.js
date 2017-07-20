@@ -240,7 +240,7 @@ function changeEvent(a,b){
 	c.color=b,
 	$("#calendar-patient").fullCalendar("updateEvent",c)
 }
-
+//variaveis globais que vão ser usadas nas  funções myGroup,leaveMygroup
 var idUserSession;
 var jsonUniv;
 var jsonCount;
@@ -272,7 +272,7 @@ function myGroups(){
 
 	});
 }
-
+//mudar o nome das Variáveis
 function leaveMyGroups(id_group,id_paciente){
 	$('#btn-join'+id_group).prop("disabled",false);
 	$('#btn-join'+id_group).attr("disabled");
@@ -285,7 +285,7 @@ function leaveMyGroups(id_group,id_paciente){
 	});
 	
 }
-
+//mudar o nome das Variáveis
 function joinGroups(id_group,id_paciente){
 	var json = {id: id_group, patients:[{id: id_paciente}]};
 	$('#btn-join'+id_group).prop('disabled', true);
@@ -301,7 +301,7 @@ function joinGroups(id_group,id_paciente){
 
 	refreshGroup();
 }
-
+//mudar o nome das Variáveis
 function getMyGroup(){
 	ajaxCall("/siac/getMyGroups",null,function(json){
 		var linha = "";
@@ -334,6 +334,7 @@ function getMyGroup(){
 	});
 	
 }
+//mudar s nomes das variaveis
 function refreshGroup(){
 
 	ajaxCall("/siac/getGroupsFree",null,function(json){
