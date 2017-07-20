@@ -347,13 +347,21 @@ public class ConsultationService {
 
 	}
 	
-	public String cancelConsultationById(long id, String message, ConsultationDAO consDAO){
+	public String cancelConsultationById(long id, String message, ConsultationDAO consDAO, ReserveDAO resDAO){
 
 		Gson gson = new Gson();
 		Response response = new Response();
 
 		try{
 			Consultation oldCons = getConsultationsById(id, consDAO);
+			
+			//Caso a consulta esteja livre
+			if(oldCons.getState().equals(ConsultationState.FR)){
+				consDAO.cancelConsultation(oldCons);
+				response.setCode(Response.SUCCESS);
+				response.setMessage("Consulta cancelada com sucesso!");
+				
+			}
 
 			if(oldCons != null){
 				Date today = new Date();

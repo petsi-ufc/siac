@@ -189,6 +189,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					
 					var title = "";
 					if(value.state == "FR")	title = "Livre";
+					else if (value.state == "CD" && value.group == null && value.patient == null) title = "Cancelada";
 					else title = value.group == null? value.patient.name:value.group.title;
 					var e = {
 						title: title,
@@ -501,6 +502,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		}
 		
 		function _cancelConsultation(index){
+			console.log(index);
 			$scope.conToCancel = index;
 			$("#modal-cancel-consultation").modal("show");
 		}

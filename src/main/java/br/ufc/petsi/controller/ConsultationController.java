@@ -67,7 +67,7 @@ public class ConsultationController {
 	@RequestMapping(value = "/cancelConsultation", method = RequestMethod.GET)
 	@ResponseBody
 	public String cancelConsultation(@RequestParam("id") long id, @RequestParam("message") String message){
-		return consultationService.cancelConsultationById(id, message, consDAO);
+		return consultationService.cancelConsultationById(id, message, consDAO, reserveDAO);
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")
@@ -101,7 +101,7 @@ public class ConsultationController {
 	public String getConsultationsByProfessionalJSON(HttpSession session){
 		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
 		System.out.println("USER SESSION: "+proTemp);
-		System.out.println(consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO));
+		System.out.println("[JSON RESULT]: "+consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO));
 		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
 	}
 	
