@@ -41,12 +41,12 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 
 (function(){
 	
-	
 	initTimepicker("tmp-init-1",null);
 	initTimepicker("tmp-end-1",null);
 	
 	
-	angular.module("siacApp").controller("professionalController", function($scope, $compile, $sce, uiCalendarConfig, professionalService){
+	angular.module("siacApp")
+	.controller("professionalController", function($scope, $compile, $sce, uiCalendarConfig, professionalService){
 		
 		//Variables
 		$scope.menuIndex = 0;
@@ -58,6 +58,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.patients = [];
 		$scope.eventsForDay = [];
 		$scope.frequencyList = [];
+		$scope.allConsToCancel = [];
 		$scope.chGroupNowConsultation = false;
 		$scope.chPatientNowConsultation = false;
 		
@@ -106,9 +107,11 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.addConPatient = _addConPatient;
 		$scope.removeConPatient = _removeConPatient;
 		$scope.registerConsultation = _registerConsultation; 
-		$scope.cancelConsultation = _cancelConsultation; 
+		$scope.cancelConsultation = _cancelConsultation;
+		$scope.cancelAllConsultation = _cancelAllConsultation;
 		$scope.reschedulingConsultation = _reschedulingConsultation;
 		$scope.registerCancelConsultation = _registerCancelConsultation;
+		$scope.registerAllCancelConsultation = _registerAllCancelConsultation;
 		$scope.registerReschedulingConsultation = _registerReschedulingConsultation;
 		$scope.showFrequencyList = _showFrequencyList;
 		$scope.addFrequencyList = _addFrequencyList;
@@ -151,6 +154,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					
 					var d = new Date(data.start._d);
 					var e = [];
+					
 					$scope.events.forEach(function (value, key){
 						var dvs = new Date(Date.parse(value.start));
 						var dve = new Date(Date.parse(value.end));
@@ -165,7 +169,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 						}
 					});
 					$scope.eventsForDay = e;
-					
 					$("#modal-schedules-description").modal("show");
 				},
 				dayClick : _dayClick,
@@ -201,6 +204,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					};
 					if(value.group != null)
 						e.group = value.group;
+					
 					$scope.events.push(e);
 					
 				});
@@ -378,11 +382,10 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	var dataInit = new Date(date);
         	dataInit.setUTCHours(parseInt(intHour.split(":")[0]));
         	dataInit.setUTCMinutes(parseInt(intHour.split(":")[1]));
-
+        	
         	var dataEnd = new Date(date);
         	dataEnd.setUTCHours(parseInt(endHour.split(":")[0]));
         	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
-            
             
             var con = {schedule:[{"group":group, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
             if($scope.chGroupNowConsultation){
@@ -427,7 +430,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			$scope.isPacientConsultation = false;
 			$scope.isFreeConsultation = false;
 			$scope.isGroupConsultation = false;
-			$scope.showConsultationButtons = true;;
+			$scope.showConsultationButtons = true;
 		}
 		
 		function configureModal(){
@@ -455,6 +458,34 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			$("#modal-cancel-consultation").modal("show");
 		}
 		
+		function _cancelAllConsultation(date){
+			var datef = new Date(date); // Angular não está reconhecendo os métodos getDate..., então foi necessário usar o new Date
+			
+			//Adicionando a var as datas para comparar cada uma e evitar problemas futuramente
+			dayFormat = datef.getDate() + 1; //0 a 30
+			monthFormat = datef.getMonth();
+			yearFormat = datef.getFullYear();
+			
+			dayconsultations = [];
+			
+			//console.log($scope.events.length);
+			
+			for(var i = 0; i < $scope.events.length; i++){
+				datei = new Date($scope.events[i].start); //Pegando a data Start(atributo) da consulta (objeto)
+				dayi = datei.getDate();
+				monthi = datei.getMonth();
+				yeari = datei.getFullYear();
+				
+				if((yearFormat == yeari) && (monthFormat == monthi) && (dayFormat == dayi)){ //Eventos do dia selecionando para serem cancelados
+					dayconsultations.push($scope.events[i].id);
+				}
+			}
+			i = 0;
+			
+			$scope.allConsToCancel = dayconsultations;
+			$("#modal-all-cancel-consultation").modal("show");
+		}
+		
 		function _registerCancelConsultation(index, message){
 			ajaxCall("/siac/cancelConsultation", {"id":index, "message": message}, function(response){
 				var type = ALERT_ERROR;
@@ -467,6 +498,23 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 				}
 			}, function(){
 				alertMessage("Ops, algo de errado aconteceu!", null, ALERT_ERROR);
+			});
+		}
+		
+		function _registerAllCancelConsultation(index, message){
+			consultations = [];
+			for(var i=0; i < index.length; i++){
+				consultations.push({id:index[i], comment:message});
+			}
+			professionalService.cancelAllConsultation({consultations}, function(response){
+				var type = ALERT_ERROR;
+				if(response.data.code == RESPONSE_SUCCESS){
+					alertMessage(response.data.message, null, ALERT_SUCCESS);
+					location.reload(); 
+				}else{
+					console.log(response);
+					alertMessage(response.message, null, ALERT_ERROR);
+				}
 			});
 		}
 		
@@ -640,6 +688,10 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		
 		
 	});
+	
+	
+
+//;
 	
 })();
 
@@ -963,7 +1015,7 @@ function showModalSchedules(date, action){
 	labelDay.text(date);
 	
 	modal.modal('show');
-		
+
 }
 
 function onButtonAddScheduleClick(){

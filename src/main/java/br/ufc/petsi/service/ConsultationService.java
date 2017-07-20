@@ -25,6 +25,7 @@ import br.ufc.petsi.enums.ConsultationState;
 //import br.ufc.petsi.enums.QueryTemplate;
 import br.ufc.petsi.event.Event;
 import br.ufc.petsi.model.Consultation;
+import br.ufc.petsi.model.ConsultationList;
 import br.ufc.petsi.model.Group;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
@@ -382,6 +383,50 @@ public class ConsultationService {
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível cancelar a consulta pois a mesma não existe");
 			return gson.toJson(response);
+		}catch(Exception e){
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível cancelar a consulta");
+
+			e.printStackTrace();
+
+			System.out.println("Error at cancelConsultation by id: "+e);
+
+			return gson.toJson(response);
+		}
+	}
+	
+	public String cancelAllConsultationById(String json, ConsultationDAO consDAO){
+		
+		Gson gson = new Gson();
+		Response response = new Response();
+		ConsultationList consultations = null;
+
+		try{
+			
+			consultations = gson.fromJson(json, ConsultationList.class);
+			
+			for (Consultation consultation : consultations.getConsultations()) {
+				Consultation oldCons = consDAO.getConsultationById(consultation.getId());
+				String result = cancelConsultationById(oldCons.getId(), oldCons.getComment(), consDAO);
+				response = gson.fromJson(result, Response.class);
+				
+				if(response.getCode() == Response.ERROR){
+					response.setCode(Response.ERROR);
+					response.setMessage("Ops, não foi possível cancelar todas as consultas. \n"+response.getMessage());
+					return gson.toJson(response);
+				}
+				
+				if(oldCons.getPatient() != null || oldCons.getGroup() != null){
+					if(!consultation.getComment().equals(""))
+						emailService.sendEmail(oldCons, consultation.getComment());
+				}
+			}
+			
+			response.setCode(Response.SUCCESS);
+			response.setMessage("Consultas canceladas com sucesso!");
+			return gson.toJson(response);
+			
+			
 		}catch(Exception e){
 			response.setCode(Response.ERROR);
 			response.setMessage("Ops, não foi possível cancelar a consulta");
