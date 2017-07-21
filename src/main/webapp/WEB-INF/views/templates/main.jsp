@@ -16,7 +16,7 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-stars.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-datetimepicker.min.css'/>">
-	
+	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/jquery.datetimepicker.css'/>">
 
 	<script type="text/javascript" src="<c:url value='/resources/js/angular.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/jquery-2.1.3.min.js'/>"></script>
@@ -30,6 +30,7 @@
 	<script type="text/javascript" src="<c:url value='/resources/js/siac-funcs.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/schedule-classes.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/bootstrap-datetimepicker.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/jquery.datetimepicker.full.js'/>"></script>
 	
 		
 	<script type="text/javascript" src="<c:url value='/resources/js/app.js'/>"></script>

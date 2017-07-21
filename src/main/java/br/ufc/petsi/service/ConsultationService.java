@@ -84,7 +84,7 @@ public class ConsultationService {
 				consultation.setProfessional(proTemp);
 				consultation.setService(proTemp.getSocialService());
 				//consultation.setState(state);
-				
+				System.out.println(consultation.getDateInit() + "; " + consultation.getDateEnd());
 				if(consultation.getDateInit().after(consultation.getDateEnd())){
 					response.setCode(Response.ERROR);
 					response.setMessage("Ops, existe uma consulta com horário de inicio superior ao de fim");

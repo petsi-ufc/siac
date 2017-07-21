@@ -308,7 +308,17 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		}
 		
 		function _addTempSchedule(){
-			
+//			var dateInit = $('#livreInicio').val();
+//        	var dateEnd = $('#livreFim').val();
+//        	
+//        	var dataInit = new Date(date);
+//        	dataInit.setUTCHours(parseInt(intHour.split(":")[0]));
+//        	dataInit.setUTCMinutes(parseInt(intHour.split(":")[1]));
+//
+//        	var dataEnd = new Date(date);
+//        	dataEnd.setUTCHours(parseInt(endHour.split(":")[0]));
+//        	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
+        	
 			var dateInit = angular.copy($scope.selectedDay);
 			var dateEnd = angular.copy($scope.selectedDay);
 			
@@ -354,7 +364,10 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			});
 		}
         
-        function _saveConsultations(patient, date, intHour, endHour){
+        function _saveConsultations(patient, date){
+        	var intHour = $('#pacienteInicio').val();
+        	var endHour = $('#pacienteFim').val();
+        	
         	var dataInit = new Date(date);
         	dataInit.setUTCHours(parseInt(intHour.split(":")[0]));
         	dataInit.setUTCMinutes(parseInt(intHour.split(":")[1]));
@@ -383,23 +396,26 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
             
 		}
         
-        function _saveGroupConsultation(group, date, intHour, endHour){
+        function _saveGroupConsultation(group, date){
+        	var intHour = $('#grupoInicio').val();
+        	var endHour = $('#grupoFim').val();
+
         	var dataInit = new Date(date);
+        	
         	dataInit.setUTCHours(parseInt(intHour.split(":")[0]));
         	dataInit.setUTCMinutes(parseInt(intHour.split(":")[1]));
         	
         	var dataEnd = new Date(date);
         	dataEnd.setUTCHours(parseInt(endHour.split(":")[0]));
         	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
-            
         	
             var con = {schedule:[{"group":group, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
             if($scope.chGroupNowConsultation){
             	con.schedule[0].state="NO";
             }
-            console.log(con);
-            
+//            console.log(con);
             professionalService.saveConsultation({json:con}, function(response){
+            	
 				var message = response.data.message;
 				if(response.data.code == 200){
 					alertMessage(message,null,ALERT_SUCCESS);

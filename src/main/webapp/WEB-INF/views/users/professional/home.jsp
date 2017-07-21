@@ -729,18 +729,12 @@
 					
 								<div id="date-report" class="form-group">
 									<div class="input-group col-md-4" id="date-left">
-										
-											<label class="control-label" for="input-dtpckr-start-report">Início</label>
-											<input ng-required="true" type="text" placeholder="Date" name="dateBegin" class="form-control" id="input-dtpckr-start-report"
-											/>
-										
+										<label class="control-label" for="input-dtpckr-start-report">Início</label>
+										<input ng-required="true" type="text" placeholder="Date" name="dateBegin" class="form-control datetimepicker2" id="input-dtpckr-start-report"/>
 									</div>
 									<div class="input-group col-md-4" id="date-right"layout-gt-md="row" layout="column">
-										
-											<label class="control-label" for="input-dtpckr-end-report">Fim</label>
-											<input ng-required="true" type="text" placeholder="Date" name="dateEnd" class="form-control" id="input-dtpckr-end-report"
-											/>
-										
+										<label class="control-label" for="input-dtpckr-end-report">Fim</label>
+										<input ng-required="true" type="text" placeholder="Date" name="dateEnd" class="form-control datetimepicker2" id="input-dtpckr-end-report"/>
 									</div>
 								</div>
 					
@@ -971,18 +965,17 @@
 										<div class="row row-schedule-id">
 											<label class="col-lg-1 control-label">Início</label>
 											<div class="col-md-5">
-												<div class="margin-left input-group date datetimepicker1">
-													<input id="grupoInicio" type="text" ng-model="initGrpSchTemp" class="form-control input-small"> 
+												<div class="margin-left input-group date">
+													<input id="grupoInicio" type="text" ng-model="initGrpSchTemp" class="form-control input-small datetimepicker1"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
 												</div>												
 											</div>
-								
 											<label class="col-lg-1 control-label">Fim</label>
 											<div class="col-md-5">
-												<div class="input-group date datetimepicker2">
-													<input id="grupoFim" type="text" ng-model="endGrpSchTemp" class="form-control input-small" > 
+												<div class="input-group date">
+													<input id="grupoFim" type="text" ng-model="endGrpSchTemp" class="form-control input-small datetimepicker1"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -1060,7 +1053,7 @@
 											<label class="col-lg-1 control-label">Início</label>
 											<div class="col-md-5">
 												<div class="timepicker-init margin-left input-group timepicker">
-													<input id="pacienteInicio" type="text" ng-model="initSchTemp" class="form-control input-small"> 
+													<input id="pacienteInicio" type="text" ng-model="initSchTemp" class="form-control input-small datetimepicker1"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -1070,7 +1063,7 @@
 											<label class="col-lg-1 control-label">Fim</label>
 											<div class="col-md-5">
 												<div class="timepicker-end input-group timepicker">
-													<input id="pacienteFim" type="text" class="form-control input-small" ng-model="endSchTemp"> 
+													<input id="pacienteFim" type="text" class="form-control input-small datetimepicker1" ng-model="endSchTemp"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -1152,7 +1145,7 @@
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
 											<div class="margin-left input-group timepicker">
-												<input id="livreInicio" type="text" class="form-control input-small"> 
+												<input id="livreInicio" type="text" class="form-control input-small datetimepicker1"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
@@ -1162,7 +1155,7 @@
 										<label class="col-lg-1 control-label">Fim</label>
 										<div class="col-md-4">
 											<div class="input-group timepicker">
-												<input id="livreFim" type="text" class="form-control input-small" > 
+												<input id="livreFim" type="text" class="form-control input-small datetimepicker1" > 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
@@ -1273,10 +1266,10 @@
 				
 				</div> 
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-disabled="(initSchTemp == null || endSchTemp == null)" ng-click="saveConsultations(ptt,selectedDay,initSchTemp,endSchTemp)">
+					<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-click="saveConsultations(ptt,selectedDay)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
-					<button type="submit" class="btn btn-primary" ng-if="isGroupConsultation == true" ng-disabled="grp == null" ng-click="saveGroupConsultation(grp,selectedDay,initGrpSchTemp,endGrpSchTemp)">
+					<button type="submit" class="btn btn-primary" ng-if="isGroupConsultation == true" ng-disabled="grp == null" ng-click="saveGroupConsultation(grp,selectedDay)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
 					<button type="submit" class="btn btn-primary" ng-if="isFreeConsultation == true" ng-disabled="generetedSchedules.length == 0" 
