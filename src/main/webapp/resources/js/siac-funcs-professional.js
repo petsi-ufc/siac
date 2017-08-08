@@ -184,10 +184,14 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 
 		
 		function getConsultations(a,b,c){
+			var init = a._d;
+			var end = b._d;
+			init = (init.getFullYear())+"-"+(init.getMonth()+1)+"-"+(init.getDate()+1);
+			end = (end.getFullYear())+"-"+(end.getMonth()+1)+"-"+(end.getDate()+1);
 			
 			showSnack("Carregando as consultas...");
-			professionalService.getProfessionalConsultations(function(data){
-				
+			professionalService.getProfessionalConsultations(init, end, function(data){
+				$scope.events.length = 0;
 				data.data.forEach(function (value, key){
 					
 					var title = "";
@@ -207,11 +211,9 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					};
 					if(value.group != null)
 						e.group = value.group;
-					
 					$scope.events.push(e);
-					
 				});
-				
+				console.log($scope.events);
 			});
 		}
 		

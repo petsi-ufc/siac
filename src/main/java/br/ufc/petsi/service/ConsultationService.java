@@ -132,7 +132,7 @@ public class ConsultationService {
 		}
 		
 		try{
-			List<Consultation> cons = consDAO.getConsultationByProfessional(proTemp);
+			List<Consultation> cons = consDAO.getConsultationByProfessional(proTemp, null, null);
 			for(Consultation c: cons){
 				
 				if(formatter.format(c.getDateInit()).equals(formatter.format(con.getDateInit())) && formatter.format(c.getDateEnd()).equals(formatter.format(con.getDateEnd())) && (c.getState().equals(ConsultationState.SC) || c.getState().equals(ConsultationState.RV))){
@@ -256,8 +256,8 @@ public class ConsultationService {
 		return json;
 	}
 
-	public String getConsultationsByProfessionalJSON(Professional professional, ConsultationDAO consDAO){
-		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
+	public String getConsultationsByProfessionalJSON(Professional professional, ConsultationDAO consDAO, Date init, Date end){
+		List<Consultation> cons = consDAO.getConsultationByProfessional(professional, init, end);
 		String json = "";
 		try{
 			Gson gson = new GsonBuilder().setExclusionStrategies(new ConsultationExclusionStrategy()).serializeNulls().create();
@@ -270,7 +270,7 @@ public class ConsultationService {
 	}
 
 	public List<Consultation> getConsultationsByProfessional(Professional professional, ConsultationDAO consDAO){
-		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
+		List<Consultation> cons = consDAO.getConsultationByProfessional(professional, null, null);
 		return cons;
 	}
 
