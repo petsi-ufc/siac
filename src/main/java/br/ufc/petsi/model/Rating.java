@@ -3,14 +3,17 @@ package br.ufc.petsi.model;
 import java.io.Serializable;
 
 import javax.annotation.Generated;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -39,10 +42,15 @@ public class Rating implements Serializable{
 	private int rating;
 
 	@Expose
-	@OneToOne(mappedBy="rating")
+	@ManyToOne(cascade=CascadeType.MERGE)
 	@JsonProperty("consultation")
 	@JsonManagedReference(value="rating1")
 	private Consultation consultation;
+	
+	@ManyToOne(cascade=CascadeType.MERGE)
+	@JsonProperty("patient")
+	@JsonManagedReference
+	private Patient patient;
 	
 	public Rating() {}
 
@@ -91,11 +99,21 @@ public class Rating implements Serializable{
 	public void setConsultation(Consultation consultation) {
 		this.consultation = consultation;
 	}
+	
+	@JsonProperty("patient")
+	public Patient getPatient() {
+		return patient;
+	}
+
+	@JsonProperty("patient")
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
 
 	@Override
 	public String toString() {
 		return "Rating [id=" + id + ", comment=" + comment + ", rating="
-				+ rating + ", consultation=" + consultation + "]";
+				+ rating + ", consultation=" + consultation.getId()+", patient="+patient.getId() + "]";
 	}
 
 }

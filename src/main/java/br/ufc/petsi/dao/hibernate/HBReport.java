@@ -29,7 +29,8 @@ public class HBReport implements ReportDAO{
 		
 		RatingReport ratingReport = new RatingReport();
 		
-		Query query = (Query) manager.createQuery("SELECT avg(r.rating) FROM Rating r, Consultation c WHERE r.id = c.rating.id and c.professional.id = :professionalId");
+		//Query query = (Query) manager.createQuery("SELECT avg(r.rating) FROM Rating r, Consultation c WHERE r.id = c.rating.id and c.professional.id = :professionalId");
+		Query query = (Query) manager.createQuery("SELECT avg(r.rating) FROM Rating r, Consultation c WHERE c.professional.id = :professionalId AND r.consultation.id = c.id");
 		query.setParameter("professionalId", professionalId);
 		
 		Object result = query.getSingleResult();
@@ -40,7 +41,8 @@ public class HBReport implements ReportDAO{
 		
 		ratingReport.setAverage(rating);
 		
-		Query query2 = (Query) manager.createQuery("SELECT r FROM Rating r, Consultation c WHERE r.id = c.rating.id and c.professional.id = :professionalId and c.dateInit >= :dateBegin and c.dateInit <= :dateEnd");
+		//Query query2 = (Query) manager.createQuery("SELECT r FROM Rating r, Consultation c WHERE r.id = c.rating.id and c.professional.id = :professionalId and c.dateInit >= :dateBegin and c.dateInit <= :dateEnd");
+		Query query2 = (Query) manager.createQuery("SELECT r FROM Rating r, Consultation c WHERE r.consultation.id = c.id and c.professional.id = :professionalId and c.dateInit >= :dateBegin and c.dateInit <= :dateEnd");
 		query2.setParameter("professionalId", professionalId);
 		query2.setParameter("dateBegin", dateBegin);
 		query2.setParameter("dateEnd", dateEnd);

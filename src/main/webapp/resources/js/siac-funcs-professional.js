@@ -357,7 +357,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 				var message = response.data.message;
 				if(response.data.code == 200){
 					alertMessage(message,null,ALERT_SUCCESS);
-					location.reload(); 
+					//location.reload(); 
 				}else{
 					console.log(response.data);
 					alertMessage(message,null,ALERT_ERROR);
@@ -504,7 +504,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			console.log($scope.comment);
 			if($scope.comment != '' && $scope.comment != undefined){
 				ajaxCall("/siac/registerConsultation", {"id": $scope.tempConsultation.id}, function(response){
-					if(response.code == RESPONSE_SUCCESS){
+					if(response.data.code == RESPONSE_SUCCESS){
 						alertMessage(response.message, null, ALERT_SUCCESS);
 						$scope.idConsultationToComment = $scope.tempConsultation.id;
 						$scope.registerComment($scope.comment);
@@ -700,6 +700,16 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			$scope.group = 1;
 			$scope.update = true;
 			$scope.grupo = group;
+			
+			professionalService.getPatientsOfGroup({id:group.id}, function(response){
+				var message = response.data.message;
+				console.log(response);
+				if(response.data.code == 200){
+					$scope.grupo.patients = message;
+				}else{
+					alertMessage(message,null,ALERT_ERROR);
+				}
+			});
 			
 			if(group.openGroup){
 				$("#inlineRadio1").prop("checked", true);

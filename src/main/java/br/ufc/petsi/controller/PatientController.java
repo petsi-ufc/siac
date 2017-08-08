@@ -106,8 +106,9 @@ public class PatientController {
 	@Secured("ROLE_PATIENT")
 	@RequestMapping("/showRating")
 	@ResponseBody
-	public String getRatingByConsultation(Consultation consultation){
-		return consService.getRatingByConsultation(consultation, consDAO);
+	public String getRatingByConsultation(Consultation consultation, HttpSession session){
+		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
+		return consService.getRatingByConsultation(consultation, patient, consDAO);
 	}
 
 	@Secured("ROLE_PATIENT")

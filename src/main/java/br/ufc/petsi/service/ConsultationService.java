@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.swing.JOptionPane;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.eclipse.jdt.internal.compiler.impl.Constant;
 
 import br.ufc.petsi.constants.Constants;
@@ -449,10 +450,10 @@ public class ConsultationService {
 		}
 	}
 
-	public String getRatingByConsultation(Consultation consultation, ConsultationDAO consultationDAO){
+	public String getRatingByConsultation(Consultation consultation, Patient patient, ConsultationDAO consultationDAO){
 		String json = "";
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-		Rating rating = consultationDAO.getRatingByIdConsultation(consultation.getId());
+		Rating rating = consultationDAO.getRatingByIdConsultation(consultation.getId(), patient.getId());
 		json = gson.toJson(rating);
 		return json;
 
@@ -500,21 +501,42 @@ public class ConsultationService {
 		return "{'msg': Reserva cancelada com sucesso}";
 	}
 
-	public String updateRating(Consultation consultation, ConsultationDAO consultationDAO, Patient patient){
+	public String updateRating(String json, ConsultationDAO consultationDAO, Patient patient){
 
 		Gson gson = new Gson();
 		Response response = new Response();
 		
 		try{
-			if(consultation.getState().equals(ConsultationState.RD) && consultation.getPatient().getCpf().equals(patient.getCpf())){
-				response.setCode(Response.SUCCESS);
-				response.setMessage("Consulta avaliada com sucesso");
-				consultationDAO.update(consultation);
+			Rating rating  = gson.fromJson(json, Rating.class);
+			rating.setPatient(patient);
+			Consultation consultation = consultationDAO.getConsultationById(rating.getConsultation().getId());
+			consultation.getRatings().add(rating);
+			rating.setConsultation(consultation);
+			
+			if(consultation.getState().equals(ConsultationState.RD)){
+				if(consultation.getPatient() != null){
+					if(consultation.getPatient().getCpf().equals(patient.getCpf())){
+						response.setCode(Response.SUCCESS);
+						response.setMessage("Consulta avaliada com sucesso");
+						consultationDAO.update(consultation);
+					}else{
+						response.setCode(Response.ERROR);
+						response.setMessage("A consulta não pode ser avaliada");
+					}
+				}else{
+					if(verifierPatientInGroup(consultation.getGroup(), patient)){
+						response.setCode(Response.SUCCESS);
+						response.setMessage("Consulta avaliada com sucesso");
+						consultationDAO.update(consultation);
+					}else{
+						response.setCode(Response.ERROR);
+						response.setMessage("A consulta não pode ser avaliada");
+					}
+				}
 			} 
 			else{
 				response.setCode(Response.ERROR);
 				response.setMessage("A consulta não pode ser avaliada");
-
 			}
 			return gson.toJson(response);
 
@@ -528,6 +550,8 @@ public class ConsultationService {
 
 	}
 	
+
+
 	public String checkSchedules(Professional proTemp, String json, ConsultationDAO consDAO){
 		Gson gson = new Gson();
 		Response response = new Response();
@@ -600,6 +624,15 @@ public class ConsultationService {
 		for (Group g : groups) {
 			if(g.getId() == group.getId())
 				return true;
+		}
+		return false;
+	}
+	
+	public boolean verifierPatientInGroup(Group group, Patient patient) {
+		if(group != null){
+			for(Patient p: group.getPatients())
+				if(p.getCpf().equals(patient.getCpf()))
+					return true;
 		}
 		return false;
 	}

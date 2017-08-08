@@ -58,9 +58,9 @@ public class HBGroup implements GroupDAO {
 	@Override
 	public List<Patient> getPatients(Group group) {
 		try{
-			Group g = manager.find(Group.class, group.getId());
-			return g.getPatients();
-		}catch(NoResultException ex){
+			return manager.find(Group.class, group.getId()).getPatients();
+		}catch(Exception e){
+			System.out.println("No result at getPatients: "+e);
 			return null;
 		}
 	}

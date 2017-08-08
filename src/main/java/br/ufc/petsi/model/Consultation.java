@@ -96,15 +96,14 @@ public class Consultation implements Serializable{
 	@JsonProperty("state")
 	private ConsultationState state;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = true, 
-			fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name="id_rating")
-	@JsonProperty("rating")
-	@JsonBackReference(value="rating1")
-	private Rating rating;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="consultation", cascade=CascadeType.MERGE)
+	@JsonProperty("ratings")
+	@JsonBackReference
+	private List<Rating> ratings;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="consultation")
 	@JsonProperty("reserves")
+	@JsonBackReference
 	private List<Reserve> reserves;
 	
 	@Enumerated( EnumType.STRING )
@@ -189,14 +188,14 @@ public class Consultation implements Serializable{
 		this.state = state;
 	}
 
-	@JsonProperty("rating")
-	public Rating getRating() {
-		return rating;
+	@JsonProperty("ratings")
+	public List<Rating> getRatings() {
+		return ratings;
 	}
 
-	@JsonProperty("rating")
-	public void setRating(Rating rating) {
-		this.rating = rating;
+	@JsonProperty("ratings")
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
 	}
 
 	@JsonProperty("reserves")

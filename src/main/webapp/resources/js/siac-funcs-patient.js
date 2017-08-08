@@ -92,9 +92,18 @@ function myConsultations(){
 		$("#my-consultations").css("display","block"),
 		$(".tr-my-consultations").remove(),
 		ajaxCall("/siac/getMyConsultations",null,function(a){
+			console.log(a);
 			var b,c,d,e,f,g,h;
 			$.each(a,function(a,i){
-				$.each(i,function(a,i){"start"==a&&(c=i),"title"==a&&(b=i),"hour"==a&&(d=i),"state"==a&&(e=i),"id"==a&&(f=i),"isRatingNull"==a&&(g=i),"idReserve"==a&&(h=i)});
+				$.each(i,function(a,i){
+					"start"==a&&(c=i),
+					"title"==a&&(b=i),
+					"hour"==a&&(d=i),
+					"state"==a&&(e=i),
+					"id"==a&&(f=i),
+					"isRatingNull"==a&&(g=i),
+					"idReserve"==a&&(h=i)
+					});
 				var j=$("<tr class='tr-my-consultations'></tr>");
 				j.append($("<td>"+b+"</td>")),
 				j.append($("<td>"+c+"</td>")),
@@ -128,19 +137,20 @@ function addRating(){
 	}),
 	$("#save-rating").click(function(){
 		var a=new Object;
-		a["rating.rating"]=$("#rating-grade option:selected").val(),
-		a["rating.comment"]=$("#rating-comment").val(),
-		a.id=$("#input-rating-id").val(),
-		console.log(JSON.stringify(a)),
+		a.rating = $("#rating-grade option:selected").val();
+		a.comment = $("#rating-comment").val();
+		a.consultation = {id:$("#input-rating-id").val()};
+		console.log(JSON.stringify(a));
 
-		ajaxCall("/siac/updateConsultationRating",a,function(a){
+		ajaxCall("/siac/updateConsultationRating?json="+JSON.stringify(a),a,function(a){
+			console.log(a);
 			a.code==RESPONSE_SUCCESS?alertMessage(a.message,null,ALERT_SUCCESS):alertMessage(a.message,null,ALERT_ERROR)
 		},function(){
 			alertMessage("ERRO",null,ALERT_ERROR)
 		}),
 
-		$("#modal-rating").modal("hide"),
-		$("#modal-event").modal("hide")
+		$("#modal-rating").modal("hide");
+		$("#modal-event").modal("hide");
 	})
 }
 
