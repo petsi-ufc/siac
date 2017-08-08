@@ -77,7 +77,9 @@ public class ConsultationService {
 			
 			for (Consultation consultation : scheduler.json.getSchedule()) {
 				if(!consultation.getState().equals(ConsultationState.FR)){
+					System.out.println("Usuario LPA" + consultation.getPatient());
 					if(consultation.getPatient() != null){
+						System.out.println("Usuario LPA" + consultation.getPatient());
 						consultation.setPatient((Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT));
 					}
 				}
