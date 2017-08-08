@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
+import br.ufc.petsi.model.Rating;
 import br.ufc.petsi.model.Reserve;
+import br.ufc.petsi.service.ConsultationService;
 
 public class Event {
 
@@ -18,10 +20,16 @@ public class Event {
 	private String hour;
 	private String state;
 	private boolean isRatingNull;
+	private boolean isGroup;
 	private long idReserve;
+	
+	//Auxiliar
+	private ConsultationService service;
 
 	public Event(Patient patient, Consultation consultation) {
 
+		service = new ConsultationService();
+		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
 		SimpleDateFormat simpleHourFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -30,33 +38,69 @@ public class Event {
 		this.end = simpleDateFormat.format(consultation.getDateEnd());
 		this.title = consultation.getService().getName();
 		this.state = consultation.getState().name();
-		if(consultation.getRating() != null) this.isRatingNull = false;
-		else this.isRatingNull = true;
+		if(consultation.getRatings().size() > 0){
+			for(Rating r: consultation.getRatings()){
+				if(r.getPatient().getId() == patient.getId()){
+					this.isRatingNull = false;
+					break;
+				}else{
+					this.isRatingNull = true;
+				}
+			}
+		}else{
+			this.isRatingNull = true;
+		}
 
 		boolean isReserved = false;
 		
 		if(this.state == ConsultationState.SC.name()){
-			if(!patient.getCpf().equals(consultation.getPatient().getCpf())){
-				for(Reserve reserve:consultation.getReserves()){
-					if(patient.getCpf().equals(reserve.getPatient().getCpf()) && reserve.isActive()){
-						isReserved = true;
-						this.idReserve = reserve.getId();
+			if(consultation.getPatient() != null){
+				if(!patient.getCpf().equals(consultation.getPatient().getCpf())){
+					for(Reserve reserve:consultation.getReserves()){
+						if(patient.getCpf().equals(reserve.getPatient().getCpf()) && reserve.isActive()){
+							isReserved = true;
+							this.idReserve = reserve.getId();
+						}
+					}
+					if(isReserved){
+						this.color = "#D9D919";
+						this.textColor = "white";
+						this.state = "Reservado";
+					}else{
+						this.color = "#FF7F00";
+						this.textColor = "white";
+						this.state = "Ocupado";
+					}
+					
+				}else{
+					this.color = "#4682B4";
+					this.textColor = "white";
+					this.state = "Agendado";
+				}
+				this.isGroup = false;
+			}else{
+				if(service.verifierPatientInGroup(consultation.getGroup(), patient)){
+					this.color = "#4682B4";
+					this.textColor = "white";
+					this.state = "Agendado";
+				}else{
+					for(Reserve reserve:consultation.getReserves()){
+						if(patient.getCpf().equals(reserve.getPatient().getCpf()) && reserve.isActive()){
+							isReserved = true;
+							this.idReserve = reserve.getId();
+						}
+					}
+					if(isReserved){
+						this.color = "#D9D919";
+						this.textColor = "white";
+						this.state = "Reservado";
+					}else{
+						this.color = "#FF7F00";
+						this.textColor = "white";
+						this.state = "Ocupado";
 					}
 				}
-				if(isReserved){
-					this.color = "#D9D919";
-					this.textColor = "white";
-					this.state = "Reservado";
-				}else{
-					this.color = "#FF7F00";
-					this.textColor = "white";
-					this.state = "Ocupado";
-				}
-				
-			}else{
-				this.color = "#4682B4";
-				this.textColor = "white";
-				this.state = "Agendado";
+				this.isGroup = true;
 			}
 			
 		}else if(this.state == ConsultationState.FR.name()){
@@ -161,6 +205,14 @@ public class Event {
 
 	public void setIdReserve(long idReserve) {
 		this.idReserve = idReserve;
+	}
+
+	public boolean isGroup() {
+		return isGroup;
+	}
+
+	public void setGroup(boolean isGroup) {
+		this.isGroup = isGroup;
 	}
 	
 	

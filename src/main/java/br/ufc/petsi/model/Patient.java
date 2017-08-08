@@ -42,6 +42,11 @@ public class Patient extends User implements Serializable{
 	@JsonProperty("groups")
 	@JsonBackReference
 	private List<Group> groups;
+	
+	@OneToMany(mappedBy="patient", fetch=FetchType.LAZY,cascade=CascadeType.MERGE)
+	@JsonProperty("ratings")
+	@JsonBackReference
+	private List<Rating> ratings;
 
 	public Patient() {}
 	
@@ -68,5 +73,17 @@ public class Patient extends User implements Serializable{
 	public void setGroups(List<Group> groups) {
 		this.groups = groups;
 	}
+
+	@JsonProperty("ratings")
+	public List<Rating> getRatings() {
+		return ratings;
+	}
+
+	@JsonProperty("ratings")
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
+	}
+	
+	
 
 }

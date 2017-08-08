@@ -108,12 +108,10 @@ public class ConsultationController {
 	@Secured("ROLE_PATIENT")
 	@RequestMapping("/updateConsultationRating")
 	@ResponseBody
-	public String updateConsultationRating(Consultation c, HttpSession session){		
-		
-		Consultation consultation = consultationService.getConsultationsById(c.getId(), consDAO);
-		consultation.setRating(c.getRating());
+	public String updateConsultationRating(@RequestParam("json") String json, HttpSession session){		
 		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
-		return consultationService.updateRating(consultation, consDAO, patient);
+		patient = (Patient) userDAO.getByCpf(patient.getCpf(), Constants.ROLE_PATIENT);
+		return consultationService.updateRating(json, consDAO, patient);
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")

@@ -30,6 +30,8 @@ public class LdapAuthenticationFilter extends UsernamePasswordAuthenticationFilt
 		HttpSession session = request.getSession();
 		session.setAttribute("loginRole", role);
 		
+		System.out.println("[PAPEL DO LOGIN DO USUÁRIO]: "+role);
+		
 		CurrentSession.setSession(session);
 		
 		return super.attemptAuthentication(request, response);

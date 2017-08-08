@@ -165,14 +165,15 @@ public class GroupService {
 	
 	public String listPatientsOfGroup(String json, GroupDAO gdao){
 		Gson gson = new Gson();
-		ObjectMapper mapper = new ObjectMapper();
 		Response response = new Response();
 		
 		try{
 			
 			Group group = gson.fromJson(json, Group.class);
-			group.setPatients(gdao.getPatients(group));
-			return mapper.writeValueAsString(group);
+			response.setCode(Response.SUCCESS);
+			System.out.println("[QTD PATIENTS]: "+gdao.getPatients(group).size());
+			response.setMessage(gson.toJson(gdao.getPatients(group)));
+			return gson.toJson(response);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -194,7 +195,6 @@ public class GroupService {
 					patient.getListConsultations().removeAll(patient.getListConsultations());
 				}
 			}
-			
 			response.setCode(Response.SUCCESS);
 			response.setMessage(mapper.writeValueAsString(groups));
 			return gson.toJson(response);

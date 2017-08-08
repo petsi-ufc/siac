@@ -87,6 +87,13 @@
 			});
 		}
 		
+		function _getPatientsOfGroup(params, callback){
+			$http.get("/siac/getPatients?json="+JSON.stringify(params)).then(callback, function(err){
+				console.log("Error at get patients of groups");
+				console.log(err);
+			});
+		}
+		
 		function _registerFrequency(params, callback){
 			$http.post('/siac/registerFrequency?json='+JSON.stringify(params), {"json":params}).then(callback, function(err){
 				console.log("Error at register frequency");
@@ -120,7 +127,8 @@
 			addAndRemovePatient : _addAndRemovePatient,
 			registerFrequency: _registerFrequency,
 			registerComment: _registerComment,
-			getFrequencyList: _getFrequencyList
+			getFrequencyList: _getFrequencyList,
+			getPatientsOfGroup :_getPatientsOfGroup
 		}
 	});
 })();

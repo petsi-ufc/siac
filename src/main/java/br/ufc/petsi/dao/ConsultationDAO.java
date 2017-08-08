@@ -25,6 +25,6 @@ public interface ConsultationDAO {
 	public List<Consultation> getConsultationByPeriod(Professional professional, Date dateInit, Date dateEnd);
 	public List<Consultation> getConsultationByGroup(Group group);
 	public boolean isRatingNull(Consultation consultation);
-	public Rating getRatingByIdConsultation(long idConsultation);
+	public Rating getRatingByIdConsultation(long idConsultation, long idPatient);
 	
 }
