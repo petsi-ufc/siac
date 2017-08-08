@@ -79,9 +79,15 @@ public class ConsultationService {
 			for (Consultation consultation : scheduler.json.getSchedule()) {
 				if(!consultation.getState().equals(ConsultationState.FR)){
 					System.out.println("Usuario LPA:=> " + consultation.getPatient());
-					if(consultation.getPatient() == null){
-						consultation.setPatient((Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT));
-						System.out.println("Usurio VINDO DO BANCO" + consultation.getPatient().toString());
+					if(consultation.getPatient() != null){
+						Patient patient = (Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT);
+						if(patient == null){
+							udao.save(consultation.getPatient());
+							patient = (Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT);
+							consultation.setPatient(patient);
+						}
+						
+						System.out.println("Paciente do Banco" + patient.toString());
 					}
 				}
 				consultation.setProfessional(proTemp);

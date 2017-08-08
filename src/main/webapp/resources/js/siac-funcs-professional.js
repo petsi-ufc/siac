@@ -357,7 +357,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 				var message = response.data.message;
 				if(response.data.code == 200){
 					alertMessage(message,null,ALERT_SUCCESS);
-					//location.reload(); 
+					location.reload(); 
 				}else{
 					console.log(response.data);
 					alertMessage(message,null,ALERT_ERROR);
