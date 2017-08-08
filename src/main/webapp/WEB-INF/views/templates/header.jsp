@@ -11,7 +11,7 @@
         <!-- ESSA NAVBAR É PREENCHIDA DINAMICAMENTE COM JS. -->
       </ul>  
       <ul class="nav navbar-nav navbar-right">
-      	<li><a href="<c:url value="/j_spring_security_logout" />"><span class="glyphicon glyphicon-log-out"></span>Sair</a></li>
+      	<li><a href="<c:url value="/j_spring_security_logout" />"><span class="glyphicon glyphicon-log-out"></span> SAIR</a></li>
       </ul>
       
     </div>

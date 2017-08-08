@@ -121,7 +121,7 @@
 
 			<div id="constutaions-panel" class="panel panel-primary">
 				<div class="panel-heading">
-					<h3>Minhas Consultas</h3>
+					<h3 class="panel-title">Minhas Consultas</h3>
 
 				</div>
 				<table id="my-consultations-table" class="table table-hover">

@@ -6,7 +6,7 @@
 	scope="session" />
 <jsp:setProperty property="*" name="user" />
 
-<div id="home-content" ng-app="siacApp" ng-controller="professionalController">
+<div id="home-content" ng-controller="professionalController">
 
 	<div id="left-bar">
 
@@ -704,16 +704,41 @@
 			
 			<div class="panel-body">
 				<form action="relatorio/avaliacao" method="post" target="_blank">
-					<div id="date-report" class="form-group">
-						<div class="input-group col-md-4" id="date-left">
-							<label class="control-label" for="input-dtpckr-start-report">Início</label>
-							<input ng-required="true" type='text' placeholder="Ex.: 26/05/2016" name="dateBegin" class="form-control" id="input-dtpckr-start-report"/>
-						</div>
-						<div class="input-group col-md-4" id="date-right">
-							<label class="control-label" for="input-dtpckr-end-report">Fim</label>
-							<input ng-required="true" type='text' placeholder="Ex.: 28/05/2016" name="dateEnd" class="form-control" id="input-dtpckr-end-report"/>
-						</div>
-					</div>
+<!-- 					<md-content class="md-padding"> -->
+<!-- 						<md-card layout="column"> -->
+<!-- 							<md-card-content class="md-padding"> -->
+<!-- 								<div id="date-report" class="form-group"> -->
+<!-- 									<div class="input-group col-md-4" id="date-left" layout-gt-md="row" layout="column"> -->
+<!-- 										<md-input-container flex-gt-md="30"> -->
+<!-- 											<label class="control-label" for="input-dtpckr-start-report">Início</label> -->
+<!-- 											<input ng-required="true" type="text" placeholder="Date" name="dateBegin" class="form-control" id="input-dtpckr-start-report" -->
+<!-- 											time="false" date="true" mdc-datetime-picker id="date" ng-model="date" min-date="minDate" max-date="maxDate"/> -->
+<!-- 										</md-input-container> -->
+<!-- 									</div> -->
+<!-- 									<div class="input-group col-md-4" id="date-right"layout-gt-md="row" layout="column"> -->
+<!-- 										<md-input-container flex-gt-md="30"> -->
+<!-- 											<label class="control-label" for="input-dtpckr-end-report">Fim</label> -->
+<!-- 											<input ng-required="true" type="text" placeholder="Date" name="dateEnd" class="form-control" id="input-dtpckr-end-report" -->
+<!-- 											time="false" date="true" mdc-datetime-picker id="date" ng-model="date" min-date="minDate" max-date="maxDate"/> -->
+<!-- 										</md-input-container> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</md-card-content> -->
+<!-- 						</md-card> -->
+<!-- 					</md-content> -->
+					
+								<div id="date-report" class="form-group">
+									<div class="input-group col-md-4" id="date-left">
+										<label class="control-label" for="input-dtpckr-start-report">Início</label>
+										<input ng-required="true" type="text" placeholder="Date" name="dateBegin" class="form-control datetimepicker2" id="input-dtpckr-start-report"/>
+									</div>
+									<div class="input-group col-md-4" id="date-right"layout-gt-md="row" layout="column">
+										<label class="control-label" for="input-dtpckr-end-report">Fim</label>
+										<input ng-required="true" type="text" placeholder="Date" name="dateEnd" class="form-control datetimepicker2" id="input-dtpckr-end-report"/>
+									</div>
+								</div>
+					
+					
 					<br><br><br><br>
 					<button type="submit" class="btn btn-primary" id="button-generate-report" data-dismiss="modal">Gerar</button>
 				</form>
@@ -819,8 +844,8 @@
 			<div class="modal-content">
 				<div id="title-header" class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">x</button>
-					<h3 id="modal-schedule-title" class="modal-title text-center">Cadastrar
-						Horário</h3>
+					<h3 id="modal-schedule-title" class="modal-title text-center">Gerenciar
+						Horários</h3>
 				</div>
 				<div class="modal-body">
 					<h4 class="modal-description" id="modal-description-body">Horários para o dia {{selectedDay.format("DD/MM/YYYY")}}</h4>
@@ -848,8 +873,45 @@
 									<p style="font-size:20px">Cadastrar <br> consulta com grupo</p>
 								</button>
 							</div>
+							<div class="col-xs-6">
+							<br>
+								<button class="btn btn-danger btn-block" style="height: 200px" ng-click="cancelAllConsultation(selectedDay)">
+									<span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:20px"></span>
+									<p style="font-size:20px">Cancelar <br> todas as Consultas <br> do Dia </p>
+								</button>
+							</div>
 						</div>
 					</div>
+					
+					<div class="modal fade" role="dialog" id="modal-all-cancel-consultation">
+						<div class="modal-dialog modal-md">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<h4>Cancelar Horário</h4>
+								</div>
+								<div class="modal-title">
+									<h4>Deseja realmente cancelar todos os horários?</h4>
+								</div>
+								<div class="modal-body">
+									<div id="div-send-email">
+										<label>Enviar email para o paciente:</label>
+										<textarea ng-model="message_cancel" placeholder="Escrever email..." id="text-area-email"
+											class="no-resize form-control" rows="3"></textarea>
+									</div>
+									<div class="margin-top">
+										<button id="btn-cancel-consultation" class="btn btn-danger"
+											value="" name="id" ng-click="registerAllCancelConsultation(allConsToCancel,message_cancel)">Sim, cancelar</button>
+										<button class="btn btn-default" data-dismiss="modal">Voltar</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+								
 					<!-- INÍCIO - TESTE  -->
 					<!-- <div class="panel panel-primary">
 						<div class="panel-heading">
@@ -903,18 +965,17 @@
 										<div class="row row-schedule-id">
 											<label class="col-lg-1 control-label">Início</label>
 											<div class="col-md-5">
-												<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
-													<input id="grupoInicio" type="text" ng-model="initGrpSchTemp" class="form-control input-small"> 
+												<div class="margin-left input-group date">
+													<input id="grupoInicio" type="text" ng-model="initGrpSchTemp" class="form-control input-small datetimepicker1"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
-												</div>
+												</div>												
 											</div>
-								
 											<label class="col-lg-1 control-label">Fim</label>
 											<div class="col-md-5">
-												<div class="timepicker-end input-group bootstrap-timepicker timepicker">
-													<input id="grupoFim" type="text" class="form-control input-small" ng-model="endGrpSchTemp"> 
+												<div class="input-group date">
+													<input id="grupoFim" type="text" ng-model="endGrpSchTemp" class="form-control input-small datetimepicker1"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -991,8 +1052,8 @@
 										<div class="row row-schedule-id">
 											<label class="col-lg-1 control-label">Início</label>
 											<div class="col-md-5">
-												<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
-													<input id="pacienteInicio" type="text" ng-model="initSchTemp" class="form-control input-small"> 
+												<div class="timepicker-init margin-left input-group timepicker">
+													<input id="pacienteInicio" type="text" ng-model="initSchTemp" class="form-control input-small datetimepicker1"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -1001,8 +1062,8 @@
 		
 											<label class="col-lg-1 control-label">Fim</label>
 											<div class="col-md-5">
-												<div class="timepicker-end input-group bootstrap-timepicker timepicker">
-													<input id="pacienteFim" type="text" class="form-control input-small" ng-model="endSchTemp"> 
+												<div class="timepicker-end input-group timepicker">
+													<input id="pacienteFim" type="text" class="form-control input-small datetimepicker1" ng-model="endSchTemp"> 
 													<span class="input-group-addon">
 														<i class="glyphicon glyphicon-time"></i>
 													</span>
@@ -1083,8 +1144,8 @@
 									<div class="row row-schedule-id">
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
-											<div class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
-												<input id="livreInicio" type="text" class="form-control input-small"> 
+											<div class="margin-left input-group timepicker">
+												<input id="livreInicio" type="text" class="form-control input-small datetimepicker1"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
@@ -1093,8 +1154,8 @@
 	
 										<label class="col-lg-1 control-label">Fim</label>
 										<div class="col-md-4">
-											<div class="timepicker-end input-group bootstrap-timepicker timepicker">
-												<input id="livreFim" type="text" class="form-control input-small" > 
+											<div class="input-group timepicker">
+												<input id="livreFim" type="text" class="form-control input-small datetimepicker1" > 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
@@ -1125,7 +1186,7 @@
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
 											<div
-												class="timepicker-init margin-left input-group bootstrap-timepicker timepicker">
+												class="margin-left input-group timepicker">
 												<input type="text" value="{{sch.schedule.dateInit.format('HH:mm')}}" 
 													class="form-control input-small"> <span
 													class="input-group-addon"><i
@@ -1136,7 +1197,52 @@
 										<label class="col-lg-1 control-label">Fim</label>
 										<div class="col-md-4">
 											<div
-												class="timepicker-end input-group bootstrap-timepicker timepicker">
+												class="input-group timepicker">
+												<input type="text" class="form-control input-small" value="{{sch.schedule.dateEnd.format('HH:mm')}}"> 
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-time"></i>
+												</span>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<button type="button" class="btn btn-danger add-schedule" ng-click="removeSchedule($index)">
+												<span class="glyphicon glyphicon glyphicon-minus">
+													
+												</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					
+					<div class="panel panel-primary" ng-show="isRemoveAllConsultation == true">
+						<div class="panel-heading">
+							<h3 class="panel-title">Deseja Realmente Remover todas as Consultas deste Dia? (Disponível, Agendada, Em Espera)</h3>
+						</div>
+						<div class="panel-body" id="panel-schedules">
+							<form class="form-horizontal">
+								<div id="row-add-schedules">
+									
+									<h5 ng-show="generetedSchedules.length == 0">Nenhum horário cadastrado</h5>
+									
+									<div class="row row-schedule-id" ng-repeat="sch in generetedSchedules">
+										<label class="col-lg-1 control-label">Início</label>
+										<div class="col-md-4">
+											<div
+												class="margin-left input-group timepicker">
+												<input type="text" value="{{sch.schedule.dateInit.format('HH:mm')}}" 
+													class="form-control input-small"> <span
+													class="input-group-addon"><i
+													class="glyphicon glyphicon-time"></i></span>
+											</div>
+										</div>
+	
+										<label class="col-lg-1 control-label">Fim</label>
+										<div class="col-md-4">
+											<div
+												class="input-group timepicker">
 												<input type="text" class="form-control input-small" value="{{sch.schedule.dateEnd.format('HH:mm')}}"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
@@ -1157,12 +1263,13 @@
 					</div>
 				
 				
+				
 				</div> 
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-disabled="(initSchTemp == null || endSchTemp == null)" ng-click="saveConsultations(ptt,selectedDay,initSchTemp,endSchTemp)">
+					<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-click="saveConsultations(ptt,selectedDay)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
-					<button type="submit" class="btn btn-primary" ng-if="isGroupConsultation == true" ng-disabled="(initGrpSchTemp == null || endGrpSchTemp == null) || grp == null" ng-click="saveGroupConsultation(grp,selectedDay,initGrpSchTemp,endGrpSchTemp)">
+					<button type="submit" class="btn btn-primary" ng-if="isGroupConsultation == true" ng-disabled="grp == null" ng-click="saveGroupConsultation(grp,selectedDay)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
 					<button type="submit" class="btn btn-primary" ng-if="isFreeConsultation == true" ng-disabled="generetedSchedules.length == 0" 
@@ -1237,7 +1344,7 @@
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
 											<div
-												class="timepicker-init  margin-left input-group bootstrap-timepicker timepicker">
+												class="margin-left input-group">
 												<input id="tmp-init-1" type="text"  
 													class="form-control input-small"> <span
 													class="input-group-addon"><i
@@ -1248,7 +1355,7 @@
 										<label class="col-lg-1 control-label">Fim</label>
 										<div class="col-md-4">
 											<div
-												class="timepicker-end input-group bootstrap-timepicker timepicker">
+												class="input-group">
 												<input id="tmp-end-1" type="text" class="form-control input-small"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>

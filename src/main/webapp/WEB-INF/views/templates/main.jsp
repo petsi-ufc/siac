@@ -3,7 +3,7 @@
 <%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html ng-app="siacApp">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,6 +15,8 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-timepicker.min.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css'/>">
 	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-stars.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-datetimepicker.min.css'/>">
+	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/jquery.datetimepicker.css'/>">
 
 	<script type="text/javascript" src="<c:url value='/resources/js/angular.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/jquery-2.1.3.min.js'/>"></script>
@@ -27,7 +29,10 @@
 	<script type="text/javascript" src="<c:url value='/resources/js/bootstrap-timepicker.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/siac-funcs.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/js/schedule-classes.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/bootstrap-datetimepicker.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/js/jquery.datetimepicker.full.js'/>"></script>
 	
+		
 	<script type="text/javascript" src="<c:url value='/resources/js/app.js'/>"></script>
 	
 	<%-- <script type="text/javascript" src="<c:url value='/resources/js/qrating-1.0.0.js'/>"></script>
@@ -45,7 +50,7 @@
 		<tiles:getAsString name="title" />
 	</title>
 </head>
-<body ng-app="siacApp">
+<body>
 	<header>
 		<!-- cabeçalho -->
 		<tiles:insertAttribute name="header" />
@@ -60,13 +65,8 @@
 		<!-- rodapé -->
 		<tiles:insertAttribute name="footer"/>
 	</footer>
+	
+	<script type="text/javascript" src="<c:url value='/resources/js/config-datatimepicker.js'/>"></script>
+	
 </body>
-<script type="text/javascript">
-	$('#pacienteInicio').timepicker();
-	$('#pacienteFim').timepicker();
-	$('#livreInicio').timepicker();
-	$('#livreFim').timepicker();
-	$('#grupoInicio').timepicker();
-	$('#grupoFim').timepicker();
-</script>
 </html>

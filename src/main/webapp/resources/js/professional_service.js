@@ -115,6 +115,13 @@
 			});
 		}
 		
+		function _cancelAllConsultation(params, callback){
+			$http.post('/siac/cancelAllConsultation?json='+JSON.stringify(params), {"json":params}).then(callback, function(err){
+				console.log("Error at cancel all consultations");
+				console.log(err);
+			});
+		}
+		
 		return {
 			getProfessionalConsultations : _getProfessionalConsultations,
 			saveConsultation : _saveConsultation,
@@ -128,7 +135,8 @@
 			registerFrequency: _registerFrequency,
 			registerComment: _registerComment,
 			getFrequencyList: _getFrequencyList,
-			getPatientsOfGroup :_getPatientsOfGroup
+			getPatientsOfGroup :_getPatientsOfGroup,
+			cancelAllConsultation: _cancelAllConsultation
 		}
 	});
 })();

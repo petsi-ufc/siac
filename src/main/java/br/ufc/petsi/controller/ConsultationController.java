@@ -3,6 +3,7 @@ package br.ufc.petsi.controller;
 
 
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -20,7 +21,6 @@ import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.enums.ConsultationState;
-import br.ufc.petsi.enums.Role;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
@@ -67,7 +67,15 @@ public class ConsultationController {
 	@RequestMapping(value = "/cancelConsultation", method = RequestMethod.GET)
 	@ResponseBody
 	public String cancelConsultation(@RequestParam("id") long id, @RequestParam("message") String message){
-		return consultationService.cancelConsultationById(id, message, consDAO, reserveDAO);
+		return consultationService.cancelConsultationById(id, message, consDAO);
+	}
+	
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping(value = "/cancelAllConsultation", method = RequestMethod.POST)
+	@ResponseBody
+	public String cancelConsultation(@RequestParam("json") String json){
+		System.out.println(json);
+		return consultationService.cancelAllConsultationById(json, consDAO);
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")
