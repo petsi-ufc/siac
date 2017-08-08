@@ -58,7 +58,7 @@ public class Consultation implements Serializable{
 	@JsonBackReference(value="professional1")
 	private Professional professional;
 	
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name="id_patient")
 	@Fetch(FetchMode.JOIN)
 	@JsonProperty("patient")

@@ -190,7 +190,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 				
 				data.data.forEach(function (value, key){
 					console.log(value);
-					console.log("value Patient =>" + value.patient);
+					console.log("value Patient => " + value.patient);
 					var title = "";
 					if(value.state == "FR")	title = "Livre";
 					else if (value.state == "CD" &&  value.group == null &&  value.patient == null) title = "Cancelada";
