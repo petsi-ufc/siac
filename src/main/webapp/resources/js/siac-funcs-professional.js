@@ -416,7 +416,8 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
             if($scope.chGroupNowConsultation){
             	con.schedule[0].state="NO";
             }
-//            console.log(con);
+            
+            console.log(con);
             professionalService.saveConsultation({json:con}, function(response){
             	
 				var message = response.data.message;

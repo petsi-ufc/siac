@@ -854,14 +854,14 @@
 							<div class="col-xs-6">
 								<button class="btn btn-primary text-center btn-block" style="height:200px" ng-click="setPacientConsultation()">
 									<span class="glyphicon glyphicon-user" aria-hidden="true" style="font-size:20px"></span>
-									<p style="font-size:20px">Cadastrar consulta <br>com paciente.</p>
+									<p style="font-size:20px">Cadastrar consulta <br>com paciente</p>
 								</button>
 							</div>
 							
 							<div class="col-xs-6">
 								<button class="btn btn-primary btn-block" style="height:200px" ng-click="setFreeConsultation()">
 									<span class="glyphicon glyphicon-time" aria-hidden="true" style="font-size:20px"></span>
-									<p style="font-size:20px">Cadastrar <br>consulta livre.</p>
+									<p style="font-size:20px">Cadastrar <br>consulta livre</p>
 								</button>
 							</div>
 							<br>
@@ -877,7 +877,7 @@
 							<br>
 								<button class="btn btn-danger btn-block" style="height: 200px" ng-click="cancelAllConsultation(selectedDay)">
 									<span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:20px"></span>
-									<p style="font-size:20px">Cancelar <br> todas as Consultas <br> do Dia </p>
+									<p style="font-size:20px">Cancelar <br> todas as Consultas <br> do Dia</p>
 								</button>
 							</div>
 						</div>
@@ -967,18 +967,12 @@
 											<div class="col-md-5">
 												<div class="margin-left input-group date">
 													<input id="grupoInicio" type="text" ng-model="initGrpSchTemp" class="form-control input-small datetimepicker1"> 
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-time"></i>
-													</span>
 												</div>												
 											</div>
 											<label class="col-lg-1 control-label">Fim</label>
 											<div class="col-md-5">
 												<div class="input-group date">
 													<input id="grupoFim" type="text" ng-model="endGrpSchTemp" class="form-control input-small datetimepicker1"> 
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-time"></i>
-													</span>
 												</div>
 											</div>
 											<center>
@@ -991,7 +985,6 @@
 											</center>
 										</div>
 									</div>
-									
 							</form>
 							<form class="form-horizontal">
 									<br>
@@ -1054,9 +1047,6 @@
 											<div class="col-md-5">
 												<div class="timepicker-init margin-left input-group timepicker">
 													<input id="pacienteInicio" type="text" ng-model="initSchTemp" class="form-control input-small datetimepicker1"> 
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-time"></i>
-													</span>
 												</div>
 											</div>
 		
@@ -1064,9 +1054,6 @@
 											<div class="col-md-5">
 												<div class="timepicker-end input-group timepicker">
 													<input id="pacienteFim" type="text" class="form-control input-small datetimepicker1" ng-model="endSchTemp"> 
-													<span class="input-group-addon">
-														<i class="glyphicon glyphicon-time"></i>
-													</span>
 												</div>
 											</div>
 											<center>
@@ -1145,20 +1132,14 @@
 										<label class="col-lg-1 control-label">Início</label>
 										<div class="col-md-4">
 											<div class="margin-left input-group timepicker">
-												<input id="livreInicio" type="text" class="form-control input-small datetimepicker1"> 
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-time"></i>
-												</span>
+												<input id="livreInicio" type="text" class="form-control input-small datetimepicker1">
 											</div>
 										</div>
 	
 										<label class="col-lg-1 control-label">Fim</label>
 										<div class="col-md-4">
 											<div class="input-group timepicker">
-												<input id="livreFim" type="text" class="form-control input-small datetimepicker1" > 
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-time"></i>
-												</span>
+												<input id="livreFim" type="text" class="form-control input-small datetimepicker1" >
 											</div>
 										</div>
 										<div class="col-md-2">
@@ -1266,7 +1247,7 @@
 				
 				</div> 
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-click="saveConsultations(ptt,selectedDay)">
+					<button type="submit" class="btn btn-primary" ng-if="isPacientConsultation == true" ng-disabled="ptt == null" ng-click="saveConsultations(ptt,selectedDay)">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
 					<button type="submit" class="btn btn-primary" ng-if="isGroupConsultation == true" ng-disabled="grp == null" ng-click="saveGroupConsultation(grp,selectedDay)">
