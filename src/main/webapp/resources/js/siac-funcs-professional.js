@@ -193,11 +193,12 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			professionalService.getProfessionalConsultations(init, end, function(data){
 				$scope.events.length = 0;
 				data.data.forEach(function (value, key){
-					
+					console.log(value);
+					console.log("value Patient => " + value.patient);
 					var title = "";
 					if(value.state == "FR")	title = "Livre";
-					else if (value.state == "CD" && value.group == null && value.patient == null) title = "Cancelada";
-					else title = value.group == null? value.patient.name:value.group.title;
+					else if (value.state == "CD" &&  value.group == null &&  value.patient == null) title = "Cancelada";
+					else title =  value.group == null ? value.patient.name : value.group.title;
 					var e = {
 						title: title,
 						color: colors.get(value.state).hex,

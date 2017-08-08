@@ -78,8 +78,10 @@ public class ConsultationService {
 			
 			for (Consultation consultation : scheduler.json.getSchedule()) {
 				if(!consultation.getState().equals(ConsultationState.FR)){
-					if(consultation.getPatient() != null){
+					System.out.println("Usuario LPA:=> " + consultation.getPatient());
+					if(consultation.getPatient() == null){
 						consultation.setPatient((Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT));
+						System.out.println("Usurio VINDO DO BANCO" + consultation.getPatient().toString());
 					}
 				}
 				consultation.setProfessional(proTemp);
