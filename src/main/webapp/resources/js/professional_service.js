@@ -6,8 +6,8 @@
 	
 	angular.module("siacApp").service("professionalService", function($http){
 		
-		function _getProfessionalConsultations(callback){
-			$http.get("/siac/getConsutationsByProfessionalJSON").then(callback, function(err){
+		function _getProfessionalConsultations(dateInit, dateEnd, callback){
+			$http.post("/siac/getConsutationsByProfessionalJSON?dateInit="+dateInit+"&dateEnd="+dateEnd).then(callback, function(err){
 				console.log("Error at get professional consultations");
 				console.log(err);
 			});

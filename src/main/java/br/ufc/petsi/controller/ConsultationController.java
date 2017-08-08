@@ -2,6 +2,8 @@ package br.ufc.petsi.controller;
 
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -108,11 +110,21 @@ public class ConsultationController {
 	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/getConsutationsByProfessionalJSON")
 	@ResponseBody
-	public String getConsultationsByProfessionalJSON(HttpSession session){
+	public String getConsultationsByProfessionalJSON(@RequestParam("dateInit") String dateInit, @RequestParam("dateEnd") String dateEnd, HttpSession session){
 		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
-		System.out.println("USER SESSION: "+proTemp);
-		System.out.println("[JSON RESULT]: "+consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO));
-		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO);
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		System.out.println("[DATE INIT]: "+dateInit);
+		System.out.println("[DATE END]: "+dateEnd);
+		Date init = null;
+		Date end = null;
+		try{
+			init = (Date) formatter.parse(dateInit);
+			end = (Date) formatter.parse(dateEnd);
+		}catch (Exception e) {
+			System.out.println(e);
+			return "[]";
+		}
+		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO, init, end);
 	}
 	
 	@Secured("ROLE_PATIENT")
