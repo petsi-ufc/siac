@@ -248,6 +248,7 @@ public class ConsultationService {
 						events.add(event);
 					}
 				}else{
+					System.out.println(c);
 					if(c.getPatient().getCpf().equals(patient.getCpf())){
 						Event event = new Event(patient, c);
 						events.add(event);
