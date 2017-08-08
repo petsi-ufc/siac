@@ -21,7 +21,7 @@ public interface ConsultationDAO {
 	public List<Consultation> getConsultationsByState(ConsultationState state);
 	public List<Consultation> getConsultationsBySocialService(SocialService service);
 	public List<Consultation> getConsultationsBySocialServiceAndDate(SocialService service, Date startDay);
-	public List<Consultation> getConsultationByProfessional(Professional professional);
+	public List<Consultation> getConsultationByProfessional(Professional professional, Date init, Date end);
 	public List<Consultation> getConsultationByPeriod(Professional professional, Date dateInit, Date dateEnd);
 	public List<Consultation> getConsultationByGroup(Group group);
 	public boolean isRatingNull(Consultation consultation);

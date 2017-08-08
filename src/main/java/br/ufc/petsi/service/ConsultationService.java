@@ -78,8 +78,16 @@ public class ConsultationService {
 			
 			for (Consultation consultation : scheduler.json.getSchedule()) {
 				if(!consultation.getState().equals(ConsultationState.FR)){
+					System.out.println("Usuario LPA:=> " + consultation.getPatient());
 					if(consultation.getPatient() != null){
-						consultation.setPatient((Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT));
+						Patient patient = (Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT);
+						if(patient == null){
+							udao.save(consultation.getPatient());
+							patient = (Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT);
+							consultation.setPatient(patient);
+						}
+						
+						System.out.println("Paciente do Banco" + patient.toString());
 					}
 				}
 				consultation.setProfessional(proTemp);
@@ -132,7 +140,7 @@ public class ConsultationService {
 		}
 		
 		try{
-			List<Consultation> cons = consDAO.getConsultationByProfessional(proTemp);
+			List<Consultation> cons = consDAO.getConsultationByProfessional(proTemp, null, null);
 			for(Consultation c: cons){
 				
 				if(formatter.format(c.getDateInit()).equals(formatter.format(con.getDateInit())) && formatter.format(c.getDateEnd()).equals(formatter.format(con.getDateEnd())) && (c.getState().equals(ConsultationState.SC) || c.getState().equals(ConsultationState.RV))){
@@ -256,8 +264,8 @@ public class ConsultationService {
 		return json;
 	}
 
-	public String getConsultationsByProfessionalJSON(Professional professional, ConsultationDAO consDAO){
-		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
+	public String getConsultationsByProfessionalJSON(Professional professional, ConsultationDAO consDAO, Date init, Date end){
+		List<Consultation> cons = consDAO.getConsultationByProfessional(professional, init, end);
 		String json = "";
 		try{
 			Gson gson = new GsonBuilder().setExclusionStrategies(new ConsultationExclusionStrategy()).serializeNulls().create();
@@ -270,7 +278,7 @@ public class ConsultationService {
 	}
 
 	public List<Consultation> getConsultationsByProfessional(Professional professional, ConsultationDAO consDAO){
-		List<Consultation> cons = consDAO.getConsultationByProfessional(professional);
+		List<Consultation> cons = consDAO.getConsultationByProfessional(professional, null, null);
 		return cons;
 	}
 

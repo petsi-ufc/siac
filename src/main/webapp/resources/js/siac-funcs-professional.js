@@ -184,16 +184,21 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 
 		
 		function getConsultations(a,b,c){
+			var init = a._d;
+			var end = b._d;
+			init = (init.getFullYear())+"-"+(init.getMonth()+1)+"-"+(init.getDate()+1);
+			end = (end.getFullYear())+"-"+(end.getMonth()+1)+"-"+(end.getDate()+1);
 			
 			showSnack("Carregando as consultas...");
-			professionalService.getProfessionalConsultations(function(data){
-				
+			professionalService.getProfessionalConsultations(init, end, function(data){
+				$scope.events.length = 0;
 				data.data.forEach(function (value, key){
-					
+					console.log(value);
+					console.log("value Patient => " + value.patient);
 					var title = "";
 					if(value.state == "FR")	title = "Livre";
-					else if (value.state == "CD" && value.group == null && value.patient == null) title = "Cancelada";
-					else title = value.group == null? value.patient.name:value.group.title;
+					else if (value.state == "CD" &&  value.group == null &&  value.patient == null) title = "Cancelada";
+					else title =  value.group == null ? value.patient.name : value.group.title;
 					var e = {
 						title: title,
 						color: colors.get(value.state).hex,
@@ -207,11 +212,9 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					};
 					if(value.group != null)
 						e.group = value.group;
-					
 					$scope.events.push(e);
-					
 				});
-				
+				console.log($scope.events);
 			});
 		}
 		
