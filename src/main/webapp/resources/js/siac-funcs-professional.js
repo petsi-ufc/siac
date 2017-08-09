@@ -310,30 +310,65 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			
 		}
 		
-		function _addTempSchedule(){
-//			var dateInit = $('#livreInicio').val();
-//        	var dateEnd = $('#livreFim').val();
+		// ESSE CÓDIGO A GENTE NÃO ESTÁ MAIS UTILIZANDO, CASO O DE BAIXO NÃO FUNCIONE, VOLTE PARA ESSE E SEJA FELIZ
+//		function _addTempSchedule(){
+////			var dateInit = $('#livreInicio').val();
+////        	var dateEnd = $('#livreFim').val();
+////        	
+////        	var dataInit = new Date(date);
+////        	dataInit.setUTCHours(parseInt(intHour.split(":")[0]));
+////        	dataInit.setUTCMinutes(parseInt(intHour.split(":")[1]));
+////
+////        	var dataEnd = new Date(date);
+////        	dataEnd.setUTCHours(parseInt(endHour.split(":")[0]));
+////        	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
 //        	
-//        	var dataInit = new Date(date);
-//        	dataInit.setUTCHours(parseInt(intHour.split(":")[0]));
-//        	dataInit.setUTCMinutes(parseInt(intHour.split(":")[1]));
-//
-//        	var dataEnd = new Date(date);
-//        	dataEnd.setUTCHours(parseInt(endHour.split(":")[0]));
-//        	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
-        	
+//			var dateInit = angular.copy($scope.selectedDay);
+//			var dateEnd = angular.copy($scope.selectedDay);
+//			
+//			dateInit.set("hours",$("#tmp-init-1").data("timepicker").hour);
+//			dateInit.set("minute", $("#tmp-init-1").data("timepicker").minute);
+//			
+//			dateEnd.set("hours", $("#tmp-end-1").data("timepicker").hour);
+//			dateEnd.set("minute", $("#tmp-end-1").data("timepicker").minute);
+//			
+//			$scope.generetedSchedules.push({schedule:{dateInit: dateInit, dateEnd : dateEnd, state: "FR"}});
+//		}
+//		
+//		function initTimePickers(){
+//			$("#tmp-init-1").timepicker({showMeridian: false, defaultTime:"8:00"});
+//			$("#tmp-end-1").timepicker({showMeridian: false, defaultTime:"8:15"});
+//			$("#tmp-init-hour").timepicker();
+//		}
+		
+		function _addTempSchedule(){
+			var dInittemp = $('#livreInicio').val();
+			var dEndtemp = $('#livreFim').val();
+		
+			if(typeof dInittemp === undefined || dInittemp == "__:__"){
+				dInittemp = '08:00';
+			}
+			
+			if(typeof dEndtemp === undefined || dEndtemp == "__:__"){
+				dEndtemp = '08:15';
+			}
+			
 			var dateInit = angular.copy($scope.selectedDay);
 			var dateEnd = angular.copy($scope.selectedDay);
+	
+			dateInit.set("hours", dInittemp.substring(0,2));
+			dateInit.set("minute", dInittemp.substring(3,5));
 			
-			dateInit.set("hours",$("#tmp-init-1").data("timepicker").hour);
-			dateInit.set("minute", $("#tmp-init-1").data("timepicker").minute);
+	
+			dateEnd.set("hours", dEndtemp.substring(0,2));
+			dateEnd.set("minute",  dEndtemp.substring(3,5));
 			
-			dateEnd.set("hours", $("#tmp-end-1").data("timepicker").hour);
-			dateEnd.set("minute", $("#tmp-end-1").data("timepicker").minute);
+			
 			
 			$scope.generetedSchedules.push({schedule:{dateInit: dateInit, dateEnd : dateEnd, state: "FR"}});
+	
 		}
-		
+	
 		function initTimePickers(){
 			$("#tmp-init-1").timepicker({showMeridian: false, defaultTime:"8:00"});
 			$("#tmp-end-1").timepicker({showMeridian: false, defaultTime:"8:15"});
