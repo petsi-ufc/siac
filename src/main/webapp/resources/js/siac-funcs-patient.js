@@ -158,6 +158,7 @@ function onServiceClick(){
 	$(document).on("click",".link-service",function(){
 		if($(".service").removeClass("active"),$(this).parent().addClass("active"),$(this).hasClass("social-service")){
 			$("#my-consultations").css("display","none");
+			$("#div-my-groups").css("display","none");
 			var a=$(this).attr("id");
 
 			$("#my-calendar-title").html("Calendário "+$(this).attr("data-name")),
@@ -269,10 +270,10 @@ function myGroups(){
 		});
 
 		ajaxCall("/siac/getMyGroups",null,function(json){
+			showSnack("Carregando grupos...");
 			jsonUniv = JSON.parse(json.message);
 			jsonCount =  Object.keys(json.message).length;
 			console.log(jsonUniv[0]);
-
 		});
 
 		getMyGroup();
@@ -375,7 +376,12 @@ function refreshGroup(){
 
 }
 
-
+function showSnack(text) {
+    var x = document.getElementById("snackbar")
+    x.textContent= text;
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
 
 $("document").ready(function(){
 	chargeEvents(),
