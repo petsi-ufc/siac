@@ -1221,6 +1221,7 @@ function onButtonGenerateSchedules(){
 			tempEnd = momentTime.format("HH:mm");
 			
 			var time = {"timeInit":tempInit, "timeEnd":tempEnd, "idSchedule":0};
+			console.log(time);
 			addSchedules(time);
 		}
 	});
