@@ -123,6 +123,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.getFrequencyList = _getFrequencyList;
 		$scope.reload = _reload;
 		$scope.viewComment = _viewComment;
+		
 
 		$("#input-frequenci").keypress(function(e){
 			setFrequenciDays();
@@ -1289,6 +1290,7 @@ function onButtonRemoveScheduleClick(){
 		$(this).parents(".row").remove();
 	});
 }
+
 
 function onButtonConfirmSchedulesClick(){
 	/*
