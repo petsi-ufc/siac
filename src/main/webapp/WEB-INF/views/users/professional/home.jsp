@@ -1368,3 +1368,26 @@
 </div>
 
 <div id="snackbar"></div>
+<script>
+$(document).ready(function() {
+	$("my-calendar").fullCalendar({
+	
+		var content = '<h3>'+data.title+'</h3>' + 
+		'<p><b>Start:</b> '+data.start+'<br />' + 
+		(data.end && '<p><b>End:</b> '+data.end+'</p>' || '');
+		
+		eventMouseover:function(data, event, view) {
+			tooltip.set({
+				'content.text': content
+			})
+			.reposition(event).show(event);
+		}
+		events: [
+			{
+				title: 'All Day Event',
+				start: new Date(y, m, 1)
+			}]
+	});
+});
+
+</script>
