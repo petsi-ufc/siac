@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -63,22 +64,23 @@ public class ConsultationService {
 
 
 	public String saveConsultation(Professional proTemp, String json, ConsultationDAO consDAO, ConsultationState state){
+		
 		GsonBuilder gsonb = new GsonBuilder();
 		DateDeserializer ds = new DateDeserializer();
 		gsonb.registerTypeAdapter(Date.class, ds);
 		Gson gson = gsonb.create();
-		
-		ObjectMapper mapper = new ObjectMapper();
+
 		Response response = new Response();
 		
 		try{
-			
 			//Scheduler scheduler = mapper.readValue(json, Scheduler.class);
 			Json scheduler = gson.fromJson(json, Json.class);
 			
 			for (Consultation consultation : scheduler.json.getSchedule()) {
+			//for (Consultation consultation : scheduler.getSchedule()) {
 				if(!consultation.getState().equals(ConsultationState.FR)){
 					System.out.println("Usuario LPA:=> " + consultation.getPatient());
+					System.out.println("Data:=> " + consultation.getDateInit());
 					if(consultation.getPatient() != null){
 						Patient patient = (Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT);
 						if(patient == null){
