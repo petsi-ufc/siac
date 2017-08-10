@@ -46,7 +46,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 	
 	
 	angular.module("siacApp")
-	.controller("professionalController", function($scope, $compile, $sce, uiCalendarConfig, professionalService){
+	.controller("professionalController", function($scope, $compile, $sce,$timeout ,uiCalendarConfig, professionalService){
 		
 		//Variables
 		$scope.menuIndex = 0;
@@ -123,6 +123,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.getFrequencyList = _getFrequencyList;
 		$scope.reload = _reload;
 		$scope.viewComment = _viewComment;
+		$scope.MouseOver = _MouseOver;
 		
 
 		$("#input-frequenci").keypress(function(e){
@@ -175,6 +176,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					$("#modal-schedules-description").modal("show");
 				},
 				dayClick : _dayClick,
+				eventRender: _MouseOver,
 				events: getConsultations,
 				monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
 			    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
@@ -219,6 +221,15 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			});
 		}
 		
+		function _MouseOver(event, element, view){
+			 
+			$timeout(function(){
+				 element.attr({
+					    'title': "Evento",
+					    'tooltip-append-to-body': true
+					});
+				  });
+		}
 		
 		function _addFrequencyList(index){
 			$scope.frequencyList[index].presence = !$scope.frequencyList[index].presence;
@@ -813,6 +824,11 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 	
 
 //;
+	
+	
+		
+	
+
 	
 })();
 
@@ -1483,3 +1499,4 @@ function getTimePickerHourAndMinutes(timepickerId){
 	minute = $("#"+timepickerId).data("timepicker").minute;
 	return {"hour":hour, "minute":minute};
 }
+
