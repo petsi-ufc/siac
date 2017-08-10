@@ -98,7 +98,7 @@ public class Consultation implements Serializable{
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="consultation", cascade=CascadeType.MERGE)
 	@JsonProperty("ratings")
-	@JsonBackReference
+	@JsonBackReference("ratings")
 	private List<Rating> ratings;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="consultation")

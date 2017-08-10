@@ -386,7 +386,8 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         		var s = arraySchedules[i].schedule;
         		console.log(s.dateInit);
         		console.log(s.dateEnd);
-				array.push({dateInit: format(s.dateInit._d), dateEnd : format(s.dateEnd._d), state: "FR"});
+				//array.push({dateInit: format(s.dateInit._d), dateEnd : format(s.dateEnd._d), state: "FR"});
+        		array.push({dateInit: s.dateInit._d.getTime(), dateEnd : s.dateEnd._d.getTime(), state: "FR"});
 			}
 			var json = {json:{schedule:array}};
 			
@@ -414,8 +415,8 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	dataEnd.setUTCHours(parseInt(endHour.split(":")[0]));
         	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
             
-        	
-            var con = {schedule:[{"patient":patient, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
+        	var con = {schedule:[{"patient":patient, "dateInit":dataInit.getTime(),"dateEnd":dataEnd.getTime(), state:"SC"}]};
+            //var con = {schedule:[{"patient":patient, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
             if($scope.chPatientNowConsultation){
             	con.schedule[0].state="NO";
             }
@@ -439,7 +440,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	var endHour = $('#grupoFim').val();
 
         	var dataInit = new Date(date);
-        	
         	dataInit.setUTCHours(parseInt(intHour.split(":")[0]));
         	dataInit.setUTCMinutes(parseInt(intHour.split(":")[1]));
         	
@@ -447,7 +447,9 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	dataEnd.setUTCHours(parseInt(endHour.split(":")[0]));
         	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
         	
-            var con = {schedule:[{"group":group, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
+        	var g = {"id":group.id};
+        	var con = {schedule:[{"group":g, "dateInit":dataInit.getTime(),"dateEnd":dataEnd.getTime(), state:"SC"}]};
+            //var con = {schedule:[{"group":group, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
             if($scope.chGroupNowConsultation){
             	con.schedule[0].state="NO";
             }

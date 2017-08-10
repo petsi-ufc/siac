@@ -44,7 +44,7 @@ public class Rating implements Serializable{
 	@Expose
 	@ManyToOne(cascade=CascadeType.MERGE)
 	@JsonProperty("consultation")
-	@JsonManagedReference(value="rating1")
+	@JsonManagedReference(value="ratings")
 	private Consultation consultation;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
