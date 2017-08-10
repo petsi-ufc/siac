@@ -591,12 +591,6 @@
 							<td>
 								<h5>Cancelada</h5>
 							</td>
-							<td>
-								<div class='legend-color color-black-2'></div>
-							</td>
-							<td>
-								<h5>Não Agendada</h5>
-							</td>
 						</tr>
 					</tbody>
 				</table>
