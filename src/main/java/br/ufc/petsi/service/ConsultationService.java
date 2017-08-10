@@ -69,8 +69,7 @@ public class ConsultationService {
 		DateDeserializer ds = new DateDeserializer();
 		gsonb.registerTypeAdapter(Date.class, ds);
 		Gson gson = gsonb.create();
-		
-		ObjectMapper mapper = new ObjectMapper();
+
 		Response response = new Response();
 		
 		try{
