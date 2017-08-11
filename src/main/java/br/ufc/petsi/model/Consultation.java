@@ -92,6 +92,11 @@ public class Consultation implements Serializable{
 	@JsonProperty("reason")
 	private String reason;
 	
+	//Motivo pelo qual a consulta foi cancelada / reagendada
+	@Column(name="reasonCancel")
+	@JsonProperty("reasonCancel")
+	private String reasonCancel;
+	
 	@Enumerated( EnumType.STRING )
 	@JsonProperty("state")
 	private ConsultationState state;
@@ -236,6 +241,16 @@ public class Consultation implements Serializable{
 	@JsonProperty("reason")
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	
+	@JsonProperty("reason")
+	public String getReasonCancel() {
+		return reasonCancel;
+	}
+
+	@JsonProperty("reason")
+	public void setReasonCancel(String reasonCancel) {
+		this.reasonCancel = reasonCancel;
 	}
 	
 	@JsonProperty("patient")

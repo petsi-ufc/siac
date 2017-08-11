@@ -207,22 +207,17 @@
 							
 							<div class="col-md-4">
 								<label class="control-label" for="input-dtpckr-reschedule">Nova Data</label>
-								<input type='text' ng-model="newDate" class="form-control" id="input-dtpckr-reschedule"/>
+								<input type='text' ng-model="newDate" class="form-control datetimepicker2" id="input-dtpckr-reschedule"/>
 							</div>	                   			
 								
-          						<div class="col-md-4">
-									<label class="control-label" for="rch-timeinit">Hora de Início</label>
-									<div class="bootstrap-timepicker timepicker">
-									<input id="rch-timeinit" ng-model="newStarHour" type="text" class="input-schedule-info form-control input-small">
-									
-								</div>
-							</div>  	
-														
+          					<div class="col-md-4">
+								<label class="control-label" for="rch-timeinit">Hora de Início</label>
+								<input id="rch-timeinit" ng-model="newStarHour" type="text" class="input-schedule-info form-control input-small datetimepicker1">
+							</div>
+							  						
 							<div class="col-md-4">
-									<label class="control-label" for="rch-timeend">Hora de Fim</label>
-									<div class="bootstrap-timepicker timepicker">
-									<input id="rch-timeend" ng-model="newEndHour" type="text" class="input-schedule-info form-control input-small">
-								</div>
+								<label class="control-label" for="rch-timeend">Hora de Fim</label>
+								<input id="rch-timeend" ng-model="newEndHour" type="text" class="input-schedule-info form-control input-small datetimepicker1">
 							</div>
 							
 							<div class="input-group col-md-12" id="div-email">
@@ -236,7 +231,7 @@
 						</div>
 						
 						<div class="modal-footer">
-							<button id="btn-confirm-resch" ng-click="registerReschedulingConsultation(consultation.id, newDate, newStarHour, newEndHour, reason)" ng-disabled="reason == null || newEndHour == null || newStarHour == null || newDate == null" type="button" class="btn btn-primary">Confirmar</button>
+							<button id="btn-confirm-resch" ng-click="registerReschedulingConsultation(consultation.id, reason)" ng-disabled="reason == null" type="button" class="btn btn-primary">Confirmar</button>
 							<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
 						</div>
 					</div>
@@ -1169,7 +1164,7 @@
 											<div
 												class="margin-left input-group timepicker">
 												<input type="text" value="{{sch.schedule.dateInit.format('HH:mm')}}" 
-													class="form-control input-small"> <span
+													class="form-control input-small" disabled="disabled"> <span
 													class="input-group-addon"><i
 													class="glyphicon glyphicon-time"></i></span>
 											</div>
@@ -1179,7 +1174,7 @@
 										<div class="col-md-4">
 											<div
 												class="input-group timepicker">
-												<input type="text" class="form-control input-small" value="{{sch.schedule.dateEnd.format('HH:mm')}}"> 
+												<input type="text" class="form-control input-small" value="{{sch.schedule.dateEnd.format('HH:mm')}}" disabled="disabled"> 
 												<span class="input-group-addon">
 													<i class="glyphicon glyphicon-time"></i>
 												</span>
