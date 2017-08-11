@@ -609,7 +609,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		
 		function _registerCancelConsultation(index, message){
 			ajaxCall("/siac/cancelConsultation", {"id":index, "message": message}, function(response){
-				console.log(index + "; " + message);
 				var type = ALERT_ERROR;
 				if(response.code == RESPONSE_SUCCESS){
 					alertMessage(response.message, null, ALERT_SUCCESS);
