@@ -1368,17 +1368,4 @@
 </div>
 
 <div id="snackbar"></div>
-<script >
 
-$("my-calendar").fullCalendar({
-	 eventRender: function(event, element) {
-	      $(element).tooltip({title: event.title,container: "body"});             
-	  },
-	  events:[{
-		  tittle:"Funcionando...!",
-		  start:title: 'All Day Event',
-			
-	  }]
-});
-
-</script>
