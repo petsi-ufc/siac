@@ -210,6 +210,38 @@
 		</div>
 	</div>
 	
+	
+	<!-- 	Método aproveitado da página do profissional, mudando apenas algumas coisas -->
+	<div class="modal fade" role="dialog" id="modal-cancel-consultation">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4>Cancelar Horário</h4>
+					</div>
+					<div class="modal-title">
+						<h4>Deseja realmente cancelar este horário?</h4>
+					</div>
+					<div class="modal-body">
+						<div id="div-send-email">
+							<label>Motivo do cancelamento da consulta: </label>
+							<textarea ng-model="message_cancel" placeholder="Escrever email..." id="text-area-email-cancel"
+								class="no-resize form-control" rows="3"></textarea>
+						</div>
+						<div class="margin-top">
+							<button id="cancel-consultation" class="btn btn-danger"
+								value="" name="id">Sim, cancelar</button>
+							<button class="btn btn-default" data-dismiss="modal">Voltar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	
 	<!-- 	Método aproveitado da página do profissional, mudando apenas algumas coisas -->
 	<div class="modal fade" role="dialog" id="modal-schedule-consultation">
 		<div class="modal-dialog modal-md">
