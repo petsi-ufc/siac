@@ -243,12 +243,12 @@ public class Consultation implements Serializable{
 		this.reason = reason;
 	}
 	
-	@JsonProperty("reason")
+	@JsonProperty("reasonCancel")
 	public String getReasonCancel() {
 		return reasonCancel;
 	}
 
-	@JsonProperty("reason")
+	@JsonProperty("reasonCancel")
 	public void setReasonCancel(String reasonCancel) {
 		this.reasonCancel = reasonCancel;
 	}
