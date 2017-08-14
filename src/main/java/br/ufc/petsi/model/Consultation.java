@@ -92,13 +92,18 @@ public class Consultation implements Serializable{
 	@JsonProperty("reason")
 	private String reason;
 	
+	//Motivo pelo qual a consulta foi cancelada / reagendada
+	@Column(name="reasonCancel")
+	@JsonProperty("reasonCancel")
+	private String reasonCancel;
+	
 	@Enumerated( EnumType.STRING )
 	@JsonProperty("state")
 	private ConsultationState state;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="consultation", cascade=CascadeType.MERGE)
 	@JsonProperty("ratings")
-	@JsonBackReference
+	@JsonBackReference("ratings")
 	private List<Rating> ratings;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="consultation")
@@ -236,6 +241,16 @@ public class Consultation implements Serializable{
 	@JsonProperty("reason")
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	
+	@JsonProperty("reasonCancel")
+	public String getReasonCancel() {
+		return reasonCancel;
+	}
+
+	@JsonProperty("reasonCancel")
+	public void setReasonCancel(String reasonCancel) {
+		this.reasonCancel = reasonCancel;
 	}
 	
 	@JsonProperty("patient")
