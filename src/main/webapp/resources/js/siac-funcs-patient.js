@@ -32,8 +32,12 @@ function chargeScheduleDay(a){
 			var g=$("<tr class='tr-horary info'> </tr>");
 			g.append($("<td>"+c+"</td>")),
 			g.append($("<td>"+d+"</td>")),
-			g.append($("<td><button type='button' class='btn btn-danger btn-sm' data-id='"+a+"' id='cancel-consultation'>Cancelar</button></td>")),
-			$("#body-table-event").append(g)
+			g.append($("<td><button type='button' class='btn btn-danger btn-sm' data-id='"+a+"' id='cancel-consultation-modal'>Cancelar</button></td>")),
+			$("#body-table-event").append(g),
+//			Abrir modal para cancelar
+			$(document).on("click","#cancel-consultation-modal",function(){
+				$("#modal-cancel-consultation").modal("show");
+			});
 		}else if("Cancelado"==d){
 			var g=$("<tr class='tr-horary danger'> </tr>");
 			g.append($("<td>"+c+"</td>")),
@@ -54,8 +58,12 @@ function chargeScheduleDay(a){
 			var g=$("<tr class='tr-horary success'></tr>");
 			g.append($("<td>"+c+" </td>")),
 			g.append($("<td>Disponível</td>")),
-			g.append($("<td><button type='button' class='btn btn-primary btn-sm' data-id='"+a+"' id='schedule-consultation'>Agendar</button></td>")),
-			$("#body-table-event").append(g)
+			g.append($("<td><button type='button' class='btn btn-primary btn-sm' data-id='"+a+"' id='schedule-consultation-modal'>Agendar</button></td>")),
+			$("#body-table-event").append(g),
+//			Abrir modal para dizer o motivo da consulta
+			$(document).on("click","#schedule-consultation-modal",function(){
+				$("#modal-schedule-consultation").modal("show");
+			});
 		}else if("Ocupado"==d){
 			var g=$("<tr class='tr-horary warning'> </tr>");
 			g.append($("<td>"+c+"</td>")),
@@ -176,9 +184,12 @@ function onServiceClick(){
 
 function scheduleConsultation(){
 	$(document).on("click","#schedule-consultation",function(){
-		var a=$(this).attr("data-id");
-		ajaxCall("/siac/scheduleConsultation",{id:a},function(b){
-			b.code==RESPONSE_SUCCESS?(changeEvent(a,"#4682B4"),alertMessage(b.message,null,ALERT_SUCCESS)):alertMessage(b.message,null,ALERT_ERROR)
+		var a=$("#schedule-consultation-modal").attr("data-id");
+		var message = $("#text-area-email-schedule").val();
+		console.log(message);
+		ajaxCall("/siac/scheduleConsultation",{id:a, reason:message},function(b){
+			b.code==RESPONSE_SUCCESS?(changeEvent(a,"#4682B4"),alertMessage(b.message,null,ALERT_SUCCESS)):alertMessage(b.message,null,ALERT_ERROR),
+			location.reload(); 
 		},function(){
 			alertMessage("Ops, Não foi possível agendar essa consulta!",null,ALERT_ERROR)}),
 			$("#modal-event").modal("hide"),chargeEvents()
@@ -203,13 +214,18 @@ function showRating(){
 	})
 }
 
+//Não está com o angular implementado 100%
 function cancelConsultation(){
 	$(document).on("click","#cancel-consultation",function(){
-		var a=$(this).attr("data-id");
-		ajaxCallNoJSON("/siac/cancelConsultationPatient",{id:a},function(){
+		var a=$("#cancel-consultation-modal").attr("data-id");
+		var message = $("#text-area-email-cancel").val();
+		
+		ajaxCallNoJSON("/siac/cancelConsultationPatient",{id:a, reasonCancel:message},function(){
 			alertMessage("Consulta cancelada com sucesso",null,ALERT_SUCCESS),
-
-			"Meu Calendário"===$("#my-calendar-title").text()?$("#calendar-patient").fullCalendar("removeEvents",a):changeEvent(a,"#32CD32")
+			
+			"Meu Calendário"===$("#my-calendar-title").text()?$("#calendar-patient").fullCalendar("removeEvents",a):changeEvent(a,"#32CD32");
+			location.reload(); 
+					
 		},function(){
 			alertMessage("Desculpe, a operação falhou",5e3,ALERT_ERROR)
 		}),

@@ -396,8 +396,8 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	var array = [];
         	for ( var i in arraySchedules) {
         		var s = arraySchedules[i].schedule;
-        		console.log(s.dateInit);
-        		console.log(s.dateEnd);
+        		//console.log(s.dateInit);
+        		//console.log(s.dateEnd);
 				//array.push({dateInit: format(s.dateInit._d), dateEnd : format(s.dateEnd._d), state: "FR"});
         		array.push({dateInit: s.dateInit._d.getTime(), dateEnd : s.dateEnd._d.getTime(), state: "FR"});
 			}
@@ -575,7 +575,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		}
 		
 		function _cancelConsultation(index){
-			console.log(index);
 			$scope.conToCancel = index;
 			$("#modal-cancel-consultation").modal("show");
 		}
@@ -615,7 +614,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					alertMessage(response.message, null, ALERT_SUCCESS);
 					location.reload(); 
 				}else{
-					console.log(response);
 					alertMessage(response.message, null, ALERT_ERROR);
 				}
 			}, function(){
@@ -645,11 +643,15 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			$("#modal-reschedule").modal("show");
 		}
 		
-		function _registerReschedulingConsultation(id, newDate, newStarHour, newEndHour, reason){
+		function _registerReschedulingConsultation(id, reason){
 			
-			var d = newDate.split("/");
-			var dateStart = new Date(d[2]+"-"+d[1]+"-"+d[0]+"T"+newStarHour);
-			var dateEnd = new Date(d[2]+"-"+d[1]+"-"+d[0]+"T"+newEndHour);
+			var dateTemp = $('#input-dtpckr-reschedule').val();
+			var intHour = $('#rch-timeinit').val();
+        	var endHour = $('#rch-timeend').val();
+			
+			var d = dateTemp.split("/");
+			var dateStart = new Date(d[2]+"-"+d[1]+"-"+d[0]+"T"+intHour);
+			var dateEnd = new Date(d[2]+"-"+d[1]+"-"+d[0]+"T"+endHour);
 			
 			var params = {"idConsultation": id, "dateInit": dateStart, "dateEnd": dateEnd, "email": reason};
 			
@@ -1210,8 +1212,6 @@ function showModalSchedules(date, action, inputVacancyPattern, inputTime, inputH
 
 function onButtonAddScheduleClick(){
 	$(".add-schedule").click(function(){
-		
-		
 		//Pegando o último timepicker para obter o último horário.
 		var listTimers = $(".timepicker-end input");
 		var idLastTimePicker = listTimers[listTimers.length - 1];

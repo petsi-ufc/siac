@@ -209,7 +209,34 @@
 			</div>
 		</div>
 	</div>
-
+	
+	<!-- 	Método aproveitado da página do profissional, mudando apenas algumas coisas -->
+	<div class="modal fade" role="dialog" id="modal-schedule-consultation">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4>Agendar Horário</h4>
+				</div>
+				<div class="modal-title">
+					<h4>Qual o motivo da consulta?</h4>
+				</div>
+				<div class="modal-body">
+					<div id="div-send-email">
+						<label>Motivo da Consulta:</label>
+						<textarea placeholder="Escrever motivo..." id="text-area-email-schedule" class="no-resize form-control" rows="3"></textarea>
+					</div>
+					<div class="margin-top">
+						<button id="schedule-consultation" class="btn btn-danger"
+						value="" name="id">Sim, agendar</button>
+						<button class="btn btn-default" data-dismiss="modal">Voltar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<div id="modal-rating" class="modal fade" tabindex="-1" role="dialog">
 		<div class="modal-dialog">

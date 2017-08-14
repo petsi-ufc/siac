@@ -95,8 +95,8 @@ public class PatientController {
 	@RequestMapping("/scheduleConsultation")
 	@ResponseBody
 	public String scheduleConsultation(Consultation consultation, HttpSession session){
-
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
+		consultation2.setReason(consultation.getReason());
 		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
 		Patient patient2 = (Patient) userDAO.getByCpf(patient.getCpf(), Constants.ROLE_PATIENT);
 		return this.consService.updateConsultation(consultation2, this.consDAO, patient2);
@@ -115,9 +115,8 @@ public class PatientController {
 	@RequestMapping("/cancelConsultationPatient")
 	@ResponseBody
 	public String cancelConsultation(Consultation consultation){
-
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), consDAO);
-
+		consultation2.setReasonCancel(consultation.getReasonCancel());
 		return consService.cancelConsultation(consultation2, consDAO, reserveDAO);
 	}
 
@@ -125,13 +124,9 @@ public class PatientController {
 	@RequestMapping("/reserveConsultation")
 	@ResponseBody
 	public String reserveConsultation(Consultation consultation, HttpSession session){
-
 		Consultation consultation2 = this.consService.getConsultationsById(consultation.getId(), this.consDAO);
-
 		Patient patient = (Patient) session.getAttribute(Constants.USER_SESSION);
-
 		return consService.reserveConsultation(patient, consultation2, reserveDAO);
-
 	}
 
 	@Secured("ROLE_PATIENT")

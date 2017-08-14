@@ -309,6 +309,8 @@ public class ConsultationService {
 			Consultation consultation = consDAO.getConsultationById(idConsultation);
 			consultation.setDateInit(dateInit);
 			consultation.setDateEnd(dateEnd);
+			//Email não é o email da(s) pessoa(s) e sim o corpo de email ou motivo da remarcação ou cancelamento
+			consultation.setReasonCancel(email);
 			if(consultation.getPatient() != null && consultation.getGroup() != null && consultation.getPatient().getEmail() != null && !email.equals("")){
 				emailService.sendEmail(consultation, email);
 			}
@@ -370,6 +372,7 @@ public class ConsultationService {
 			
 			//Caso a consulta esteja livre
 			if(oldCons.getState().equals(ConsultationState.FR)){
+				oldCons.setReasonCancel(message);
 				consDAO.cancelConsultation(oldCons);
 				response.setCode(Response.SUCCESS);
 				response.setMessage("Consulta cancelada com sucesso!");
@@ -427,7 +430,7 @@ public class ConsultationService {
 			
 			for (Consultation consultation : consultations.getConsultations()) {
 				Consultation oldCons = consDAO.getConsultationById(consultation.getId());
-				String result = cancelConsultationById(oldCons.getId(), oldCons.getComment(), consDAO);
+				String result = cancelConsultationById(oldCons.getId(), consultation.getComment(), consDAO);
 				response = gson.fromJson(result, Response.class);
 				
 				if(response.getCode() == Response.ERROR){
@@ -440,6 +443,7 @@ public class ConsultationService {
 					if(!consultation.getComment().equals(""))
 						emailService.sendEmail(oldCons, consultation.getComment());
 				}
+				
 			}
 			
 			response.setCode(Response.SUCCESS);
