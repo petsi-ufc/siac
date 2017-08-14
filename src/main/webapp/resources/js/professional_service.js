@@ -15,8 +15,17 @@
 		
 		function _saveConsultation(params, callback){
 			console.log(params);
-			$http.post("/siac/saveConsultation?json="+JSON.stringify(params)).then(callback, function(err){
-				console.log("Error at save professional consultations");
+			$http.post("/siac/checkSchedules?json="+JSON.stringify(params)).then(function(response){
+				if(response.data.code == 200){
+					$http.post("/siac/saveConsultation?json="+JSON.stringify(params)).then(callback, function(err){
+						console.log("Error at save professional consultations");
+						console.log(err);
+					});
+				}else{
+					callback(response);
+				}
+			},function(err){
+				console.log("Error at check schedule");
 				console.log(err);
 			});
 		}

@@ -967,14 +967,6 @@
 													<input id="grupoFim" type="text" ng-model="endGrpSchTemp" class="form-control input-small datetimepicker1"> 
 												</div>
 											</div>
-											<center>
-												<div ng class="checkbox">
-													<label>
-														<br>
-														<input ng-model="chGroupNowConsultation" type="checkbox" value="">Esta consulta será realizada agora!
-													</label>
-												</div>
-											</center>
 										</div>
 									</div>
 							</form>
@@ -1048,14 +1040,6 @@
 													<input id="pacienteFim" type="text" class="form-control input-small datetimepicker1" ng-model="endSchTemp"> 
 												</div>
 											</div>
-											<center>
-												<div ng class="checkbox">
-													<label>
-														<br>
-														<input ng-model="chPatientNowConsultation" type="checkbox" value="">Esta consulta será realizada agora!
-													</label>
-												</div>
-											</center>
 										</div>
 										<br>
 										<table class="table table-bordered table-hover">

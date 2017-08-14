@@ -436,11 +436,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
             
         	var con = {schedule:[{"patient":patient, "dateInit":dataInit.getTime(),"dateEnd":dataEnd.getTime(), state:"SC"}]};
-            //var con = {schedule:[{"patient":patient, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
-            if($scope.chPatientNowConsultation){
-            	con.schedule[0].state="NO";
-            }
-            console.log(con);
             
             professionalService.saveConsultation({json:con}, function(response){
 				var message = response.data.message;
@@ -469,10 +464,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	
         	var g = {"id":group.id};
         	var con = {schedule:[{"group":g, "dateInit":dataInit.getTime(),"dateEnd":dataEnd.getTime(), state:"SC"}]};
-            //var con = {schedule:[{"group":group, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
-            if($scope.chGroupNowConsultation){
-            	con.schedule[0].state="NO";
-            }
             
             console.log(con);
             professionalService.saveConsultation({json:con}, function(response){

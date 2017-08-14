@@ -229,7 +229,7 @@
 						<textarea placeholder="Escrever motivo..." id="text-area-email-schedule" class="no-resize form-control" rows="3"></textarea>
 					</div>
 					<div class="margin-top">
-						<button id="schedule-consultation" class="btn btn-danger"
+						<button id="schedule-consultation" class="btn btn-primary"
 						value="" name="id">Sim, agendar</button>
 						<button class="btn btn-default" data-dismiss="modal">Voltar</button>
 					</div>
