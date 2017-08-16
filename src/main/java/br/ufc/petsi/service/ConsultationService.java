@@ -103,6 +103,11 @@ public class ConsultationService {
 				}
 				
 				consDAO.save(consultation);
+				if(((consultation.getPatient() != null && consultation.getPatient().getEmail() != null) || consultation.getGroup() != null) ){
+					String date = consultation.getDateInit().getDate()+"/"+consultation.getDateInit().getMonth()+"/"+(consultation.getDateInit().getYear()+1900);
+					String hour = consultation.getDateInit().getHours()+":"+consultation.getDateInit().getMinutes();
+					emailService.sendEmail(consultation, "A sua consulta com o(a) "+consultation.getService().getName()+" foi marcada para o dia "+date+" às "+hour);
+				}
 			}
 			
 		}catch(Exception e){
@@ -311,7 +316,7 @@ public class ConsultationService {
 			consultation.setDateEnd(dateEnd);
 			//Email não é o email da(s) pessoa(s) e sim o corpo de email ou motivo da remarcação ou cancelamento
 			consultation.setReasonCancel(email);
-			if(consultation.getPatient() != null && consultation.getGroup() != null && consultation.getPatient().getEmail() != null && !email.equals("")){
+			if(((consultation.getPatient() != null && consultation.getPatient().getEmail() != null) || consultation.getGroup() != null) && !email.equals("")){
 				emailService.sendEmail(consultation, email);
 			}
 			consDAO.update(consultation);
@@ -566,16 +571,49 @@ public class ConsultationService {
 
 
 	public String checkSchedules(Professional proTemp, String json, ConsultationDAO consDAO){
-		Gson gson = new Gson();
-		Response response = new Response();
-		JsonObject schedules = (JsonObject) new JsonParser().parse(json);
-		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+		GsonBuilder gsonb = new GsonBuilder();
+		DateDeserializer ds = new DateDeserializer();
+		gsonb.registerTypeAdapter(Date.class, ds);
+		Gson gson = gsonb.create();
 		
-		Date dateInit = new Date(Long.parseLong(schedules.get("dateInit").toString()));
-		Date dateEnd = new Date(Long.parseLong(schedules.get("dateEnd").toString()));
+		Response response = new Response();
+		//JsonObject schedules = (JsonObject) new JsonParser().parse(json);
+		//SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+		
+		//System.out.println(json);
+		
+		//Date dateInit = new Date(Long.parseLong(schedules.get("dateInit").toString()));
+		//Date dateEnd = new Date(Long.parseLong(schedules.get("dateEnd").toString()));
 		try{
-			List<Consultation> cons = consDAO.getConsultationByPeriod(proTemp, dateInit, dateEnd);
+			
+			Json scheduler = gson.fromJson(json, Json.class);
+			
+			ArrayList<Consultation> occupieds = new ArrayList<Consultation>();
+			
+			for (Consultation consultation : scheduler.json.getSchedule()) {
+				List<Consultation> cons = consDAO.getConsultationByPeriod(proTemp, consultation.getDateInit(), consultation.getDateEnd());
+				for(Consultation c: cons){
+					
+					if(c.getDateInit().getHours() >= consultation.getDateInit().getHours() && c.getDateInit().getMinutes() >= consultation.getDateInit().getMinutes() && c.getDateEnd().getHours() <= consultation.getDateEnd().getHours() && c.getDateEnd().getMinutes() <= consultation.getDateEnd().getMinutes() ){						
+						occupieds.add(c);
+					}
+				}
+			}
+			
+			if(occupieds.size() > 0){
+				String occupied = "";
+				for(Consultation c:occupieds){
+					occupied += "["+c.getDateInit()+"] ";
+				}
+				response.setCode(Response.ERROR);
+				response.setMessage("As seguintes consultas estão conflitando com o(s) horário(s) enviados: "+occupied);
+				return gson.toJson(response);
+			}
+			
+			/*List<Consultation> cons = consDAO.getConsultationByPeriod(proTemp, dateInit, dateEnd);
 			for(Consultation c: cons){
+				System.out.println(c);
+				
 				Date di = new Date();
 				String si = schedules.get("hourInit").toString().replaceAll("\"", "");
 				di.setHours(Integer.parseInt(si.split(":")[0]));
@@ -594,7 +632,7 @@ public class ConsultationService {
 					response.setMessage("Ops, outra(s) consulta(s) está(ão) agendada(s) neste período");
 					return gson.toJson(response);
 				}
-			}
+			}*/
 		}catch (Exception e) {
 			e.printStackTrace();
 			response.setCode(Response.ERROR);

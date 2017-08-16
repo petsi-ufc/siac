@@ -30,7 +30,6 @@ public class DateDeserializer implements JsonDeserializer<Date> {
     	  int mMinite = c.get(Calendar.MINUTE);
     	  
     	  Date d = new Date((mMonth+1)+"/"+mDay+"/"+mYear+" "+(mHour+3)+":"+mMinite);
-    	  System.out.println(d);
     	  
     	  try {
     		  return d;

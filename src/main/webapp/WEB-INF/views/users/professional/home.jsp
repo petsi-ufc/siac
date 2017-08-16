@@ -586,12 +586,6 @@
 							<td>
 								<h5>Cancelada</h5>
 							</td>
-							<td>
-								<div class='legend-color color-black-2'></div>
-							</td>
-							<td>
-								<h5>Não Agendada</h5>
-							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -606,9 +600,7 @@
 					</span>
 				</div>
 			</div> -->
-			<div  ui-calendar="uiConfig.calendar" config="uiConfig.calendar" ng-model="eventSources" class="calendar" calendar="calendar" id="calendar" ></div>
-
-			
+			<div ui-calendar="uiConfig.calendar" config="uiConfig.calendar" ng-model="eventSources" class="calendar" calendar="calendar" id="calendar" ></div>
 		</div>
 
 		<div class="panel panel-primary margin-right" ng-show="canShow(1)" id="panel-register-schedules">
@@ -635,11 +627,10 @@
 					<div class="form-group">
 						<h5>Padrões:</h5>
 					</div>
-					<div class="input-group bootstrap-timepicker timepicker">
-						<label for="input-count-time-init"></label>
-						<input id="tmp-init-hour" type="text"	class="input-schedule-info form-control input-small ng-pristine ng-valid ng-empty ng-touched" 
-						placeholder="Horário de início" title="Horário padrão para iniciar as consulta de um determinado dia">
-						<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+					<div class="form-group">
+						<div class="margin-left input-group timepicker">
+							<input id="tmp-init-hour" type="text" class="form-control input-small datetimepicker1" placeholder="Horário de início" title="Horário padrão para iniciar as consulta de um determinado dia"/>
+						</div>
 					</div>
 					<div class="form-group">
 						<input id="input-number-vacancy" type="number" min="0"
@@ -655,19 +646,19 @@
 					<div class="row">
 						<div id="days-buttons">
 							<button type="button" class="btn btn-default btn-day"
-								value="Monday">Segunda</button>
+								value="Monday" ng-click="addScheduler($event)">Segunda</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Tuesday">Terça</button>
+								value="Tuesday" ng-click="addScheduler($event)">Terça</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Wednesday">Quarta</button>
+								value="Wednesday" ng-click="addScheduler($event)">Quarta</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Thursday">Quinta</button>
+								value="Thursday" ng-click="addScheduler($event)">Quinta</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Friday">Sexta</button>
+								value="Friday" ng-click="addScheduler($event)">Sexta</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Saturday">Sábado</button>
+								value="Saturday" ng-click="addScheduler($event)">Sábado</button>
 							<button type="button" class="btn btn-default btn-day"
-								value="Sunday">Domingo</button>
+								value="Sunday" ng-click="addScheduler($event)">Domingo</button>
 						</div>
 					</div>
 					<div class="row margin-top" id="div-table-days">
@@ -683,10 +674,16 @@
 								</thead>
 								<tbody id="tbody-table-days">
 									<!-- Preenchida dinamicamente -->
+									<tr ng-repeat="d in scheduler">
+										<td>{{d.day}}</td>
+										<td>{{d.date}}</td>
+										<td><button value={{d.date}} class="action-day add-schedule btn btn-primary" ng-click="onShowSchedulers(d)">Editar <i class="glyphicon glyphicon-time"></i></button></td>
+										<td><button value={{d.date}} class="btn btn-danger action-day remove-day" ng-click="removeDate(d)"><i class="glyphicon glyphicon-trash"></button></i></td>
+									</tr>	
 								</tbody>
 							</table>
 						</div>
-						<button class="btn btn-success" >Consolidar Horários</button>
+						<button class="btn btn-success" ng-click="consolidateAgenda()" >Consolidar Horários</button>
 					</div>
 				</div>
 			</div>
@@ -970,14 +967,6 @@
 													<input id="grupoFim" type="text" ng-model="endGrpSchTemp" class="form-control input-small datetimepicker1"> 
 												</div>
 											</div>
-											<center>
-												<div ng class="checkbox">
-													<label>
-														<br>
-														<input ng-model="chGroupNowConsultation" type="checkbox" value="">Esta consulta será realizada agora!
-													</label>
-												</div>
-											</center>
 										</div>
 									</div>
 							</form>
@@ -1051,14 +1040,6 @@
 													<input id="pacienteFim" type="text" class="form-control input-small datetimepicker1" ng-model="endSchTemp"> 
 												</div>
 											</div>
-											<center>
-												<div ng class="checkbox">
-													<label>
-														<br>
-														<input ng-model="chPatientNowConsultation" type="checkbox" value="">Esta consulta será realizada agora!
-													</label>
-												</div>
-											</center>
 										</div>
 										<br>
 										<table class="table table-bordered table-hover">
@@ -1195,7 +1176,7 @@
 					
 					<div class="panel panel-primary" ng-show="isRemoveAllConsultation == true">
 						<div class="panel-heading">
-							<h3 class="panel-title">Deseja Realmente Remover todas as Consultas deste Dia? (Disponível, Agendada, Em Espera)</h3>
+							<h3 class="panel-title">Deseja Realmente Cancelar todas as Consultas deste Dia? (Disponível, Agendada, Em Espera)</h3>
 						</div>
 						<div class="panel-body" id="panel-schedules">
 							<form class="form-horizontal">
@@ -1270,7 +1251,7 @@
 				<div class="modal-body">
 					<h4 class="modal-description" id="modal-description-body"></h4>
 					<label id="label-date-clicked" class="hidden"></label>
-					<div class="panel panel-primary">
+					<!--<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Gerador de Horários</h3>
 						</div>
@@ -1308,10 +1289,10 @@
 								</button>
 							</div>
 						</div>
-					</div>
+					</div>-->
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Horários</h3>
+							<h3 class="panel-title">Gerenciador de Horários</h3>
 						</div>
 						<div class="panel-body" id="panel-schedules-hours">
 							<form class="form-horizontal">
@@ -1321,10 +1302,9 @@
 										<div class="col-md-4">
 											<div
 												class="margin-left input-group">
-												<input id="tmp-init-1" type="text"  
-													class="form-control input-small"> <span
-													class="input-group-addon"><i
-													class="glyphicon glyphicon-time"></i></span>
+												<div class="input-group timepicker">
+													<input id="tmp-init-plus-1"  type="text" class="form-control input-small datetimepicker1">
+												</div>
 											</div>
 										</div>
 	
@@ -1332,18 +1312,36 @@
 										<div class="col-md-4">
 											<div
 												class="input-group">
-												<input id="tmp-end-1" type="text" class="form-control input-small"> 
-												<span class="input-group-addon">
-													<i class="glyphicon glyphicon-time"></i>
-												</span>
+												<div class="input-group timepicker">
+													<input id="tmp-end-plus-1" type="text" class="form-control input-small datetimepicker1">
+												</div>
 											</div>
 										</div>
 										<div class="col-md-2">
-											<button type="button" class="btn btn-primary add-schedule">
+											<button type="button" class="btn btn-primary add-schedule" ng-click="plusScheculer()">
 												<span class="glyphicon glyphicon glyphicon-plus"></span>
 											</button>
 										</div>
 									</div>
+									<!-- TABELAS DE HORÁRIOS GERADOS AUTOMÁTICAMENTE -->
+									<br/>
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Início</th>
+												<th>Fim</th>
+												<th>Remover</th>
+											</tr>
+										</thead>
+										<tbody id="tbody-table-days">
+											<!-- Preenchida dinamicamente -->
+											<tr ng-repeat="d in schedulerOfDay.schedules">
+												<td>{{d.timeInit}}</td>
+												<td>{{d.timeEnd}}</td>
+												<td><button value={{d.idSchedule}} class="btn btn-danger action-day remove-day" ng-click="removeScheduler(d)"><i class="glyphicon glyphicon-trash"></i></button></td>
+											</tr>	
+										</tbody>
+									</table>
 								</div>
 							</form>
 						</div>
@@ -1351,7 +1349,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-primary"
-						id="btn-confirm-schedules-hours">
+						id="btn-confirm-schedules-hours" ng-click="confirmeSchduler()">
 						Salvar <i class="glyphicon glyphicon-floppy-saved"></i>
 					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
@@ -1363,4 +1361,3 @@
 </div>
 
 <div id="snackbar"></div>
-

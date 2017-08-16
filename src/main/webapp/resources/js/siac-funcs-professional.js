@@ -226,10 +226,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		function _MouseOver(event, element, view){
 			console.log("Consultattion MouseOver");
 			console.log(DataConsultation);
-			
-		
-			
-					
+							
 					if(event.state == "SC"){
 						var title;
 						if( event.isGroup){
@@ -277,12 +274,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 						 element.attr(config_tooltip);
 					});	
 				}
-				
-				
-				
-		
-			
-			
+	
 		}
 		
 		function _addFrequencyList(index){

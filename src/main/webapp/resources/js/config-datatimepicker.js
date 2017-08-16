@@ -10,7 +10,7 @@ $('.datetimepicker1').datetimepicker({
 	datepicker:false,
 	format:'H:i',
 	step:15,
-	mask:'23:59',
+	mask:'29:59',
 	use24hours: true
 });
 
