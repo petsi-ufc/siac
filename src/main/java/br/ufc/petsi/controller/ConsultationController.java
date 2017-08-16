@@ -10,9 +10,11 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.jca.cci.CciOperationNotSupportedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +28,7 @@ import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
+import br.ufc.petsi.model.Reserve;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ConsultationService;
 
@@ -156,5 +159,16 @@ public class ConsultationController {
 	public String registerComment(@RequestParam("json") String json){
 		return consultationService.registerComment(json, consDAO);
 	}
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping("/getReserveByidConsultation")
+	@ResponseBody
+	public List<Reserve> getReserveByidConsultation(@RequestParam("id") long id){
+		Consultation consulta = new Consultation();
+		consulta.setId(id);
+		System.out.println("ID: Consulta " + consulta.getId());
+		return reserveDAO.getActiveReservesByConsultation(consulta);
+		
+	}
+	
 	
 }

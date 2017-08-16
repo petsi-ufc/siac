@@ -185,7 +185,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			}
 		};
 
-		
+		var DataConsultation;
 		function getConsultations(a,b,c){
 			var init = a._d;
 			var end = b._d;
@@ -195,8 +195,10 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			showSnack("Carregando as consultas...");
 			professionalService.getProfessionalConsultations(init, end, function(data){
 				$scope.events.length = 0;
+				DataConsultation = data;
 				data.data.forEach(function (value, key){
 					console.log(value);
+					
 					console.log("value Patient => " + value.patient);
 					var title = "";
 					if(value.state == "FR")	title = "Livre";
@@ -222,13 +224,65 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		}
 		
 		function _MouseOver(event, element, view){
-			 
-			$timeout(function(){
-				 element.attr({
-					    'title': "Evento",
+			console.log("Consultattion MouseOver");
+			console.log(DataConsultation);
+			
+		
+			
+					
+					if(event.state == "SC"){
+						var title;
+						if( event.isGroup){
+							
+							title = "Grupo";
+						}else{
+							professionalService.getReserveByidConsultation(66,function(data){
+								console.log("Chegando..");
+								console.log(data);
+							});
+							title = "Pessoa";
+							
+						}
+						var config_tooltip =
+						{
+						    'title': title,
+						    'tooltip-append-to-body': true
+						};
+						$timeout(function(){
+							 element.attr(config_tooltip);
+						});	
+						
+						
+					}
+				
+				if(event.state == "CD"){
+					var title = "Consulta Cancelada!";
+					var config_tooltip =
+					{
+					    'title': title,
+					    'tooltip-append-to-body': true;
+					};
+					$timeout(function(){
+						 element.attr(config_tooltip);
+					});	
+				}
+				if(event.state == "FR"){
+					var title = "Consulta Livre!";
+					var config_tooltip =
+					{
+					    'title': title,
 					    'tooltip-append-to-body': true
-					});
-				  });
+					};
+					$timeout(function(){
+						 element.attr(config_tooltip);
+					});	
+				}
+				
+				
+				
+		
+			
+			
 		}
 		
 		function _addFrequencyList(index){

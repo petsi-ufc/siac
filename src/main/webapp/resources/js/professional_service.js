@@ -122,7 +122,14 @@
 				console.log(err);
 			});
 		}
-		
+		function _getReserveByidConsultation(params,callback){
+			$http.get('/siac/getReserveByidConsultation?id='+params,{'id':params}).then(callback,function(error){
+				console.log("ID: " + params);
+				console.log("erro at get All Reserve ):");
+				console.log(error);
+			});
+		}
+	
 		return {
 			getProfessionalConsultations : _getProfessionalConsultations,
 			saveConsultation : _saveConsultation,
@@ -137,7 +144,8 @@
 			registerComment: _registerComment,
 			getFrequencyList: _getFrequencyList,
 			getPatientsOfGroup :_getPatientsOfGroup,
-			cancelAllConsultation: _cancelAllConsultation
+			cancelAllConsultation: _cancelAllConsultation,
+			getReserveByidConsultation: _getReserveByidConsultation
 		}
 	});
 })();
