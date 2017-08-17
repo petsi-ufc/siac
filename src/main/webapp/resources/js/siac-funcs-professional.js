@@ -45,8 +45,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 	initTimepicker("tmp-end-1",null);
 	
 	
-	angular.module("siacApp")
-	.controller("professionalController", function($scope, $compile, $sce,$timeout ,uiCalendarConfig, professionalService){
+	angular.module("siacApp").controller("professionalController", function($scope, $compile, $sce,$timeout ,uiCalendarConfig, professionalService){
 		
 		//Variables
 		$scope.menuIndex = 0;
@@ -227,53 +226,67 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			console.log("Consultattion MouseOver");
 			console.log(DataConsultation);
 							
-					if(event.state == "SC"){
-						var title;
-						if( event.isGroup){
+			if(event.state == "SC"){
+				var title;
+				if(event.isGroup){
+					
+					title = "Grupo";
+				}else{
+					var nome;
+					professionalService.getReserveByidConsultation(event.id,function(data){
+						console.log("Chegando..");
+						console.log(data);
+						data.data.forEach(function(value,key){
+							console.log("Name: "+value.patient.name);
+							var config_tooltip =
+							{
+							    'title': value.patient.name,
+							    'tooltip-append-to-body': true
+							};
+							$timeout(function(){
+								 element.attr(config_tooltip);
+							});	
 							
-							title = "Grupo";
-						}else{
-							professionalService.getReserveByidConsultation(66,function(data){
-								console.log("Chegando..");
-								console.log(data);
-							});
-							title = "Pessoa";
-							
-						}
-						var config_tooltip =
-						{
-						    'title': title,
-						    'tooltip-append-to-body': true
-						};
-						$timeout(function(){
-							 element.attr(config_tooltip);
-						});	
-						
-						
-					}
+						});
+					});
+					
+										
+					
+				}
+				var config_tooltip =
+				{
+				    'title': title,
+				    'tooltip-append-to-body': true
+				};
+				$timeout(function(){
+					 element.attr(config_tooltip);
+				});	
 				
-				if(event.state == "CD"){
-					var title = "Consulta Cancelada!";
-					var config_tooltip =
-					{
-					    'title': title,
-					    'tooltip-append-to-body': true;
-					};
-					$timeout(function(){
-						 element.attr(config_tooltip);
-					});	
-				}
-				if(event.state == "FR"){
-					var title = "Consulta Livre!";
-					var config_tooltip =
-					{
-					    'title': title,
-					    'tooltip-append-to-body': true
-					};
-					$timeout(function(){
-						 element.attr(config_tooltip);
-					});	
-				}
+				
+			}
+		//Está dando Erro essa Parte
+//		if(event.state == "CD"){
+//			var title = "Consulta Cancelada!";
+//			var config_tooltip =
+//			{
+//			    'title': title,
+//			    'tooltip-append-to-body': true;
+//			};
+//			$timeout(function(){
+//				 element.attr(config_tooltip);
+//			});	
+//		}
+		if(event.state == "FR"){
+			var title = "Consulta Livre!";
+			var config_tooltip =
+			{
+			    'title': title,
+			    'tooltip-append-to-body': true
+			};
+			$timeout(function(){
+				 element.attr(config_tooltip);
+			});	
+		}
 	
 		}
 		
@@ -369,36 +382,36 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		}
 		
 		// ESSE CÓDIGO A GENTE NÃO ESTÁ MAIS UTILIZANDO, CASO O DE BAIXO NÃO FUNCIONE, VOLTE PARA ESSE E SEJA FELIZ
-//		function _addTempSchedule(){
-////			var dateInit = $('#livreInicio').val();
-////        	var dateEnd = $('#livreFim').val();
-////        	
-////        	var dataInit = new Date(date);
-////        	dataInit.setUTCHours(parseInt(intHour.split(":")[0]));
-////        	dataInit.setUTCMinutes(parseInt(intHour.split(":")[1]));
-////
-////        	var dataEnd = new Date(date);
-////        	dataEnd.setUTCHours(parseInt(endHour.split(":")[0]));
-////        	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
-//        	
-//			var dateInit = angular.copy($scope.selectedDay);
-//			var dateEnd = angular.copy($scope.selectedDay);
-//			
-//			dateInit.set("hours",$("#tmp-init-1").data("timepicker").hour);
-//			dateInit.set("minute", $("#tmp-init-1").data("timepicker").minute);
-//			
-//			dateEnd.set("hours", $("#tmp-end-1").data("timepicker").hour);
-//			dateEnd.set("minute", $("#tmp-end-1").data("timepicker").minute);
-//			
-//			$scope.generetedSchedules.push({schedule:{dateInit: dateInit, dateEnd : dateEnd, state: "FR"}});
-//		}
-//		
-//		function initTimePickers(){
-//			$("#tmp-init-1").timepicker({showMeridian: false, defaultTime:"8:00"});
-//			$("#tmp-end-1").timepicker({showMeridian: false, defaultTime:"8:15"});
-//			$("#tmp-init-hour").timepicker();
-//		}
+		function _addTempSchedule(){
+			var dateInit = $('#livreInicio').val();
+        	var dateEnd = $('#livreFim').val();
+        	
+        	var dataInit = new Date(date);
+        	dataInit.setUTCHours(parseInt(intHour.split(":")[0]));
+        	dataInit.setUTCMinutes(parseInt(intHour.split(":")[1]));
+
+        	var dataEnd = new Date(date);
+        	dataEnd.setUTCHours(parseInt(endHour.split(":")[0]));
+        	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
+        	
+			var dateInit = angular.copy($scope.selectedDay);
+			var dateEnd = angular.copy($scope.selectedDay);
+			
+			dateInit.set("hours",$("#tmp-init-1").data("timepicker").hour);
+			dateInit.set("minute", $("#tmp-init-1").data("timepicker").minute);
+			
+			dateEnd.set("hours", $("#tmp-end-1").data("timepicker").hour);
+			dateEnd.set("minute", $("#tmp-end-1").data("timepicker").minute);
+			
+			$scope.generetedSchedules.push({schedule:{dateInit: dateInit, dateEnd : dateEnd, state: "FR"}});
+		}
 		
+		function initTimePickers(){
+			$("#tmp-init-1").timepicker({showMeridian: false, defaultTime:"8:00"});
+			$("#tmp-end-1").timepicker({showMeridian: false, defaultTime:"8:15"});
+			$("#tmp-init-hour").timepicker();
+		}
+	/*	
 		function _addTempSchedule(){
 			var dInittemp = $('#livreInicio').val();
 			var dEndtemp = $('#livreFim').val();
@@ -426,7 +439,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			$scope.generetedSchedules.push({schedule:{dateInit: dateInit, dateEnd : dateEnd, state: "FR"}});
 	
 		}
-	
+	*/
 		function initTimePickers(){
 			$("#tmp-init-1").timepicker({showMeridian: false, defaultTime:"8:00"});
 			$("#tmp-end-1").timepicker({showMeridian: false, defaultTime:"8:15"});

@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.dao.ReserveDAO;
@@ -162,11 +165,19 @@ public class ConsultationController {
 	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/getReserveByidConsultation")
 	@ResponseBody
-	public List<Reserve> getReserveByidConsultation(@RequestParam("id") long id){
+	public String getReserveByidConsultation(@RequestParam("id") long id){
 		Consultation consulta = new Consultation();
 		consulta.setId(id);
 		System.out.println("ID: Consulta " + consulta.getId());
-		return reserveDAO.getActiveReservesByConsultation(consulta);
+		ObjectMapper mapper = new ObjectMapper();
+		String json = null;
+		try{
+			json = mapper.writeValueAsString(reserveDAO.getActiveReservesByConsultation(consulta));
+		}catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		System.out.println(json);
+		return json;
 		
 	}
 	
