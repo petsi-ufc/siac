@@ -57,9 +57,15 @@ public class HBReserve implements ReserveDAO{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Reserve> getActiveReservesByConsultation(Consultation consultation) {
+		System.out.println("Consultaaaa: " + consultation.getId());
+		try{
 		Query query = this.manager.createQuery("SELECT re FROM Reserve re WHERE re.consultation.id = :id AND re.active = true");
 		query.setParameter("id", consultation.getId());
 		return (List<Reserve>) query.getResultList();
+		}catch(Exception e){
+			System.out.println(e);
+			return null;
+		}
 	}
 	
 	@Override
