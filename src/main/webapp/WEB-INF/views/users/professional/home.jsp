@@ -689,54 +689,61 @@
 			</div>
 		</div>
 		
-		<div class="panel panel-primary margin-right" id="panel-generate-report" ng-show="canShow(2)">
+		<div class="panel panel-primary margin-right" id="panel-generate-report" ng-show="canShow(2)" >
 			<div class="panel-heading">
 				<h1 class="panel-title">Gerar Relatórios</h1>
 			</div>
 			
 			<div class="panel-body">
-				<form action="relatorio/avaliacao" method="post" target="_blank">
-<!-- 					<md-content class="md-padding"> -->
-<!-- 						<md-card layout="column"> -->
-<!-- 							<md-card-content class="md-padding"> -->
-<!-- 								<div id="date-report" class="form-group"> -->
-<!-- 									<div class="input-group col-md-4" id="date-left" layout-gt-md="row" layout="column"> -->
-<!-- 										<md-input-container flex-gt-md="30"> -->
-<!-- 											<label class="control-label" for="input-dtpckr-start-report">Início</label> -->
-<!-- 											<input ng-required="true" type="text" placeholder="Date" name="dateBegin" class="form-control" id="input-dtpckr-start-report" -->
-<!-- 											time="false" date="true" mdc-datetime-picker id="date" ng-model="date" min-date="minDate" max-date="maxDate"/> -->
-<!-- 										</md-input-container> -->
-<!-- 									</div> -->
-<!-- 									<div class="input-group col-md-4" id="date-right"layout-gt-md="row" layout="column"> -->
-<!-- 										<md-input-container flex-gt-md="30"> -->
-<!-- 											<label class="control-label" for="input-dtpckr-end-report">Fim</label> -->
-<!-- 											<input ng-required="true" type="text" placeholder="Date" name="dateEnd" class="form-control" id="input-dtpckr-end-report" -->
-<!-- 											time="false" date="true" mdc-datetime-picker id="date" ng-model="date" min-date="minDate" max-date="maxDate"/> -->
-<!-- 										</md-input-container> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</md-card-content> -->
-<!-- 						</md-card> -->
-<!-- 					</md-content> -->
-					
-								<div id="date-report" class="form-group">
-									<div class="input-group col-md-4" id="date-left">
-										<label class="control-label" for="input-dtpckr-start-report">Início</label>
-										<input ng-required="true" type="text" placeholder="Date" name="dateBegin" class="form-control datetimepicker2" id="input-dtpckr-start-report"/>
-									</div>
-									<div class="input-group col-md-4" id="date-right"layout-gt-md="row" layout="column">
-										<label class="control-label" for="input-dtpckr-end-report">Fim</label>
-										<input ng-required="true" type="text" placeholder="Date" name="dateEnd" class="form-control datetimepicker2" id="input-dtpckr-end-report"/>
-									</div>
-								</div>
-					
-					
+				<form action="relatorio/avaliacao" method="post" target="_blank" ng-show="showReport">
+					    <div id="date-report" class="form-group" >
+							<div class="input-group col-md-4" id="date-left">
+								<label class="control-label" for="input-dtpckr-start-report">Início</label>
+								<input ng-required="true" type="text" placeholder="Date" name="dateBegin" class="form-control datetimepicker2" id="input-dtpckr-start-report"/>
+							</div>
+							<div class="input-group col-md-4" id="date-right"layout-gt-md="row" layout="column">
+								<label class="control-label" for="input-dtpckr-end-report">Fim</label>
+								<input ng-required="true" type="text" placeholder="Date" name="dateEnd" class="form-control datetimepicker2" id="input-dtpckr-end-report"/>
+							</div>
+						</div>
+						<br><br><br><br>
+						<button type="submit" class="btn btn-primary" id="button-generate-report" data-dismiss="modal">Gerar</button>
+				 </form>
+				 <form action="relatorio/avaliacaoMes" method="post" target="_blank" ng-show="!showReport">
+					    <div id="date-report" class="form-group" >
+							<div class="input-group col-md-4" id="date-left">
+								<label class="control-label">Mês</label><br>
+								<!-- <input type="text" placeholder="Date" name="dateBegin" class="form-control" id="input-dtpckr-start-report"/>-->
+								<select name="month" class="form-control">
+									<option value="1">Janeiro</option>
+									<option value="2">Fevereiro</option>
+									<option value="3">Março</option>
+									<option value="4">Abril</option>
+									<option value="5">Maio</option>
+									<option value="6">Junho</option>
+									<option value="7">Julho</option>
+									<option value="8">Agosto</option>
+									<option value="9">Setembro</option>
+									<option value="10">Outubro</option>
+									<option value="11">Novembro</option>
+									<option value="12">Dezembro</option>
+								</select>
+							</div>
+							<div class="input-group col-md-4" id="date-right" layout-gt-md="row" layout="column">
+								<label class="control-label" for="input-year-report">Ano</label><br>
+								<input type="text" placeholder="Ano" name="year" id="input-year-report" class="form-control"/>
+							</div>
+						</div>
 					<br><br><br><br>
 					<button type="submit" class="btn btn-primary" id="button-generate-report" data-dismiss="modal">Gerar</button>
 				</form>
 			</div>
+			<ul class="pager">
+				<li><a ng-click="showReport = true" style="cursor:pointer">Por Período</a></li>
+				<li><a ng-click="showReport = false" style="cursor:pointer">Por Mês</a></li>
+			</ul>
+			<br>
 		</div>
-
 		<div class="panel panel-primary margin-right" id="panel-frequency-comment" ng-show="canShow(4)">
 			<div class="panel-heading">
 				<h1 class="panel-title">Registrar Consulta</h1>

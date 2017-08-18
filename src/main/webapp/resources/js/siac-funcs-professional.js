@@ -62,10 +62,12 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.chGroupNowConsultation = false;
 		$scope.chPatientNowConsultation = false;
 		$scope.modelCheck = false;
+		$scope.showReport = true;
 		
 		//Colors
 		var colors = new Map();
 		colors.set("SC", {text: "Agendada", hex : "#4682B4", css: "color-blue"});
+		colors.set("RS", {text: "Agendada", hex : "#4682B4", css: "color-blue"});
 		colors.set("FR", {text: "Disponível", hex : "#32CD32", css: "color-green"});
 		colors.set("RD", {text: "Realizada", hex : "grey", css: "color-grey"});
 		colors.set("RV", {text: "Reservada", hex : "#D9D919", css: "color-yellow"});

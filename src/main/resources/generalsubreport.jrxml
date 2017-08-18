@@ -14,7 +14,7 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="9ee684eb-205d-467b-99e3-f9fa2b9a4bdc" x="18" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<reportElement x="18" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="9ee684eb-205d-467b-99e3-f9fa2b9a4bdc"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -29,7 +29,7 @@
 				<textFieldExpression><![CDATA[$F{numberOfMonth}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="bc9fbf0b-0908-4322-a551-dc17dfd9eca4" positionType="Float" x="437" y="0" width="100" height="20"/>
+				<reportElement positionType="Float" x="437" y="0" width="100" height="20" uuid="bc9fbf0b-0908-4322-a551-dc17dfd9eca4"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -43,7 +43,7 @@
 				<textFieldExpression><![CDATA[$F{totalByMonth}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="0934821f-0b73-4256-9af4-28d2e25ede79" positionType="Float" x="118" y="0" width="98" height="20"/>
+				<reportElement positionType="Float" x="118" y="0" width="98" height="20" uuid="0934821f-0b73-4256-9af4-28d2e25ede79"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -57,7 +57,7 @@
 				<textFieldExpression><![CDATA[$F{scheduledByMonth}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="302caa2c-4633-4639-ab59-65ec052c8e40" positionType="Float" x="216" y="0" width="98" height="20"/>
+				<reportElement positionType="Float" x="216" y="0" width="98" height="20" uuid="302caa2c-4633-4639-ab59-65ec052c8e40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -71,7 +71,7 @@
 				<textFieldExpression><![CDATA[$F{unscheduledByMonth}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="8aa4cfce-c2f5-4f4f-b7ec-cc1a9197b162" positionType="Float" x="314" y="0" width="123" height="20"/>
+				<reportElement positionType="Float" x="314" y="0" width="123" height="20" uuid="8aa4cfce-c2f5-4f4f-b7ec-cc1a9197b162"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>

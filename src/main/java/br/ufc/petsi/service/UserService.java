@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -87,13 +88,19 @@ public class UserService {
 	public String getProfessionals(UserDAO userDAO){
 		
 		List<User> users = userDAO.getUsersByRole(Constants.ROLE_PROFESSIONAL);
-		
-		Gson gson = new GsonBuilder()
+		//Gson gson = new Gson();
+		ObjectMapper mapper = new ObjectMapper();
+		/*Gson gson = new GsonBuilder()
 		        .setExclusionStrategies(new UserExclusionStrategy())
-		        .create();
+		        .create();*/
 		
-		return gson.toJson(users);
-		
+		//return gson.toJson(users);
+		try{
+			return mapper.writeValueAsString(users);
+		}catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return "";
 	}
 	
 	public User getIdUserByCpf(String cpf){

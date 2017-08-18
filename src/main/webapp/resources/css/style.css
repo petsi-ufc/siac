@@ -433,12 +433,22 @@ body html{
 	min-width: 100px !important;
 }
 
-#date-report #date-left{
+#date-report #date-left {
 	margin-left: 10%;
 	float: left;
 }
 
-#date-report #date-right{
+#date-report #date-right {
+	margin-right: 10%;
+	float: right;
+}
+
+#date-report-for-month #date-left-for-month{
+	margin-left: 10%;
+	float: left;
+}
+
+#date-report-for-month #date-right-for-month{
 	margin-right: 10%;
 	float: right;
 }
