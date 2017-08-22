@@ -51,8 +51,7 @@
 			<h2>Gerar Relatórios</h2>
 			<br /> <br /> <br />
 
-			<form action="relatorio/geral" method="post" target="_blank"
-				id="form-report">
+			<form action="relatorio/geral" method="post" target="_blank" id="form-report">
 				<div class="form-group">
 					<label>Escolha o tipo de relatório</label> <select
 						class="form-control type-report" id="select-report-type">
@@ -61,6 +60,7 @@
 						<option value="by-type">Por serviço</option>
 					</select>
 				</div>
+				
 				<div class="form-group" id="select-servico">
 					<label>Escolha o serviço</label> <select
 						class="form-control select-service" id="select-service-type"
@@ -75,8 +75,9 @@
 						<option value="option-default">Escolha o profissional</option>
 					</select>
 				</div>
+				
 				<div id="date-report" class="form-group">
-					<div class="input-group col-md-4" id="date-left">
+					<div class="input-group col-md-4" id="date-left" style="float:left; margin-left:5%;">
 						<label class="control-label" for="input-dtpckr-start-report">Início</label>
 						<input type='text' name="dateBegin" class="form-control"
 							id="input-dtpckr-start-report" />
@@ -87,14 +88,41 @@
 							id="input-dtpckr-end-report" />
 					</div>
 				</div>
+				<div id="date-report-for-month" class="form-group" >
+					<div class="input-group col-md-4" id="date-left-for-month">
+						<label class="control-label">Mês</label>
+						<select name="month" class="form-control">
+							<option value="1">Janeiro</option>
+							<option value="2">Fevereiro</option>
+							<option value="3">Março</option>
+							<option value="4">Abril</option>
+							<option value="5">Maio</option>
+							<option value="6">Junho</option>
+							<option value="7">Julho</option>
+							<option value="8">Agosto</option>
+							<option value="9">Setembro</option>
+							<option value="10">Outubro</option>
+							<option value="11">Novembro</option>
+							<option value="12">Dezembro</option>
+						</select>
+					</div>
+					<div class="input-group col-md-4" id="date-right-for-month" layout-gt-md="row" layout="column" style="margin-left:5%;">
+						<label class="control-label" for="input-year-report">Ano</label>
+						<input type="text" placeholder="Ano" name="year" id="input-year-report" class="form-control"/>
+					</div>
+				</div>
 				<br>
 				<br>
 				<br>
 				<br>
-				<button type="submit" class="btn btn-primary"
+				<button type="submit" class="btn btn-primary" 
 					id="button-generate-report" data-dismiss="modal"
 					onclick="return onGenerateReportButtonClicked();">Gerar</button>
 			</form>
+			<ul class="pager">
+				<li><a style="cursor:pointer" onclick="$('#date-report-for-month').hide();$('#date-report').show();$('#input-year-report').val('');$('select[name=month]').val(1);">Por Período</a></li>
+				<li><a style="cursor:pointer"onclick="$('#date-report-for-month').show();$('#date-report').hide();$('#input-dtpckr-start-report').val('');$('#input-dtpckr-end-report').val('');">Por Mês</a></li>
+			</ul>
 		</div>
 
 		<div id="set-professional">

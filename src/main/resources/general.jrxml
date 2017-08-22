@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="General" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="General" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aa056720-7367-4c3f-8dde-961f3b9e9fed">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="87"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
@@ -16,11 +16,11 @@
 	<title>
 		<band height="76" splitType="Stretch">
 			<image>
-				<reportElement x="30" y="4" width="310" height="70"/>
+				<reportElement x="30" y="4" width="310" height="70" uuid="d1def461-22de-4d05-8840-094fe79aa7db"/>
 				<imageExpression><![CDATA["./logo-ufc.jpg"]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="419" y="4" width="95" height="70"/>
+				<reportElement x="419" y="4" width="95" height="70" uuid="f052c124-145a-49c2-87d9-ae1c8f267e36"/>
 				<imageExpression><![CDATA["./logo-ufc-qx.jpg"]]></imageExpression>
 			</image>
 		</band>
@@ -28,45 +28,45 @@
 	<pageHeader>
 		<band height="189" splitType="Stretch">
 			<staticText>
-				<reportElement x="250" y="70" width="40" height="20"/>
+				<reportElement x="250" y="70" width="40" height="20" uuid="195529b3-9809-46da-a8dd-005d5e48128c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true" isStrikeThrough="false"/>
 				</textElement>
 				<text><![CDATA[à]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="22" y="73" width="231" height="20"/>
+				<reportElement x="22" y="73" width="231" height="20" uuid="19cd783f-9dff-40bc-9c13-3f9d317f1f9c"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Relatório referente ao período:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="2" y="97" width="550" height="1" forecolor="#787373"/>
+				<reportElement x="2" y="97" width="550" height="1" forecolor="#787373" uuid="b6ba88d1-8184-4aea-ab1c-5795ecf872e6"/>
 			</line>
 			<staticText>
-				<reportElement x="0" y="27" width="555" height="22"/>
+				<reportElement x="0" y="27" width="555" height="22" uuid="9eb36a6c-5bde-494a-91f0-2d45a6163061"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[RELATÓRIOS DE AGENDAMENTOS - GERAL]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="190" y="73" width="100" height="20"/>
+				<reportElement x="190" y="73" width="100" height="20" uuid="251e1cab-f536-4b2f-b50d-659b932d3ac6"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{dateBegin})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{dateBegin})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="290" y="73" width="100" height="20"/>
+				<reportElement x="290" y="73" width="100" height="20" uuid="241e2906-b018-47d3-974f-c87e9f82fd58"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{dateEnd})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{dateEnd})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="314" y="149" width="123" height="40"/>
+				<reportElement x="314" y="149" width="123" height="40" uuid="02d81ffb-b7fd-4928-9110-c69a1359ebad"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -80,7 +80,7 @@
 				<text><![CDATA[Canceladas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="18" y="149" width="100" height="40"/>
+				<reportElement x="18" y="149" width="100" height="40" uuid="3b090136-53ea-4ec0-98e3-c580b4c8d4b6"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -94,7 +94,7 @@
 				<text><![CDATA[Mês]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="437" y="149" width="100" height="40"/>
+				<reportElement x="437" y="149" width="100" height="40" uuid="0e5ea17c-d5dc-43d4-bc22-b7baa71063fa"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -108,7 +108,7 @@
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="129" width="419" height="20"/>
+				<reportElement x="118" y="129" width="419" height="20" uuid="2a52f882-0eed-4c00-af63-93bc17d6a89a"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -122,21 +122,7 @@
 				<text><![CDATA[CONSULTAS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="216" y="169" width="98" height="20"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="11" isBold="false" isItalic="true" isStrikeThrough="false"/>
-				</textElement>
-				<text><![CDATA[Não Agendadas]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="118" y="149" width="196" height="20"/>
+				<reportElement x="118" y="149" width="98" height="40" uuid="0bd3659f-c847-4532-9ed5-b7fa12241a40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -150,7 +136,7 @@
 				<text><![CDATA[Realizadas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="169" width="98" height="20"/>
+				<reportElement x="216" y="149" width="98" height="40" uuid="17af9cc7-4ed6-495e-8960-ebdc0b193beb"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -159,16 +145,16 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="11" isBold="false" isItalic="true" isStrikeThrough="false"/>
+					<font size="11" isBold="true" isStrikeThrough="false"/>
 				</textElement>
-				<text><![CDATA[Agendadas]]></text>
+				<text><![CDATA[Remarcações]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
 		<band height="40" splitType="Stretch">
 			<subreport>
-				<reportElement x="0" y="0" width="555" height="40"/>
+				<reportElement x="0" y="0" width="555" height="40" uuid="c75e42e9-697e-481d-9d2f-5ed4aafd91bc"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{byMonth})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{GeneralSubReportLocation}]]></subreportExpression>
 			</subreport>
@@ -177,13 +163,12 @@
 	<pageFooter>
 		<band height="50" splitType="Stretch">
 			<image>
-				<reportElement x="419" y="0" width="136" height="45"/>
+				<reportElement x="419" y="0" width="136" height="45" uuid="b0285ab0-760e-4df7-8cff-4ef35b51d0e5"/>
 				<imageExpression><![CDATA["./logo-siac.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="16" y="29" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[www.siac.com.br]]></text>
+				<reportElement x="16" y="29" width="116" height="20" uuid="123016da-151a-47a8-a465-9f30ce9e4679"/>
+				<text><![CDATA[siac@quixada.ufc.br]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

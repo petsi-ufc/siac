@@ -138,7 +138,7 @@ public class ConsultationService {
 		}
 		con.setProfessional(proTemp);
 		con.setService(proTemp.getSocialService());
-		con.setState(ConsultationState.NO);
+		//con.setState(ConsultationState.NO);
 		
 		if(con.getDateInit().after(con.getDateEnd())){
 			response.setCode(Response.ERROR);
@@ -316,6 +316,7 @@ public class ConsultationService {
 			consultation.setDateEnd(dateEnd);
 			//Email não é o email da(s) pessoa(s) e sim o corpo de email ou motivo da remarcação ou cancelamento
 			consultation.setReasonCancel(email);
+			consultation.setState(ConsultationState.RS);
 			if(((consultation.getPatient() != null && consultation.getPatient().getEmail() != null) || consultation.getGroup() != null) && !email.equals("")){
 				emailService.sendEmail(consultation, email);
 			}

@@ -61,10 +61,12 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.chGroupNowConsultation = false;
 		$scope.chPatientNowConsultation = false;
 		$scope.modelCheck = false;
+		$scope.showReport = true;
 		
 		//Colors
 		var colors = new Map();
 		colors.set("SC", {text: "Agendada", hex : "#4682B4", css: "color-blue"});
+		colors.set("RS", {text: "Agendada", hex : "#4682B4", css: "color-blue"});
 		colors.set("FR", {text: "Disponível", hex : "#32CD32", css: "color-green"});
 		colors.set("RD", {text: "Realizada", hex : "grey", css: "color-grey"});
 		colors.set("RV", {text: "Reservada", hex : "#D9D919", css: "color-yellow"});
@@ -124,19 +126,28 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.viewComment = _viewComment;
 		$scope.MouseOver = _MouseOver;
 		
-
-		$("#input-frequenci").keypress(function(e){
-			setFrequenciDays();
-		});
+		//Array destinado ao gerenciamento da agenda de horários
+		$scope.scheduler = [];
+		//funções destinadas ao gerenciamento da agenda de horários
+		$scope.addScheduler = _addScheduler;
+		$scope.onShowSchedulers = _onShowSchedulers;
+		$scope.removeScheduler = _removeScheduler; 
+		$scope.plusScheculer = _plusScheculer;
+		$scope.confirmeSchduler = _confirmeSchduler;
+		$scope.removeDate = _removeDate;
+		$scope.consolidateAgenda = _consolidateAgenda;
+		$scope.setFrequenciDays = _setFrequenciDays;
+		$scope.fillTableDays = _fillTableDays;
+		$scope.getDateByDays = _getDateByDays;
 		
-		onButtonAddScheduleClick();
-		onSelectScheduleRepeatClick();
-		onButtonRepeatScheduleDayClick();
-		onButtonGenerateSchedules();
-
-		onButtonConfirmSchedulesClick();
-		
-		initTimePickers();
+//		onButtonAddScheduleClick();
+//		onSelectScheduleRepeatClick();
+//		onButtonRepeatScheduleDayClick();
+//		onButtonGenerateSchedules();
+//
+//		onButtonConfirmSchedulesClick();
+//		
+//		initTimePickers();
 		configureModal();
 		loadPatients();
 		getMyGroups();
@@ -879,16 +890,267 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		}
 		
 		
+		//Mapa que conterá todos os dias da semana
+		// que se repetirão, Mon, Tue...
+		// CHAVE: dia da semana
+		// VALOR: booleano, indicando se o dia foi marcado ou não
+		var mapSelectedDays = new Map();
+		mapSelectedDays.set("Monday", false);
+		mapSelectedDays.set("Sunday", false);
+		mapSelectedDays.set("Tuesday", false);
+		mapSelectedDays.set("Wednesday", false);
+		mapSelectedDays.set("Thursday", false);
+		mapSelectedDays.set("Friday", false);
+		mapSelectedDays.set("Saturday", false);
+
+		mapVars.set(MAP_SELECTED_DAYS, mapSelectedDays);
+
+		//Mapa usado para preencher a tabela de 
+		//datas com dias da semana em português 
+		var mapWeekDays = new Map();
+		mapWeekDays.set("Monday", "Segunda-Feira");
+		mapWeekDays.set("Tuesday", "Terça-Feira");
+		mapWeekDays.set("Wednesday", "Quarta-Feira");
+		mapWeekDays.set("Thursday", "Quinta-Feira");
+		mapWeekDays.set("Friday", "Sexta-Feira");
+		mapWeekDays.set("Saturday", "Sábado");
+		mapWeekDays.set("Sunday", "Domingo");
+
+		mapVars.set(MAP_WEEK_DAYS, mapWeekDays);
+		
+		
+		function _setFrequenciDays(){
+			var inputFrequenci = $("#input-frequenci");
+			var inputNumberVancancy = $("#input-number-vacancy").val();
+			var inputTimeConsultation = $("#input-time-consultation").val();
+			
+			var inputInitHour = $("#tmp-init-hour").val();
+			val = inputFrequenci.val() <= 48 ? inputFrequenci.val() : 48;
+			
+			if(val == "")
+				return;
+			
+			var mapDays = mapVars.get(MAP_SELECTED_DAYS);	
+			
+			if(val != ""){
+				var resultMap = _getDateByDays(mapDays, val);
+				mapVars.set(MAP_DAYS, resultMap);
+				
+				scheduleManager.updateSchedules(resultMap);
+				
+				try{
+					//Preenchendo a tabela de dias, a partir dos valores padrão
+					_fillTableDays(resultMap, parseInt(inputNumberVancancy), parseInt(inputTimeConsultation), inputInitHour);
+				}catch(err){
+					alert("Verifique os valores especificados!");
+				}
+			}
+		}
+		
+		function _addScheduler($event){
+			
+			var btnClass = $event.target.className;
+			
+			var mapDays = mapVars.get(MAP_SELECTED_DAYS);
+			//Pegando o nome do dia do botão clicado
+			var dayName = $event.target.value;
+			
+			if(btnClass === "btn btn-default btn-day btn-success"){
+				$event.target.className = "btn btn-default btn-day";
+				mapDays.set(dayName, false);
+			}else{
+				//Setando o dia clicado como true na lista de dias selecionados
+				mapDays.set(dayName, true);
+				$event.target.className = "btn btn-default btn-day btn-success";
+			}
+			_setFrequenciDays();
+		} 
+		
+		function _removeScheduler(scheduler){
+			for(var i = 0; i < $scope.schedulerOfDay.schedules.length;i++){
+				if($scope.schedulerOfDay.schedules[i].idSchedule === scheduler.idSchedule){
+					$scope.schedulerOfDay.schedules.splice(i,1);
+				}
+			}
+		}
+		
+		function _removeDate(date){
+			for(var i = 0; i < $scope.scheduler.length;i++){
+				if($scope.scheduler[i].date === date.date){
+					$scope.scheduler.splice(i,1);
+				}
+			}
+		}
+		
+		function _onShowSchedulers(day){
+			$("#modal-day-scheduler").modal("show");
+			$scope.schedulerOfDay = day;
+		}
+		
+		function _plusScheculer(){
+			var hour = {timeInit:$("#tmp-init-plus-1").val(), timeEnd:$("#tmp-end-plus-1").val(), idSchedule:$scope.schedulerOfDay.schedules.length};
+			$scope.schedulerOfDay.schedules.push(hour);
+		}
+		
+		function _fillTableDays(mapDays, inputVacancy, inputTime, inputHour){
+			var table = $("#tbody-table-days");
+			
+			var mapPtBrDays = mapVars.get(MAP_WEEK_DAYS);
+			//Removendo as linhas antigas
+			table.find("td").remove();
+			
+			$scope.scheduler = [];
+			mapDays.forEach(function(value, key, mapDays){
+				
+				today = moment(date,"DD/MM/YYYY").format("dddd");
+				var objDay = {
+					day:mapPtBrDays.get(value),
+					date: key,
+					schedules:[]
+				}
+				
+				//Preenchendo os horários com base nos valores padrão
+				if(inputVacancy != null && inputTime != null && inputHour != null){
+					
+					var hour = inputHour.split(":")[0];
+					var minutes = inputHour.split(":")[1];
+					
+					var momentTime = moment();
+					momentTime.hours(hour);
+					momentTime.minutes(minutes);
+					
+					var tempInit = momentTime.format("HH:mm");
+					var tempEnd = momentTime.format("HH:mm");
+					
+					//Esse for adiciona novos timepickers em relação a quantidade
+					//de vagas e o tempo para cada consulta. Como já existe 2 timepickers fixos
+					//a quantidade informada pelo usuário deve ser diminuida em 1
+					for(var i = 0; i < parseInt(inputVacancy); i++){
+						tempInit = momentTime.format("HH:mm");
+						momentTime.add('m', parseInt(inputTime));
+						tempEnd = momentTime.format("HH:mm");
+						
+						var time = {"timeInit":tempInit, "timeEnd":tempEnd, "idSchedule":i};
+						objDay.schedules.push(time);
+					}
+				}
+				
+				$scope.scheduler.push(objDay);
+			});
+			
+		}
+
+		function _getDateByDays(mapDays, repetition){
+			var date = moment();
+			date.locale('en');
+			
+			//Lista de dias selecionados
+			listDays = [];
+
+
+			//Variável usada para informar a salto entre a quantidade de semanas ou meses
+			var salt = 1;
+			
+			//Adicionando os dias selecionados na lista listDays
+			mapDays.forEach(function(value, key, mapDays){
+				if(value){
+					listDays.push(key);
+				}
+			});
+			
+			/*Variável usada para retorno da função.
+			 * Mapa contendo nome do dia da semana e sua respectiva data.
+			 * Chave -> data
+			 * Value -> dia da semana
+			*/
+			var resultMap = new Map();
+			
+			listDays.forEach(function(el, index, listDays){
+				var tempDate = moment();
+				tempDate.locale('en');
+				
+				//Procurando a primeira ocorrência do dia selecionado.
+				for(var i = 0; i < 7; i++){
+					//Pegando o nome do dia.
+					day = tempDate.format('dddd');
+					if(day == el){
+						
+						//Depois de encontrado, todas as datas com base na frequencia (mensal ou semanal) são obtidas
+						for(var j = 0; j < repetition; j++){
+							//Pegando o dia
+							newDate = tempDate.format("DD/MM/YYYY");
+							
+							//Adicionando o dia no mapa.
+							resultMap.set(newDate, day);
+							
+							//Pulando para a data especificada passando a quantidade e a frequencia(meses ou dias)
+							tempDate.add(salt, frequenci);
+							
+							if(frequenci == "months"){
+								tempDate.startOf("month");
+								
+								for(var z = 0; z < 7; z++){
+									//Pegando o nome do dia.
+									_day = tempDate.format('dddd');
+									
+									if(_day == el){
+										break;
+									}
+									tempDate.add(1, "day");
+								}
+							}
+						}	
+						break;
+					}
+					//Passando pro dia seguinte
+					tempDate.add(1, "day");
+				}
+				
+			});	
+			return resultMap;
+		}
+		
+		function _confirmeSchduler(){
+			$("#modal-day-scheduler").modal("hide");
+		}
+		
+		function _consolidateAgenda(){
+			console.log($scope.scheduler);
+			var agenda = {schedule:[]};
+			for(var i=0; i<$scope.scheduler.length; i++){
+				var d = $scope.scheduler[i].date;
+				var date = new Date(d.split("/")[1]+"/"+d.split("/")[0]+"/"+d.split("/")[2]);
+				for(var j=0;j<$scope.scheduler[i].schedules.length;j++){
+		        	
+		        	var dataInit = new Date(date);
+		        	dataInit.setUTCHours(parseInt($scope.scheduler[i].schedules[j].timeInit.split(":")[0]));
+		        	dataInit.setUTCMinutes(parseInt($scope.scheduler[i].schedules[j].timeInit.split(":")[1]));
+		        	
+		        	var dataEnd = new Date(date);
+		        	dataEnd.setUTCHours(parseInt($scope.scheduler[i].schedules[j].timeEnd.split(":")[0]));
+		        	dataEnd.setUTCMinutes(parseInt($scope.scheduler[i].schedules[j].timeEnd.split(":")[1]));
+		        	
+					agenda.schedule.push({dateInit: dataInit.getTime(), dateEnd : dataEnd.getTime(), state: "FR"});
+				}
+			}
+			console.log(agenda);
+			
+			professionalService.saveConsultation({json:agenda}, function(response){
+				var message = response.data.message;
+				if(response.data.code == 200){
+					alertMessage(message,null,ALERT_SUCCESS);
+					location.reload(); 
+				}else{
+					console.log(response.data);
+					alertMessage(message,null,ALERT_ERROR);
+				}
+			});
+		}
+		
 	});
 	
 	
-
 //;
-	
-	
-		
-	
-
 	
 })();
 
@@ -922,639 +1184,3 @@ function findGroup(id, groups){
 	}
 	return null;
 }
-
-//TODO: Testando a geração de horários automática
-
-//Mapa que conterá todos os dias da semana
-// que se repetirão, Mon, Tue...
-// CHAVE: dia da semana
-// VALOR: booleano, indicando se o dia foi marcado ou não
-var mapSelectedDays = new Map();
-mapSelectedDays.set("Monday", false);
-mapSelectedDays.set("Sunday", false);
-mapSelectedDays.set("Tuesday", false);
-mapSelectedDays.set("Wednesday", false);
-mapSelectedDays.set("Thursday", false);
-mapSelectedDays.set("Friday", false);
-mapSelectedDays.set("Saturday", false);
-
-mapVars.set(MAP_SELECTED_DAYS, mapSelectedDays);
-
-//Mapa usado para preencher a tabela de 
-//datas com dias da semana em português 
-var mapWeekDays = new Map();
-mapWeekDays.set("Monday", "Segunda-Feira");
-mapWeekDays.set("Tuesday", "Terça-Feira");
-mapWeekDays.set("Wednesday", "Quarta-Feira");
-mapWeekDays.set("Thursday", "Quinta-Feira");
-mapWeekDays.set("Friday", "Sexta-Feira");
-mapWeekDays.set("Saturday", "Sábado");
-mapWeekDays.set("Sunday", "Domingo");
-
-mapVars.set(MAP_WEEK_DAYS, mapWeekDays);
-
-function inicializateScheduler(){
-	$("#input-frequenci")
-}
-
-function setFrequenciDays(){
-	var inputFrequenci = $("#input-frequenci");
-	var inputNumberVancancy = $("#input-number-vacancy").val();
-	var inputTimeConsultation = $("#input-time-consultation").val();
-	var inputInitHour = $("#tmp-init-hour").val();
-	val = inputFrequenci.val() <= 48 ? inputFrequenci.val() : 48;
-	
-	if(val == "")
-		return;
-	
-	var mapDays = mapVars.get(MAP_SELECTED_DAYS);	
-	
-	if(val != ""){
-		var resultMap = getDateByDays(mapDays, val);
-		mapVars.set(MAP_DAYS, resultMap);
-		
-		scheduleManager.updateSchedules(resultMap);
-		
-		try{
-			//Preenchendo a tabela de dias, a partir dos valores padrão
-			fillTableDays(resultMap, parseInt(inputNumberVancancy), parseInt(inputTimeConsultation), inputInitHour);
-		}catch(err){
-			alert("Verifique os valores especificados!");
-		}
-	}
-}
-
-function onButtonRepeatScheduleDayClick(){
-	$(".btn-day").click(function(){
-		
-		var btn = $(this);
-		
-		var mapDays = mapVars.get(MAP_SELECTED_DAYS);
-		//Pegando o nome do dia do botão clicado
-		var dayName = btn.val();
-		
-		if(btn.hasClass("btn-success")){
-			btn.removeClass("btn-success");
-			
-			mapDays.set(dayName, false);
-			
-		}else{
-			//Setando o dia clicado como true na lista de dias selecionados
-			mapDays.set(dayName, true);
-			
-			btn.addClass("btn-success");
-		}
-		setFrequenciDays();
-	});
-}
-
-function onSelectScheduleRepeatClick(){
-	//var select = mapVars.get(SELECT_REPEAT_SCHEDULE_ID);
-	var select = $(SELECT_REPEAT_SCHEDULE_ID); 
-	select.change(function(){
-		var inputFrequenci = $("#input-frequenci");
-		
-		var selectVal = $(this).find(":selected").val();
-			
-		/*
-		 * Se a frequencia selecionada for semanalmente, a variável global
-		 * frequenci será "w" (Informa ao moment que o salto entre as datas será por semana)
-		 * caso contrário o valor será "M" (Informa ao moment que o salto entre as datas será por mês)
-		*/
-		if(selectVal == WEEKLY_FREQUENCI){
-			frequenci = "week";
-			inputFrequenci.attr("placeholder","Quantidade de Semanas");
-		}else{
-			frequenci = "months";
-			inputFrequenci.attr("placeholder","Quantidade de Meses");
-		}
-		setFrequenciDays();
-		
-	});
-}
-
-function fillTableDays(mapDays, inputVacancy, inputTime, inputHour){
-	var table = $("#tbody-table-days");
-	
-	var mapPtBrDays = mapVars.get(MAP_WEEK_DAYS);
-	console.log(table);
-	//Removendo as linhas antigas
-	table.find("td").remove();
-	
-	
-	mapDays.forEach(function(value, key, mapDays){
-		row = $("<tr>");
-		data = '"<td class="day-name">'+mapPtBrDays.get(value)+'</td>"';
-		data += '"<td>'+key+'</td>"';
-		
-		var isScheduleRegistered = scheduleManager.isScheduleRegistered(key);
-		
-		var hiddenAddSchedule = "";
-		var hiddenEditSchedule = "hidden";
-		var disableRemoveDay = "";
-		
-		if(isScheduleRegistered){
-			hiddenAddSchedule = "hidden";
-			hiddenEditSchedule = "";
-			disableRemoveDay = "disabled"
-		}
-		
-		
-		var trashData = '<td><button value="'+key+'" class="'+disableRemoveDay+' btn btn-danger action-day remove-day"><i class="glyphicon glyphicon-trash"></button></i></td>';
-		
-		data += '<td>'+
-			'<button type="button" value="'+key+'" class="'+hiddenAddSchedule+' action-day add-schedule btn btn-primary">Cadastrar <i class="glyphicon glyphicon-time"></i></button>'
-			+'<button type="button" value="'+key+'" class="'+hiddenEditSchedule+' action-day edit-schedule btn btn-warning">Editar <i class="glyphicon glyphicon-pencil"></i></button>'
-			+'</td>';
-		data += trashData;
-		
-		row.append(data);
-		table.append(row);
-	});
-	
-	if(inputVacancy > 0 && inputTime > 0 && inputHour != "")
-		onActionTableClick(inputVacancy, inputTime, inputHour);
-	else
-		onActionTableClick(null, null, null);
-}
-
-function onActionTableClick(inputVacancy, inputTime, inputHour){
-	map = mapVars.get(MAP_DAYS);
-	mapButtonDays = mapVars.get(MAP_SELECTED_DAYS);
-	$(".action-day").click(function(){
-		action = $(this);
-		var key = action.attr("value");
-		
-		//Removendo a cor vermelha dos timepickers inválidos.
-		$(".row-schedule-id").removeClass("has-error");
-		
-		
-		if(action.hasClass("add-schedule")){
-			showModalSchedules(key, REGISTER_ACTION, inputVacancy, inputTime, inputHour);
-		}else if(action.hasClass("remove-day") && !action.hasClass("disabled")){
-			var dayName = map.get(key);
-			
-			//Removendo a data selecionada e preenchendo a tabela novamente
-			map.delete(key);
-			fillTableDays(map);
-			
-			//Removendo todos os horários cadastrados do dia removido.
-			scheduleManager.removeScheduleDay(key);
-			
-			//Conferindo se ainda existe uma ocorrencia do dia da semana exluído
-			if(!hasValue(dayName, map)){
-				//Removendo a classe que deixa o botão verde, já que não existe mais ocorrência do dia
-				//vinculado a ele.
-				$("#days-buttons").find("button[value="+dayName+"]").removeClass("btn-success");
-				
-				//Informando que o dia não está mais selecionado
-				mapButtonDays.set(dayName, false);
-			}
-		}else if(action.hasClass("edit-schedule")){
-			var scheduleDay = scheduleManager.getSchedulesMap().get(key);
-			var listSchedules = scheduleDay.getListSchedules();
-			//setEditModalSchedule(key, listSchedules);
-		}
-	});
-}
-
-function getDateByDays(mapDays, repetition){
-	var date = moment();
-	date.locale('en');
-	
-	//Lista de dias selecionados
-	listDays = [];
-
-	//Variável usada para informar a salto entre a quantidade de semanas ou meses
-	var salt = 1;
-	
-	//Adicionando os dias selecionados na lista listDays
-	mapDays.forEach(function(value, key, mapDays){
-		if(value){
-			listDays.push(key);
-		}
-	});
-	
-	/*Variável usada para retorno da função.
-	 * Mapa contendo nome do dia da semana e sua respectiva data.
-	 * Chave -> data
-	 * Value -> dia da semana
-	*/
-	var resultMap = new Map();
-	
-	listDays.forEach(function(el, index, listDays){
-		var tempDate = moment();
-		tempDate.locale('en');
-		
-		//Procurando a primeira ocorrência do dia selecionado.
-		for(var i = 0; i < 7; i++){
-			//Pegando o nome do dia.
-			day = tempDate.format('dddd');
-			if(day == el){
-				
-				//Depois de encontrado, todas as datas com base na frequencia (mensal ou semanal) são obtidas
-				for(var j = 0; j < repetition; j++){
-					//Pegando o dia
-					newDate = tempDate.format("DD/MM/YYYY");
-					
-					//Adicionando o dia no mapa.
-					resultMap.set(newDate, day);
-					
-					//Pulando para a data especificada passando a quantidade e a frequencia(meses ou dias)
-					tempDate.add(salt, frequenci);
-					
-					if(frequenci == "months"){
-						tempDate.startOf("month");
-						
-						for(var z = 0; z < 7; z++){
-							//Pegando o nome do dia.
-							_day = tempDate.format('dddd');
-							
-							if(_day == el){
-								break;
-							}
-							tempDate.add(1, "day");
-						}
-					}
-				}	
-				break;
-			}
-			//Passando pro dia seguinte
-			tempDate.add(1, "day");
-		}
-		
-	});	
-	return resultMap;
-}
-
-
-function showModalSchedules(date, action, inputVacancyPattern, inputTime, inputHour){
-	
-	var inputVacancy = mapVars.get(INPUT_VACANCY);
-	var inputTimePerConsult = mapVars.get(INPUT_COUNT_TIME);
-	
-	inputVacancy.val("");
-	inputTimePerConsult.val("");
-	
-	var modal =	$("#modal-day-scheduler");
-	var modalDescription = $("#modal-description-body");
-	var labelDay = $("#label-date-clicked");
-	
-	//Removendo todos os timepickers clonados.
-	modal.find(".cloned-timepicker").remove();
-	
-	//Resetando os ids dos timepickers;
-	idTimepickersInit = 1;
-	idTimepickersEnd = 1;
-	
-	initTimepicker("tmp-init-0", null);
-	initTimepicker("tmp-init-1", null);
-	initTimepicker("tmp-end-1", null);
-	
-	$("#tmp-init-1").removeAttr("disabled");
-	$("#tmp-end-1").removeAttr("disabled");
-	
-	today = moment(date,"DD/MM/YYYY").format("dddd");
-	
-	//Preenchendo os horários com base nos valores padrão
-	if(inputVacancyPattern != null && inputTime != null && inputHour != null){
-		var vacancy = inputVacancyPattern;
-		var timePerConsult = inputTime;
-		var timeInit = getTimePickerHourAndMinutes("tmp-init-hour");
-		
-		console.log(inputVacancy);
-		console.log(inputTime);
-		console.log(inputHour);
-		
-		hour = timeInit["hour"];
-		minutes = timeInit["minute"];
-		
-		momentTime = moment();
-		momentTime.hours(hour);
-		momentTime.minutes(minutes);
-		
-		tempInit = momentTime.format("HH:mm");
-		momentTime.add('m', timePerConsult);
-		tempEnd = momentTime.format("HH:mm");
-		
-		console.log(tempInit);
-		console.log(tempEnd);
-		
-		//Iniciando os 2 timepickers fixos do modal
-		$("#tmp-init-1").timepicker('setTime', tempInit);
-		$("#tmp-end-1").timepicker('setTime', tempEnd);
-		
-		//Esse for adiciona novos timepickers em relação a quantidade
-		//de vagas e o tempo para cada consulta. Como já existe 2 timepickers fixos
-		//a quantidade informada pelo usuário deve ser diminuida em 1
-		for(var i = 0; i < vacancy; i++){
-			tempInit = momentTime.format("HH:mm");
-			momentTime.add('m', timePerConsult);
-			tempEnd = momentTime.format("HH:mm");
-			
-			var time = {"timeInit":tempInit, "timeEnd":tempEnd, "idSchedule":0};
-			console.log(time);
-			addSchedules(time);
-		}
-	}
-	
-	
-	//Mostrando o modal
-	$("#modal-schedule-title").text(action+" Horários");
-	modalDescription.html(action+" consultas para o dia <strong>"+date+" ("+today+")</strong>");
-	labelDay.text(date);
-	
-	modal.modal('show');
-
-}
-
-function onButtonAddScheduleClick(){
-	$(".add-schedule").click(function(){
-		//Pegando o último timepicker para obter o último horário.
-		var listTimers = $(".timepicker-end input");
-		var idLastTimePicker = listTimers[listTimers.length - 1];
-		
-		hour = $("#"+idLastTimePicker.id).data("timepicker").hour;
-		minute = $("#"+idLastTimePicker.id).data("timepicker").minute;
-		
-		momentTime = moment();
-		momentTime.hours(hour);
-		
-		var timePerconsult = $("#input-count-time").val() ? $("#input-count-time").val() : 15;
-		
-		momentTime.minutes(minute);
-		momentTime.add('m', timePerconsult);
-		tempInit = momentTime.format("HH:mm");
-		
-		momentTime.add('m', timePerconsult);
-		tempEnd = momentTime.format("HH:mm")
-		
-		var time = {"timeInit":tempInit, "timeEnd":tempEnd, "idSchedule":null};
-		addSchedules(time);
-	});
-}
-
-function onButtonGenerateSchedules(){  
-	$("#btn-generate-schedules").bind("click", function(event){
-		
-		//Removendo todos os timepickers clonados 
-		$(".cloned-timepicker").remove();
-		//Removendo a classe de input inválido de todos os timepickers.
-		$(".row-schedule-id").removeClass("has-error");
-		
-		var inputVacancy = $("#input-count-vacancy");
-		var inputTimePerConsult = $("#input-count-time");
-		
-		var vacancy = parseInt(inputVacancy.val());
-		var timePerConsult = parseInt(inputTimePerConsult.val());
-		var timeInit = getTimePickerHourAndMinutes("tmp-init-0");
-		
-		hour = timeInit["hour"];
-		minutes = timeInit["minute"];
-		
-		momentTime = moment();
-		momentTime.hours(hour);
-		momentTime.minutes(minutes);
-		
-		tempInit = momentTime.format("HH:mm");
-		momentTime.add('m', timePerConsult);
-		tempEnd = momentTime.format("HH:mm");
-		
-		//Iniciando os 2 timepickers fixos do modal
-		$("#tmp-init-1").timepicker('setTime', tempInit);
-		$("#tmp-end-1").timepicker('setTime', tempEnd);
-		
-		//Esse for adiciona novos timepickers em relação a quantidade
-		//de vagas e o tempo para cada consulta. Como já existe 2 timepickers fixos
-		//a quantidade informada pelo usuário deve ser diminuida em 1
-		for(var i = 0; i < vacancy-1; i++){
-			tempInit = momentTime.format("HH:mm");
-			momentTime.add('m', timePerConsult);
-			tempEnd = momentTime.format("HH:mm");
-			
-			var time = {"timeInit":tempInit, "timeEnd":tempEnd, "idSchedule":0};
-			addSchedules(time);
-		}
-	});
-}
-
-function addSchedules(obj){
-	
-	
-	var timeInit = obj.timeInit;
-	var timeEnd = obj.timeEnd;
-	var scheduleId = obj.idSchedule;
-	
-	var newRow = $("#row-add-schedules-hours").clone();
-	
-	newRow.find(".row-schedule-id").attr("id",scheduleId);
-	
-	timeInitId = "tmp-init-"+getNewInitTimePickerId();
-	timeEndId = "tmp-end-"+getNewEndTimePickerId();
-	
-	var timepickerInit = newRow.find(".timepicker-init"); 
-	var timepickerEnd = newRow.find(".timepicker-end");
-	
-	var inputInit = timepickerInit.find("input"); 
-	var inputEnd = timepickerEnd.find("input");
-	if(!obj.disabled){
-		inputInit.removeAttr("disabled");
-		inputEnd.removeAttr("disabled");
-	}else{
-		inputInit.attr("disabled", obj.disabled);
-		inputEnd.attr("disabled", obj.disabled);
-	}
-	
-	inputInit.attr("id", timeInitId);
-	inputEnd.attr("id", timeEndId);
-	
-	//Adicionando a classe que informa que o timepicker é clonado.
-	newRow.addClass("cloned-timepicker");
-	
-	var button = newRow.find(".add-schedule");
-	button.removeClass("add-schedule");
-	button.addClass("remove-schedule");
-	button.removeClass("btn-primary");
-	button.addClass("btn-danger");
-	
-	if(obj.disabled){
-		button.attr("disabled","disabled");
-	}
-	
-	var span = button.find("span");
-	span.removeClass("glyphicon-plus");
-	span.addClass("glyphicon-minus");
-	
-	$("#panel-schedules-hours").append(newRow);
-
-	//Iniciando os timepickers
-	initTimepicker(timeInitId, timeInit);
-	initTimepicker(timeEndId, timeEnd);		
-	
-	//Iniciando o metodo de remover os horários caso o usuário clique no botar de remover horário.
-	onButtonRemoveScheduleClick();
-	
-}
-
-function onButtonRemoveScheduleClick(){
-	$(".remove-schedule").click(function(){
-		$(this).parents(".row").remove();
-	});
-}
-
-
-function onButtonConfirmSchedulesClick(){
-	/*
-	 * Quando o profissional clicar para confirmar 
-	 * o cadastro de horários, todos as horas dos timepickers
-	 * devem ser pegues.
-	 */
-	$("#btn-confirm-schedules-hours").click(function(event){
-		
-		var modal = $("#modal-day-scheduler");
-		var rowsSchedules = modal.find("#panel-schedules-hours").find(".row-schedule-id");
-		var timepickersObject = rowsSchedules.find(".timepicker").find("input");
-		
-
-		var timepickersIdArray = []
-		var tempArray = $.makeArray(timepickersObject);
-		
-		for(var i = 0, j=0; i < tempArray.length-1; i+=2, j++){
-			var idSchedule = rowsSchedules[j].id;
-			
-			if(tempArray[i].id && tempArray[i+1].id){
-				timepickersIdArray.push({"idSchedule":idSchedule, "timePickInit":tempArray[i].id, "timePickEnd":tempArray[i+1].id});
-			}
-		}
-		
-		
-		var labelDay = $("#label-date-clicked");
-		var date = labelDay.text();
-		
-		if(timepickersIdArray.length > 0){
-			
-			//Removendo a cor vermelha dos timepickers inválidos.
-			$(".row-schedule-id").removeClass("has-error");
-			//Salvando os horários no objeto schedule manager
-			if(!saveSchedules(timepickersIdArray, date)){
-				return;
-			}
-			 
-			//Quando o profissional cadastrar os horários
-			//o botão do de cadastrar será alterado para o de editar
-			var panel = $("#panel-register-schedules");
-			
-			var buttonAddSchedules = panel.find("button[value='"+date+"']").filter(".add-schedule");
-			var buttonEditSchedules = buttonAddSchedules.siblings(".edit-schedule");
-			var buttonRemoveDay = panel.find("button[value='"+date+"']").filter(".remove-day");
-			
-			buttonRemoveDay.addClass("disabled");
-			buttonEditSchedules.removeClass("hidden");
-			buttonAddSchedules.addClass("hidden");
-			
-		}
-		
-		//var params = JSON.stringify(scheduleManager.getScheduleDayAsJSON(date));
-		var data = scheduleManager.getScheduleDayAsJSON(date);
-		console.log(data.data[0].listSchedules[0].timeInit);
-		console.log(data.data[0].listSchedules[0].timeEnd);
-		
-		console.log(data.data[0].listSchedules[1].timeInit);
-		console.log(data.data[0].listSchedules[1].timeEnd);
-		console.log(data.data[0].listSchedules[0].timeInit);
-		
-		console.log(JSON.stringify(scheduleManager.getScheduleDayAsJSON(date)));
-		/*ajaxCall("/siac/saveConsultation", {"json": params}, function(response){
-			var type = ALERT_SUCCESS;
-			if(response.code == RESPONSE_ERROR)
-				type = ALERT_ERROR;
-			
-			alertMessage(response.message, null, type);
-			
-			
-			//Carregando todas as consultas cadastradas no calendário do profissional.
-			getProfessionalConsultations(fillProfessionalCalendar);
-			
-		}, null, "POST");*/
-		
-		modal.modal("hide");
-		
-	});
-
-}
-
-//Função que verifica se os horários informados nos timepickers são válidos.
-//Se o horário do timepicker de inicio for menor que o timepicker de fim é retornado true.
-function isValidTimePickers(objTimeInit, objTimeEnd){
-	var dateInit = new Date();
-	dateInit.setHours(objTimeInit.hour);
-	dateInit.setMinutes(objTimeInit.minute);
-	
-	var dateEnd = new Date();
-	dateEnd.setHours(objTimeEnd.hour);
-	dateEnd.setMinutes(objTimeEnd.minute);
-	
-	console.log("INI: "+dateInit+" - End: "+dateEnd)
-	
-	if( dateInit.getTime() >= dateEnd.getTime() )
-		return false;
-	return true;
-}
-
-/* Função que recebe uma data todos os timepickers referentes aos horários
- * e salva no gerenciador de horários(scheduleManager).
- * 
- * Caso a data passada já esteja cadastrada no schedule manager
- * então a operação será de edição, logo todos os horários daquela 
- * data serão atualizados com os novos horários dos timepickers.
-*/
-function saveSchedules(timepickersId, date){
-	var scheduleDay = scheduleManager.getSchedulesMap().get(date);
-	/*Caso esse dia (date) já exista, a lista de horários antiga 
-	 *é apagada e os novos horários são cadastrados. 
-	*/
-	if(scheduleDay){
-		scheduleDay.clearListSchedules();
-	}else{
-		scheduleDay = new ScheduleDay();
-		scheduleDay.setDate(date);
-	}
-
-	var listScheduleTime = scheduleDay.getListSchedules();
-	
-	for(var i = 0; i < timepickersId.length; i++){
-		
-		var timeInit = getTimePickerHourAndMinutes(timepickersId[i].timePickInit);
-		var timeEnd = getTimePickerHourAndMinutes(timepickersId[i].timePickEnd);
-		var scheduleId = timepickersId[i].idSchedule;
-		
-		//Se o horário de inicio for maior que o de fim, os timepickers ficam vermelho.
-		if(!isValidTimePickers(timeInit, timeEnd)){
-			$("#"+timepickersId[i].timePickInit).parents(".row-schedule-id").addClass("has-error");
-			$("#"+timepickersId[i].timePickEnd).parents(".row-schedule-id").addClass("has-error");
-			return false;
-		}
-		scheduleDay.addSchedule(getFormatedDate(date), timeInit["hour"], timeInit["minute"], timeEnd["hour"], timeEnd["minute"], null, null, null, scheduleId, null);
-		
-	}
-	
-	scheduleManager.addScheduleDay(date, scheduleDay);
-	return true;
-}
-
-function getNewInitTimePickerId(){
-	idTimepickersInit = idTimepickersInit+1;
-	return idTimepickersInit;
-}
-
-function getNewEndTimePickerId(){
-	idTimepickersEnd = idTimepickersEnd+1;
-	return idTimepickersEnd;
-}
-
-function getTimePickerHourAndMinutes(timepickerId){
-	hour = $("#"+timepickerId).data("timepicker").hour;
-	minute = $("#"+timepickerId).data("timepicker").minute;
-	return {"hour":hour, "minute":minute};
-}
-

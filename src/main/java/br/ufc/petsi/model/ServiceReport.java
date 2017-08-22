@@ -30,7 +30,8 @@ public class ServiceReport {
 	private int canceled;
 	@JsonProperty("byMonth")
 	private List<DetailByMonth> byMonth;
-
+	@JsonProperty("rescheduled")
+	private int rescheduled;
 	
 	public ServiceReport() {
 		super();
@@ -140,5 +141,17 @@ public class ServiceReport {
 	public void setByMonth(List<DetailByMonth> byMonth) {
 		this.byMonth = byMonth;
 	}
+
+	@JsonProperty("rescheduled")
+	public int getRescheduled() {
+		return rescheduled;
+	}
+
+	@JsonProperty("rescheduled")
+	public void setRescheduled(int rescheduled) {
+		this.rescheduled = rescheduled;
+	}
+	
+	
 	
 }

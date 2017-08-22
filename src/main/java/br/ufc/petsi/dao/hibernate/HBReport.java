@@ -11,6 +11,8 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import br.ufc.petsi.dao.ReportDAO;
+import br.ufc.petsi.enums.ConsultationState;
+import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.DetailByMonth;
 import br.ufc.petsi.model.GeneralReport;
 import br.ufc.petsi.model.Rating;
@@ -24,12 +26,10 @@ public class HBReport implements ReportDAO{
 	@PersistenceContext
 	private EntityManager manager;
 
-	public RatingReport getRatingReport(Long professionalId, Date dateBegin,
-			Date dateEnd) {
+	public RatingReport getRatingReport(Long professionalId, Date dateBegin, Date dateEnd, Integer month, Integer year) {
 		
 		RatingReport ratingReport = new RatingReport();
 		
-		//Query query = (Query) manager.createQuery("SELECT avg(r.rating) FROM Rating r, Consultation c WHERE r.id = c.rating.id and c.professional.id = :professionalId");
 		Query query = (Query) manager.createQuery("SELECT avg(r.rating) FROM Rating r, Consultation c WHERE c.professional.id = :professionalId AND r.consultation.id = c.id");
 		query.setParameter("professionalId", professionalId);
 		
@@ -41,19 +41,25 @@ public class HBReport implements ReportDAO{
 		
 		ratingReport.setAverage(rating);
 		
-		//Query query2 = (Query) manager.createQuery("SELECT r FROM Rating r, Consultation c WHERE r.id = c.rating.id and c.professional.id = :professionalId and c.dateInit >= :dateBegin and c.dateInit <= :dateEnd");
-		Query query2 = (Query) manager.createQuery("SELECT r FROM Rating r, Consultation c WHERE r.consultation.id = c.id and c.professional.id = :professionalId and c.dateInit >= :dateBegin and c.dateInit <= :dateEnd");
+		Query query2 = null;
+		if(dateBegin != null && dateEnd != null){
+			query2 = (Query) manager.createQuery("SELECT r FROM Rating r, Consultation c WHERE r.consultation.id = c.id and c.professional.id = :professionalId and c.dateInit >= :dateBegin and c.dateInit <= :dateEnd");
+			query2.setParameter("dateBegin", dateBegin);
+			query2.setParameter("dateEnd", dateEnd);
+		}else {
+			query2 = (Query) manager.createQuery("SELECT r FROM Rating r, Consultation c WHERE r.consultation.id = c.id and c.professional.id = :professionalId and extract(MONTH FROM c.dateInit) = :m and extract(YEAR FROM c.dateInit) = :y");
+			query2.setParameter("m", month);
+			query2.setParameter("y", year);
+		}
 		query2.setParameter("professionalId", professionalId);
-		query2.setParameter("dateBegin", dateBegin);
-		query2.setParameter("dateEnd", dateEnd);
+		
 		
 		ratingReport.setRatings((List<Rating>)query2.getResultList());
 		
 		return ratingReport;
 	}
 	
-	public ServiceReport getServiceReport(long serviceId, long professionalId, Date dateBegin,
-			Date dateEnd) {
+	public ServiceReport getServiceReport(long serviceId, long professionalId, Date dateBegin, Date dateEnd, Integer month, Integer year) {
 		
 		ServiceReport serviceReport = new ServiceReport();
 		
@@ -64,47 +70,100 @@ public class HBReport implements ReportDAO{
 		query = (Query) manager.createQuery("SELECT name FROM SocialService WHERE id = :serviceId");
 		query.setParameter("serviceId", serviceId);
 		serviceReport.setService((String)query.getSingleResult());
-				
-		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.dateInit BETWEEN :dateBegin and :dateEnd");
+		
+		if(dateBegin != null && dateEnd != null){
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state != 'FR' and c.dateInit BETWEEN :dateBegin and :dateEnd");
+			query.setParameter("dateBegin", dateBegin);
+			query.setParameter("dateEnd", dateEnd);
+		}else{
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state != 'FR' and extract(MONTH FROM c.dateInit) = :m and extract(YEAR FROM c.dateInit) = :y");
+			query.setParameter("m", month);
+			query.setParameter("y", year);
+		}
+		
 		query.setParameter("professionalId", professionalId);
-		query.setParameter("dateBegin", dateBegin);
-		query.setParameter("dateEnd", dateEnd);
 		Long total = (Long) query.getSingleResult();
 		serviceReport.setTotal(total.intValue());
 		
-		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'RD' and c.dateInit BETWEEN :dateBegin and :dateEnd");
+		if(dateBegin != null && dateEnd != null){
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'RD' and c.dateInit BETWEEN :dateBegin and :dateEnd");
+			query.setParameter("dateBegin", dateBegin);
+			query.setParameter("dateEnd", dateEnd);
+		}else{
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'RD' and extract(MONTH FROM c.dateInit) = :m and extract(YEAR FROM c.dateInit) = :y");
+			query.setParameter("m", month);
+			query.setParameter("y", year);	
+		}
 		query.setParameter("professionalId", professionalId);
-		query.setParameter("dateBegin", dateBegin);
-		query.setParameter("dateEnd", dateEnd);
 		Long scheduled = (Long) query.getSingleResult();
 		serviceReport.setScheduled(scheduled.intValue());
 		
-		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'UD' and c.dateInit BETWEEN :dateBegin and :dateEnd");
+		
+		if(dateBegin != null && dateEnd != null){
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'RS' and c.dateInit BETWEEN :dateBegin and :dateEnd");			
+			query.setParameter("dateBegin", dateBegin);
+			query.setParameter("dateEnd", dateEnd);
+		}else{
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'RS' and extract(MONTH FROM c.dateInit) = :m and extract(YEAR FROM c.dateInit) = :y");
+			query.setParameter("m", month);
+			query.setParameter("y", year);
+		}
 		query.setParameter("professionalId", professionalId);
-		query.setParameter("dateBegin", dateBegin);
-		query.setParameter("dateEnd", dateEnd);
+		Long rescheduled = (Long) query.getSingleResult();
+		serviceReport.setRescheduled(rescheduled.intValue());
+		
+		
+		if(dateBegin != null && dateEnd != null){
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'UD' and c.dateInit BETWEEN :dateBegin and :dateEnd");
+			query.setParameter("dateBegin", dateBegin);
+			query.setParameter("dateEnd", dateEnd);
+		}else{
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'UD' and extract(MONTH FROM c.dateInit) = :m and extract(YEAR FROM c.dateInit) = :y");
+			query.setParameter("m", month);
+			query.setParameter("y", year);
+		}
+		query.setParameter("professionalId", professionalId);
 		Long unscheduled = (Long) query.getSingleResult();
 		serviceReport.setUnscheduled(unscheduled.intValue());
 		
-		query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'CD' and c.dateInit BETWEEN :dateBegin and :dateEnd");
+		if(dateBegin != null && dateEnd != null){
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'CD' and c.dateInit BETWEEN :dateBegin and :dateEnd");
+			query.setParameter("dateBegin", dateBegin);
+			query.setParameter("dateEnd", dateEnd);
+		}else{
+			query = (Query) manager.createQuery("SELECT count(c.id) FROM Consultation c WHERE c.professional.id = :professionalId and c.state = 'CD' and extract(MONTH FROM c.dateInit) = :m and extract(YEAR FROM c.dateInit) = :y");
+			query.setParameter("m", month);
+			query.setParameter("y", year);
+		}
 		query.setParameter("professionalId", professionalId);
-		query.setParameter("dateBegin", dateBegin);
-		query.setParameter("dateEnd", dateEnd);
 		Long canceled = (Long) query.getSingleResult();
 		serviceReport.setCanceled(canceled.intValue());
 		
-		Query query2 = (Query) manager.createQuery("SELECT to_char(c.dateInit, 'MM/YYYY'), "
-				+ "sum(case when c.state = 'RD' then 1 else 0 end), "
-				+ "sum(case when c.state = 'UD' then 1 else 0 end), "
-				+ "sum(case when c.state = 'CD' then 1 else 0 end), "
-				+ "count(*) FROM Consultation c "
-				+ "WHERE c.professional.id = :professionalId and c.dateInit BETWEEN :dateBegin and :dateEnd "
-				+ "GROUP BY to_char(c.dateEnd, 'YYYY/MM'),  to_char(c.dateInit, 'MM/YYYY') "
-				+ "ORDER BY to_char(c.dateEnd, 'YYYY/MM')");
+		Query query2 = null;
+		if(dateBegin != null && dateEnd != null){
+			query2 = (Query) manager.createQuery("SELECT to_char(c.dateInit, 'MM/YYYY'), "
+					+ "sum(case when c.state = 'RD' then 1 else 0 end), "
+					+ "sum(case when c.state = 'RS' then 1 else 0 end), "
+					+ "sum(case when c.state = 'CD' then 1 else 0 end), "
+					+ "sum(case when c.state != 'FR' then 1 else 0 end) FROM Consultation c "
+					+ "WHERE c.professional.id = :professionalId and c.dateInit BETWEEN :dateBegin and :dateEnd "
+					+ "GROUP BY to_char(c.dateEnd, 'YYYY/MM'),  to_char(c.dateInit, 'MM/YYYY') "
+					+ "ORDER BY to_char(c.dateEnd, 'YYYY/MM')");
+			query2.setParameter("dateBegin", dateBegin);
+			query2.setParameter("dateEnd", dateEnd);	
+		}else{
+			query2 = (Query) manager.createQuery("SELECT to_char(c.dateInit, 'MM/YYYY'), "
+					+ "sum(case when c.state = 'RD' then 1 else 0 end), "
+					+ "sum(case when c.state = 'RS' then 1 else 0 end), "
+					+ "sum(case when c.state = 'CD' then 1 else 0 end), "
+					+ "sum(case when c.state != 'FR' then 1 else 0 end) FROM Consultation c "
+					+ "WHERE c.professional.id = :professionalId and extract(MONTH FROM c.dateInit) = :m and extract(YEAR FROM c.dateInit) = :y "
+					+ "GROUP BY to_char(c.dateEnd, 'YYYY/MM'),  to_char(c.dateInit, 'MM/YYYY') "
+					+ "ORDER BY to_char(c.dateEnd, 'YYYY/MM')");
+			query2.setParameter("m", month);
+			query2.setParameter("y", year);	
+		}
 		query2.setParameter("professionalId", professionalId);
-		query2.setParameter("dateBegin", dateBegin);
-		query2.setParameter("dateEnd", dateEnd);
-		
 		List<Object[]> list = query2.getResultList();
 
 		List <DetailByMonth> detail = new ArrayList<DetailByMonth>();
@@ -142,22 +201,34 @@ public class HBReport implements ReportDAO{
 		return serviceReport;
 	}
 	
-	public GeneralReport getGeneralReport(Date dateBegin,
-			Date dateEnd) {
-		
+	public GeneralReport getGeneralReport(Date dateBegin,Date dateEnd, Integer month, Integer year) {
 		
 		GeneralReport generalReport = new GeneralReport();
-		
-		Query query = (Query) manager.createQuery("SELECT to_char(c.dateInit, 'MM/YYYY'), "
-				+ "sum(case when c.state = 'RD' then 1 else 0 end), "
-				+ "sum(case when c.state = 'UD' then 1 else 0 end), "
-				+ "sum(case when c.state = 'CD' then 1 else 0 end), "
-				+ "count(*) FROM Consultation c "
-				+ "WHERE c.dateInit BETWEEN :dateBegin and :dateEnd "
-				+ "GROUP BY to_char(c.dateEnd, 'YYYY/MM'),  to_char(c.dateInit, 'MM/YYYY') "
-				+ "ORDER BY to_char(c.dateEnd, 'YYYY/MM')");
-		query.setParameter("dateBegin", dateBegin);
-		query.setParameter("dateEnd", dateEnd);
+		Query query = null;
+		 
+		if(dateBegin != null && dateEnd != null){
+			query = (Query) manager.createQuery("SELECT to_char(c.dateInit, 'MM/YYYY'), "
+					+ "sum(case when c.state = 'RD' then 1 else 0 end), "
+					+ "sum(case when c.state = 'RS' then 1 else 0 end), "
+					+ "sum(case when c.state = 'CD' then 1 else 0 end), "
+					+ "sum(case when c.state != 'FR' then 1 else 0 end) FROM Consultation c "
+					+ "WHERE c.dateInit BETWEEN :dateBegin and :dateEnd "
+					+ "GROUP BY to_char(c.dateEnd, 'YYYY/MM'),  to_char(c.dateInit, 'MM/YYYY') "
+					+ "ORDER BY to_char(c.dateEnd, 'YYYY/MM')");
+			query.setParameter("dateBegin", dateBegin);
+			query.setParameter("dateEnd", dateEnd);
+		}else{
+			query = (Query) manager.createQuery("SELECT to_char(c.dateInit, 'MM/YYYY'), "
+					+ "sum(case when c.state = 'RD' then 1 else 0 end), "
+					+ "sum(case when c.state = 'RS' then 1 else 0 end), "
+					+ "sum(case when c.state = 'CD' then 1 else 0 end), "
+					+ "sum(case when c.state != 'FR' then 1 else 0 end) FROM Consultation c "
+					+ "WHERE extract(MONTH FROM c.dateInit) = :m and extract(YEAR FROM c.dateInit) = :y "
+					+ "GROUP BY to_char(c.dateEnd, 'YYYY/MM'),  to_char(c.dateInit, 'MM/YYYY') "
+					+ "ORDER BY to_char(c.dateEnd, 'YYYY/MM')");
+			query.setParameter("m", month);
+			query.setParameter("y", year);
+		}
 		
 		List<Object[]> list = query.getResultList();
 

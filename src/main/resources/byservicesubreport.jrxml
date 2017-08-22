@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="byservicesubreport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" >
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="byservicesubreport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="840399cd-0866-42e1-a192-5421bf1715ff">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -14,7 +14,7 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="18" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<reportElement x="18" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="31398e7e-67e3-4090-97c1-0d8479fb4711"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -29,7 +29,7 @@
 				<textFieldExpression><![CDATA[$F{numberOfMonth}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="437" y="0" width="100" height="20"/>
+				<reportElement positionType="Float" x="437" y="0" width="100" height="20" uuid="95977536-2f3b-4393-8729-c7f7eb16fc0d"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -43,7 +43,7 @@
 				<textFieldExpression><![CDATA[$F{totalByMonth}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="118" y="0" width="98" height="20"/>
+				<reportElement positionType="Float" x="118" y="0" width="108" height="20" uuid="b4fee3c8-a35b-41e9-a71d-bec88ad6af2d"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -57,7 +57,7 @@
 				<textFieldExpression><![CDATA[$F{scheduledByMonth}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="216" y="0" width="98" height="20"/>
+				<reportElement positionType="Float" x="226" y="0" width="114" height="20" uuid="1bcc65c5-89d3-4e29-b567-3d75b1075a60"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -71,7 +71,7 @@
 				<textFieldExpression><![CDATA[$F{unscheduledByMonth}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="314" y="0" width="123" height="20"/>
+				<reportElement positionType="Float" x="340" y="0" width="97" height="20" uuid="b0ae7793-a4ec-4201-b76c-92fb92d703d5"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
