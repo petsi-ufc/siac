@@ -223,24 +223,19 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		}
 		
 		function _MouseOver(event, element, view){
-			console.log("Consultattion MouseOver");
-			console.log(DataConsultation);
 							
 			if(event.state == "SC"){
 				var title;
 				if(event.isGroup){
 					
-					title = "Grupo";
+					title = event.title;
 				}else{
 					var nome;
 					professionalService.getReserveByidConsultation(event.id,function(data){
-						console.log("Chegando..");
-						console.log(data);
 						data.data.forEach(function(value,key){
-							console.log("Name: "+value.patient.name);
 							var config_tooltip =
 							{
-							    'title': value.patient.name,
+							    'title':  value.patient.name,
 							    'tooltip-append-to-body': true
 							};
 							$timeout(function(){
@@ -264,18 +259,18 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 				
 				
 			}
-		//Está dando Erro essa Parte
-//		if(event.state == "CD"){
-//			var title = "Consulta Cancelada!";
-//			var config_tooltip =
-//			{
-//			    'title': title,
-//			    'tooltip-append-to-body': true;
-//			};
-//			$timeout(function(){
-//				 element.attr(config_tooltip);
-//			});	
-//		}
+			if(event.state == "CD"){
+				var title = "Consulta Cancelada!";
+				var config_tooltip =
+				{
+				    'title': title,
+				    'tooltip-append-to-body': true
+				};
+				$timeout(function(){
+					 element.attr(config_tooltip);
+				});	
+				
+			}
 		if(event.state == "FR"){
 			var title = "Consulta Livre!";
 			var config_tooltip =
@@ -382,6 +377,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		}
 		
 		// ESSE CÓDIGO A GENTE NÃO ESTÁ MAIS UTILIZANDO, CASO O DE BAIXO NÃO FUNCIONE, VOLTE PARA ESSE E SEJA FELIZ
+		/*
 		function _addTempSchedule(){
 			var dateInit = $('#livreInicio').val();
         	var dateEnd = $('#livreFim').val();
@@ -406,12 +402,15 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			$scope.generetedSchedules.push({schedule:{dateInit: dateInit, dateEnd : dateEnd, state: "FR"}});
 		}
 		
+		
 		function initTimePickers(){
 			$("#tmp-init-1").timepicker({showMeridian: false, defaultTime:"8:00"});
 			$("#tmp-end-1").timepicker({showMeridian: false, defaultTime:"8:15"});
 			$("#tmp-init-hour").timepicker();
 		}
-	/*	
+		*/
+		
+		
 		function _addTempSchedule(){
 			var dInittemp = $('#livreInicio').val();
 			var dEndtemp = $('#livreFim').val();
@@ -439,7 +438,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			$scope.generetedSchedules.push({schedule:{dateInit: dateInit, dateEnd : dateEnd, state: "FR"}});
 	
 		}
-	*/
+	
 		function initTimePickers(){
 			$("#tmp-init-1").timepicker({showMeridian: false, defaultTime:"8:00"});
 			$("#tmp-end-1").timepicker({showMeridian: false, defaultTime:"8:15"});
