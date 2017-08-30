@@ -461,7 +461,8 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		}
 		
 		
-        function _saveFreeConsultations(arraySchedules){
+        function _saveFreeConsultations(arraySchedules,modal){
+        	console.log("MODAL" + modal);
         	var array = [];
         	for ( var i in arraySchedules) {
         		var s = arraySchedules[i].schedule;
@@ -478,13 +479,25 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					alertMessage(message,null,ALERT_SUCCESS);
 					location.reload(); 
 				}else{
+					/*
 					console.log(response.data);
+					if(modal!= null){
+					var div = $("#modal-horario");
+					div.addClass("alert");
+					div.addClass("alert-danger");
+					div.find("#erro-msg").text(message);
+					div.show();
+					div.fadeOut(3000);
+					}else{
 					alertMessage(message,null,ALERT_ERROR);
+					}*/
+					
+					alertMessage(message,null,ALERT_ERROR,null,modal);
 				}
 			});
 		}
         
-        function _saveConsultations(patient, date){
+        function _saveConsultations(patient, date,modal){
         	var intHour = $('#pacienteInicio').val();
         	var endHour = $('#pacienteFim').val();
         	
@@ -510,7 +523,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					location.reload(); 
 				}else{
 					console.log(response.data);
-					alertMessage(message,null,ALERT_ERROR);
+					alertMessage(message,null,ALERT_ERROR,null,modal);
 				}
 			});
             
@@ -544,7 +557,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					location.reload(); 
 				}else{
 					console.log(response.data);
-					alertMessage(message,null,ALERT_ERROR);
+					alertMessage(message,null,ALERT_ERROR,null,modal);
 				}
 			});
         }
