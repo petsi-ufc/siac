@@ -294,6 +294,8 @@
 		<div class="alert alert-message hidden" role="alert">
 			<span id="alert-text">Alert de Mensagens</span><span id="alert-icon"></span>
 		</div>
+		
+		
 
 		<div ng-show="canShow(3)">
 			<div>
