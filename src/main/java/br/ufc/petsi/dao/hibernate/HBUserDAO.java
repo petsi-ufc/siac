@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.UserDAO;
+import br.ufc.petsi.model.Administrator;
+import br.ufc.petsi.model.Patient;
+import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.User;
 import br.ufc.petsi.util.LogGenerator;
 
@@ -58,10 +61,22 @@ public class HBUserDAO implements UserDAO{
 		System.out.println("CPF: "+cpf+" - Role: "+ role);
 		User u = null;
 		try{
-			Query query = manager.createQuery("from users WHERE cpf = :paramCpf AND role = :paramRole");
+			/*Query query = manager.createQuery("from users WHERE cpf = :paramCpf AND role = :paramRole");
 			query.setParameter("paramCpf", cpf);
 			query.setParameter("paramRole", role);
-			u = (User) query.getSingleResult();
+			u = (User) query.getSingleResult();*/
+			Query query = manager.createQuery("SELECT cpf, email, name, role, id FROM users WHERE cpf = :paramCpf AND role = :paramRole");
+			query.setParameter("paramCpf", cpf);
+			query.setParameter("paramRole", role);
+			Object[] obj = (Object[]) query.getSingleResult();
+			if(role.equals(Constants.ROLE_PROFESSIONAL)){
+				u = new Professional(String.valueOf(obj[0]), String.valueOf(obj[2]), String.valueOf(obj[1]), String.valueOf(obj[3]), null, null);
+			}else if(role.equals(Constants.ROLE_PATIENT)){
+				u = new Patient(String.valueOf(obj[0]), String.valueOf(obj[2]), String.valueOf(obj[1]), String.valueOf(obj[3]));
+			}else if(role.equals(Constants.ROLE_ADMIN)){
+				u = new Administrator(String.valueOf(obj[0]), String.valueOf(obj[2]), String.valueOf(obj[1]), String.valueOf(obj[3]));
+			}
+			u.setId(Long.parseLong(String.valueOf(obj[4])));
 		}catch(NoResultException e){
 			System.out.println("Erro HBDAO getALL: "+e);	
 		}

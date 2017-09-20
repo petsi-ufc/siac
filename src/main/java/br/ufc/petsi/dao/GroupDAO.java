@@ -2,6 +2,7 @@ package br.ufc.petsi.dao;
 
 import java.util.List;
 
+import br.ufc.petsi.model.Consultation;
 import br.ufc.petsi.model.Group;
 import br.ufc.petsi.model.Patient;
 import br.ufc.petsi.model.Professional;
@@ -16,4 +17,5 @@ public interface GroupDAO {
 	public List<Group> getAllGroups (Professional professional);
 	public List<Group> getGroupsByPatient(Patient patient);
 	public List<Group> getGroupsFree();
+	List<Consultation> getConsultations(Group group);
 }

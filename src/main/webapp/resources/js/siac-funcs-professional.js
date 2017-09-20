@@ -39,13 +39,48 @@ mapVars.set(TABLE_DAYS, $("#tbody-table-days"));
 mapVars.set(INPUT_VACANCY, $("#input-count-vacancy"));
 mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 
+var worker = null;
+if(typeof(Worker) !== "undefined"){
+	worker = new Worker('resources/js/doWork.js');
+}else{
+	alert("não dá suporte ao worker");
+}
+
 (function(){
 	
 	initTimepicker("tmp-init-1",null);
 	initTimepicker("tmp-end-1",null);
 	
 	
-	angular.module("siacApp").controller("professionalController", function($scope, $compile, $sce,$timeout ,uiCalendarConfig, professionalService){
+	angular.module("siacApp")
+	
+	/*.run(function($rootScope, professionalService){
+		$rootScope.events = [];
+		/*function runConsultations(datas){
+			datas.forEach(function (value, key){
+				var title = "";
+				if(value.state == "FR")	title = "Livre";
+				else if (value.state == "CD" &&  value.group == null &&  value.patient == null) title = "Cancelada";
+				else title =  value.group == null ? value.patient.name : value.group.title;
+				var e = {
+					title: title,
+					color: colors.get(value.state).hex,
+					state: value.state,
+					start:value.dateInit,
+					end: value.dateEnd,
+					date: value.date,
+					id: value.id,
+					isGroup: value.group != null,
+					comment: value.comment
+				};
+				if(value.group != null)
+					e.group = value.group;
+				$rootScope.events.push(e);
+			});
+		}
+	})*/
+	
+	.controller("professionalController", function($scope,$rootScope, $compile, $sce,$timeout ,uiCalendarConfig, professionalService){
 		
 		//Variables
 		$scope.menuIndex = 0;
@@ -140,14 +175,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		$scope.fillTableDays = _fillTableDays;
 		$scope.getDateByDays = _getDateByDays;
 		
-//		onButtonAddScheduleClick();
-//		onSelectScheduleRepeatClick();
-//		onButtonRepeatScheduleDayClick();
-//		onButtonGenerateSchedules();
-//
-//		onButtonConfirmSchedulesClick();
-//		
-//		initTimePickers();
+		
 		configureModal();
 		loadPatients();
 		getMyGroups();
@@ -194,6 +222,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']
 			}
 		};
+		
 
 		var DataConsultation;
 		function getConsultations(a,b,c){
@@ -203,13 +232,13 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			end = (end.getFullYear())+"-"+(end.getMonth()+1)+"-"+(end.getDate()+1);
 			
 			showSnack("Carregando as consultas...");
+			var start = new Date().getTime();
 			professionalService.getProfessionalConsultations(init, end, function(data){
+				var end = new Date().getTime();
 				$scope.events.length = 0;
 				DataConsultation = data;
+				//worker.postMessage({datas: data.data});
 				data.data.forEach(function (value, key){
-					console.log(value);
-					
-					console.log("value Patient => " + value.patient);
 					var title = "";
 					if(value.state == "FR")	title = "Livre";
 					else if (value.state == "CD" &&  value.group == null &&  value.patient == null) title = "Cancelada";
@@ -230,6 +259,18 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					$scope.events.push(e);
 				});
 				console.log($scope.events);
+				/*worker.addEventListener('message', function(e) {
+					console.log(e.data);
+					//console.log($scope.uiConfig)
+					//for(var i=0;i<e.data.length;i++)
+						//$scope.events.push(e.data[i]);
+					e.data.forEach(function(value, key){
+						$scope.events.push(value);
+					});																																																																																									
+					//$scope.uiConfig.fullCalendar('refetchEvents');
+					$('#calendar').fullCalendar('refetchEvents')
+					console.log($scope.events);
+				}, false);*/
 			});
 		}
 		
@@ -309,6 +350,7 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 
 		
 		function _registerFrequencyList(){
+			console.log($scope.frequencyList);
 			professionalService.registerFrequency({frequencyList:$scope.frequencyList}, function(response){
 				var message = response.data.message;
 				if(response.data.code == 200){
@@ -323,18 +365,27 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 		
 		function _showConsultationOfGroup(group){
 			$("#modal-consultation-group").modal("show");
+			showSnack("Carregando as consultas...");
+			professionalService.getConsultationsByGroup({id:group.id}, function(response){
+				var consultations = response.data.message;
+				if(response.data.code == 200){
+					group.listConsultations =  JSON.parse(consultations);
+				}else{
+					alert(consultations,null,ALERT_ERROR);
+				}
+			});
 			$scope.groupVisibleConsultation = group;
 		}
 		
 		function viewFrequencyListOfGroup(frequency){
 			$scope.frequencyListOfGroup = frequency;
-			console.log($scope.frequencyListOfGroup);
 			$("#modal-view-frequency-group").modal("show");
 		}
 		
 		function _getFrequencyList(idConsultation){
 			professionalService.getFrequencyList({id:idConsultation}, function(response){
 				var message = response.data.message;
+				console.log(message);
 				if(response.data.code == 200){
 					viewFrequencyListOfGroup(JSON.parse(message));
 				}else{
@@ -465,14 +516,12 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	var array = [];
         	for ( var i in arraySchedules) {
         		var s = arraySchedules[i].schedule;
-        		//console.log(s.dateInit);
-        		//console.log(s.dateEnd);
-				//array.push({dateInit: format(s.dateInit._d), dateEnd : format(s.dateEnd._d), state: "FR"});
         		array.push({dateInit: s.dateInit._d.getTime(), dateEnd : s.dateEnd._d.getTime(), state: "FR"});
 			}
 			var json = {json:{schedule:array}};
 			
 			professionalService.saveConsultation(json, function(response){
+				//console.log(response.data);
 				var message = response.data.message;
 				if(response.data.code == 200){
 					alertMessage(message,null,ALERT_SUCCESS);
@@ -497,10 +546,6 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	dataEnd.setUTCMinutes(parseInt(endHour.split(":")[1]));
             
         	var con = {schedule:[{"patient":patient, "dateInit":dataInit.getTime(),"dateEnd":dataEnd.getTime(), state:"SC"}]};
-            //var con = {schedule:[{"patient":patient, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
-            if($scope.chPatientNowConsultation){
-            	con.schedule[0].state="NO";
-            }
             console.log(con);
             
             professionalService.saveConsultation({json:con}, function(response){
@@ -530,14 +575,10 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
         	
         	var g = {"id":group.id};
         	var con = {schedule:[{"group":g, "dateInit":dataInit.getTime(),"dateEnd":dataEnd.getTime(), state:"SC"}]};
-            //var con = {schedule:[{"group":group, "dateInit":format(dataInit),"dateEnd":format(dataEnd), state:"SC"}]};
-            if($scope.chGroupNowConsultation){
-            	con.schedule[0].state="NO";
-            }
             
             console.log(con);
             professionalService.saveConsultation({json:con}, function(response){
-            	
+            	//console.log(response.data);
 				var message = response.data.message;
 				if(response.data.code == 200){
 					alertMessage(message,null,ALERT_SUCCESS);
@@ -592,21 +633,35 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 					
 					//Caso se uma consulta com um grupo
 					if($scope.events[i].isGroup){
+						
 						$("#modal-schedules-description").modal("hide");
 						$scope.setMenuIndex(4);
 						
 						//Trazer as informações do grupo
 						$scope.tempConsultation = {};
 						$scope.tempConsultation.group = findGroup($scope.events[i].group.id,$scope.groups);
-						$scope.frequencyList = [];//reset na lista de frequencia
-						for (var i in $scope.tempConsultation.group.patients){
-							$scope.frequencyList.push({
-								group:{id:$scope.tempConsultation.group.id},
-								patient:{id:$scope.tempConsultation.group.patients[i].id},
-								presence: false,
-								consultation: {id:index}
-							});
-						}
+						
+						//consulta os membros do grupo
+						showSnack("Consultando os membros do grupo, aguarde...");
+						professionalService.getPatientsOfGroup({id:$scope.events[i].group.id}, function(response){
+							var message = JSON.parse(response.data.message);
+							if(response.data.code == 200){
+								$scope.tempConsultation.group.patients = message;
+								$scope.frequencyList = [];//reset na lista de frequencia
+								for (var i in $scope.tempConsultation.group.patients){
+									$scope.frequencyList.push({
+										group:{id:$scope.tempConsultation.group.id},
+										patient:{id:$scope.tempConsultation.group.patients[i].id},
+										presence: false,
+										consultation: {id:index}
+									});
+								}
+								console.log($scope.tempConsultation.group.patients);
+							}else{
+								alertMessage(message,null,ALERT_ERROR);
+							}
+						});
+						
 						$scope.tempConsultation.date = date;
 						$scope.tempConsultation.id = index;
 					
@@ -624,14 +679,14 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			console.log($scope.frequencyList);
 			console.log($scope.comment);
 			if($scope.comment != '' && $scope.comment != undefined){
-				ajaxCall("/siac/registerConsultation", {"id": $scope.tempConsultation.id}, function(response){
+				professionalService.registerConsultationAndFrequency({"id": $scope.tempConsultation.id, "comment":$scope.comment, "frequencyList": $scope.frequencyList},function(response){
+					console.log(response);
 					if(response.data.code == RESPONSE_SUCCESS){
-						alertMessage(response.message, null, ALERT_SUCCESS);
-						$scope.idConsultationToComment = $scope.tempConsultation.id;
+						alertMessage(response.data.message, null, ALERT_SUCCESS);
 						$scope.registerComment($scope.comment);
-						$scope.registerFrequencyList();
+						location.reload();
 					}else{
-						alertMessage(response.message, null, ALERT_ERROR);
+						alertMessage(response.data.message, null, ALERT_ERROR);
 					}
 					
 				}, function(a,b){
@@ -823,10 +878,10 @@ mapVars.set(INPUT_COUNT_TIME, $("#input-count-time"));
 			$scope.group = 1;
 			$scope.update = true;
 			$scope.grupo = group;
-			
+			showSnack("Consultando os membros do grupo, aguarde...");
 			professionalService.getPatientsOfGroup({id:group.id}, function(response){
-				var message = response.data.message;
-				console.log(response);
+				var message = JSON.parse(response.data.message);
+				//console.log(message);
 				if(response.data.code == 200){
 					$scope.grupo.patients = message;
 				}else{

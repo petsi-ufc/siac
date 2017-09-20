@@ -565,7 +565,8 @@
 							<td>
 								<h5>Agendada</h5>
 							</td>
-
+						</tr>
+						<tr>
 							<td>
 								<div class='legend-color color-grey'></div>
 							</td>
@@ -784,7 +785,7 @@
 									<tr ng-repeat="patient in tempConsultation.group.patients">
 										<td><input type="checkbox" ng-checked="modelCheck" ng-click="addFrequencyList($index);"/></td>
 										<td>{{patient.name}}</td>
-									</tr>	
+									</tr>								
 								</tbody>
 							</table>
 						</div>

@@ -13,10 +13,18 @@
 			});
 		}
 		
+		function _getConsultationsByGroup(params,callback){
+			$http.post("/siac/getConsultationsByGroup?json="+JSON.stringify(params)).then(callback, function(err){
+				console.log("Error at get group consultations");
+				console.log(err);
+			});
+		}
+		
 		function _saveConsultation(params, callback){
 			console.log(params);
 			$http.post("/siac/checkSchedules?json="+JSON.stringify(params)).then(function(response){
 				if(response.data.code == 200){
+					//console.log("Os horários passaram!");
 					$http.post("/siac/saveConsultation?json="+JSON.stringify(params)).then(callback, function(err){
 						console.log("Error at save professional consultations");
 						console.log(err);
@@ -138,6 +146,13 @@
 				console.log(error);
 			});
 		}
+		
+		function _registerConsultationAndFrequency(params, callback){
+			$http.post('/siac/registerConsultationAndFrequency?json='+JSON.stringify(params), {"json":params}).then(callback, function(err){
+				console.log("error at register consultation and frequency");
+				console.log(err);
+			});
+		}
 	
 		return {
 			getProfessionalConsultations : _getProfessionalConsultations,
@@ -154,7 +169,9 @@
 			getFrequencyList: _getFrequencyList,
 			getPatientsOfGroup :_getPatientsOfGroup,
 			cancelAllConsultation: _cancelAllConsultation,
-			getReserveByidConsultation: _getReserveByidConsultation
+			getReserveByidConsultation: _getReserveByidConsultation,
+			getConsultationsByGroup: _getConsultationsByGroup,
+			registerConsultationAndFrequency: _registerConsultationAndFrequency
 		}
 	});
 })();

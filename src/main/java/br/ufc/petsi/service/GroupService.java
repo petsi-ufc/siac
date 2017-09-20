@@ -183,18 +183,31 @@ public class GroupService {
 		}
 	}
 	
+	public String listConsultationsOfGroup(String json, GroupDAO gdao){
+		Gson gson = new Gson();
+		Response response = new Response();
+		
+		try{
+			
+			Group group = gson.fromJson(json, Group.class);
+			response.setCode(Response.SUCCESS);
+			response.setMessage(gson.toJson(gdao.getConsultations(group)));
+			return gson.toJson(response);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			response.setCode(Response.ERROR);
+			response.setMessage("Ops, não foi possível listar as consultas deste grupo!");
+			return gson.toJson(response);
+		}
+	}
+	
 	public String getAllGroups(Professional professional, GroupDAO gdao){
 		Gson gson = new Gson();
 		ObjectMapper mapper = new ObjectMapper();
 		Response response = new Response();
 		try{
 			List<Group> groups = gdao.getAllGroups(professional);
-			//Removendo as consultas dos pacientes (hibernate trás automaticamente na consulta) para diminuir o processamento no front-end
-			for (Group group : groups) {
-				for(Patient patient: group.getPatients()){
-					patient.getListConsultations().removeAll(patient.getListConsultations());
-				}
-			}
 			response.setCode(Response.SUCCESS);
 			response.setMessage(mapper.writeValueAsString(groups));
 			return gson.toJson(response);

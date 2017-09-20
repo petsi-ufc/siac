@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
+import br.ufc.petsi.dao.FrequencyDAO;
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.dao.UserDAO;
 import br.ufc.petsi.enums.ConsultationState;
@@ -34,6 +35,7 @@ import br.ufc.petsi.model.Professional;
 import br.ufc.petsi.model.Reserve;
 import br.ufc.petsi.model.SocialService;
 import br.ufc.petsi.service.ConsultationService;
+import br.ufc.petsi.service.FrequencyService;
 
 
 @Controller
@@ -44,6 +46,9 @@ public class ConsultationController {
 	private ConsultationService consultationService;
 	
 	@Inject
+	private FrequencyService freqService;
+	
+	@Inject
 	private ConsultationDAO consDAO;
 	
 	@Inject
@@ -51,6 +56,9 @@ public class ConsultationController {
 	
 	@Inject
 	private UserDAO userDAO;
+	
+	@Inject
+	private FrequencyDAO freqDAO;
 	
 	@Secured({"ROLE_PATIENT", "ROLE_PROFESSIONAL"})
 	@RequestMapping("/getConsultationsBySocialService")
@@ -110,6 +118,7 @@ public class ConsultationController {
 	@ResponseBody
 	public String checkSchedules(@RequestParam("json") String json, HttpSession session){
 		Professional proTemp = (Professional) session.getAttribute(Constants.USER_SESSION);
+		System.out.println(json);
 		return consultationService.checkSchedules(proTemp, json, consDAO);
 	}
 	
@@ -130,7 +139,11 @@ public class ConsultationController {
 			System.out.println(e);
 			return "[]";
 		}
-		return consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO, init, end);
+		long start = System.currentTimeMillis();
+		String cons = consultationService.getConsultationsByProfessionalJSON(proTemp, consDAO, init, end);
+		long finish = System.currentTimeMillis() - start;
+		System.out.println("[TEMPO DE EXECUÇÃO DA CONSULTA]: "+finish+" milisegundos");
+		return cons;
 	}
 	
 	@Secured("ROLE_PATIENT")
@@ -147,6 +160,14 @@ public class ConsultationController {
 	@ResponseBody
 	public String registerConsultation(Consultation cons){
 		return consultationService.registerConsultation(cons, consDAO);
+	}
+	
+	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping("/registerConsultationAndFrequency")
+	@ResponseBody
+	public String registerConsultationAndFrequency(@RequestParam("json") String json){
+		System.out.println(json);
+		return consultationService.registerConsultationAndFrequency(json, consDAO, freqService, freqDAO);
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")

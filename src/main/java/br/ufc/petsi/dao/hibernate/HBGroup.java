@@ -1,6 +1,7 @@
 package br.ufc.petsi.dao.hibernate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -57,8 +58,16 @@ public class HBGroup implements GroupDAO {
 
 	@Override
 	public List<Patient> getPatients(Group group) {
+		Query query = (Query) manager.createNativeQuery("select role,id,cpf,email,name from users u, group_patient gp where u.id = gp.id_patient and gp.id_group = "+group.getId());
+		List<Patient> patients = new ArrayList<Patient>();
 		try{
-			return manager.find(Group.class, group.getId()).getPatients();
+			List<Object[]> pats = query.getResultList();
+			for(Object[] obj: pats){
+				Patient p = new Patient(String.valueOf(obj[2]),String.valueOf((String)obj[4]),String.valueOf(obj[3]),String.valueOf(obj[0]));
+				p.setId(Long.parseLong(String.valueOf(obj[1])));
+				patients.add(p);
+			}
+			return patients;
 		}catch(Exception e){
 			System.out.println("No result at getPatients: "+e);
 			return null;
@@ -66,10 +75,40 @@ public class HBGroup implements GroupDAO {
 	}
 
 	@Override
+	public List<Consultation> getConsultations(Group group) {
+		Query query = (Query) manager.createNativeQuery("select id, date_init, date_end from consultation where id_group = "+group.getId());
+		List<Consultation> consultations = new ArrayList<Consultation>();
+		try{
+			List<Object[]> result = query.getResultList();
+			for(Object[] obj: result){
+				Consultation c = new Consultation();
+				c.setId(Long.parseLong(String.valueOf(obj[0])));
+				//Date dinit = new Date(String.valueOf());
+				c.setDateInit((Date)obj[1]);
+				//Date dend = new Date(String.valueOf(obj[2]));
+				c.setDateEnd((Date)obj[2]);
+				consultations.add(c);
+			}
+			return consultations;
+		}catch(Exception e){
+			System.out.println("No result at getConsultations: "+e.getMessage());
+			return null;
+		}
+	}
+	
+	@Override
 	public List<Group> getAllGroups(Professional professional) {
-		Query query = (Query) manager.createQuery("SELECT grp FROM Group grp WHERE grp.facilitator = :facilitator");
-		query.setParameter("facilitator", professional);
-		List<Group> groups = query.getResultList();
+		Query query = (Query) manager.createNativeQuery("SELECT id,opengroup,title,patientlimit FROM service_group WHERE facilitator_id ="+professional.getId());
+		List<Group> groups = new ArrayList<Group>(); 
+		List<Object[]> objs = query.getResultList();
+		for(Object[] obj: objs){
+			Group g = new Group();
+			g.setId(Long.parseLong(String.valueOf(obj[0])));
+			g.setOpenGroup((boolean) obj[1]);
+			g.setTitle((String) obj[2]);
+			g.setPatientLimit((int)obj[3]);
+			groups.add(g);
+		}
 		return groups;
 	}
 

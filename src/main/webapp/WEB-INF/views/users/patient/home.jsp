@@ -63,7 +63,8 @@
 								<h5>Realizada</h5>
 							</td>
 
-
+						</tr>
+						<tr>
 							<td>
 								<div class='legend-color'
 									style='background-color: #D9D919; margin-left: 12px; margin-right: 12px'></div>

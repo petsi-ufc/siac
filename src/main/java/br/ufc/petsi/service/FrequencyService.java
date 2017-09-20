@@ -1,9 +1,15 @@
 package br.ufc.petsi.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import br.ufc.petsi.dao.FrequencyDAO;
 import br.ufc.petsi.model.Consultation;
@@ -22,14 +28,23 @@ public class FrequencyService {
 		try{
 		
 			//FrequencyList frequencyList = mapper.readValue(json, FrequencyList.class);
-			FrequencyList frequencyList = gson.fromJson(json, FrequencyList.class);
+			//FrequencyList frequencyList = gson.fromJson(json, FrequencyList.class);
+			List<Frequency> frequencyList = new ArrayList<Frequency>();
 			
-			if(frequencyList.getFrequencyList().size() == 0){
+			JsonParser parser = new JsonParser();
+			JsonArray array = parser.parse(json).getAsJsonArray();
+			System.out.println(array);
+			for(int i =0; i < array.size();i++){
+				Frequency freq = gson.fromJson(array.get(i), Frequency.class);
+				frequencyList.add(freq);
+			}
+			
+			if(frequencyList.size() == 0){
 				response.setCode(Response.ERROR);
 				response.setMessage("Sua lista de frequência está vazia!");
 				return gson.toJson(response);
 			}else{
-				for(Frequency frequency: frequencyList.getFrequencyList()){
+				for(Frequency frequency: frequencyList){
 					freqDAO.register(frequency);
 				}
 			}

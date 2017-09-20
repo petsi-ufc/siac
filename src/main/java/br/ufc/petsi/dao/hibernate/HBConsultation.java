@@ -13,6 +13,8 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lowagie.text.pdf.hyphenation.TernaryTree.Iterator;
+
 import br.ufc.petsi.dao.ConsultationDAO;
 import br.ufc.petsi.enums.ConsultationState;
 import br.ufc.petsi.model.Consultation;
@@ -99,13 +101,45 @@ public class HBConsultation implements ConsultationDAO{
 
 	@Override
 	public List<Consultation> getConsultationByProfessional(Professional professional, Date init, Date end) {
-		Query query = (Query) manager.createQuery("SELECT cons FROM Consultation cons WHERE cons.professional = :professional AND cons.dateInit >= :init AND cons.dateEnd <= :end ORDER BY cons.dateInit DESC");
-		query.setParameter("professional", professional);
-		query.setParameter("init", init);
-		query.setParameter("end", end);
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Query query = (Query) manager.createNativeQuery("select c.id, c.date_end, c.date_init, c.state, c.professional_id, c.id_service, c.comment, c.reason,c.id_group,g.title,c.id_patient,u.cpf,u.name"+ 
+															" from consultation as c left join users as u on c.id_patient = u.id left join service_group as g on c.id_group = g.id and c.professional_id = "+professional.getId()+" AND c.date_init >= '"+formatter.format(init)+"' AND c.date_end <= '"+formatter.format(end)+"' ORDER BY c.date_init DESC");
+		
 		List<Consultation> cons = new ArrayList<Consultation>();
 		try{
-			cons = query.getResultList();
+			List<Object[]> list = query.getResultList();
+			for(Object[] obj: list){
+				Consultation c = new Consultation();
+				c.setId(Long.parseLong(String.valueOf(obj[0])));
+				c.setDateEnd((Date) obj[1]);
+				c.setDateInit((Date) obj[2]);
+				c.setState(ConsultationState.valueOf(ConsultationState.class, (String) obj[3]));
+				Professional p = new Professional();
+				p.setId(Long.parseLong(String.valueOf(obj[4])));
+				c.setProfessional(p);
+				if(obj[5] != null){
+					SocialService s = new SocialService();
+					s.setId(Long.parseLong(String.valueOf(obj[5])));
+					c.setService(s);
+				}
+				c.setComment((String) obj[6]);
+				c.setReason((String) obj[7]);
+				if(obj[8]!=null){
+					Group g = new Group();
+					g.setId(Long.parseLong(String.valueOf(obj[8])));
+					g.setTitle((String) obj[9]);
+					c.setGroup(g);
+				}
+				if(obj[10]!=null){
+					Patient pat = new Patient();
+					pat.setId(Long.parseLong(String.valueOf(obj[10])));
+					pat.setCpf((String) obj[11]);
+					pat.setName((String) obj[12]);
+					c.setPatient(pat);
+				}
+				cons.add(c);
+			}
 		}catch(NoResultException e){
 			System.out.println("No result at getConsultationByProfessional: "+e);
 		}

@@ -77,6 +77,13 @@ public class GroupController {
 	}
 	
 	@Secured("ROLE_PROFESSIONAL")
+	@RequestMapping("/getConsultationsByGroup")
+	@ResponseBody
+	public String getConsultationsByGroup(@RequestParam("json") String json){
+		return groupService.listConsultationsOfGroup(json, groupDAO);
+	}
+	
+	@Secured("ROLE_PROFESSIONAL")
 	@RequestMapping("/closeGroup")
 	@ResponseBody
 	public String closeGroup(@RequestParam("json") String json){

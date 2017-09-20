@@ -19,6 +19,7 @@ import org.eclipse.jdt.internal.compiler.impl.Constant;
 
 import br.ufc.petsi.constants.Constants;
 import br.ufc.petsi.dao.ConsultationDAO;
+import br.ufc.petsi.dao.FrequencyDAO;
 import br.ufc.petsi.dao.GroupDAO;
 import br.ufc.petsi.dao.ReserveDAO;
 import br.ufc.petsi.dao.UserDAO;
@@ -88,8 +89,9 @@ public class ConsultationService {
 							patient = (Patient)udao.getByCpf(consultation.getPatient().getCpf(), Constants.ROLE_PATIENT);
 							consultation.setPatient(patient);
 						}
-						
 						System.out.println("Paciente do Banco" + patient.toString());
+					}else if(consultation.getGroup() != null){
+						System.out.println(consultation);
 					}
 				}
 				consultation.setProfessional(proTemp);
@@ -189,6 +191,46 @@ public class ConsultationService {
 		consDAO.registerConsultation(con);
 		res.setCode(Response.SUCCESS);
 		res.setMessage("Consulta registrada com sucesso!");
+		return gson.toJson(res);
+	}
+	
+	public String registerConsultationAndFrequency(String json, ConsultationDAO consDAO, FrequencyService freqServ, FrequencyDAO freqDAO){
+		Gson gson = new Gson();
+		Response res = new Response();
+		try{
+			JsonParser parser = new JsonParser();
+			JsonObject obj = parser.parse(json).getAsJsonObject();
+			Long id = obj.get("id").getAsLong();
+			String comment = obj.get("comment").getAsString();
+			Consultation consultation = new Consultation();
+			consultation.setId(id);
+			consultation.setComment(comment);
+			
+			Consultation oldConsultation = consDAO.getConsultationById(id);
+			
+			if(oldConsultation.getGroup() == null){
+				res.setCode(Response.ERROR);
+				res.setMessage("Ops, não é possível registrar uma consulta quando a mesma não possui nenhum paciente!");
+				return gson.toJson(res);
+			}
+			
+			Date today = new Date();
+			if(today.before(oldConsultation.getDateEnd())){
+				res.setCode(Response.ERROR);
+				res.setMessage("Ops, não é possível registrar uma consulta que ainda não aconteceu!");
+				return gson.toJson(res);
+			}
+			
+			consDAO.registerConsultation(consultation);
+			freqServ.registerFrequency(String.valueOf(obj.get("frequencyList").getAsJsonArray()), freqDAO);
+			res.setCode(Response.SUCCESS);
+			res.setMessage("Consulta registrada com sucesso!");
+		}catch (Exception e) {
+			System.out.println(e);
+			res.setCode(Response.ERROR);
+			res.setMessage("Não foi possível registrar sua consulta!");
+			return gson.toJson(res);
+		}
 		return gson.toJson(res);
 	}
 	
@@ -691,6 +733,15 @@ public class ConsultationService {
 	
 	private class Json{
 		public Scheduler json;
+		
+		@Override
+		public String toString() {
+			String consultations = "";
+			for(Consultation c: json.getSchedule())
+				consultations += c.toString();
+			return consultations;
+		}
+		
 	}
 	
 }
