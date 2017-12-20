@@ -97,6 +97,7 @@ if(typeof(Worker) !== "undefined"){
 		$scope.chPatientNowConsultation = false;
 		$scope.modelCheck = false;
 		$scope.showReport = true;
+		$scope.initGroup = true;
 		
 		//Colors
 		var colors = new Map();
@@ -156,6 +157,7 @@ if(typeof(Worker) !== "undefined"){
 		$scope.showComment = _showComment;
 		$scope.registerComment = _registerComment;
 		$scope.showConsultationOfGroup = _showConsultationOfGroup;
+		$scope.getMyGroups = _getMyGroups;
 		$scope.getFrequencyList = _getFrequencyList;
 		$scope.reload = _reload;
 		$scope.viewComment = _viewComment;
@@ -178,7 +180,7 @@ if(typeof(Worker) !== "undefined"){
 		
 		configureModal();
 		loadPatients();
-		getMyGroups();
+		//getMyGroups();
 		
 		
 		//Configuração do calendário.
@@ -231,7 +233,7 @@ if(typeof(Worker) !== "undefined"){
 			init = (init.getFullYear())+"-"+(init.getMonth()+1)+"-"+(init.getDate()+1);
 			end = (end.getFullYear())+"-"+(end.getMonth()+1)+"-"+(end.getDate()+1);
 			
-			showSnack("Carregando as consultas...");
+			showSnack("Carregando as consultas, aguarde...");
 			var start = new Date().getTime();
 			professionalService.getProfessionalConsultations(init, end, function(data){
 				var end = new Date().getTime();
@@ -257,6 +259,7 @@ if(typeof(Worker) !== "undefined"){
 					if(value.group != null)
 						e.group = value.group;
 					$scope.events.push(e);
+					hideSnack();
 				});
 				console.log($scope.events);
 				/*worker.addEventListener('message', function(e) {
@@ -432,6 +435,10 @@ if(typeof(Worker) !== "undefined"){
 		
 		function _setMenuIndex(index){
 			$scope.menuIndex = index;
+			if($scope.initGroup){
+				$scope.getMyGroups(); 
+				$scope.initGroup = false;
+			}
 		}
 		
 		function _generateSchedules(vacancyAmount, timePerConsult, timeInit){
@@ -770,7 +777,7 @@ if(typeof(Worker) !== "undefined"){
 					location.reload(); 
 				}else{
 					console.log(response);
-					alertMessage(response.message, null, ALERT_ERROR);
+					alertMessage(response.data.message, null, ALERT_ERROR);
 				}
 			});
 		}
@@ -804,7 +811,7 @@ if(typeof(Worker) !== "undefined"){
 			}, "POST");
 		}
 		
-		function getMyGroups(){
+		function _getMyGroups(){
 			//$scope.groups = [{"id":70, "openGroup":true, "title":"Aprimore", "patientLimit":10, "patients":[{"id":0,"cpf":"00104294337","name":"Mariana Souza Araujo","email":"marianasouza@siaf.com"},{"id":0,"cpf":"00104294447","name":"Mariana Souza Araujo","email":"marianasouza@siaf.com"}]},
 			//                 {"id":71, "openGroup":false, "title":"Um grupo qualquer", "patientLimit":15, "patients":[{"id":0,"cpf":"00104294447","name":"Mariana Souza Araujo","email":"marianasouza@siaf.com"},{"id":0,"cpf":"45631697300","name":"Mariana Carvalho Cunha","email":"marianac@gmail.com"}]}];
 
@@ -880,7 +887,7 @@ if(typeof(Worker) !== "undefined"){
 				if(response.data.code == 200){
 					alertMessage(message,null,ALERT_SUCCESS);
 					cleanGrupo();
-					getMyGroups();
+					$scope.getMyGroups();
 				}else{
 					alertMessage(message,null,ALERT_ERROR);
 				}
@@ -914,7 +921,7 @@ if(typeof(Worker) !== "undefined"){
 			professionalService.updateGroup($scope.grupo, function(response){
 				var message = response.data.message;
 				if(response.data.code == 200){
-					getMyGroups();
+					$scope.getMyGroups();
 					alertMessage(message,null,ALERT_SUCCESS);
 					$scope.grupo = {};
 					$scope.grupo.patients = [];
@@ -1238,6 +1245,11 @@ function showSnack(text) {
     x.textContent= text;
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+function hideSnack(){
+	var x = document.getElementById("snackbar")
+	x.className = x.className.replace("show", "");
 }
 
 function format(date){

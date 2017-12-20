@@ -1,5 +1,6 @@
 package br.ufc.petsi.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.inject.Named;
@@ -61,7 +62,12 @@ public class SocialServiceService {
 		
 		SocialService service2 = serviceDao.getServiceById(service.getId());
 		
-		service2.setName(service.getName());
+		try {
+			service2.setName(new String(service.getName().getBytes(),"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		serviceDao.edit(service2);
 	}
 

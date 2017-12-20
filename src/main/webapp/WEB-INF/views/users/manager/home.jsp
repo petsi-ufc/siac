@@ -50,7 +50,7 @@
 		<div id="generate-report">
 			<h2>Gerar Relatórios</h2>
 			<br /> <br /> <br />
-
+			
 			<form action="relatorio/geral" method="post" target="_blank" id="form-report">
 				<div class="form-group">
 					<label>Escolha o tipo de relatório</label> <select
@@ -75,6 +75,11 @@
 						<option value="option-default">Escolha o profissional</option>
 					</select>
 				</div>
+				
+				<ul class="pager">
+					<li><a style="cursor:pointer" onclick="$('#date-report-for-month').hide();$('#date-report').show();$('#input-year-report').val('');$('select[name=month]').val(1);">Por Período</a></li>
+					<li><a style="cursor:pointer"onclick="$('#date-report-for-month').show();$('#date-report').hide();$('#input-dtpckr-start-report').val('');$('#input-dtpckr-end-report').val('');">Por Mês</a></li>
+				</ul>
 				
 				<div id="date-report" class="form-group">
 					<div class="input-group col-md-4" id="date-left" style="float:left; margin-left:5%;">
@@ -108,7 +113,7 @@
 					</div>
 					<div class="input-group col-md-4" id="date-right-for-month" layout-gt-md="row" layout="column" style="margin-left:5%;">
 						<label class="control-label" for="input-year-report">Ano</label>
-						<input type="text" placeholder="Ano" name="year" id="input-year-report" class="form-control"/>
+						<input type="text" placeholder="Ano, Ex.: 2016, 2017" name="year" id="input-year-report" class="form-control"/>
 					</div>
 				</div>
 				<br>
@@ -119,10 +124,6 @@
 					id="button-generate-report" data-dismiss="modal"
 					onclick="return onGenerateReportButtonClicked();">Gerar</button>
 			</form>
-			<ul class="pager">
-				<li><a style="cursor:pointer" onclick="$('#date-report-for-month').hide();$('#date-report').show();$('#input-year-report').val('');$('select[name=month]').val(1);">Por Período</a></li>
-				<li><a style="cursor:pointer"onclick="$('#date-report-for-month').show();$('#date-report').hide();$('#input-dtpckr-start-report').val('');$('#input-dtpckr-end-report').val('');">Por Mês</a></li>
-			</ul>
 		</div>
 
 		<div id="set-professional">
@@ -150,6 +151,7 @@
 								<th>Nome</th>
 								<th>Email</th>
 								<th>Serviço</th>
+								<th>Estado</th>
 							</tr>
 						</thead>
 					</table>
@@ -297,3 +299,4 @@
 		</div>
 	</div>
 </div>
+<div id="snackbar"></div>

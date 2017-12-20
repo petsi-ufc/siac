@@ -91,7 +91,7 @@ public class ConsultationService {
 						}
 						System.out.println("Paciente do Banco" + patient.toString());
 					}else if(consultation.getGroup() != null){
-						System.out.println(consultation);
+						consultation.getGroup().setPatients(gpDAO.getPatients(consultation.getGroup()));
 					}
 				}
 				consultation.setProfessional(proTemp);

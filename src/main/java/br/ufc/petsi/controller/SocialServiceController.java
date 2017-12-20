@@ -57,6 +57,7 @@ public class SocialServiceController {
 	@RequestMapping("/editService")
 	@ResponseBody
 	public String editService(SocialService service){
+		System.out.println("[SERVIÇO QUE VAI SER EDITADO]:"+service);
 		serviceService.editService(serviceDao, service);
 		return this.getServices();
 	}

@@ -821,7 +821,12 @@
 			<div class="panel-heading">
 				<h1 class="panel-title">Gerar Relatórios</h1>
 			</div>
-
+			<ul class="pager">
+				<li><a ng-click="showReport = true" style="cursor: pointer">Por
+						Período</a></li>
+				<li><a ng-click="showReport = false" style="cursor: pointer">Por
+						Mês</a></li>
+			</ul>
 			<div class="panel-body">
 				<form action="relatorio/avaliacao" method="post" target="_blank"
 					ng-show="showReport">
@@ -877,12 +882,6 @@
 						id="button-generate-report" data-dismiss="modal">Gerar</button>
 				</form>
 			</div>
-			<ul class="pager">
-				<li><a ng-click="showReport = true" style="cursor: pointer">Por
-						Período</a></li>
-				<li><a ng-click="showReport = false" style="cursor: pointer">Por
-						Mês</a></li>
-			</ul>
 			<br>
 		</div>
 		<div class="panel panel-primary margin-right"

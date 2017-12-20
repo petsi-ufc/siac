@@ -98,9 +98,9 @@ public class HBGroup implements GroupDAO {
 	
 	@Override
 	public List<Group> getAllGroups(Professional professional) {
-		Query query = (Query) manager.createNativeQuery("SELECT id,opengroup,title,patientlimit FROM service_group WHERE facilitator_id ="+professional.getId());
+		Query query = manager.createNativeQuery("SELECT id,opengroup,title,patientlimit FROM service_group WHERE facilitator_id ="+professional.getId());
 		List<Group> groups = new ArrayList<Group>(); 
-		List<Object[]> objs = query.getResultList();
+		List<Object[]> objs = (List<Object[]>) query.getResultList();
 		for(Object[] obj: objs){
 			Group g = new Group();
 			g.setId(Long.parseLong(String.valueOf(obj[0])));

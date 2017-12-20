@@ -172,6 +172,7 @@ function onServiceClick(){
 			$("#my-calendar-title").html("Calendário "+$(this).attr("data-name")),
 
 			ajaxCall("/siac/getConsultationBySocialService",{id:a},function(a){
+				console.log(a);
 				$(".content-calendar").css("display","block"),
 				$(".calendar").remove(),
 				$(".content-calendar").append($("<div class='calendar' id='calendar-patient'></div>")),

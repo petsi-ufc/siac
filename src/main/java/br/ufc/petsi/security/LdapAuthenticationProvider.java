@@ -31,6 +31,11 @@ public class LdapAuthenticationProvider implements AuthenticationProvider {
 		String password = authen.getCredentials() != null ? (String) authen.getCredentials() : null;
 		String role = (String)CurrentSession.getSession().getAttribute("loginRole");
 		
+		//CPF
+//		String name = "27240450848";
+//		String role = "ROLE_ADMIN";
+//		String password = "1234";
+		
 		User user = userDAO.getByCpf(name, role);
 		
 		if( user == null )
@@ -51,7 +56,7 @@ public class LdapAuthenticationProvider implements AuthenticationProvider {
 		if(!ldapDAO.authenticate(name, password)) 
 			throw new BadCredentialsException("Login e/ou senha inválidos");
 		
-		
+	
 		if(!role.equals(user.getRole())) 
 			throw new BadCredentialsException("Você não possui essa permissão!");
 		

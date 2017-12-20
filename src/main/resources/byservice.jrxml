@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ByService" language="javascript" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bd259830-f411-48a7-878e-72f2077edecc">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="303"/>
+	<property name="ireport.y" value="299"/>
 	<subDataset name="dataset1" uuid="592f6524-74f4-4c7a-a4eb-315556b80895"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
@@ -35,7 +35,7 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="281" splitType="Stretch">
+		<band height="184" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="22" width="555" height="48" uuid="b82030b4-dfd5-4cd3-a9bb-e8736643bb5f"/>
 				<textElement textAlignment="Center">
@@ -96,15 +96,34 @@ UFC - CAMPUS QUIXADÁ]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{professional}]]></textFieldExpression>
 			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="83" y="125" width="461" height="20" uuid="1965e84d-89eb-44c7-93d0-8f05419adb3d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{service}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="175" width="555" height="1" forecolor="#787373" uuid="24f83e7c-4878-4965-8f55-2a9623365780"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="157" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="93" width="555" height="63" uuid="316b108e-1c01-4dfa-95a1-1718412f3499"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{byMonth})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SubReportByServiceLocation}]]></subreportExpression>
+			</subreport>
 			<staticText>
-				<reportElement x="18" y="188" width="181" height="20" uuid="f7e971f5-4023-4334-81e4-75cee9dcf7b7"/>
+				<reportElement x="18" y="2" width="181" height="20" uuid="f7e971f5-4023-4334-81e4-75cee9dcf7b7"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Especificações mensais: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="221" width="419" height="20" uuid="4f27097f-99fe-465f-9e37-10a171745496"/>
+				<reportElement x="118" y="33" width="419" height="20" uuid="4f27097f-99fe-465f-9e37-10a171745496"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -117,15 +136,8 @@ UFC - CAMPUS QUIXADÁ]]></text>
 				</textElement>
 				<text><![CDATA[CONSULTAS]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="83" y="125" width="461" height="20" uuid="1965e84d-89eb-44c7-93d0-8f05419adb3d"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{service}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="437" y="241" width="100" height="40" uuid="23ed7ea0-61c9-43b9-8f6d-03ed9ba7f62e"/>
+				<reportElement x="437" y="53" width="100" height="40" uuid="23ed7ea0-61c9-43b9-8f6d-03ed9ba7f62e"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -136,10 +148,10 @@ UFC - CAMPUS QUIXADÁ]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true" isStrikeThrough="false"/>
 				</textElement>
-				<text><![CDATA[Total]]></text>
+				<text><![CDATA[Total Agendadas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="314" y="241" width="123" height="40" uuid="c504c923-d319-4b83-a99b-e2db5dc203a0"/>
+				<reportElement x="314" y="53" width="123" height="40" uuid="c504c923-d319-4b83-a99b-e2db5dc203a0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -153,7 +165,7 @@ UFC - CAMPUS QUIXADÁ]]></text>
 				<text><![CDATA[Canceladas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="241" width="98" height="40" uuid="e1aee0c6-07b9-4953-9efd-b672b0dfe6d4"/>
+				<reportElement x="118" y="53" width="98" height="40" uuid="e1aee0c6-07b9-4953-9efd-b672b0dfe6d4"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -167,7 +179,21 @@ UFC - CAMPUS QUIXADÁ]]></text>
 				<text><![CDATA[Realizadas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="18" y="241" width="100" height="40" uuid="14d06e41-88cd-4062-906a-91684613d561"/>
+				<reportElement x="216" y="53" width="98" height="40" uuid="e7103497-30d5-4eaa-a5fa-e6f6a50d66f3"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Remarcadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="53" width="100" height="40" uuid="14d06e41-88cd-4062-906a-91684613d561"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -180,39 +206,10 @@ UFC - CAMPUS QUIXADÁ]]></text>
 				</textElement>
 				<text><![CDATA[Mês]]></text>
 			</staticText>
-			<ellipse>
-				<reportElement x="141" y="275" width="0" height="0" backcolor="#000000" uuid="d9229956-e37e-48f1-aaa0-700550db544b"/>
-			</ellipse>
-			<staticText>
-				<reportElement x="216" y="241" width="98" height="40" uuid="e7103497-30d5-4eaa-a5fa-e6f6a50d66f3"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="11" isBold="true" isStrikeThrough="false"/>
-				</textElement>
-				<text><![CDATA[Remarcações]]></text>
-			</staticText>
-			<line>
-				<reportElement x="0" y="175" width="555" height="1" forecolor="#787373" uuid="24f83e7c-4878-4965-8f55-2a9623365780"/>
-			</line>
-		</band>
-	</pageHeader>
-	<detail>
-		<band height="63" splitType="Stretch">
-			<subreport>
-				<reportElement x="0" y="0" width="555" height="63" uuid="316b108e-1c01-4dfa-95a1-1718412f3499"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{byMonth})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SubReportByServiceLocation}]]></subreportExpression>
-			</subreport>
 		</band>
 		<band height="99">
 			<staticText>
-				<reportElement x="18" y="23" width="519" height="27" backcolor="#DEE1DF" uuid="cc66de24-6659-471f-9d85-89999be369ab"/>
+				<reportElement x="18" y="23" width="519" height="27" backcolor="#46C8D1" uuid="cc66de24-6659-471f-9d85-89999be369ab"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -233,7 +230,7 @@ UFC - CAMPUS QUIXADÁ]]></text>
 		</band>
 		<band height="98">
 			<staticText>
-				<reportElement x="19" y="22" width="519" height="27" backcolor="#DEE1DF" uuid="25f87dfc-6e02-4e87-a2d3-f5f0aa9626f6"/>
+				<reportElement x="19" y="22" width="519" height="27" backcolor="#FD5460" uuid="25f87dfc-6e02-4e87-a2d3-f5f0aa9626f6"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>

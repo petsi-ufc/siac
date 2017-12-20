@@ -102,13 +102,14 @@ public class HBConsultation implements ConsultationDAO{
 	@Override
 	public List<Consultation> getConsultationByProfessional(Professional professional, Date init, Date end) {
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Query query = (Query) manager.createNativeQuery("select c.id, c.date_end, c.date_init, c.state, c.professional_id, c.id_service, c.comment, c.reason,c.id_group,g.title,c.id_patient,u.cpf,u.name"+ 
-															" from consultation as c left join users as u on c.id_patient = u.id left join service_group as g on c.id_group = g.id and c.professional_id = "+professional.getId()+" AND c.date_init >= '"+formatter.format(init)+"' AND c.date_end <= '"+formatter.format(end)+"' ORDER BY c.date_init DESC");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Query query = manager.createNativeQuery("SELECT c.id, c.date_end, c.date_init, c.state, c.professional_id, c.id_service, c.comment, c.reason,c.id_group,g.title,c.id_patient,u.cpf,u.name"+ 
+												" FROM consultation as c left join users as u on c.id_patient = u.id left join service_group as g on c.id_group = g.id WHERE c.professional_id = "+professional.getId()+" AND c.date_init >= to_date('"+formatter.format(init)+"','YYYY-MM-DD') AND c.date_end <= to_date('"+formatter.format(end)+"','YYYY-MM-DD')");
 		
 		List<Consultation> cons = new ArrayList<Consultation>();
 		try{
-			List<Object[]> list = query.getResultList();
+			List<Object[]> list = (List<Object[]>) query.getResultList();
+			System.out.println("[QUANTIDADE DE CONSULTAS]:"+list.size());
 			for(Object[] obj: list){
 				Consultation c = new Consultation();
 				c.setId(Long.parseLong(String.valueOf(obj[0])));
